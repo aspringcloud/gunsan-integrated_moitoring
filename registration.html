@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Registration</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <!--cropper-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js"></script>
+    <script src="js/validation.js"></script>
+    <script src="js/map_function.js"></script>
+
+    <!--font awesome icon-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/login_style.css">
+    <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/cropper/2.3.4/cropper.min.css">
+</head>
+
+<body background="images\login_bg.png">
+    <div id="registration_div" class="container registration_box">
+        <div class="col d-flex justify-content-center mb-5"><img class="align-center logo_size" src="images\sc_logo.svg" alt="spring cloud logo"></img>
+        </div>
+        <!--enctype="multipart/form-data" method="post" role="form"-->
+        <form id="registration-form" enctype="multipart/form-data" onsubmit="register_validation(); return false;">
+            <div class="container">
+                <div class="row form-group">
+                    <div class="col-md-6">
+                        <div class="avatar-upload">
+                            <div class="avatar-edit">
+                                <input class="avatar-edit-input" type='file' name="imageUpload" id="imageUpload" onchange="crop_image(this);" accept=".png, .jpg, .jpeg" />
+                                <label for="imageUpload"></label>
+                            </div>
+                            <div class="avatar-preview">
+                                <div id="imagePreview" class="cropped" style="background-image: url(http://ssl.gstatic.com/accounts/ui/avatar_2x.png);"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mt-5">
+                        <select class="form-control form_input font_roboto mt-4" id="select_level">
+                                <option selected enabled>등급지정 선택하세요</option>
+                                <option>Level 1</option>
+                                <option>Level 2</option>
+                                <option>Level 3</option>
+                            </select>
+                        <span><p class="error" id="level_error"></p></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 has-icon padding-right">
+                        <span class="fa fa-envelope-open form-control-feedback"></span>
+                        <input id="signup_id" type="text" class="form-control form_input" placeholder="ID를 입력해주세요/ id">
+                        <span><p class="error" id="signup_id_error"></p></span>
+                    </div>
+
+                    <div class="col-md-6 select_box">
+                        <select class="form-control form_input" id="sel_team">
+                                <option value="" selected enabled>선택하세요</option>
+                                <option>aspringcloud.com</option>
+                                <option>aimobility.com</option>
+                                <option>직접입력</option>
+                            </select>
+                        <span><p class="error" id="team_error"></p></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 has-icon">
+                        <span class="fa fa-phone form-control-feedback"></span>
+                        <input id="signup_phone" type="text" class="form-control form_input" placeholder="전화번호를 입력해주세요">
+                        <span><p class="error" id="signup_phone_error"></p></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 has-icon">
+                        <span class="fa fa-user form-control-feedback"></span>
+                        <input id="signup_name" type="text" class="form-control form_input" placeholder="이름을 입력해주세요">
+                        <span><p class="error" id="signup_name_error"></p></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 has-icon">
+                        <span class="fa fa-sitemap form-control-feedback"></span>
+                        <input id="signup_affiliation" type="text" class="form-control form_input" placeholder="소속을 입력해주세요">
+                        <span><p class="error" id="signup_affiliation_error"></p></span>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-12"><button type="submit" class="btn btn-primary btn-block login_button"> 회원등록 </button></div>
+                </div>
+            </div>
+        </form>
+    </div>
+    </div>
+    <div id="modal_div" class="container modal_style">
+        <!-- Modal -->
+        <div class="container ">
+            <div id="imageModal" class="modal fade" role="dialog">
+                <div class="modal-dialog modal_style">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">×</button>
+                        </div>
+                        <div id="crop_image" class="modal-body ml-4">
+                        </div>
+                        <div class="modal-footer">
+                            <div class="mr-2 ml-2"> <button type="button" class=" btn btn-block login_button active btn-block-width" data-dismiss="modal" onclick="save_image()">확인</button></div>
+                            <div class="mr-2"> <button type="button" class="btn btn-block login_button btn-block-width" data-dismiss="modal" onclick="/*clear_fileInput();*/">취소</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!---modal-->
+        </div>
+        <div id="userlist_table_div" class="" style="display:none;">
+            <div id="user_list_div" class="container white_background container_userlist justify-content-center">
+                <div class="row">
+                    <div class="col-md-12">
+                        <p class="float-left font-weight-bold p1 mt-4 ml-3">사용자 정보 목록</p>
+                    </div>
+                </div>
+                <br>
+                <div>
+                    <table id="userListTable" class="fixed_header mb-2 ml-3">
+                        <thead>
+                            <tr>
+                                <th style="width :100px">선택</th>
+                                <th style="width :100px">번호</th>
+                                <th style="width :210px">아이디 (이메일)</th>
+                                <th style="width :100px">이름</th>
+                                <th style="width :100px">소속</th>
+                                <th style="width :100px">사진</th>
+                                <th style="width :100px">등급</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mt-5"><button type="submit" class="btn btn-primary btn-block close_button btn-block-width float-right" id="updateUserData" onclick=u pdateUserData();> 저장 </button></div>
+                    <div class="col-md-6 mt-5"><button type="submit" class="btn btn-primary btn-block close_button btn-block-width"> 취소 </button></div>
+                </div>
+            </div>
+        </div>
+</body>
+
+</html>

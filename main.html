@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<head>
+    <title>Main</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--jquery-->
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+  
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script> 
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <!--cropper-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js"></script>
+    <script src="js/map_function.js"></script>
+    <script src="js/validation.js"></script>
+    <pre id="api-response"></pre>
+
+    <!--open weather map API-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+    <!--chart.js 
+    <script src="Chart.js/Chart.js"></script>
+    <script src="Chart.js/Chart.min.js"></script>
+    <script src="Chart.js/Chart.bundle.min.js"></script>
+    <script src="Chart.js/Chart.bundle.js"></script>
+    <link rel="stylesheet" href="Chart.js/Chart.css">
+    <link rel="stylesheet" href="Chart.js/Chart.min.css">-->
+
+    <!--Sumo select-->
+    <script src="sumoSelect/jquery.sumoselect.min.js"></script>
+    <link href="sumoSelect/sumoselect.css" rel="stylesheet" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+
+    <link rel="stylesheet" href="Chart.js/Chart.css">
+    <link rel="stylesheet" href="Chart.js/Chart.min.css">
+
+    <!--high chart -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+    <!--Leaflet files-->
+    <link rel="stylesheet" href="leaflet/leaflet.css">
+    <link rel="stylesheet" href="leaflet-routing-machine-3.2.12/dist/leaflet-routing-machine.css">
+
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="leaflet/leaflet.js"></script>
+    <script src="leaflet-routing-machine-3.2.12/dist/leaflet-routing-machine.js"></script>
+
+    <!-- Leaflet moving marker-->
+    <script type="text/javascript" src="LeafletMovingMarker/MovingMarker.js"></script>
+
+    <!-- Leaflet moving marker-->
+    <script type="text/javascript" src="LeafletRotatedMarker/leaflet.rotatedMarker.js"></script>
+
+    <!--leaflet marker direction-->
+    <script type="text/javascript" src="leaflet-marker-direction-master/src/marker-direction.js"></script>
+    <script type="text/javascript" src="leaflet-marker-direction-master/src/marker-direction.min.js"></script>
+
+    <!--Leaflet cluster files -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.1.0/dist/MarkerCluster.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.1.0/dist/MarkerCluster.Default.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>
+
+    <!-- Leaflet zoom home-->
+
+    <link rel="stylesheet" href="leaflet.zoomhome/dist/leaflet.zoomhome.css" />
+    <script src="leaflet.zoomhome/dist/leaflet.zoomhome.min.js"></script>
+
+    <!--font awesome icon-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/login_style.css">
+    <link rel="stylesheet" href="css/mainStyle.css">
+    <!--chart.js datalabel plugin -->
+ 
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.7.3/dist/Chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
+</head>
+
+<body class="standardRatio" style="margin-top: -18px;"> <!--background-color: darkmagenta;-->
+    <!-- Notice Modal -->
+    <div id="noticeModal" class="message_div">
+        <div class="message-content">
+            <div class="message-header">
+                <div class="noticeDiv2"> <p class="noticeP1">공지사항 : </p></div>
+                    <select id="select_notice" class="noticeSelect">
+                        <option value= "0" selected="selected">전체</option>
+                        <option value= "1" >통합관제</option>
+                        <option value= "2">통합대시보드</option>
+                        <option value= "3">진단 및 오류 분석</option>
+                        <option value= "4">사고 예측 모델 및 데이터분석</option>
+                        <option value= "5">STEP</option>
+                        <option value= "6">스프링고 테스트모드</option>
+                        <option value= "7">데이터센터</option>
+                    </select>
+                    <img class="noticeImg" src="images/closing_button.svg" onclick="hide_div('noticeModal');">
+                </div>
+                <hr>
+            <div class="notice-body" id="noticeBody"> </div>
+        </div>
+    </div>
+
+    <!-- Message Modal -->
+    <div id="messageModal" class="message_div">
+        <div class="message-content">
+            <div class="message-header">
+                <select id="select_site" onchange="selectSite(this,'0','0');">
+                    <option id="0" selected="selected">전체</option>
+                    <option id="1">군산</option>
+                    <option id="2">대구</option>
+                    <option id="3">세종</option>
+                    <option id="4">상암</option>
+                    <option id=" ">강릉</option>
+                </select>
+                <span class="msg_close" onclick="hide_div('messageModal')">&times;</span>
+                <br>
+                <img id="profile_photo" class="profile"/>
+                <select  class="siteManager" id="select_siteManager" onchange="/*selectSite(this)*/">전체</select>
+                <hr>
+            </div>
+            <div class="message-body">
+                <textarea id="msgArea" rows="10" cols="30" name="contents" onkeyup="fnChkByte(this,'200')"></textarea>
+            </div>
+            <div class="message-footer">
+                <hr>
+                <p class="noto_regular">
+                    <span id="byteInfo">0</span> / 200bytes
+                </p>
+                <button class="send_button" onclick="sendMail();">보내기</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="standardRatio" id="mapid"></div>
+    <div class="standardRatio hideMap" id="deguMap"></div>
+    <div class="standardRatio hideMap" id="sejongMap"></div>
+    <div class="standardRatio hideMap" id="sangamMap"></div>
+    <div class="standardRatio hideMap" id="gunsanMap"></div>
+    <div class="standardRatio hideMap" id="gangrungMap"></div>
+
+    <div class="alertDiv" id="alertDiv"> 
+        <button class="eventButton"> <img src="images/event.svg" />Event 발생 알림</button>
+        <div id="batteryAlert" class="batteryAlert">
+            <span>SCN001</span>
+            <p>배터리 충전이 필요합니다.</p>
+            <button>확인</button>
+        </div>
+    </div>
+
+    <!--chart.js graphs-->
+    <div class="distanceChart1">
+        <p class="chartTitle1">금일 총 운행거리 </p>
+        <canvas id="todayDistance" width="359px" height="95px" style="margin-right :5px"></canvas>
+    </div>
+
+    <div class="passangerChart2"> 
+        <p class="chartTitle1">금일 총 탑승자 수</p>
+        <canvas id="todayPassenger" width="240px" height="95px"></canvas>
+    </div>
+
+                                   
+    <div class="main_div">
+        <div class="mainTop">
+            <p class="mr-3 ml-5 display_inline_block">
+                <a href="http://www.aimobility.io" target="_blank"><img class="spring_cloud_logo" alt="spring cloud" src="images\login\sc_logo.svg"/></a>
+            </p>
+            <p class="logo_p1">
+                <a href="http://www.aimobility.io" target="_blank"><img class="ai_mobility_logo" alt="ai.mobility" src="images\ai_mobility.jpg"/></a>
+            </p>
+            <div class="inline_element tab_elements">
+                <p class="font_regular tabButton" onclick="showContent('integrated_control');" id="integrated_control" title="Integrated control">통합관제 </p>
+                <p onclick="showContent('integrated_Dashboard')" id="integrated_Dashboard" title="Integrated Dashboard">통합대시보드</p>
+                <p onclick="showContent('diagnostics')" title="Diagnostics and Error Analysis">진단 및 오류 분석 </p>
+                <p onclick="showContent('accident_prediction')" title="Accident Prediction Model and Data Analysis">사고 예측 모델 및 데이터분석</p>
+                <p onclick="alertfun();" title="STEP">STEP</p>
+                <p onclick="alertfun();" title="Springgo Test Mode">스프링고 테스트모드 </p>
+                <p onclick="alertfun();" title="Data center">데이터센터</p>
+            </div>
+            <div class="tab_elements date_time_div">
+                <!--tab_elements-->
+                <div class="divStyle1">
+                    <p class="count_p1" id="currentDate"></p>
+                    <p class="count_p2" id="currentTime"></p>
+                </div>
+                <div class="divStyle2">
+                    <div class="message">
+                        <img class="noticeImg" src="images/notice.svg" onclick="notice_modal();"></i>
+                    </div>
+                    <img class="message msgImg" src="images/msg.svg" onclick="msg_modal();"/>
+                    <img class="userImg" id="user_img" src="images/userIcon.svg"/>
+
+                    <div class='display_inline_block divStyle3'>
+                        <span class='greetSpan'>안녕하세요,</span>
+                        <br>
+                        <span id="active_username" style="font-size: 14px !important;">Test</span>
+                    </div>
+                    <img class="display_inline_block dropDownStyle" src="images/dropDownArrow.svg" onclick="toggle_div('logoutSetting')"/>
+                    <div id="logoutSetting" class="logoutSettings">
+                        <button class="setting_P" onclick="settings();"><img src="images/setting.svg" style="padding-right: 10px;"/>Setting</button>
+                        <button class="setting_P" onclick="logout(); "><img src="images/logout.svg" style="padding-right: 10px;"/>Logout </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Seetings button (Active user information) //settingModal-->
+        <div id="settingDialog">
+        <div class="settingDiv" id="settingDiv">
+            <div class="settingTitle">
+                <p>환경설정</p>
+                <img src="images/closing_button.svg" onclick="hide_div('settingDiv');"/>
+            </div>
+            <div class="settingDiv1">
+                <button onclick="settings();">로그인 정보</button>
+                <button onclick="passwordChange2();">비밀번호 변경</button>
+            </div>
+            <div class="settingDiv2" id="settingDiv2">
+                <label class="settingDiv_label">이메일 ID</label>
+                <span class="settingDiv_span" id="activeEmail"></span>
+                <label class="settingDiv_label">이름</label>
+                <span class="settingDiv_span" id="activeName"></span>
+                <label class="settingDiv_label">팀</label>
+                <span class="settingDiv_span" id="activeTeam"></span>
+                <label class="settingDiv_label">휴대폰</label>
+                <span class="settingDiv_span" id="activePhone"></span>
+                <label class="settingDiv_label">권한</label>
+                <span class="settingDiv_span" id="activeLevel"></span>
+            </div>
+            <div class="settingDiv3" id="settingDiv3">
+                <span><img src="images/userIcon.svg" id="activeUserImg"></span>
+                <button>사진 변경하기</button>
+            </div>
+            <div class="settingDiv21" id="settingDiv21">
+                <label class="settingDiv_label">현재 비밀번호</label>
+                <input class="settingDiv_span" id="currentPwd" type="password" disabled/>
+                <label class="settingDiv_label">새 비밀번호</label>
+                <input class="settingDiv_span" id="newPwd" type="password" placeholder="새로운 비밀번호를 입력하세요."/>
+                <label class="settingDiv_label">새 비밀번호 확인</label>
+                <input class="settingDiv_span" id="confirmPwd" type="password" placeholder="새로운 비밀번호를 다시 입력하세요." />
+                <span class="error" id="pwdResetError"></span>
+                <div>
+                    <span class="settingNotice">※ 비밀번호에 이메일ID, 이름을 포함할 수 없습니다.</span>
+                    <span class="settingNotice">※ 비밀번호는 8글자 이상이어야 합니다.</span>
+                    <span class="settingNotice">※ 비밀번호는 숫자로만 입력은 불가능합니다. </span>
+                </div>
+            </div>
+            <div class="settingDiv31" id="settingDiv31">
+                <button onclick="resetPassword()">변경하기</button>
+            </div>
+        </div>
+    </div>
+    <div class="map_zindex">
+        <div id="hide_test" class="round_button">
+            <button onclick="switchMap(this)" id="degu_button">대구</button>
+            <button onclick="switchMap(this);/*sejongRoute(); open_tab(this.id, 'degu_window',3);*/" id="sejong_button">세종 </button>
+            <button onclick="switchMap(this);/*sangamRoute(); open_tab(this.id, 'degu_window',4);*/" id="sangam_button">상암 </button>
+            <button onclick="switchMap(this);/*gunsanRoute(); open_tab(this.id, 'degu_window',1);*/" id="gunsan_button">군산 </button>
+            <!--<button onclick="switchMap(this);/*gunsanRoute(); open_tab(this.id, 'degu_window',1);*/" id="gunsan_button">강릉 </button>-->
+            <button onclick="offsite(); open_tab('offsite_window',0); " id="offsite_button"> 운행 종료<br> 노선</button>
+        </div>
+        <div class="button_window hide_div list_style_blue" id="offsite_window">
+            <ul id="offsite_list" class="button_window_ul button_window_hr" ></ul>
+        </div>
+
+        <!--offsite list modal-->
+        <div id="siteListModal" class="listModal">
+            <div id="listItem" class="listItem_div">
+                <span class="offsiteSpan" onclick="hide_div('siteListModal')"><img src="images/itemDiv_close.svg"></span>
+                <div class="listItem1">
+                    <lable id="listItem_summary"></lable>
+                </div>
+            </div>
+        </div>
+
+        <div class="button_window hide_div" id="degu_window">
+            <div id="routeTitleDiv" class="routeTitle">
+                <lable id="site_name" class="window_p display_inline_block font-weight-bold">대구 수성 알파시티</lable>
+                <img class="activeGreen" src="images/status/active_green.svg" />
+                <lable class="tempLabel" id="temp_celsicus"></lable>
+                <img class="weatherIcon" id="weather_icon" />
+            </div>
+            <div id="leftMarginDiv" style="position: absolute;left: 41px;top:100px;">
+                <p id="site_title">TEST</p>
+                <p class="font-weight-bold display_inline_block">관리자 </p>
+                <select id="manager_selectlist display_inline_block" name="manager_selectlist" style="width:103px;height: 30px; position:absolute; left :100px;"></select>
+                <button class="msgButton display_inline_block"  onclick="siteMsgSend();">메시지 보내기</button>
+                <div style="position: absolute;left: 0px; top:92px;width: 350px; height: 192px;">
+                    <span OnClick="change_info('infoIcon', 'images/info_change.svg', 'images/info.svg');" style="width: 350px; height: 28px; position: absolute;background: #828282; border-radius: 1px; ">
+                        <p style=" font-size: 14px; color:#FFFFFF; display: inline-block;margin-left: 10px;">숨기기</p>
+                        <img style="color:white; cursor:pointer; float:right; display: inline-block;width:12px;margin-right: 10px; margin-top: 8px;" src="images/openArrow.svg"/>
+                    </span>
+                    <div style="background: #FAFAFA;" class="infoDetail" id="info_content">
+                        <lable class="siteSummary mt-3" id="site_summary"></lable>
+                    </div>
+                </div>
+                <div class="station_table" id="station_table" >
+                    <p class="window_p1">정류장</p>
+                    <div class="timeDiv1">
+                        <p>
+                            <span class="timeSpan1">SW 융합 기술 지원센터</span>
+                            <span class ="timeSpan2">STA001</span>
+                        </p>
+                        <p>
+                            <span class="timeSpan1" style="padding-top: 14px;">롯데몰 북편</span>
+                            <span class ="timeSpan2">STA002</span>
+                        </p>
+                        <p>
+                            <span class="timeSpan1" style="padding-top: 13px;">롯데몰 동편</span>
+                            <span class ="timeSpan2">STA003</span>
+                        </p>
+                        <p>
+                            <span class="timeSpan1" style="padding-top: 13px;">광명테크 앞</span>
+                            <span class ="timeSpan2">STA004</span>
+                        </p>
+                    </div>
+                    <ul class="bar">
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                    <div class="timeDiv2">
+                        <p style="padding-top: 3px;" id="deguStationA">곧 도착 또는 출발</p>
+                        <p style="padding-top: 30px;" id="deguStationB">0분 후 도착</p>
+                        <p style="padding-top: 31px;" id="deguStationC">0분 후 도착</p>
+                        <p style="padding-top: 31px;" id="deguStationD">0분 후 도착</p>
+                    </div>
+                </div>
+                <!-- Div for vehicle information-->
+                <hr style="clear: both; position: absolute;width: 350px; height: 0px; top: 540px;border: 0.5px solid #BDBDBD;">
+                <div style="position: absolute; top: 570px;">
+                    <span class="window_p1">차량</span>     
+                    <select class="vehicleList" id="vehicleSelect" onchange="changeVehicleInfo(this);"></select>
+                    <span class="oddButton" onclick="oddFileDownload()"><a id="oddFile" target="_blank" href="" download></a>
+                    </span>
+                </div>
+                <!--Vehicle info div-->
+                <div class="vehicleDiv1">
+                    <div class="divStyle5" id="vehicleDiv">
+                        <div style="display:inline-block; float:left; margin-left: 5px;">
+                            <p id="vehicleID">SCN000</p>
+                            <span id="vehicleVersion" style="margin-left: -10px;">version: 0.00.0</span>
+                        </div>
+                        <div style="display:inline-block; float:right ">
+                            <div style="display: flex; align-items: flex-end;"><label id="gnss_v1" class="gnssLabel">GNSS</label></div>
+                            <div style="display: flex; align-items: flex-end;"><label class="vehicleLabel">AUTONOMOUS</label></div>
+                        </div>
+                    </div> 
+                    <div style="display: inline-block; float:left; border-right: 0.5px solid #BDBDBD;height:205px;">
+                        <div class="vehicleDiv3">
+                            <span class="cameraAngle" style="float:left "> Rear </span>
+                            <span class="cameraAngle" style="float:right " id="v_front"> Front </span>
+                            <img style="margin-top:23px; margin-bottom:23px" id="doorStatus"/>
+                        </div>
+                        <span id="v_status1" class="drivingButton"> STOPPED </span>
+                    </div>
+                    <div style="display: inline-block; float:left; margin-top:15px;">
+                        <div style="display: inline-block;width: 100px;">
+                            <span class="v_p1">Speed</span>
+                            <span class="v_p2" id="speed_v1">0</span>
+                            <p class="v_p3">km/hr</p>
+                        </div> 
+                        <div class="vehicleDiv2">
+                            <p class="v_p4">Heading</p> 
+                            <!-- <div class="vehicleDiv4">
+                                    <span id="heading_v1" class="headingText"></span>
+                                    <span id="east" class="directionEast">E</span>
+                                    <span id="west" class="directionWest">W</span>
+                                    <span id="north" class="directionNorth">N</span>
+                                    <span id="south" class="directionSouth">S</span>
+                                    <div class="sun" id="sun">
+                                        <div class="dot">
+                                            <div class="bigSun">
+                                        </div>
+                                    </div>
+                                </div>-->
+                        </div>
+                    <div>
+                </div>
+            </div>
+
+            <div style="margin-top:7px">
+                <div class="batteryDiv1"> 
+                    <label >Battery</label>
+                    <!-- <div class="parent"></div>
+                    <div id="battery" class="inverted-bar" data-content=""></div> -->
+                </div>
+
+                <div class="vehicleDiv6"> 
+                    <label>Passengers</label>
+                    <br>
+                    <p id="passengerCount" style="margin-top:-10px;display: inline-block; font-size: 36px;font-weight: bold;">8</p>
+                    <p style="display: inline-block;">/15</p>                        
+                </div>
+            </div>
+            <img id="cameraButton1" onclick="webcam('1'); " src = "images/cctv/video1.svg" hidden/>
+            <img id="cameraButton2" onclick="webcam('2'); " src = "images/cctv/video2.svg" hidden/>
+        </div>
+        </div> <!--left margin DIv-->
+    </div><!--hide-div-->
+</div><!--width 273px div-->  
+<!--</div>-->
+    <div class="div_box" id="countInfoDiv">
+        <div>
+            <p id="routeCount" class="p2"></p>
+            <p class="p3">총 운영 노선</p>
+        </div>
+        <div>
+            <p id="vehicleCount" class="p2"></p>
+            <p class="p3">총 운영 차량 </p>
+        </div>
+        <div>
+            <p id="StationCount" class="p2"></p>
+            <p class="p3">총 운영 정류장 </p>
+        </div>
+        <div>
+            <p id="kioskCount" class="p2"></p>
+            <p class="p3">총 운영 키오스크</p>
+        </div>
+        <div>
+            <p id="garageCount" class="p2"></p>
+            <p class="p3">총 운영 차고지 </p>
+        </div>
+    </div>
+
+    <div id="graph2_div" class="graphDiv graph1">
+        <p id="graphTitle1"></p>
+        <canvas id="graph2"></canvas>
+    </div>
+
+    <div id="graph1_div" class="graphDiv graph2">
+        <p id="graphTitle2"></p>
+        <canvas id="graph1"></canvas>
+    </div>
+</div>
+    <div id="webcam_div" class="webcam_div ">
+        <div id="webcam_div1" class="webcam_div2">
+            <video id="video1" width="100%" height="100%">
+                <source id="video1Src" src="images/sampleVideo.mp4" type="video/mp4">
+            </video>
+            <p class="cam_title">CAMERA-1</p>
+            <div class="cam_btn1">
+                <img id="pausePlayButton" onclick="playPause();" src="images/cctv/play_circle_outline.svg " />
+                <img style="margin-left: 10px;margin-right: 12px;" onclick="scale_image('hidden_cam1');" src="images/cctv/fullscreen.svg " />
+            </div>
+        </div>
+        <div id="webcam_div2" class="webcam_div2">
+            <video id="video2" width="100%" height="100%">
+                <source id="video2Src" type="video/mp4">
+            </video>
+            <p class="cam_title">CAMERA-2</p>
+            <div class="cam_btn1">
+                <img id="pausePlayButton" onclick="playPause();" src="images/cctv/play_circle_outline.svg " />
+                <img style="margin-left: 10px;margin-right: 12px;" onclick="scale_image('hidden_cam2');" src="images/cctv/fullscreen.svg" />
+            </div>
+        </div>
+    </div>
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+        <span class="close">&times;</span>
+        <div class="modal-content" id="img01"> </div>
+    </div>
+    <img id="hidden_cam1" hidden />
+    <img id="hidden_cam2" hidden />
+    <p id="loggedin_userid" hidden></p>
+    <p id="currentMap" hidden></p>
+</div>
+
+    <script>
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            document.getElementById("myModal").style.display = "none";
+        }
+        showCluster();
+        showSummary();
+        setDateTime();
+
+        /* getweather(35.8368,128.6835);
+        setInterval(function() {
+            getweather(35.8368,128.6835);
+        }, 20 * 60000);  */
+       
+        // Get the modal 
+        var modal = document.getElementById('siteListModal');
+        modal.onclick=function(event)
+        {
+            // When the user clicks anywhere outside of the modal, close it
+            if(modal.style.display == "block")
+            {                   
+                if (event.target == modal) 
+                    modal.style.display = "none";
+            } 
+        }
+        $('#select_site').SumoSelect();//custom-select
+        //$('#select_siteManager').SumoSelect(); // custom-select
+        // $('#select_notice').SumoSelect();
+        
+        function change_info(name, src_a, src_b) {
+            var img = eval('document.' + name);
+            var info_content = document.getElementById('info_content');
+            if(img.length == 0) return;
+            if (img.src.indexOf(src_a) >= 0) {
+                img.src = src_b;
+                info_content.style.display = 'none';
+                return;
+            }
+            if (img.src.indexOf(src_b) >= 0) {
+                img.src = src_a;
+                info_content.style.display = 'block';
+                return;
+            }
+            return;
+        }
+    </script>
+</body>
+</html>

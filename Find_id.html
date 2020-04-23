@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Find Id</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+        <!--font awesome icon-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="css/login_style.css">
+
+        <!--  <script src="js/findId_validation.js"></script>-->
+        <script src="js/common_function.js"></script>
+        <script src="js/validation.js"></script> 
+    </head>
+
+    <body style="background-color: #83c3e0;">
+        <div >
+            <img class="animation" src="images\gif\background.gif"> 
+            <span class="titleSpan">새로운 미래, 여기로부터.</span>
+        </div>
+        <div class="container_box">
+            <div style="margin-bottom: 20px;">
+                <img id="page2" src = "images\login\backArrow.svg" class="imgStyle2" onclick="backArrow(this.id)">
+                <span class="title2">SpringGO Datahub System </span>
+            </div>
+            <p class="p4">비밀번호 재설정</p>
+        <div id="FindId_div1">
+            <div class="findDiv">
+            <span class="span1">이메일로 임시 비밀번호를 발송합니다.</span> 
+            <span class="span1">본인 확인을 위해 이름과 이메일 아이디를 입력해주세요.</span>
+        </div>
+            <form id="findid-form" action="" method="post" role="form" onsubmit="">
+                <p class="name_P">이름</p>
+                <input id="input_name" type="text" class=" form-control form_input placeholder" placeholder="이름을 입력해주세요" autofocus>
+                               
+                <p class="name_P">이메일 아이디</p>
+                <input id="input_email" type="text" class="form-control form_input placeholder" placeholder="이메일 아이디를 입력해 주세요">
+               
+                <button type="submit" style="margin-top: 30px;" class="login_button" id = "forgot_pwd_button" onclick="return findid_validation(this.id);" >임시 비밀번호 받기</button>
+                <p class="error" id="input_name_error"></p>
+                <p class="error" id="input_email_error"></p>  
+                <div class="info2">COPYRIGHT@SPRINGCLOUD INC. ALL RIGHTS RESERVED.</div>
+            </form>
+        
+            </div>
+            <div class="findDiv2" id="FindId_div2">
+                <span class="span2"><p id = "id_email_p" class="spanP"></p>으로</span>
+                <p id = "id_pwd_p" class="p5"></p>
+                <button type="submit" onclick="openLoginPage();" class="login_button"> 로그인 </button>
+                <div class="info2">COPYRIGHT@SPRINGCLOUD INC. ALL RIGHTS RESERVED.</div>
+            </div>    
+        </div>
+    </body>
+</html>
