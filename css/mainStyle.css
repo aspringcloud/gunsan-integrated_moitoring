@@ -4,11 +4,58 @@ width:1920px;
 height:1080px;
 }
 
-.hideMap
-{
+.bodyMargin{
+margin-top: -18px;
+}
+
+.msgSendP{
+color: #333333;
+color: #333333;
+font-family: Noto_medium;
+font-size: 18px; 
+display: inline-block;
+line-height: 3; 
+margin-left: 20px;
+display:inline-block
+}
+
+.msgDiv2{
+margin-top: 10px; 
+margin-bottom: 10px; 
+margin-left: 7px;
+}
+
+/*msg box text area style*/
+.textArea{
+margin-left:5px; 
+width: 395px;
+height: 124px;
+background-color: #F2F2F2
+}
+
+.msgP2{
+font-size: 13px; 
+color: rgba(85, 85, 85, 0.5); 
+float:right; 
+margin-right: 22px;
+}
+
+.canvasMargin1{
+margin-right :5px
+}
+
+.userName{
+font-size: 14px !important;
+}
+.setting_P img{
+padding-right: 10px;
+}
+
+.hideMap{
 display:none;
 }
 
+/* user setting div modal*/
 .settingModal{
 display: none;
 position: fixed;
@@ -20,6 +67,23 @@ width: 100%;
 height: 100%;
 background-color: rgb(0, 0, 0);
 background-color: rgba(0, 0, 0, 0.5);
+}
+
+.buttonDiv{
+position :absolute; bottom:5px; right:10px;
+}
+
+.buttonDiv img{
+display:inline-block;
+}
+
+.msgDiv1{
+width:100%; border-radius: 3px 3px 0px 0px;background: #F4F4F4;
+box-shadow: 0px 0.5px 0px rgba(0, 0, 0, 0.3); height: 57px;
+}
+
+.siteTitle{
+font-size: 14px; color: #555555; font-family: Noto_regular;letter-spacing: -0.016em;
 }
 
 .settingDiv{
@@ -224,12 +288,93 @@ display: none;
 display:none;
 }
 
+.siteDiv1{
+position: absolute;
+left: 41px;
+top:100px;
+}
+
+.marginDiv2{
+margin-bottom: 15px;
+}
+
+.select1{
+margin-top: 3px;
+width:103px;
+height: 30px;
+position:absolute;
+left :100px;
+border:1px solid #BDBDBD;
+}
+
+.titleSpan1{
+width: 350px;
+height: 28px; 
+position: absolute;
+background: #828282; 
+border-radius: 1px; 
+}
+
+.titleSpan1 p{
+font-size: 14px; 
+color:#FFFFFF; 
+display: inline-block;
+margin-left: 10px;
+}
+.titleDiv1
+{
+display:inline-block;
+float:left; 
+margin-left: 15px;
+margin-top: 5px;
+}
+
+.titleSpan1 img{
+color:white; 
+cursor:pointer; 
+float:right; 
+display: inline-block;
+width:12px;
+margin-right: 10px; 
+margin-top: 8px;
+}
+
+.infoDiv1{
+display:inline-block; 
+float:right; 
+margin-top: 5px; 
+}
+
+.infoDiv1 div{
+display: flex; 
+align-items: flex-end;
+}
+
+.infoDiv2{
+display: inline-block; 
+float:left; 
+border-right: 0.5px solid #BDBDBD;
+height:205px;
+}
+
+.speedDiv{
+display: inline-block; float:left; margin-top:15px;
+}
+
+.speedDiv1{
+display: inline-block;width: 100px;
+}
+
+.vehicleDiv3 img{
+margin-top:23px;
+margin-bottom:23px
+}
 .eventButton{
 background: #CA4040;
 box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3);
 border-radius: 2px;
 color: #FFFFFF;
-font-weight: bold;
+font-family: Noto_medium;
 font-size: 14px;
 width:176px;
 height:28px;
@@ -283,15 +428,51 @@ border-radius: 1px;
 border: 0px;
 }
 
+.batteryDiv2{
+width: 185px; height: 70px; margin-left: 25px;
+}
+
+.batteryBorder{
+display: inline-block;float:left; border: 1px solid #E0E0E0; width: 48px; margin-top:-10px;
+}
+
+.managerInfo1{
+display:inline-block; width:170px; 
+}
+
+.managerInfo2{
+display:inline-block; width:180px;
+}
+
+.numberP1{
+font-family:Noto_medium; color: #000000;font-size: 14px; display: inline-block; margin-right: 10px;
+}
+
+.numberP2{
+font-family:Noto_medium; font-size: 14px; color: #000000; display: inline-block; margin-right: 10px;
+}
 .alertDiv{
 z-index: 1001;
-right: 70px;
+right: 100px;
 top:120px;
 position: absolute;
 background-color: transparent;
 display: none;
 }
 
+.eastDiv{
+float:left;
+height:60px;
+width:10px; 
+display: inline-block; 
+font-size: 9px;
+vertical-align: inherit; 
+margin-left: 22px;
+}
+
+.eastDiv p{
+color: #BDBDBD;vertical-align: middle; margin-top: 22px;font-family: Roboto_regular;
+}
 .rightSlider{
 position: absolute;
 left: 383px;
@@ -330,6 +511,14 @@ left: 138px;
 position: absolute;
 width: 112px;
 height: 30px;
+text-indent: 15px;
+font-family: Roboto_regular;
+font-size: 15px;
+color: #333333;
+}
+
+.fullscreen{
+margin-left: 10px;margin-right: 12px;
 }
 
 .oddButton{
@@ -370,12 +559,12 @@ display:none;
 }
 
 .chartTitle1{
-font-weight: 500;font-family : Noto Sans KR; color: #185786;
+font-family : Noto_medium; color: #185786;
 font-size: 13px; margin-left: 10px;  margin-top: 7px;
 }
 
 .distanceChart1{
-display: inline-block; 
+display: none; 
 position: absolute;
 width: 359px;
 height: 130px;    z-index: 1001;
@@ -386,11 +575,36 @@ border-radius: 5px;
 }    
 
 .passangerChart2{
-display: inline-block; position: absolute;
+display: none; position: absolute;
 width: 240px;
 height: 128px; z-index: 1001;
 left: 977px;
 top: 922px;background: #FFFFFF;
 box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12), 0px 0px 2px rgba(0, 0, 0, 0.14);
 border-radius: 5px;
+}
+
+.scrolly{
+overflow-y: scroll;
+}
+
+/* width */
+::-webkit-scrollbar {
+width:5px;
+border-radius: 2.5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+background: #ffffff; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+background: #C4C4C4; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+background: #555; 
 }

@@ -117,6 +117,7 @@ function siteMsgSend() {
     // Send message to manager of the site. 
     // Get email from session variable.
     document.getElementById('messageModal').style.display = "block";
+
     // get the site number and selected manager from the select box. 
     var t = document.getElementById("select_site");
     t.selectedIndex = -1; 
@@ -126,6 +127,7 @@ function siteMsgSend() {
     selectSite('all','2',strUser);
 }
 
+// send email on given email id
 function sendMail() {
     //var x = document.getElementById("manager_selectlist").selectedIndex;
     var input_email = $("#manager_selectlist :selected").val();
