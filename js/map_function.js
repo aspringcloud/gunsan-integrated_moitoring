@@ -14,6 +14,8 @@ function switchMap(obj)
             hide_div(mapList[i]);
         show_div("deguMap");
         mapList.push("deguMap");
+        document.getElementById('webcam_div1').style.display = "inline-block";
+        document.getElementById('webcam_div2').style.display = "inline-block";
         deguRoute(); 
         open_tab('degu_window',2);
         show_div("alertDiv");
@@ -24,6 +26,8 @@ function switchMap(obj)
             hide_div(mapList[i]);
         show_div("sejongMap");
         mapList.push("sejongMap");
+        hide_div('webcam_div1');
+        hide_div('webcam_div2');
         sejongRoute(); 
         open_tab('degu_window',3);
         show_div("alertDiv");
@@ -34,6 +38,8 @@ function switchMap(obj)
             hide_div(mapList[i]);
         show_div("sangamMap");
         mapList.push("sangamMap");
+        hide_div('webcam_div1');
+        hide_div('webcam_div2');
         sangamRoute(); 
         open_tab('degu_window',3);
         show_div("alertDiv");
@@ -44,6 +50,8 @@ function switchMap(obj)
             hide_div(mapList[i]);
         show_div("gunsanMap");
         mapList.push("gunsanMap");
+        hide_div('webcam_div1');
+        hide_div('webcam_div2');
         gunsanRoute(); 
         open_tab('degu_window',3);
         show_div("alertDiv");
@@ -299,10 +307,13 @@ function onDemand(map)
 
 // Get distance between two location using leaflet function
 // Note - (does not consider waypoints while showing the route)
-function getDistance(start, destination, speed) {
+function getDistance(start, destination) {
     var distance_m = (start.distanceTo(destination)).toFixed(0);
-    var distance_km = distance_m / 1000;
+     var distance_km = distance_m/1000;
     return distance_km;
+    // research
+    //https://github.com/Leaflet/Leaflet.draw/pull/542/commits/3734900a0e29dffba8393e57378a666b9e02d032
+    //https://gis.stackexchange.com/questions/327409/understanding-why-latlng-returned-from-l-geometryutil-closest-are-not-from-arr
 }
 
 // Updates the speed of vehicle in main.html
@@ -310,6 +321,10 @@ function setVehicleSpeed(speed)
 {
     var speedDom = document.getElementById("speed_v1");
     speedDom.innerHTML = speed;
+    var popupSpeedDom = document.getElementById("popup_speed"); 
+    if(popupSpeedDom)
+    popupSpeedDom.innerHTML = speed;
+    //alert("speedDom.innerHTML  :"+speedDom.innerHTML);
     if(speed < 18)
     {
         // speed is less then 18 text color is black
@@ -334,22 +349,25 @@ function setVehicleSpeed(speed)
     }
 }
 
-
 // Calculate ETA of vehicle on each station (under development)
 function arraivalTime(mapInstance, shuttleLocation,speedArray,count, request_count)
 {
     // ppt speed avg
-    // var speed = ((7*2)+(14.2)+(13.6*10))
+     var speed = ((7*2)+(14.2)+(13.6*10))
     // (7+7+14.2+13.6+13.6+13.6+13.6+13.6+13.6+13.6+13.6+13.6+13.6+14.3)/14;
-
     /* Average speed solution 15 sec */
-    var sumSpeed = (speedArray.reduce(function(pv, cv) { return pv + cv; }, 0)); 
+    /*var sumSpeed = (speedArray.reduce(function(pv, cv) { return pv + cv; }, 0)); 
     if(sumSpeed == 0 )
+    {
+        console.log("sumSpeed return false");
         return false;
-    var speed = sumSpeed/speedArray.length;
+    }
+    var speed = sumSpeed/speedArray.length;*/
+    //console.log("arival ETA");
+   // ETA(shuttleLocation, mapInstance); // for on demand
 
     // distance between vehicle and station A
-    var vtoA = getDistance(shuttleLocation, L.latLng(35.836308, 128.681547));
+  /*  var vtoA = getDistance(shuttleLocation, L.latLng(35.836308, 128.681547));
     var timeA = vtoA/speed;
     var staA = document.getElementById("deguStationA");
     if(timeA < 1)
@@ -403,7 +421,7 @@ function arraivalTime(mapInstance, shuttleLocation,speedArray,count, request_cou
     {
         staD.innerHTML = Math.round(timeD)+"분 후 도착";
     }
-   
+   */
     /* for testing
     console.log("timeA:"+(timeA)+ " distanceA: "+vtoA);
     console.log("timeB:"+(timeB)+ " distanceB: "+vtoB);
@@ -415,20 +433,24 @@ function arraivalTime(mapInstance, shuttleLocation,speedArray,count, request_cou
 var interval;
 // show vehicle info like speed, heading, gnss battery etc.
 function vehicleInfo(map, vId)
-{   var request_count = 0;
+{   
+   
+    var request_count = 0;
     var count15 = 0;
     var speedArray=[];
     interval = setInterval(function(){
         request_count++;
         count15++;
-        var apiUrl = "vehicles/"+vId+"/";
+        var apiUrl = "vehicles/1/"; //"vehicles/"+vId+"/";  //change line 2 (1 or 6)
         getMethod(apiUrl, function (data) {
+        
             var vehicle = JSON.parse(data);
+            //alert("vehicle :"+JSON.stringify(vehicle));
             var shuttleLocation = L.latLng(vehicle.lat, vehicle.lon);
-            
             // calculate ETA after every 15 seconds
             if(count15 == 16)
             {          
+                console.log("count 16 :");
                 count15 = 0;             
                 arraivalTime(map, shuttleLocation,speedArray,count15,request_count);
                 speedArray=[];
@@ -437,11 +459,15 @@ function vehicleInfo(map, vId)
             {
                 speedArray.push(vehicle.speed);
                 if(request_count==1)
+                {
+                    console.log("count 1 :");
                     arraivalTime(map, shuttleLocation,speedArray,count15, request_count);
+                }
             }
             document.getElementById("vehicleID").innerHTML = vehicle.name;
             document.getElementById("vehicleVersion").innerHTML = "version : "+vehicle.model.firmware;
                                 
+            //alert("vehicle.speed :"+vehicle.speed);
             // show speed of vehicle
             setVehicleSpeed(vehicle.speed);
             document.getElementById("heading_v1").innerHTML = vehicle.heading + "&deg";
@@ -506,13 +532,80 @@ function changeVehicleInfo(map, obj)
     }
 }
 
+// This is vehicle ripple effect function. 
+var test2;
+function showVehicleRipple(request_count, mapInstance, vehicle, markerCount2){ 
+    var vehicleObj = JSON.parse(vehicle);
+    
+    // red ripple marker
+    var icon_html2 = '<div id="vehicleRippleDiv" class="shuttle_icon">'+
+                        '<div id="ring1" class="shuttle_ring1"></div>'+
+                        '<div id="ring2" class="shuttle_ring2"></div>'+
+                        '<div id="ring3" class="shuttle_ring3"></div>'+
+                        '<div id="ring4" class="shuttle_ring4"></div>'+
+                    '</div>';
+
+    // green ripple marker
+    var icon_html_g = '<div id="vehicleRippleDiv" class="shuttle_icon">'+
+                        '<div id="ring1" class="shuttle_ring1_g"></div>'+
+                        '<div id="ring2" class="shuttle_ring2_g"></div>'+
+                        '<div id="ring3" class="shuttle_ring3_g"></div>'+
+                        '<div id="ring4" class="shuttle_ring4_g"></div>'+
+                    '</div>';
+     
+    const circleIcon = L.divIcon({html: icon_html2});
+    const circleIcon_g = L.divIcon({html: icon_html_g});
+    var marker;
+    if (request_count <= 1) 
+    {
+        if (vehicleObj.speed > 0) 
+        {
+            marker = L.marker([vehicleObj.lat, vehicleObj.lon], {
+                draggable: false,
+                icon: circleIcon_g,
+            });
+        }
+        else
+        {
+            marker = L.marker([vehicleObj.lat, vehicleObj.lon], {
+                draggable: false,
+                icon: circleIcon,
+            });
+        }
+        // rotate marker of speed is greater then 0 to avoid abnormal data
+        if(vehicleObj.speed > 0) 
+            marker.options.rotationAngle = vehicleObj.heading;
+        marker.addTo(mapInstance);
+        marker._leaflet_id = vehicleObj.id;
+        test2 = marker;
+    } 
+    else 
+    {
+        var newLatLng = new L.LatLng(vehicleObj.lat, vehicleObj.lon);
+        test2.setLatLng(newLatLng);
+        if(vehicleObj.speed > 0) 
+            test2.options.rotationAngle = vehicleObj.heading;
+        test2.addTo(mapInstance);
+    }
+  
+    // change speed status in left side window
+    if (vehicleObj.speed > 0) 
+        vehicleStatus("rgba(115, 192, 95, 0.4)", "DRIVING", "#57AE66", "#57AE66");
+    else
+        vehicleStatus("rgba(202, 64, 64, 0.4)", "STOPPED", "#CA4040", "#BDBDBD");
+
+    // change driving status in left side window
+    showVehicle(request_count, mapInstance,vehicleObj, markerCount2);  
+}
+
+
 // Show multiple vehicles on route (under development)
 var markerCount2;
 function shuttleOnRoute(mapInstance, reqCount, vehicleObj)
 {
-    JSON.stringify("stringyfy:"+vehicleObj);
-    vehicle =  vehicleObj[0];
-    getMethod("vehicles/" + vehicle.id + "/", function (vehicle) {
+    vehicle =  vehicleObj;//[0];
+    console.log("vehicle: "+JSON.stringify(vehicleObj)+ " reqCount :"+reqCount);
+    getMethod("vehicles/1/", function (vehicle) {  // change line 3 // "vehicles/" + vehicle.id + "/"
         markerCount2++;
         // creates vehicle ripple marker 
         showVehicleRipple(reqCount, mapInstance,vehicle,markerCount2);
@@ -536,7 +629,7 @@ function deguRoute()
     document.getElementById("passangerChart2").style.display = "inline-block";
    
     // daegu map center
-    var map_center = [35.83553,128.68351];
+    var map_center = [35.83731,128.68384];
      
     /* Check this --> map_function.js:717 Uncaught TypeError: Cannot read property 'style' of null*/
     var daegu_map = createMap(map_center, 17, daegu_map, 'deguMap');
@@ -551,10 +644,11 @@ function deguRoute()
 
     // Show All the shuttles on degu route
     var reqCount = 0;
+    var reqCount2 = 0;
     var firstId; 
     var vehicleObj=[];
 
-    // get ll vehicle Id's.
+    // get all vehicle Id's.
     getMethod("vehicles/", function (data) {
         var vehicle_data = JSON.parse(data).results;
         if (vehicle_data == undefined) 
@@ -564,7 +658,7 @@ function deguRoute()
         // create vehicle obj and store in array
         for (var i = 0; i < count; i++) {
             var vehicle = vehicle_data[i];
-            if (vehicle.site == 2 && vehicle.name =="SCN001") { 
+            if (vehicle.site == 2 && vehicle.name =="SCN001"){//&& vehicle.name =="SCE999") { 
                 deguShuttleArray.push(vehicle.id); // array of vehicle ID 
                 var vehicle = {
                     id:vehicle.id,
@@ -586,26 +680,356 @@ function deguRoute()
         // update status of webcam  
         webcam('1', vehicleObj );
         webcam('2', vehicleObj);
-        
-        // show multiple vehicle on degu route
-        setInterval(function(){
-           reqCount++;
-            shuttleOnRoute(daegu_map, reqCount, vehicleObj);
-        },1000);
 
         // show chart.js 
         showChartData(vehicleObj);
+        //create list of vehicles in degu route
+        vehicleObj = vehicleObj.sort((a, b) => (a.name > b.name) ? 1 : -1);
+
+        setInterval(function(){
+             reqCount++;
+            shuttleOnRoute(daegu_map, reqCount, vehicleObj[0]);
+        },1000);
+
         
+       /* setInterval(function(){
+            reqCount2++;
+           shuttleOnRoute(daegu_map, reqCount2, vehicleObj[1]);
+       },1000);
+
+        
+        setInterval(function run() {
+            reqCount++;
+            shuttleOnRoute(daegu_map, reqCount, vehicleObj[0]);
+            setTimeout(run, 1000);
+        }, 1000);
+
+        
+        setInterval(function run() {
+            reqCount2++;
+            shuttleOnRoute(daegu_map, reqCount2, vehicleObj[1]);
+            setTimeout(run, 1000);
+        }, 1000);*/
+
+
+        // show multiple vehicle on degu route
+        /*for(var i = 0; i < vehicleObj.length; i++) //vehicleObj.length
+        {
+           var v = vehicleObj[i];
+          // alert("v1 :"+v);
+            setInterval(function(){
+                //alert("v2 :"+v);
+                //var vehicleLocation = L.latLng(vehicleObj[0].lat, vehicleObj[0].lon);
+                reqCount++;
+                shuttleOnRoute(daegu_map, reqCount, v);
+            },1000);
+        }
+     */
+        createSelectList(vehicleObj);
         deguShuttleArray = deguShuttleArray.sort();
         firstId = deguShuttleArray[0];
         vehicleInfo(daegu_map, firstId);
         changeVehicleInfo(daegu_map, firstId);
-
-        //create list of vehicles in degu route
-        vehicleObj = vehicleObj.sort((a, b) => (a.name > b.name) ? 1 : -1);
-        createSelectList(vehicleObj);
     });
     show_div("alertDiv");
+}
+
+function degreesToRadians(degrees) {
+    return degrees * Math.PI / 180;
+  }
+  
+  function distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
+    var earthRadiusKm = 6371;
+  
+    var dLat = degreesToRadians(lat2-lat1);
+    var dLon = degreesToRadians(lon2-lon1);
+  
+    lat1 = degreesToRadians(lat1);
+    lat2 = degreesToRadians(lat2);
+  
+    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+    return earthRadiusKm * c;
+  }
+
+function distance(lat1, lon1, lat2, lon2, unit) {
+	if ((lat1 == lat2) && (lon1 == lon2)) {
+		return 0;
+	}
+	else {
+		var radlat1 = Math.PI * lat1/180;
+		var radlat2 = Math.PI * lat2/180;
+		var theta = lon1-lon2;
+		var radtheta = Math.PI * theta/180;
+		var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+		if (dist > 1) {
+			dist = 1;
+		}
+		dist = Math.acos(dist);
+		dist = dist * 180/Math.PI;
+		dist = dist * 60 * 1.1515;
+		if (unit=="K") { dist = dist * 1.609344 }
+		if (unit=="N") { dist = dist * 0.8684 }
+		return dist;
+	}
+}
+
+function ETA(vehicleObj, daegu_map){
+    console.log("vehicleObj :"+vehicleObj);
+    //var vehicleLoc = L.latLng(vehicleObj[0].lat, vehicleObj[0].lon);
+    //var vehicleLoc = L.latLng(35.83597,128.69015);
+    var vehicleLoc = vehicleObj;
+    var distance_V_to_A;
+    var distance_V_to_B;
+    var distance_V_to_C;
+    var distance_V_to_D;
+
+
+    /*var distance_V_to_A = getDistance(vehicleLoc, L.latLng(35.836308, 128.681547));
+    var distance_V_to_B = getDistance(vehicleLoc, L.latLng(35.838673, 128.687892));
+    var distance_V_to_C = getDistance(vehicleLoc, L.latLng(35.83459, 128.68652));
+    var distance_V_to_D = getDistance(vehicleLoc, L.latLng(35.836308, 128.681547));*/
+
+    // Route VtoA
+   var waypointsVA = [
+        vehicleObj, // vehicle location
+        L.latLng(35.83459, 128.68652), //staD
+        L.latLng(35.836308, 128.681547) //staA
+    ];
+    var controlA = L.Routing.control({
+        waypoints: waypointsVA,
+        serviceUrl: 'http://115.93.143.2:8104/route/v1',
+        dragging:true,
+        routeWhileDragging: false,
+        lineOptions: {styles: [{ color: '#008000', weight: 0 }]},  
+    }).addTo(daegu_map);
+    L.Routing.errorControl(controlA).addTo(daegu_map);
+    controlA.on('routesfound', function(e) {
+        var routes = e.routes;
+        var summary = routes[0].summary;
+        // alert distance and time in km and minutes
+        distance_V_to_A = summary.totalDistance ;
+        console.log('Total distance is ' + summary.totalDistance / 1000 + ' km and total time is ' + Math.round(summary.totalTime % 3600 / 60) + ' minutes');
+     });
+
+    // Route VtoB
+    var waypointsVB = [
+        vehicleObj, // vehicle location
+        L.latLng(35.836308, 128.681547), //staA
+        L.latLng(35.838673, 128.687892), //staB
+    ];
+    var controlB = L.Routing.control({
+        waypoints: waypointsVB,
+        serviceUrl: 'http://115.93.143.2:8104/route/v1',
+        dragging:true,
+        routeWhileDragging: false,
+        lineOptions: {styles: [{ color: '#0000FF', weight: 0 }]},  
+    }).addTo(daegu_map);
+    L.Routing.errorControl(controlB).addTo(daegu_map);
+    controlB.on('routesfound', function(e) {
+        var routes = e.routes;
+        var summary = routes[0].summary;
+        distance_V_to_B = summary.totalDistance;
+        // alert distance and time in km and minutes
+        console.log('Total distance is ' + summary.totalDistance / 1000 + ' km and total time is ' + Math.round(summary.totalTime % 3600 / 60) + ' minutes');
+     });
+
+
+    // Route VtoC
+    var waypointsVC = [
+        vehicleObj, // vehicle location
+        L.latLng(35.838673, 128.687892), //staB
+        L.latLng(35.83705, 128.690044),  // staC
+    ];
+    var controlC = L.Routing.control({
+        waypoints: waypointsVC,
+        serviceUrl: 'http://115.93.143.2:8104/route/v1',
+        dragging:true,
+        routeWhileDragging: false,
+        lineOptions: {styles: [{ color: '#00FF00', weight: 0 }]},  
+    }).addTo(daegu_map);
+    L.Routing.errorControl(controlC).addTo(daegu_map);
+    controlC.on('routesfound', function(e) {
+        var routes = e.routes;
+        var summary = routes[0].summary;
+        distance_V_to_C = summary.totalDistance;
+        // alert distance and time in km and minutes
+        console.log('Total distance is ' + summary.totalDistance / 1000 + ' km and total time is ' + Math.round(summary.totalTime % 3600 / 60) + ' minutes');
+     });
+
+    // Route VtoD
+    var waypointsVD = [
+        vehicleObj, // vehicle location
+        L.latLng(35.83705, 128.690044),  // staC
+        L.latLng(35.83459, 128.68652), //staD
+    ];
+    var controlD = L.Routing.control({
+        waypoints: waypointsVD,
+        serviceUrl: 'http://115.93.143.2:8104/route/v1',
+        dragging:true,
+        routeWhileDragging: false,
+        lineOptions: {styles: [{ color: '#FF0000', weight: 0 }]},  
+    }).addTo(daegu_map);
+    L.Routing.errorControl(controlD).addTo(daegu_map);
+    controlD.on('routesfound', function(e) {
+        var routes = e.routes;
+        var summary = routes[0].summary;
+        distance_V_to_D = summary.totalDistance;
+        // alert distance and time in km and minutes
+        console.log('Total distance is ' + summary.totalDistance / 1000 + ' km and total time is ' + Math.round(summary.totalTime % 3600 / 60) + ' minutes');
+     });
+
+    // create list of objects from with station name and distance between vehicle to each station on route
+    const distanceList = [
+        { station: 'A', distance: distance_V_to_A },
+        { station: 'B', distance: distance_V_to_B },
+        { station: 'C', distance: distance_V_to_C },
+        { station: 'D', distance: distance_V_to_D },
+      ];
+    
+    // sort the list of objects to find the smallest distance.   
+    distanceList.sort((a, b) => (a.distance > b.distance) ? 1 : -1);
+
+    var firstsmallest = distanceList[0].station; // first smallest distance
+    var secondsmallest = distanceList[1].station; // second smallest distance
+
+    console.log("firstsmallest :"+firstsmallest);
+    console.log("secondsmallest: "+secondsmallest);
+
+    // distance between garage to vehicle 
+    var distanceGtoA = getDistance(vehicleLoc, L.latLng(35.835155, 128.682617)); //garage location
+
+    // check if vehicle is parked
+   /* if(distanceGtoA <= 0.2 || distance_V_to_A <= 0.2 ) //distanceList[0].distance == distanceList[1].distance ||
+    //min if XX = true 
+    {
+        // reset all the stations - this a start of route
+        var stationAArrived = false;
+        var stationBArrived = false;
+        var stationCArrived = false;
+        var stationDArrived = false;
+    }
+    //min if XX = 
+
+    // Check the next visiting station by the sequence
+
+    console.log("1 #### firstsmallest:"+firstsmallest+ " secondsmallest:"+secondsmallest);
+    if(firstsmallest=='A' && secondsmallest =='B') // chect all stations withh alll stations
+        firstsmallest = 'B'
+    else if (firstsmallest=='B' && secondsmallest =='C')   
+        firstsmallest = 'C'
+    else if (firstsmallest=='C' && secondsmallest =='D')   
+        firstsmallest = 'D'
+    else if (firstsmallest=='D' && secondsmallest =='A')   
+        firstsmallest = 'A'
+
+    console.log("2 ^^^^^^firstsmallest:"+firstsmallest);
+  
+    // check if station is already covered by vehicle or not, if covered next station 
+   if(firstsmallest == 'A' && stationAArrived == true)
+        firstsmallest = 'B';
+    else if(firstsmallest == 'B' && stationBArrived == true)
+        firstsmallest ='C';
+    else if(firstsmallest == 'C' && stationCArrived == true)
+        firstsmallest ='D';
+    else if(firstsmallest == 'D' && stationDArrived == true)
+        firstsmallest ='A';
+
+    console.log("3 ^^^^^^firstsmallest:"+firstsmallest);*/
+    // Latitute and longitude of all stations
+    var LocC = L.latLng(35.83705, 128.690044); //staC
+    var LocD = L.latLng(35.83459, 128.68652); //staD
+    var LocA = L.latLng(35.836308, 128.681547); //staA
+    var LocB = L.latLng(35.838673, 128.687892); //staB
+
+    // static distance between each station
+    var distanceAtoB = 0.72;
+    var distanceBtoC = 0.42;
+    var distanceCtoD = 0.68;
+    var distanceDtoA = 0.68;
+    
+    // Intialize ETA variable for all stations
+    var distancetoA = 0;
+    var distancetoB = 0;
+    var distancetoC = 0;
+    var distancetoD = 0;
+
+    // calculate distance
+    if(firstsmallest == 'A')
+    {
+        console.log("Going to station A");
+        // this means vehicle is going from station D to A
+        // calculate distance between vtoA and vtoD stations
+        var vtoA =  getDistance(vehicleLoc, L.latLng(35.836308, 128.681547));
+        var vtoD =  getDistance(vehicleLoc, L.latLng(35.83459, 128.68652));
+        distancetoA = vtoA;
+        distancetoB = vtoA + distanceAtoB;
+        distancetoC = vtoA + distanceAtoB + distanceBtoC;
+        distancetoD = vtoA + distanceAtoB + distanceBtoC + distanceCtoD;
+
+        if(vtoA <= 0.2)
+            stationAArrived == true;
+            //min set a some value XX
+    }
+    else if(firstsmallest == 'B')
+    {
+        console.log("Going to station B");
+        // this means vehicle is going from station A to B
+        // calculate distance between vtoB and vtoA stations
+        var vtoB =  getDistance(vehicleLoc, L.latLng(35.838673, 128.687892));
+        var vtoA =  getDistance(vehicleLoc, L.latLng(35.836308, 128.681547));
+        distancetoA = vtoB+ distanceBtoC + distanceCtoD + distanceDtoA;
+        distancetoB = vtoB; 
+        distancetoC = vtoB + distanceBtoC;
+        distancetoD = vtoB + distanceBtoC + distanceCtoD;
+        if(vtoB <= 0.2)
+            stationBArrived == true;
+    }
+    else if(firstsmallest == 'C')
+    {
+        console.log("Going to station C");
+        // this means vehicle is going from station B to C
+        var station = "stationC";
+        // calculate distance between vtoC and vtoB stations
+        var vtoC =  getDistance(vehicleLoc, L.latLng(35.83705, 128.690044));
+        var vtoB =  getDistance(vehicleLoc, L.latLng(35.838673, 128.687892));
+    
+        distancetoA = vtoC+ distanceCtoD + distanceDtoA;
+        distancetoB = vtoC+ distanceCtoD + distanceDtoA + distanceAtoB; 
+        distancetoC = vtoC;
+        distancetoD = vtoC + distanceCtoD;
+
+        if(vtoC <= 0.2)
+            stationCArrived == true;
+    }
+    else
+    {
+        console.log("Going to station D");
+        // this means vehicle is going from station C to D
+        var station = "stationD";
+        // calculate distance between vtoC and vtoD stations
+        var vtoD =  getDistance(vehicleLoc, L.latLng(35.83459, 128.68652));
+        var vtoC =  getDistance(vehicleLoc, L.latLng(35.83705, 128.690044));
+        distancetoA = vtoD + distanceDtoA;
+        distancetoB = vtoD+ distanceDtoA + distanceAtoB; 
+        distancetoC = vtoD+ distanceDtoA + distanceAtoB + distanceBtoC; 
+        distancetoD = vtoD;
+
+        if(vtoD <= 0.2)
+            stationDArrived == true;
+    }
+
+    /* for testing */
+    console.log("distanceA: "+distance_V_to_A);
+    console.log("distanceB: "+distance_V_to_B);
+    console.log("distanceC: "+distance_V_to_C);
+    console.log("distanceD: "+distance_V_to_D);
+
+    console.log("timeA:"+(distance_V_to_A/15)+ " distanceA: "+distancetoA);
+    console.log("timeB:"+(distance_V_to_B/15)+ " distanceB: "+distancetoB);
+    console.log("timeC:"+(distance_V_to_C/15)+ " distanceC: "+distancetoC);
+    console.log("timeD:"+(distance_V_to_D/15)+ " distanceD: "+distancetoD);
 }
 
 /* show chart with todays distance passenger count */
@@ -644,13 +1068,9 @@ function showChartData(vehicleObj){
                     else
                         colorList.push('#67BBB1');
 
-                    if(colorList.length == 1)
-                    {
-                        colorList.push('#67BBB1');
-                        nameList.push("STV000");
-                        distanceList.push("20");
-                    }
+                    
                     todayChart('todayDistance', '총 운행거리', colorList, 'Distance(km)', nameList, distanceList);
+                    todayChart('todayPassenger', '총 탑승자 수', colorList, 'Passenger', nameList, distanceList);
                 }
             }
         }
@@ -735,7 +1155,7 @@ function showVehicle(request_count, mapInstance, vehicleObj, markerCount2)
     var vehicleIcon = L.icon({
         iconSize: [37, 52],
         popupAnchor: [10, -25],
-        iconAnchor: [20, 40],
+        iconAnchor: [26, 45], //20,40
         iconUrl: iconUrl,
     });
 
@@ -880,74 +1300,6 @@ function getMethod(api_name, callback) {
     request.send();
 }
 
-// This is vehicle ripple effect function. 
-var test2;
-function showVehicleRipple(request_count, mapInstance, vehicle, markerCount2){ 
-    var vehicleObj = JSON.parse(vehicle);
-    
-    // red ripple marker
-    var icon_html2 = '<div id="vehicleRippleDiv" class="shuttle_icon">'+
-                        '<div id="ring1" class="shuttle_ring1"></div>'+
-                        '<div id="ring2" class="shuttle_ring2"></div>'+
-                        '<div id="ring3" class="shuttle_ring3"></div>'+
-                        '<div id="ring4" class="shuttle_ring4"></div>'+
-                    '</div>';
-
-    // green ripple marker
-    var icon_html_g = '<div id="vehicleRippleDiv" class="shuttle_icon">'+
-                        '<div id="ring1" class="shuttle_ring1_g"></div>'+
-                        '<div id="ring2" class="shuttle_ring2_g"></div>'+
-                        '<div id="ring3" class="shuttle_ring3_g"></div>'+
-                        '<div id="ring4" class="shuttle_ring4_g"></div>'+
-                    '</div>';
-     
-    const circleIcon = L.divIcon({html: icon_html2});
-    const circleIcon_g = L.divIcon({html: icon_html_g});
-    var marker;
-    if (request_count <= 1) 
-    {
-        if (vehicleObj.speed > 0) 
-        {
-            marker = L.marker([vehicleObj.lat, vehicleObj.lon], {
-                draggable: false,
-                icon: circleIcon_g,
-            });
-        }
-        else
-        {
-            marker = L.marker([vehicleObj.lat, vehicleObj.lon], {
-                draggable: false,
-                icon: circleIcon,
-            });
-        }
-
-        // rotate marker of speed is greater then 0 to avoid abnormal data
-        if(vehicleObj.speed > 0) 
-            marker.options.rotationAngle = vehicleObj.heading;
-        marker.addTo(mapInstance);
-        marker._leaflet_id = vehicleObj.id;
-        test2 = marker;
-    } 
-    else 
-    {
-        var newLatLng = new L.LatLng(vehicleObj.lat, vehicleObj.lon);
-        test2.setLatLng(newLatLng);
-
-        if(vehicleObj.speed > 0) 
-            test2.options.rotationAngle = vehicleObj.heading;
-        test2.addTo(mapInstance);
-    }
-  
-    // change speed status in left side window
-    if (vehicleObj.speed > 0) 
-        vehicleStatus("rgba(115, 192, 95, 0.4)", "DRIVING", "#57AE66", "#57AE66");
-    else
-        vehicleStatus("rgba(202, 64, 64, 0.4)", "STOPPED", "#CA4040", "#BDBDBD");
-
-    // change driving status in left side window
-    showVehicle(request_count, mapInstance,vehicleObj, markerCount2);  
-}
-
 function vehicleStatus(color, status, statusBg, frontBG)
 {
     if(document.getElementById("ring1") != null)
@@ -1085,8 +1437,10 @@ function createRoute(map, waypoints, stationTitle,kioskTitle) {
 // creates map with given mapcenter and zoom level
 function createMap(map_center, zoom, mapInstance, mapId) {
     if (mapInstance != undefined || mapInstance != null) 
+    {
         mapInstance.remove();
-    
+        mapInstance.off();
+    }
     mapInstance = L.map(mapId, {
         zoomSnap: 0.15,      
         dragging: true, //false
@@ -1723,131 +2077,114 @@ function highchart(graph1, title, color, yAxisLable, vehicleList, yAxisList) {
 
 //create chart.js (horizontal bar chart) - under development 
 function todayChart(graph1, title, color, yAxisLable, vehicleList, distanceList) {
-    var ctx2 = document.getElementById(graph1).getContext('2d');
-    var chart2 = new Chart(ctx2, {
-        type: 'horizontalBar',
-        data: {
-            labels: vehicleList,
-            datasets: [{
-                label: yAxisLable,
-                backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgb(255, 99, 132)',
-                data: distanceList,
-                backgroundColor:color,
-                barPercentage: 0.3,
-                categoryPercentage: 1.0,
-            }]
-        },
-        title: {
-            text: title,
-            fontSize: '0px',
-            fontFamily: 'Noto Sans KR',
-            display: false,
-        },
-        yAxis: {
-            min: 0,
-            title: {
-                text: 'Distance (km)'
-            },
-            display: false,
-            gridLines:{
-                drawBorder: false
-            }
-        },
-
-        // Configuration options go here
-        options: {
-            options: {
-                hover: {
-                    intersect: false,
-                }
-            },
-            title: {
-                display: true,
-                text: '총 운행거리',
-                ticks: {
-                    fontSize: 8,
-                    fontFamily: "Noto Sans KR",
-                },
-                position:'topleft'
-            },
-           /* plugins:{
-                datalabels: {
-                    align: 'end',
-                    anchor: 'end',        
-                   
-                    color: 'black',
-                    formatter: function(value, context) {
-                        return value+'km';
-                    }
-                }
-            },*/
-            animation: {
-                duration: 1,
-                onComplete () {
-                /*    const chartInstance = this.chart;
-                    const ctx2 = chartInstance.ctx;
-                    const dataset = this.data.datasets[0];
-                    const meta = chartInstance.controller.getDatasetMeta(0);
-                    Chart.helpers.each(meta.data.forEach((bar, index) => {
-                        const label = this.data.labels[index];
-                        const labelPositionX = 50;
-                        const labelWidth = ctx.measureText(label).width + labelPositionX;
-                        ctx2.textBaseline = 'middle';
-                        ctx2.textAlign = 'left';
-                        ctx2.fillStyle = '#fff';
-                        ctx2.fillText(label, labelPositionX, bar._model.y);
-                    }));*/
-                }},
-            legend: {
-                display: false,
-            },
-            responsive: false,
-            maintainAspectRatio: false,
-            scales: {
-                xAxes: [{
-                    gridLines: {
-                        display: false,
-                        drawBorder:false,
-                    },
-                    ticks: {
-                        fontSize: 8,
-                        fontFamily: "Roboto",
-                        fontStyle: "bold",
-                        beginAtZero:true,
-                        display:false
-                    }
-                }],
-                yAxes: [{
-                    barPercentage: 0.7,
-                    categoryPercentage: 0.7,
-                    gridLines: {
-                        display: false,
-                        drawBorder:false,
-                    },
-                    ticks: {
-                        fontSize: 8,
-                        fontFamily: "Roboto",
-                        fontStyle: "bold",
-                        display:false,
-                        //stepSize: 300,
-                    }
+    
+    var ctx = document.getElementById(graph1).getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'horizontalBar',
+            data: {
+                labels: vehicleList,
+                datasets: [{
+                    label: yAxisLable,
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    data: distanceList,
+                    backgroundColor: color,
+                    barPercentage: 0.3,
+                    categoryPercentage: 1.0,
                 }]
+            },
+            title: {
+                text: title,
+                fontSize: '0px',
+                fontFamily: 'Noto Sans KR',
+            },
+            yAxis: {
+                min: 0,
+                gridLines:{
+                    drawBorder: false
+                },
+                title: {
+                    text: 'Distance (km)'
+                }
+            },
+
+            // Configuration options go here
+            options: {
+                plugins: {
+                    datalabels: {
+                      anchor: 'end',
+                      align: 'top',
+                      formatter: Math.round,
+                      font: {
+                        weight: 'bold',
+                        size: '0'
+                      }
+                    }
+                  },
+                options: {
+                    hover: {
+                        intersect: false,
+                    }
+                },
+                title: {
+                    display: false,
+                    text: '총 운행거리',
+                    ticks: {
+                        fontSize: 8,
+                        fontFamily: "Noto Sans KR"
+                    },
+                },
+                legend: {
+                    display: false,
+                },
+                responsive: false,
+                maintainAspectRatio: false,
+            
+                scales: {
+                    xAxes: [{
+                        gridLines: {
+                            display: false,
+                            drawBorder:false,
+                        },
+                        ticks: {
+                            fontSize: 8,
+                            fontFamily: "Roboto",
+                            fontStyle: "bold",
+                        },
+                        
+                    }],
+                    yAxes: [{
+                        gridLines: {
+                            display: false,
+                            drawBorder:false,
+                        },
+                        ticks: {
+                            fontSize: 8,
+                            fontFamily: "Roboto",
+                            fontStyle: "bold",
+                            stepSize: 300,
+                        }
+                    }]
+                }
             }
-        }
-    });
+        });
 }
 
-function playPause(webcam_div,  pausePlayButton)
+function playPause(webcam_div, pausePlayButton)
 {    
     // Event listener for the play/pause button
     var pausePlayButtons = document.getElementById(pausePlayButton);
     var fifthChar = pausePlayButtons.src.substring((pausePlayButtons.src).length - 5);
+    //alert("fifthChar :"+fifthChar);
     if(fifthChar == "y.svg")
     {
         // Update the button text to 'Pause'
         pausePlayButtons.src = "images/cctv/pause.svg"; 
-        document.getElementById(webcam_div).backgroundColor == "#828282";
+        document.getElementById(webcam_div).style.background = "";
+        document.getElementById(webcam_div).style.backgroundColor = "#828282";
+        document.getElementById(webcam_div).style.backgroundSize="contain";
+  
+        console.log("grey");
     } 
     else 
     {  
@@ -1855,17 +2192,22 @@ function playPause(webcam_div,  pausePlayButton)
         pausePlayButtons.src = "images/cctv/play.svg"; 
         if(webcam_div == "webcam_div1")
         {
-            document.getElementById(webcam_div).background = 'url('+document.getElementById("hidden_cam1").background+')' ;
+            document.getElementById(webcam_div).style.background = document.getElementById("hidden_cam1").style.background;
         }
         else if(webcam_div == "webcam_div2")
         {
-            document.getElementById(webcam_div).background = 'url('+document.getElementById("hidden_cam2").background+')' ;
+            document.getElementById(webcam_div).style.background = document.getElementById("hidden_cam2").style.background ;
         } 
+        document.getElementById(webcam_div).style.backgroundSize="contain";
     }
 }
 
+
 function webcam(webcamId, vehicle) {
+    console.log("*vehicle"+vehicle);
+
     var vehicleObj = vehicle[0];
+    // console.log("*vehicleObj"+vehicleObj.toString());
     show_div('webcam_div');
   
     // close div with off camer=a button
@@ -1877,20 +2219,23 @@ function webcam(webcamId, vehicle) {
     document.getElementById("playButtonDiv2").style.display = "block";
 
     var button_id = "cameraButton" + webcamId;
+    //alert("webcamId :"+webcamId);
     if (webcamId == '1') 
     {
         var webcam1 = vehicleObj.webcam1;
         if (webcam1 != null) {
+            //alert("webcam() if");
             document.getElementById("webcam_div1").style.display = "inline-block";
-            document.getElementById("hidden_cam1").background = 'url('+webcam1+ ')'; 
+            document.getElementById("hidden_cam1").style.background = 'url('+webcam1+')'; 
         }
     }
     if (webcamId == '2') {
+        //alert("webcam() else");
         document.getElementById("cameraButton2").src = "images/cctv/video2Active.svg";
         var webcam2 = vehicleObj.webcam2;
         if (webcam2 != null) {
             document.getElementById("webcam_div2").style.display = "inline-block";
-            document.getElementById("hidden_cam2").background = 'url(' + webcam2 + ')';
+            document.getElementById("hidden_cam2").style.background = 'url('+webcam2+')';
         }
     }           
 }
@@ -1898,8 +2243,9 @@ function webcam(webcamId, vehicle) {
 // under- development
 function scale_image(hidden_cam) {
     document.getElementById("myModal").style.display = "block";
-    var img = document.getElementById(hidden_cam).innerHTML;
-    document.getElementById("img01").style.backgroundImage = 'url('+img+')';
+    var div_url = document.getElementById(hidden_cam).style.background;
+    //alert("div_url:"+div_url);
+    document.getElementById("img01").style.backgroundImage = div_url;
 }
 
 function setByte(str) {

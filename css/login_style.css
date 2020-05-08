@@ -1147,11 +1147,11 @@ width: 255px;
 height: 195px;
 display: inline-block;
 border-radius: 3px;
-background-size: cover;
 border: 0.5px solid #FFFFFF;
 box-sizing: border-box;
 background-color: #828282;
 z-index:1000;
+background-size: contain;
 }
 
 .button_window_ul li:hover {
@@ -1630,7 +1630,7 @@ font-family: Roboto_medium;font-size: 13px;color: #333333; vertical-align: top;f
 }
 
 .passengerDiv2{
-width:50px; height: 20px; margin-left: 18px;
+width:70px; height: 20px; 
 }
 
 .passengerDiv3{

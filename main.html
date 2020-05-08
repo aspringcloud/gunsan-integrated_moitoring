@@ -138,11 +138,11 @@
     <!--chart.js graphs-->
     <div class="distanceChart1" id="distanceChart1">
         <p class="chartTitle1">금일 총 운행거리 </p>
-        <canvas id="todayDistance" width="359px" height="95px" class="canvasMargin1"></canvas>
+        <canvas id="todayDistance" width="359px" height="85px" class="canvasMargin1"></canvas>
     </div>
     <div class="passangerChart2" id="passangerChart2"> 
         <p class="chartTitle1">금일 총 탑승자 수</p>
-        <canvas id="todayPassenger" width="240px" height="95px"></canvas>
+        <canvas id="todayPassenger" width="240px" height="85px"></canvas>
     </div>
     <div class="main_div">
         <div class="mainTop">
@@ -447,7 +447,7 @@
         <div id="webcam_div1" class="webcam_div2">
             <p class="cam_title">CAMERA-1</p>
             <div id="offCameraDiv1" class="offcam_btn1"> 
-                <img src="images/cctv/videocam_off.svg" /> 
+                <img src="images/cctv/videocam_off.svg" onclick=""/> 
             </div>
             <div id="playButtonDiv1" class="cam_btn1">
                 <img id="pausePlayButton1" onclick="playPause('webcam_div1','pausePlayButton1');" src="images/cctv/pause.svg" />
@@ -457,7 +457,7 @@
         <div id="webcam_div2" class="webcam_div2">
             <p class="cam_title">CAMERA-2</p>
             <div id="offCameraDiv2" class="offcam_btn1"> 
-                <img src="images/cctv/videocam_off.svg" /> 
+                <img src="images/cctv/videocam_off.svg"  onclick="" /> 
             </div>
             <div id="playButtonDiv2" class="cam_btn1">
                 <img id="pausePlayButton2" onclick="playPause('webcam_div2','pausePlayButton2');" src="images/cctv/pause.svg" />
@@ -470,14 +470,14 @@
         <span class="close">&times;</span>
         <div class="modal-content" id="img01"> 
             <div class="buttonDiv">
-                <img id="pausePlayButton3" src="images/cctv/pause.svg" onclick="playPause('img01', 'pausePlayButton3')"/>
+                <!--<img id="pausePlayButton3" src="images/cctv/pause.svg" onclick="playPause('img01', 'pausePlayButton3')"/>-->
                 <img src="images/cctv/fullscreen_exit.svg" onclick="document.getElementById('myModal').style.display = 'none'"/>    
             </div>
         </div>
     </div>
-    <div id="hidden_cam1" hidden></div>
+    <div id="hidden_cam1" hidden></div> <!--style="height:500px;width:500px; z-index: 1010;position: absolute; left:600px;top:600px;border:1px solid black"-->
     <div id="hidden_cam2" hidden></div>
-        <p id="loggedin_userid" hidden></p>
+           <p id="loggedin_userid" hidden></p>
         <p id="currentMap" hidden></p>
     </div>
 
@@ -508,7 +508,7 @@
         getweather(35.8368,128.6835);
         setInterval(function() {
             getweather(35.8368,128.6835);
-        }, 20 * 60000);  
+        }, 20 * 60000); 
     </script>
 </body>
 </html>
