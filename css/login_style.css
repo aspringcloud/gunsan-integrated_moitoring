@@ -1797,7 +1797,36 @@ text-align:'center';
 height: 40px; 
 width: 117px;
 border-radius: 2px 2px 0px 0px;
+color:white;
+align-content: center;
+}
+
+.bluePopup{
 background: #0082C8;
+text-align:'center'; 
+height: 40px; 
+width: 117px;
+border-radius: 2px 2px 0px 0px;
+color:white;
+align-content: center;
+}
+
+.greenPopup{
+background: rgb(103, 187, 177);
+text-align:'center'; 
+height: 40px; 
+width: 117px;
+border-radius: 2px 2px 0px 0px;
+color:white;
+align-content: center;
+}
+
+.blackPopup{
+background: #5C5C5C;
+text-align:'center'; 
+height: 40px; 
+width: 117px;
+border-radius: 2px 2px 0px 0px;
 color:white;
 align-content: center;
 }
@@ -1805,12 +1834,13 @@ align-content: center;
 .popupTitle{
 font-weight: bold;font-size: 14px;color: #FFFFFF;display: inline-block;
 }
+
 .popupVersion{
 font-weight: normal;color: #E0E0E0; font-size: 10px; text-align:center;align-items: flex-end;
 margin-left: 34px;
 }
-.popupSpeedDiv{
 
+.popupSpeedDiv{
 display:inline-block; text-align:center;
 margin-left:5px;
 }
@@ -1824,7 +1854,7 @@ width:50%;
 }
 
 .popupSpeed{
-color: #4F4F4F;font-weight: bold;
+font-weight: bold;
 font-size: 24px;
 }
 
@@ -2199,7 +2229,7 @@ border-right: 0.3px solid #E0E0E0;
 .popup-battery:after {
 background-color: var(--afterbgColor2, #57AE66); /*#57AE66;*/
 color: white;
-width:var(--afterWidth2, 0%);
+width:var(--afterWidth2, '0%');
 height:100%;
 border-right: 0.3px solid #E0E0E0
 }

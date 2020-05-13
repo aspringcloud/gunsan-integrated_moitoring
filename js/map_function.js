@@ -311,9 +311,6 @@ function getDistance(start, destination) {
     var distance_m = (start.distanceTo(destination)).toFixed(0);
      var distance_km = distance_m/1000;
     return distance_km;
-    // research
-    //https://github.com/Leaflet/Leaflet.draw/pull/542/commits/3734900a0e29dffba8393e57378a666b9e02d032
-    //https://gis.stackexchange.com/questions/327409/understanding-why-latlng-returned-from-l-geometryutil-closest-are-not-from-arr
 }
 
 // Updates the speed of vehicle in main.html
@@ -321,10 +318,6 @@ function setVehicleSpeed(speed)
 {
     var speedDom = document.getElementById("speed_v1");
     speedDom.innerHTML = speed;
-    var popupSpeedDom = document.getElementById("popup_speed"); 
-    if(popupSpeedDom)
-    popupSpeedDom.innerHTML = speed;
-    //alert("speedDom.innerHTML  :"+speedDom.innerHTML);
     if(speed < 18)
     {
         // speed is less then 18 text color is black
@@ -430,8 +423,9 @@ function arraivalTime(mapInstance, shuttleLocation,speedArray,count, request_cou
     */
 }
 
-var interval;
+
 // show vehicle info like speed, heading, gnss battery etc.
+var interval;
 function vehicleInfo(map, vId)
 {   
    
@@ -441,16 +435,13 @@ function vehicleInfo(map, vId)
     interval = setInterval(function(){
         request_count++;
         count15++;
-        var apiUrl = "vehicles/1/"; //"vehicles/"+vId+"/";  //change line 2 (1 or 6)
+        var apiUrl = "vehicles/"+vId+"/";//"vehicles/1/"; //"vehicles/"+vId+"/";  //change line 2 (1 or 6)
         getMethod(apiUrl, function (data) {
-        
             var vehicle = JSON.parse(data);
-            //alert("vehicle :"+JSON.stringify(vehicle));
             var shuttleLocation = L.latLng(vehicle.lat, vehicle.lon);
             // calculate ETA after every 15 seconds
             if(count15 == 16)
-            {          
-                console.log("count 16 :");
+            {  
                 count15 = 0;             
                 arraivalTime(map, shuttleLocation,speedArray,count15,request_count);
                 speedArray=[];
@@ -459,49 +450,56 @@ function vehicleInfo(map, vId)
             {
                 speedArray.push(vehicle.speed);
                 if(request_count==1)
-                {
-                    console.log("count 1 :");
                     arraivalTime(map, shuttleLocation,speedArray,count15, request_count);
-                }
             }
-            document.getElementById("vehicleID").innerHTML = vehicle.name;
-            document.getElementById("vehicleVersion").innerHTML = "version : "+vehicle.model.firmware;
-                                
-            //alert("vehicle.speed :"+vehicle.speed);
-            // show speed of vehicle
-            setVehicleSpeed(vehicle.speed);
-            document.getElementById("heading_v1").innerHTML = vehicle.heading + "&deg";
-            
-            // rotate heading
-            document.getElementById("bigCircle").style = 'transform:rotate('+vehicle.heading+'deg)';
-            
-            // reverse rotate heading
-            var reverseHeading = -(vehicle.heading);
-            document.getElementById("angleDegree").style = 'transform: rotate('+reverseHeading+'deg)';
-            var vehicleMid = (vehicle.name).substring(0, 3); // trim first 3 characters
-
-            // show passenger status    
-            passengerStatus(vehicle.passenger);
-            if (vehicle.gnss == true)
-                document.getElementById("gnss_v1").style.backgroundColor = "#57AE66";
-            else
-                document.getElementById("gnss_v1").style.backgroundColor = "#CA4040";
-
-            // show door status      
-            if (vehicle.door == false)
-                document.getElementById("doorStatus").src = "images/door/door_closed.svg";
-            else
-                document.getElementById("doorStatus").src = "images/door/door_open.svg";
-            
-            // show battery status
-            setBatteryPercent(vehicle.battery);
-
-            // show webcam
-            checkWebcam(vehicle.webcam1, 'cameraButton1', 'video1', 'video1Active');
-            checkWebcam(vehicle.webcam2, 'cameraButton2', 'video2', 'video2Active');
+            updateShuttleInfo(vehicle); 
         });
     }, 1500);
     return interval;
+}
+
+function updateShuttleInfo(vehicle)
+{
+    if(vehicle.speed > 0) 
+        vehicleStatus("rgba(115, 192, 95, 0.4)", "DRIVING", "#57AE66", "#57AE66");
+    else
+        vehicleStatus("rgba(202, 64, 64, 0.4)", "STOPPED", "#CA4040", "#BDBDBD");
+    
+    // Vehicle name and version     
+    document.getElementById("vehicleID").innerHTML = vehicle.name;
+    document.getElementById("vehicleVersion").innerHTML = "version : "+vehicle.model.firmware;
+                        
+    // show speed of vehicle
+    setVehicleSpeed(vehicle.speed);
+    document.getElementById("heading_v1").innerHTML = vehicle.heading + "&deg";
+    
+    // rotate heading
+    document.getElementById("bigCircle").style = 'transform:rotate('+vehicle.heading+'deg)';
+    
+    // reverse rotate heading
+    var reverseHeading = -(vehicle.heading);
+    document.getElementById("angleDegree").style = 'transform: rotate('+reverseHeading+'deg)';
+    var vehicleMid = (vehicle.name).substring(0, 3); // trim first 3 characters
+
+    // show passenger status    
+    passengerStatus(vehicle.passenger);
+    if (vehicle.gnss == true)
+        document.getElementById("gnss_v1").style.backgroundColor = "#57AE66";
+    else
+        document.getElementById("gnss_v1").style.backgroundColor = "#CA4040";
+
+    // show door status      
+    if (vehicle.door == false)
+        document.getElementById("doorStatus").src = "images/door/door_closed.svg";
+    else
+        document.getElementById("doorStatus").src = "images/door/door_open.svg";
+    
+    // show battery status
+    setBatteryPercent(vehicle.battery);
+
+    // show webcam
+    checkWebcam(vehicle.webcam1, 'cameraButton1', 'video1', 'video1Active');
+    checkWebcam(vehicle.webcam2, 'cameraButton2', 'video2', 'video2Active');
 }
 
 // create select box options
@@ -518,6 +516,7 @@ function createSelectList(objArray)
 }
 
 // switch between the vehicle info when select option is changed. 
+/*
 function changeVehicleInfo(map, obj)
 {
     clearInterval(interval);
@@ -530,85 +529,253 @@ function changeVehicleInfo(map, obj)
         var selectedId = obj.options[obj.selectedIndex].id;
         interval= vehicleInfo(map, selectedId);
     }
+}*/
+
+function changeVehicleInfo(obj)
+{
+    // check if which sites map is open 
+    // return the last element of array 
+    var activeMap =  mapList[mapList.length - 1];
+    clearInterval(interval);
+    if(typeof(obj) == 'number')
+    {
+        interval = vehicleInfo(activeMap, obj);
+    }
+    else
+    {
+        var selectedId = obj.options[obj.selectedIndex].id;
+        interval = vehicleInfo(activeMap , selectedId);
+    }
+}
+
+function createHtmlMarker(vehicleObj, iconHtml)
+{
+    marker = L.marker([vehicleObj.lat, vehicleObj.lon], {
+        draggable: false,
+        icon: iconHtml,
+    });
+    return marker;
 }
 
 // This is vehicle ripple effect function. 
-var test2;
-function showVehicleRipple(request_count, mapInstance, vehicle, markerCount2){ 
-    var vehicleObj = JSON.parse(vehicle);
-    
-    // red ripple marker
-    var icon_html2 = '<div id="vehicleRippleDiv" class="shuttle_icon">'+
-                        '<div id="ring1" class="shuttle_ring1"></div>'+
-                        '<div id="ring2" class="shuttle_ring2"></div>'+
-                        '<div id="ring3" class="shuttle_ring3"></div>'+
-                        '<div id="ring4" class="shuttle_ring4"></div>'+
-                    '</div>';
+// This is vehicle ripple effect function. 
+var rippleMarkerArray = [];
+var shuttleMarkerArray = [];
+function showVehicleRipple(request_count, mapInstance, vehicleInfo){ 
+        var vehicleMarker;
+        for(var j = 0; j < vehicleInfo.length; j++)
+        {        
+            var vehicleObj = vehicleInfo[j];
+            // When vehicle is in shutdown state do not update location of marker and vehicle info
+            if(vehicleObj.state == 4)
+                continue;
+        
+            // red ripple marker html
+            var redIconHtml = '<div id="vehicleRippleDiv" class="shuttle_icon">'+
+                                '<div id="ring1" class="shuttle_ring1"></div>'+
+                                '<div id="ring2" class="shuttle_ring2"></div>'+
+                                '<div id="ring3" class="shuttle_ring3"></div>'+
+                                '<div id="ring4" class="shuttle_ring4"></div>'+
+                            '</div>';
 
-    // green ripple marker
-    var icon_html_g = '<div id="vehicleRippleDiv" class="shuttle_icon">'+
-                        '<div id="ring1" class="shuttle_ring1_g"></div>'+
-                        '<div id="ring2" class="shuttle_ring2_g"></div>'+
-                        '<div id="ring3" class="shuttle_ring3_g"></div>'+
-                        '<div id="ring4" class="shuttle_ring4_g"></div>'+
-                    '</div>';
-     
-    const circleIcon = L.divIcon({html: icon_html2});
-    const circleIcon_g = L.divIcon({html: icon_html_g});
-    var marker;
-    if (request_count <= 1) 
-    {
-        if (vehicleObj.speed > 0) 
-        {
-            marker = L.marker([vehicleObj.lat, vehicleObj.lon], {
-                draggable: false,
-                icon: circleIcon_g,
+            // green ripple marker html
+            var greenIconHtml = '<div id="vehicleRippleDiv" class="shuttle_icon">'+
+                                '<div id="ring1" class="shuttle_ring1_g"></div>'+
+                                '<div id="ring2" class="shuttle_ring2_g"></div>'+
+                                '<div id="ring3" class="shuttle_ring3_g"></div>'+
+                                '<div id="ring4" class="shuttle_ring4_g"></div>'+
+                            '</div>';
+        
+            const redRippleIcon = L.divIcon({html: redIconHtml});
+            const greenRippleIcon = L.divIcon({html: greenIconHtml});
+            if (request_count == 1) 
+            {
+                // create Icon for ripple marker as per the speed value
+                if (vehicleObj.speed > 0 ) // || vehicleObj.drive == true
+                {
+                    var marker = createHtmlMarker(vehicleObj, greenRippleIcon);
+                    marker.options.rotationAngle = vehicleObj.heading;                // rotate marker of speed is greater then 0 to avoid abnormal data
+                } 
+                else
+                {
+                    var marker = createHtmlMarker(vehicleObj, redRippleIcon);
+                }
+                marker._leaflet_id = vehicleObj.id;                                   // set id of vehicle as id of marker.
+                marker.addTo(mapInstance);                                            // add marker to map  
+                var rippleMarkerObj = {                                               // create marker object
+                    marker : marker,
+                    markId : vehicleObj.id
+                }
+                rippleMarkerArray.push(rippleMarkerObj);                              // maintain array of ripple marker objects
+
+                // show vehicle markers on route
+                var iconUrl = "images/route/shuttleIcon.svg";  
+                var vehicleIcon = L.icon({                                            // Create icon for marker.               
+                    iconSize: [37, 52],
+                    popupAnchor: [10, -25],
+                    iconAnchor: [26, 45],
+                    iconUrl: iconUrl,
+                });
+
+                // Create vehicle marker 
+                vehicleMarker = createHtmlMarker(vehicleObj, vehicleIcon);            
+                vehicleMarker._leaflet_id = vehicleObj.name;
+                if(vehicleObj.speed > 0)                                              // to avoid abnormal data of heading, update heading data only if speed is > 0 
+               
+                // create html and append to popup div
+                var customPopup = "";
+                const customOptions = {'className': 'custom-popup2'};
+                vehicleMarker.bindPopup(customPopup, customOptions).openPopup();               // bind popup to vehicle marker                   
+                vehicleMarker.on('click', function(e) {           
+                    // vehicle marker on click function ---> updates vehicle popup data every second 
+                    // update popup battery 
+                    for(var k = 0; k < shuttleMarkerArray.length; k++ )
+                    {
+                        if(e.target._leaflet_id == shuttleMarkerArray[k].name)                 // find the marker in array to update
+                        {                       
+                            (shuttleMarkerArray[k].marker).openPopup();
+                            mapInstance.eachLayer(function (layer) {
+                            if(layer._leaflet_id == shuttleMarkerArray[k].name)
+                            {
+                                var vehicle_name = e.target._leaflet_id;
+                                var thirdCharacter = vehicle_name.charAt(2);                   // check the third character of vehicle name
+                                var popupColor;                                                // Update the background color of popup according as per the make of vehicle 
+                                if(thirdCharacter == "E")
+                                    popupColor ="greenPopup";
+                                else if(thirdCharacter == "N") 
+                                    popupColor ="bluePopup ";
+                                else if(thirdCharacter == "K")   
+                                    popupColor ="blackPopup";
+
+                                    vehicleMarker.options.rotationAngle = vehicleObj.heading;
+
+                                // update speed status 
+                                var speedColor;
+                                var speedWeight;
+                                var currentSpeed = shuttleMarkerArray[k].speed
+                                if(currentSpeed < 18)                                              // if speed is less then 18, text should be black color with normal font weight
+                                {
+                                    speedColor = '#4F4F4F';
+                                    speedWeight = "normal";
+                                }
+                                else if(currentSpeed > 18)                                         // if speed is greater then 18, text should be red color with normal font weight
+                                {
+                                    speedColor = '#CA4040';
+                                    if(currentSpeed > 30)                                          // if speed is greater then 30, text should be red color with bold font weight
+                                        speedWeight ="bold";
+                                    else
+                                        speedWeight ="normal";
+                                }
+                                layer._popup.setContent("<div class="+popupColor+" id='vPopup'>"+
+                                                        "<p class='popupTitle'>" +shuttleMarkerArray[k].name+ "<img class='activeGreenPopup' src='images/status/active_green.svg'></p>"+
+                                                        "<span class='popupVersion'>VER:"+shuttleMarkerArray[k].version+"</span>"+
+                                                        "</div><br>"+
+                                                        "<div class='popupSpeedDiv'>"+
+                                                            "<span>Speed</span><br>"+
+                                                            "<span id='popup_speed' class='popupSpeed' style='color:"+speedColor+";font-weight:"+speedWeight+"'>"+currentSpeed+"</span><br>"+
+                                                            "<span class='popupSpeedUnit'>km/hr</span>"+
+                                                        "</div>"+
+                                                        "<div class='popupBatteryDiv'>"+
+                                                            "<span style='vertical-align:top'>Battery</span>"+
+                                                            "<div id='popupBattery' class='popup-battery' data-content="+shuttleMarkerArray[k].battery+'%'+"></div>"+
+                                                            "<div class='popupParent'></div>"+
+                                                        "</div>")
+                                setPopupBattery(shuttleMarkerArray[k].battery);                // update popup battery value 
+                                setPopupSpeed(vehicleObj.speed);                               // update popup speed value 
+                            }
+                        });
+                        break;
+                    }
+                }
             });
-        }
-        else
-        {
-            marker = L.marker([vehicleObj.lat, vehicleObj.lon], {
-                draggable: false,
-                icon: circleIcon,
-            });
-        }
-        // rotate marker of speed is greater then 0 to avoid abnormal data
-        if(vehicleObj.speed > 0) 
-            marker.options.rotationAngle = vehicleObj.heading;
-        marker.addTo(mapInstance);
-        marker._leaflet_id = vehicleObj.id;
-        test2 = marker;
-    } 
-    else 
-    {
-        var newLatLng = new L.LatLng(vehicleObj.lat, vehicleObj.lon);
-        test2.setLatLng(newLatLng);
-        if(vehicleObj.speed > 0) 
-            test2.options.rotationAngle = vehicleObj.heading;
-        test2.addTo(mapInstance);
+            vehicleMarker.addTo(mapInstance);                                                 // show vehicle icon on route
+            var shuttleMarkerObj = {                                                          // store marker in array 
+                marker : vehicleMarker,
+                markId : vehicleObj.id,
+                name: vehicleObj.name,
+                speed: vehicleObj.speed,
+                battery: vehicleObj.battery,
+                version: vehicleObj.model.firmware
+            }
+            shuttleMarkerArray.push(shuttleMarkerObj);                                         // maintain array of shuttle markers
+        }   
+        else 
+        {             
+            for(var i = 0; i < rippleMarkerArray.length; i++)
+            {           
+                if(vehicleObj.id == rippleMarkerArray[i].markId)                                // check if ripple marker is present in array
+                {
+                    var newLatLng = new L.LatLng(vehicleObj.lat, vehicleObj.lon);
+                    var currentRipple = rippleMarkerArray[i].marker;
+                    currentRipple.setLatLng(newLatLng);                                         // update the location of ripple marker
+
+                    // change speed status in left side window
+                    if (vehicleObj.speed > 0 ) //|| vehicleObj.drive == true
+                    {                  
+                        currentRipple.setIcon(greenRippleIcon);
+                        currentRipple.options.rotationAngle = vehicleObj.heading;
+                    }
+                    else
+                    {
+                        currentRipple.setIcon(redRippleIcon); //L.divIcon({html: icon_html2})
+                    }
+                    currentRipple.addTo(mapInstance);
+                }
+            }
+            
+            for(var k = 0; k < shuttleMarkerArray.length; k++ )
+            {
+                if(vehicleObj.id == shuttleMarkerArray[k].markId)                              // check if vehicle marker is present in array
+                {
+                    var newLatLng = new L.LatLng(vehicleObj.lat, vehicleObj.lon);
+                    var currentVehicle = shuttleMarkerArray[k].marker;
+                    currentVehicle.setLatLng(newLatLng);                                       // update the location of vehicle marker
+                    currentVehicle._leaflet_id = vehicleObj.name;
+
+                    if(vehicleObj.speed > 0) 
+                        currentVehicle.options.rotationAngle = vehicleObj.heading;
+                    currentVehicle.addTo(mapInstance);
+                }
+
+                // check if which vehicle is selected from select list and update the info of that vehicle 
+                var dom = document.getElementById("vehicleSelect");  // vehicle select list
+                var selectedId = dom.options[dom.selectedIndex].id;  // selected Id 
+                console.log("selectedId :"+selectedId+ " vehicleObj.name:"+vehicleObj.name);
+                if(vehicleObj.id == selectedId)
+                    updateShuttleInfo(vehicleObj);
+            }
+        }                                                     
     }
-  
-    // change speed status in left side window
-    if (vehicleObj.speed > 0) 
-        vehicleStatus("rgba(115, 192, 95, 0.4)", "DRIVING", "#57AE66", "#57AE66");
-    else
-        vehicleStatus("rgba(202, 64, 64, 0.4)", "STOPPED", "#CA4040", "#BDBDBD");
-
-    // change driving status in left side window
-    showVehicle(request_count, mapInstance,vehicleObj, markerCount2);  
 }
 
+function vehicleStatus(color, status, statusBg, frontBG)
+{
+    // Driving button 
+    document.getElementById("v_status1").innerHTML = status;
+    document.getElementById("v_status1").style.background = statusBg;
+
+    // front
+    document.getElementById("v_front").style.background = frontBG;
+}
 
 // Show multiple vehicles on route (under development)
-var markerCount2;
 function shuttleOnRoute(mapInstance, reqCount, vehicleObj)
 {
-    vehicle =  vehicleObj;//[0];
-    console.log("vehicle: "+JSON.stringify(vehicleObj)+ " reqCount :"+reqCount);
-    getMethod("vehicles/1/", function (vehicle) {  // change line 3 // "vehicles/" + vehicle.id + "/"
-        markerCount2++;
-        // creates vehicle ripple marker 
-        showVehicleRipple(reqCount, mapInstance,vehicle,markerCount2);
+    var vLocationArray=[];
+        getMethod("vehicles/", function(data){  
+        var vehicle_data = JSON.parse(data).results;
+        if (vehicle_data == undefined) 
+            vehicle_data = JSON.parse(data);
+        var count = Object.keys(vehicle_data).length;
+
+        // create vehicle obj and store in array
+        for (var i = 0; i < count; i++) {
+            var vehicle = vehicle_data[i];
+            if (vehicle.site == 2){//&& vehicle.name =="SCE999") { 
+                vLocationArray.push(vehicle); // array of vehicle ID
+            }
+        }
+        showVehicleRipple(reqCount,mapInstance,vLocationArray);
     });
 }
 
@@ -644,7 +811,6 @@ function deguRoute()
 
     // Show All the shuttles on degu route
     var reqCount = 0;
-    var reqCount2 = 0;
     var firstId; 
     var vehicleObj=[];
 
@@ -658,7 +824,7 @@ function deguRoute()
         // create vehicle obj and store in array
         for (var i = 0; i < count; i++) {
             var vehicle = vehicle_data[i];
-            if (vehicle.site == 2 && vehicle.name =="SCN001"){//&& vehicle.name =="SCE999") { 
+            if (vehicle.site == 2){//&& vehicle.name =="SCE999") { 
                 deguShuttleArray.push(vehicle.id); // array of vehicle ID 
                 var vehicle = {
                     id:vehicle.id,
@@ -674,6 +840,10 @@ function deguRoute()
                     webcam2 : vehicle.webcam2,
                 }
                 vehicleObj.push(vehicle);
+                if(vehicle.name =="SCN001")
+                {
+                    console.log("vehicle obj value :"+vehicle.speed);
+                }
             }
         }
 
@@ -683,64 +853,32 @@ function deguRoute()
 
         // show chart.js 
         showChartData(vehicleObj);
+
         //create list of vehicles in degu route
-        vehicleObj = vehicleObj.sort((a, b) => (a.name > b.name) ? 1 : -1);
+        vehicleObj = vehicleObj.sort((a, b) => (a.id > b.id) ? 1 : -1);
 
+        // Call update function every second
         setInterval(function(){
-             reqCount++;
-            shuttleOnRoute(daegu_map, reqCount, vehicleObj[0]);
-        },1000);
-
-        
-       /* setInterval(function(){
-            reqCount2++;
-           shuttleOnRoute(daegu_map, reqCount2, vehicleObj[1]);
-       },1000);
-
-        
-        setInterval(function run() {
             reqCount++;
-            shuttleOnRoute(daegu_map, reqCount, vehicleObj[0]);
-            setTimeout(run, 1000);
+            shuttleOnRoute(daegu_map, reqCount, vehicleObj);
         }, 1000);
 
-        
-        setInterval(function run() {
-            reqCount2++;
-            shuttleOnRoute(daegu_map, reqCount2, vehicleObj[1]);
-            setTimeout(run, 1000);
-        }, 1000);*/
-
-
-        // show multiple vehicle on degu route
-        /*for(var i = 0; i < vehicleObj.length; i++) //vehicleObj.length
-        {
-           var v = vehicleObj[i];
-          // alert("v1 :"+v);
-            setInterval(function(){
-                //alert("v2 :"+v);
-                //var vehicleLocation = L.latLng(vehicleObj[0].lat, vehicleObj[0].lon);
-                reqCount++;
-                shuttleOnRoute(daegu_map, reqCount, v);
-            },1000);
-        }
-     */
+        // create select list of vehicle 
         createSelectList(vehicleObj);
         deguShuttleArray = deguShuttleArray.sort();
         firstId = deguShuttleArray[0];
         vehicleInfo(daegu_map, firstId);
-        changeVehicleInfo(daegu_map, firstId);
+        changeVehicleInfo(firstId);
     });
     show_div("alertDiv");
 }
 
 function degreesToRadians(degrees) {
     return degrees * Math.PI / 180;
-  }
+}
   
-  function distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
+function distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
     var earthRadiusKm = 6371;
-  
     var dLat = degreesToRadians(lat2-lat1);
     var dLon = degreesToRadians(lon2-lon1);
   
@@ -751,7 +889,7 @@ function degreesToRadians(degrees) {
             Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
     return earthRadiusKm * c;
-  }
+}
 
 function distance(lat1, lon1, lat2, lon2, unit) {
 	if ((lat1 == lat2) && (lon1 == lon2)) {
@@ -784,7 +922,6 @@ function ETA(vehicleObj, daegu_map){
     var distance_V_to_B;
     var distance_V_to_C;
     var distance_V_to_D;
-
 
     /*var distance_V_to_A = getDistance(vehicleLoc, L.latLng(35.836308, 128.681547));
     var distance_V_to_B = getDistance(vehicleLoc, L.latLng(35.838673, 128.687892));
@@ -1091,12 +1228,10 @@ function setBatteryPercent(percent) {
         percent = 0;
 
     $("#battery").attr('data-content', percent+'%');
-    $("#popupBattery").attr('data-content', percent+'%');
-
+  
     var after = (100 - percent) +"%";    
     var battery = document.querySelectorAll('.inverted-bar3')[0];
-    var popupBattery = document.querySelectorAll('.popup-battery')[0];
-
+   
     // updates side window battery status
     battery.style.setProperty("--afterWidth3", percent+'%');
     if (percent <= 30) 
@@ -1113,18 +1248,27 @@ function setBatteryPercent(percent) {
         else
             battery.style.setProperty("--fontSize", "12px");
     }
-             
+}
+
+function setPopupBattery(percent)
+{
+    if (percent == null)
+    percent = 0;
+
+    $("#popupBattery").attr('data-content', percent+'%');
+    var popupBattery = document.querySelectorAll('.popup-battery')[0];
+
     //  updates popup battery status
     if(popupBattery!= undefined)
     {
-        popupBattery.style.setProperty("--afterWidth2", (percent+1)+"%");
+        popupBattery.style.setProperty("--afterWidth2", (percent+1)+'%');
         if (percent <= 30) 
         {  
             popupBattery.style.setProperty("--afterbgColor2", "#CA4040");
             popupBattery.style.setProperty("--beforeColor2", "#CA4040");
         }
         else
-        {         
+        {   
             popupBattery.style.setProperty("--beforeColor2", "#57AE66");
             popupBattery.style.setProperty("--afterbgColor2", "#57AE66");
             if(percent == 100)
@@ -1133,22 +1277,39 @@ function setBatteryPercent(percent) {
     }
 }
 
+/*
 // function identifies the model of vehicle(navya, kamo or easymile)
 function identifyMake(vehicle_name)
 {
     var thirdCharacter = vehicle_name.charAt(2);
     var dom = document.getElementById('vPopup');
-   
+   // alert("leaflet id  :"+vehicle_name+" thirdCharacter:"+thirdCharacter);
     if(thirdCharacter == 'E')
-        dom.style.background = '#67BBB1';
+    {
+        dom.style.background = "#67BBB1";
+    }
+       
     else if(thirdCharacter == 'N') 
-        dom.style.background = '#0082C8' ;
+    {
+        alert("vehicle_name id blue:"+vehicle_name);
+        dom.style.background = "#0082C8";
+    }
+      
     else if(thirdCharacter == 'K')   
-        dom.style.background = '#5C5C5C';
-} 
+    {
+        alert("vehicle_name id black:"+vehicle_name);
+        dom.style.background = "#5C5C5C";
+    }
+      
+    else{
 
+        alert("vehicle_name id colorless:"+vehicle_name);
+    }
+} 
+*/
+/*
 var prevMarker; // retains value of previous marker
-function showVehicle(request_count, mapInstance, vehicleObj, markerCount2)
+function showVehicle(request_count, mapInstance, vehicleObj)
 {
     var popupMarker;
     var iconUrl = "images/route/shuttleIcon.svg";  
@@ -1168,7 +1329,7 @@ function showVehicle(request_count, mapInstance, vehicleObj, markerCount2)
         });
 
         // not in use currently
-        vehicleMarker._leaflet_id = vehicleObj.id; 
+        //vehicleMarker._leaflet_id = vehicleObj.id; 
         if(vehicleObj.speed > 0) 
             vehicleMarker.options.rotationAngle = vehicleObj.heading;
               
@@ -1227,6 +1388,20 @@ function showVehicle(request_count, mapInstance, vehicleObj, markerCount2)
         prevMarker.addTo(mapInstance);
         popupMarker = prevMarker;
         //setPopupSpeed(vehicleObj.speed, vehicleObj.name);
+
+      
+        for(var i = 0; i <vMarkerArray.length;i++ )
+        {
+               if(vehicleObj.id == vMarkerArray[i].markId)
+               {
+            //   alert("id:"+vehicleObj.id+" marker id:"+vMarkerArray[i].id);
+                  var newLatLng = new L.LatLng(vehicleObj[j].lat, vehicleObj[j].lon);
+                  vMarkerArray[i].marker.setLatLng(newLatLng);
+                  console.log("!!!!!!!!!!i:"+i);
+                }
+            
+        }
+    
     }
 
     // open vehicle popup onclick to show shuttle battery and speed info.
@@ -1243,9 +1418,9 @@ function showVehicle(request_count, mapInstance, vehicleObj, markerCount2)
         }
     });
 }
-
+*/
 // function not in use currently
-function setPopupSpeed(speed, title)
+function setPopupSpeed(speed)
 {
     var popup_speed = document.getElementById("popup_speed");
     if (popup_speed == null)
@@ -1279,7 +1454,7 @@ function getMethod(api_name, callback) {
     var password = localStorage.getItem("userPwd"); 
     var base64Credentials = "Basic " + btoa(username + ":" + password);
     var request = new XMLHttpRequest();
-    var base_url = "http://115.93.143.2:9103/api/";
+    var base_url = "https://115.93.143.2:9103/api/";
 
     // get and return data 
     request.open('GET', base_url + api_name, true);
@@ -1300,19 +1475,6 @@ function getMethod(api_name, callback) {
     request.send();
 }
 
-function vehicleStatus(color, status, statusBg, frontBG)
-{
-    if(document.getElementById("ring1") != null)
-    {
-        document.getElementById("ring1").style.background = color;
-        document.getElementById("ring2").style.background = color;
-        document.getElementById("ring3").style.background = color;
-        document.getElementById("ring4").style.background = color;
-    }
-    document.getElementById("v_status1").innerHTML = status;
-    document.getElementById("v_status1").style.background = statusBg;
-    document.getElementById("v_front").style.background = frontBG;
-}
 
 // updates offsite count div
 function showSummary() {
@@ -1554,7 +1716,7 @@ function open_tab( window_id, site_id) {
 
 function logout() {
     var email = document.getElementById("loggedin_userid").innerText;
-    var api_url = "http://115.93.143.2:9103/api/auth/logout/";
+    var api_url = "https://115.93.143.2:9103/api/auth/logout/";
     postMethod(JSON.stringify(email), api_url, function (status_code) {
         if (status_code == 200)
             window.location.href = "index.html";
@@ -2175,7 +2337,6 @@ function playPause(webcam_div, pausePlayButton)
     // Event listener for the play/pause button
     var pausePlayButtons = document.getElementById(pausePlayButton);
     var fifthChar = pausePlayButtons.src.substring((pausePlayButtons.src).length - 5);
-    //alert("fifthChar :"+fifthChar);
     if(fifthChar == "y.svg")
     {
         // Update the button text to 'Pause'
@@ -2183,28 +2344,23 @@ function playPause(webcam_div, pausePlayButton)
         document.getElementById(webcam_div).style.background = "";
         document.getElementById(webcam_div).style.backgroundColor = "#828282";
         document.getElementById(webcam_div).style.backgroundSize="contain";
-  
-        console.log("grey");
     } 
     else 
     {  
         // Update the button text to 'Play'
         pausePlayButtons.src = "images/cctv/play.svg"; 
         if(webcam_div == "webcam_div1")
-        {
             document.getElementById(webcam_div).style.background = document.getElementById("hidden_cam1").style.background;
-        }
+        
         else if(webcam_div == "webcam_div2")
-        {
             document.getElementById(webcam_div).style.background = document.getElementById("hidden_cam2").style.background ;
-        } 
         document.getElementById(webcam_div).style.backgroundSize="contain";
     }
 }
 
 
 function webcam(webcamId, vehicle) {
-    console.log("*vehicle"+vehicle);
+    //console.log("*vehicle"+vehicle);
 
     var vehicleObj = vehicle[0];
     // console.log("*vehicleObj"+vehicleObj.toString());
@@ -2419,7 +2575,7 @@ function resetPassword()
         "new_password1": input_new_pwd,
         "new_password2": input_repeat_pwd,
     });
-    var api_url = "http://115.93.143.2:9103/api/auth/password/change/";
+    var api_url = "https://115.93.143.2:9103/api/auth/password/change/";
     postMethod(data, api_url, function (req) {
         var res = JSON.parse(req.response);
         var pwdErrorDom = document.getElementById("pwdResetError");
@@ -2475,7 +2631,7 @@ function oddFileDownload(){
         var filePath = vehicle.odd; 
         if(filePath == null)
         {
-            alert("ODd file is not available");
+            alert("Odd file is not available");
             return false;
         }
         var oddDom = document.getElementById("oddFile");

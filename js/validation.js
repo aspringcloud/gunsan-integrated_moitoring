@@ -23,7 +23,7 @@ function login_validation() {
         "password": input_pwd,
     });
 
-    var api_url = "http://115.93.143.2:9103/api/auth/login/";
+    var api_url = "https://115.93.143.2:9103/api/auth/login/";
     postMethod(data, api_url, function (request) {
         if (request.status == 200) { 
             var response = JSON.parse(request.response);
@@ -83,7 +83,7 @@ function findid_validation(button_id) {
         "email": input_email,
     });
 
-    var api_url = "http://115.93.143.2:9103/api/users/resetpassword/";
+    var api_url = "https://115.93.143.2:9103/api/users/resetpassword/";
     postMethod(postdata, api_url, function (status_code) {
         if (status_code == 200) {
             document.getElementById('id_email_p').innerHTML = input_email;
@@ -101,7 +101,7 @@ function findid_validation(button_id) {
 }
 
 function sendEmailAPI(postdata) {
-    var api_url = "http://115.93.143.2:9103/api/users/sendmessage/";
+    var api_url = "https://115.93.143.2:9103/api/users/sendmessage/";
     postMethod(postdata, api_url, function (status_code) {
         if (status_code == 200)
             alert("Email send successful");
@@ -148,7 +148,7 @@ function postMethod(data, api_url, callback) {
     var request = new XMLHttpRequest();
     request.open('POST', requestURL, true);
     request.onload = function (e) {
-        if(api_url == "http://115.93.143.2:9103/api/auth/password/change/" || api_url == "http://115.93.143.2:9103/api/auth/login/" )
+        if(api_url == "https://115.93.143.2:9103/api/auth/password/change/" || api_url == "https://115.93.143.2:9103/api/auth/login/" )
             callback(request);
         else
             callback(request.status);
@@ -156,7 +156,7 @@ function postMethod(data, api_url, callback) {
     request.onerror = function(status) {
         console.log("Error (POST).");
     };
-    if(api_url == "http://115.93.143.2:9103/api/auth/login/")
+    if(api_url == "https://115.93.143.2:9103/api/auth/login/")
     {
         request.setRequestHeader("Authorization", authenticateUser((JSON.parse(data)).email, (JSON.parse(data)).password));
         request.setRequestHeader("Content-Type", "application/json;charset=UTF-8;");
@@ -308,7 +308,7 @@ function register_validation() {
         "level": Number(input_level.substr(input_level.length - 1)),
     });
 
-    var api_url = "http://115.93.143.2:9103/api/users/"
+    var api_url = "https://115.93.143.2:9103/api/users/"
     postMethod(data, api_url, function (status_code) {
         if (status_code == 200 || status_code == 201 || status_code == 400) {
             getMethod(api_url, function (user_data) {

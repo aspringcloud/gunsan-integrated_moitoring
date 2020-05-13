@@ -608,3 +608,21 @@ background: #C4C4C4;
 ::-webkit-scrollbar-thumb:hover {
 background: #555; 
 }
+
+
+/*image window popup style*/
+
+.pull-right{float:right}
+.main_popup{width:350px; height:430px; border:3px solid #3E4156;background-color: white;}
+.popup_bottom{
+    background-color: #3E4156;
+    color: white;
+    height: 25px;
+    padding: 2px 10px 3px 10px;
+    width:330px;
+  
+}
+.imgStyle{
+ height :600px;
+ width:490px;
+}
