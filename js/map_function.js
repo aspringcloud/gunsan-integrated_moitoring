@@ -2750,7 +2750,7 @@ webSocket();
 function webSocket()
 {
     // Create WebSocket connection.
-    const socket = new WebSocket('ws://115.93.143.2:9103/api/event/door/');
+    const socket = new WebSocket('ws://115.93.143.2:9103/api/vehicle/');
 
     // Connection opened
     socket.addEventListener('open', function (event) {
