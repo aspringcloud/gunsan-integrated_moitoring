@@ -6,18 +6,18 @@
 // Calls the function associated for that route 
 var mapList = [];               // stores the id of open map 
 mapList.push("mapid");          //  push id of offsite map on login  
+var daegu_map;
 function switchMap(obj)
 {   
     if(obj.id == "degu_button")
-    {     
+    {           
         for(var i = 0 ; i < mapList.length; i++)
             hide_div(mapList[i]);
         show_div("deguMap");
         mapList.push("deguMap");
         document.getElementById('webcam_div1').style.display = "inline-block";
         document.getElementById('webcam_div2').style.display = "inline-block";
-        deguRoute(); 
-        open_tab('degu_window',2);
+        deguRoute(daegu_map); 
         show_div("alertDiv");
     }
     else if(obj.id == "sejong_button")
@@ -29,7 +29,6 @@ function switchMap(obj)
         hide_div('webcam_div1');
         hide_div('webcam_div2');
         sejongRoute(); 
-        open_tab('degu_window',3);
         show_div("alertDiv");
     }
     else if(obj.id == "sangam_button")
@@ -41,7 +40,7 @@ function switchMap(obj)
         hide_div('webcam_div1');
         hide_div('webcam_div2');
         sangamRoute(); 
-        open_tab('degu_window',3);
+        open_tab('degu_window',4);
         show_div("alertDiv");
     }
     else if(obj.id == "gunsan_button")
@@ -53,7 +52,7 @@ function switchMap(obj)
         hide_div('webcam_div1');
         hide_div('webcam_div2');
         gunsanRoute(); 
-        open_tab('degu_window',3);
+        open_tab('degu_window',1);
         show_div("alertDiv");
     }
     else if(obj.id == "gangrung_button") 
@@ -136,8 +135,8 @@ function showGraphs() {
             passengerList.push(graph_data[i].accum_passenger);
             distanceList.push(graph_data[i].accum_distance);
         }
-        highchart('graph2', '총 운행거리', '#f1ca3f', 'Distance(km)', vehicleList, passengerList);
-        highchart('graph1', '총 탑승자 수', '#3bc7d1', 'Passenger', vehicleList, distanceList);
+        highchart('graph2', '총 운행거리', '#f1ca3f', 'Distance(km)', vehicleList, passengerList, 'km');
+        highchart('graph1', '총 탑승자 수', '#3bc7d1', 'Passenger', vehicleList, distanceList, '명');
     });
 }
 
@@ -471,13 +470,17 @@ function updateShuttleInfo(vehicle)
                         
     // show speed of vehicle
     setVehicleSpeed(vehicle.speed);
-    document.getElementById("heading_v1").innerHTML = vehicle.heading + "&deg";
+    if(vehicle.heading == null)
+        var heading = 0;
+    else
+        var heading = vehicle.heading;    
+    document.getElementById("heading_v1").innerHTML = heading + "&deg";
     
     // rotate heading
     document.getElementById("bigCircle").style = 'transform:rotate('+vehicle.heading+'deg)';
     
     // reverse rotate heading
-    var reverseHeading = -(vehicle.heading);
+    var reverseHeading = -(heading);
     document.getElementById("angleDegree").style = 'transform: rotate('+reverseHeading+'deg)';
     var vehicleMid = (vehicle.name).substring(0, 3); // trim first 3 characters
 
@@ -504,8 +507,9 @@ function updateShuttleInfo(vehicle)
 
 // create select box options
 function createSelectList(objArray)
-{
+{ 
     var selectDom = document.getElementById("vehicleSelect");
+    $('#vehicleSelect').empty();
     for(var i = 0; i < objArray.length; i++)
     {
         var option = document.createElement("option");
@@ -535,6 +539,7 @@ function changeVehicleInfo(obj)
 {
     // check if which sites map is open 
     // return the last element of array 
+    //alert("changeVehicleInfo:"+obj);
     var activeMap =  mapList[mapList.length - 1];
     clearInterval(interval);
     if(typeof(obj) == 'number')
@@ -563,14 +568,11 @@ var rippleMarkerArray = [];
 var shuttleMarkerArray = [];
 function showVehicleRipple(request_count, mapInstance, vehicleInfo){ 
         var vehicleMarker;
+        // loop throght array vehicles of route
         for(var j = 0; j < vehicleInfo.length; j++)
         {        
             var vehicleObj = vehicleInfo[j];
-            // When vehicle is in shutdown state do not update location of marker and vehicle info
-            if(vehicleObj.state == 4)
-                continue;
-        
-            // red ripple marker html
+           // red ripple marker html
             var redIconHtml = '<div id="vehicleRippleDiv" class="shuttle_icon">'+
                                 '<div id="ring1" class="shuttle_ring1"></div>'+
                                 '<div id="ring2" class="shuttle_ring2"></div>'+
@@ -628,66 +630,12 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo){
                 vehicleMarker.bindPopup(customPopup, customOptions).openPopup();               // bind popup to vehicle marker                   
                 vehicleMarker.on('click', function(e) {           
                     // vehicle marker on click function ---> updates vehicle popup data every second 
-                    // update popup battery 
-                    for(var k = 0; k < shuttleMarkerArray.length; k++ )
-                    {
-                        if(e.target._leaflet_id == shuttleMarkerArray[k].name)                 // find the marker in array to update
-                        {                       
-                            (shuttleMarkerArray[k].marker).openPopup();
-                            mapInstance.eachLayer(function (layer) {
-                            if(layer._leaflet_id == shuttleMarkerArray[k].name)
-                            {
-                                var vehicle_name = e.target._leaflet_id;
-                                var thirdCharacter = vehicle_name.charAt(2);                   // check the third character of vehicle name
-                                var popupColor;                                                // Update the background color of popup according as per the make of vehicle 
-                                if(thirdCharacter == "E")
-                                    popupColor ="greenPopup";
-                                else if(thirdCharacter == "N") 
-                                    popupColor ="bluePopup ";
-                                else if(thirdCharacter == "K")   
-                                    popupColor ="blackPopup";
-
-                                    vehicleMarker.options.rotationAngle = vehicleObj.heading;
-
-                                // update speed status 
-                                var speedColor;
-                                var speedWeight;
-                                var currentSpeed = shuttleMarkerArray[k].speed
-                                if(currentSpeed < 18)                                              // if speed is less then 18, text should be black color with normal font weight
-                                {
-                                    speedColor = '#4F4F4F';
-                                    speedWeight = "normal";
-                                }
-                                else if(currentSpeed > 18)                                         // if speed is greater then 18, text should be red color with normal font weight
-                                {
-                                    speedColor = '#CA4040';
-                                    if(currentSpeed > 30)                                          // if speed is greater then 30, text should be red color with bold font weight
-                                        speedWeight ="bold";
-                                    else
-                                        speedWeight ="normal";
-                                }
-                                layer._popup.setContent("<div class="+popupColor+" id='vPopup'>"+
-                                                        "<p class='popupTitle'>" +shuttleMarkerArray[k].name+ "<img class='activeGreenPopup' src='images/status/active_green.svg'></p>"+
-                                                        "<span class='popupVersion'>VER:"+shuttleMarkerArray[k].version+"</span>"+
-                                                        "</div><br>"+
-                                                        "<div class='popupSpeedDiv'>"+
-                                                            "<span>Speed</span><br>"+
-                                                            "<span id='popup_speed' class='popupSpeed' style='color:"+speedColor+";font-weight:"+speedWeight+"'>"+currentSpeed+"</span><br>"+
-                                                            "<span class='popupSpeedUnit'>km/hr</span>"+
-                                                        "</div>"+
-                                                        "<div class='popupBatteryDiv'>"+
-                                                            "<span style='vertical-align:top'>Battery</span>"+
-                                                            "<div id='popupBattery' class='popup-battery' data-content="+shuttleMarkerArray[k].battery+'%'+"></div>"+
-                                                            "<div class='popupParent'></div>"+
-                                                        "</div>")
-                                setPopupBattery(shuttleMarkerArray[k].battery);                // update popup battery value 
-                                setPopupSpeed(vehicleObj.speed);                               // update popup speed value 
-                            }
-                        });
-                        break;
-                    }
-                }
+                    setPopupContent(e, mapInstance);
             });
+
+            if(vehicleObj.speed > 0)
+                vehicleMarker.options.rotationAngle = vehicleObj.heading;
+
             vehicleMarker.addTo(mapInstance);                                                 // show vehicle icon on route
             var shuttleMarkerObj = {                                                          // store marker in array 
                 marker : vehicleMarker,
@@ -699,12 +647,13 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo){
             }
             shuttleMarkerArray.push(shuttleMarkerObj);                                         // maintain array of shuttle markers
         }   
-        else 
-        {             
+        else  //update markers
+        {           
             for(var i = 0; i < rippleMarkerArray.length; i++)
             {           
                 if(vehicleObj.id == rippleMarkerArray[i].markId)                                // check if ripple marker is present in array
                 {
+                   // console.log("else Lat:"+vehicleObj.lat+ "Lon:"+vehicleObj.lon+ "name :"+vehicleObj.name);
                     var newLatLng = new L.LatLng(vehicleObj.lat, vehicleObj.lon);
                     var currentRipple = rippleMarkerArray[i].marker;
                     currentRipple.setLatLng(newLatLng);                                         // update the location of ripple marker
@@ -735,16 +684,130 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo){
                     if(vehicleObj.speed > 0) 
                         currentVehicle.options.rotationAngle = vehicleObj.heading;
                     currentVehicle.addTo(mapInstance);
-                }
+                                      
+                    // If current markers popup is open then set the content of popup
+                    var currentMarker =  shuttleMarkerArray[k].marker;
+                    if(currentMarker.getPopup().isOpen() == true)
+                    {
+                        // set popup color
+                        var thirdCharacter = (vehicleObj.name).charAt(2);                   // check the third character of vehicle name
+                        var popupColor;                                                // Update the background color of popup according as per the make of vehicle 
+                        if(thirdCharacter == "E")
+                            popupColor ="greenPopup";
+                        else if(thirdCharacter == "N") 
+                            popupColor ="bluePopup ";
+                        else if(thirdCharacter == "K")   
+                            popupColor ="blackPopup";
 
+                        // update speed status 
+                        var speedColor;
+                        var speedWeight;
+                        var currentSpeed = shuttleMarkerArray[k].speed
+                        if(currentSpeed < 18)                                              // if speed is less then 18, text should be black color with normal font weight
+                        {
+                            speedColor = '#4F4F4F';
+                            speedWeight = "normal";
+                        }
+                        else if(currentSpeed > 18)                                         // if speed is greater then 18, text should be red color with normal font weight
+                        {
+                            speedColor = '#CA4040';
+                            if(currentSpeed > 30)                                          // if speed is greater then 30, text should be red color with bold font weight
+                                speedWeight ="bold";
+                            else
+                                speedWeight ="normal";
+                        }
+
+                        if(vehicleObj.id == 1)
+                        console.log("%%%%vehicleObj.version:"+vehicleObj.model.version+ " vehicleObj.battery:"+vehicleObj.battery);
+                    
+                        currentMarker._popup.setContent("<div class="+popupColor+" id='vPopup'>"+
+                        "<p class='popupTitle'>" +vehicleObj.name+ "<img class='activeGreenPopup' src='images/status/active_green.svg'></p>"+
+                        "<span class='popupVersion'>VER:"+shuttleMarkerArray[k].version+"</span>"+
+                        "</div><br>"+
+                        "<div class='popupSpeedDiv'>"+
+                            "<span>Speed</span><br>"+
+                            "<span id='popup_speed' class='popupSpeed' style='color:"+speedColor+";font-weight:"+speedWeight+"'>"+vehicleObj.speed+"</span><br>"+
+                            "<span class='popupSpeedUnit'>km/hr</span>"+
+                        "</div>"+
+                        "<div class='popupBatteryDiv'>"+
+                            "<span style='vertical-align:top'>Battery</span>"+
+                            "<div id='popupBattery' class='popup-battery' data-content="+vehicleObj.battery+'%'+"></div>"+
+                            "<div class='popupParent'></div>"+
+                        "</div>")
+                        setPopupBattery(vehicleObj.battery);                // update popup battery value 
+                        setPopupSpeed(vehicleObj.speed);        
+                    }
+                }
+               
                 // check if which vehicle is selected from select list and update the info of that vehicle 
                 var dom = document.getElementById("vehicleSelect");  // vehicle select list
                 var selectedId = dom.options[dom.selectedIndex].id;  // selected Id 
-                console.log("selectedId :"+selectedId+ " vehicleObj.name:"+vehicleObj.name);
+                
                 if(vehicleObj.id == selectedId)
                     updateShuttleInfo(vehicleObj);
             }
         }                                                     
+    }
+}
+
+function setPopupContent(e, mapInstance)
+{
+    // update popup battery 
+    for(var k = 0; k < shuttleMarkerArray.length; k++)
+    {
+        if(e.target._leaflet_id == shuttleMarkerArray[k].name)                 // find the marker in array to update
+        {                       
+            (shuttleMarkerArray[k].marker).openPopup();
+            mapInstance.eachLayer(function (layer) {
+                if(layer._leaflet_id == shuttleMarkerArray[k].name)
+                {
+                    var vehicle_name = e.target._leaflet_id;
+                    var thirdCharacter = vehicle_name.charAt(2);                   // check the third character of vehicle name
+                    var popupColor;                                                // Update the background color of popup according as per the make of vehicle 
+                    if(thirdCharacter == "E")
+                        popupColor ="greenPopup";
+                    else if(thirdCharacter == "N") 
+                        popupColor ="bluePopup ";
+                    else if(thirdCharacter == "K")   
+                        popupColor ="blackPopup";
+                    
+                    // update speed status 
+                    var speedColor;
+                    var speedWeight;
+                    var currentSpeed = shuttleMarkerArray[k].speed
+                    if(currentSpeed < 18)                                              // if speed is less then 18, text should be black color with normal font weight
+                    {
+                        speedColor = '#4F4F4F';
+                        speedWeight = "normal";
+                    }
+                    else if(currentSpeed > 18)                                         // if speed is greater then 18, text should be red color with normal font weight
+                    {
+                        speedColor = '#CA4040';
+                        if(currentSpeed > 30)                                          // if speed is greater then 30, text should be red color with bold font weight
+                            speedWeight ="bold";
+                        else
+                            speedWeight ="normal";
+                    }
+                    layer._popup.setContent("<div class="+popupColor+" id='vPopup'>"+
+                                            "<p class='popupTitle'>" +shuttleMarkerArray[k].name+ "<img class='activeGreenPopup' src='images/status/active_green.svg'></p>"+
+                                            "<span class='popupVersion'>VER:"+shuttleMarkerArray[k].version+"</span>"+
+                                            "</div><br>"+
+                                            "<div class='popupSpeedDiv'>"+
+                                                "<span>Speed</span><br>"+
+                                                "<span id='popup_speed' class='popupSpeed' style='color:"+speedColor+";font-weight:"+speedWeight+"'>"+currentSpeed+"</span><br>"+
+                                                "<span class='popupSpeedUnit'>km/hr</span>"+
+                                            "</div>"+
+                                            "<div class='popupBatteryDiv'>"+
+                                                "<span style='vertical-align:top'>Battery</span>"+
+                                                "<div id='popupBattery' class='popup-battery' data-content="+shuttleMarkerArray[k].battery+'%'+"></div>"+
+                                                "<div class='popupParent'></div>"+
+                                            "</div>")
+                    setPopupBattery(shuttleMarkerArray[k].battery);                // update popup battery value 
+                    setPopupSpeed(shuttleMarkerArray[k].speed);                               // update popup speed value 
+                }
+            });
+            break;
+        }
     }
 }
 
@@ -779,9 +842,13 @@ function shuttleOnRoute(mapInstance, reqCount, vehicleObj)
     });
 }
 
+var daegu_interval;
+
 // Daegu monitoring
-function deguRoute() 
+function deguRoute(daegu_map) 
 {
+    if(interval != null)
+        clearInterval(interval);
     var deguShuttleArray=[]; // stores info of each vehicle in object form on degu route
     document.getElementById("degu_button").backgroundColor = "#ffffff";
     document.getElementById("degu_button").color = "#185786";
@@ -792,15 +859,30 @@ function deguRoute()
     hide_div("offsite_window");
     show_div("webcam_div");
     show_div("degu_window");
+    open_tab('degu_window',2);
     document.getElementById("distanceChart1").style.display = "inline-block";
     document.getElementById("passangerChart2").style.display = "inline-block";
-   
+
+    // clear hidden cameras 
+    document.getElementById("hidden_cam1").style.background= "";
+    document.getElementById("hidden_cam2").style.background= "";
+    document.getElementById("webcam_div1").style.background= "#828282";
+    document.getElementById("webcam_div2").style.background= "#828282";
+    if(document.getElementById("pausePlayButton1").src= "images/cctv/play.svg")
+        document.getElementById("pausePlayButton1").src= "images/cctv/pause.svg";
+    if(document.getElementById("pausePlayButton2").src= "images/cctv/play.svg")
+        document.getElementById("pausePlayButton2").src= "images/cctv/pause.svg";
+ 
     // daegu map center
     var map_center = [35.83731,128.68384];
      
     /* Check this --> map_function.js:717 Uncaught TypeError: Cannot read property 'style' of null*/
-    var daegu_map = createMap(map_center, 17, daegu_map, 'deguMap');
-        
+    var container = L.DomUtil.get('deguMap');
+    if(container != null)
+        container._leaflet_id = null;
+
+    daegu_map = createMap(map_center, 17, daegu_map, 'deguMap');
+
     // show stations, kiosk, garage on degu route.
     showRouteInfo(daegu_map, "stations/", "route/station_kiosk.svg", 2);
     showRouteInfo(daegu_map, "garages/", "route/garageIcon.svg", 2);
@@ -840,37 +922,40 @@ function deguRoute()
                     webcam2 : vehicle.webcam2,
                 }
                 vehicleObj.push(vehicle);
-                if(vehicle.name =="SCN001")
+              /*  if(vehicle.name =="SCN001")
                 {
                     console.log("vehicle obj value :"+vehicle.speed);
-                }
+                }*/
             }
         }
-
-        // update status of webcam  
-        webcam('1', vehicleObj );
-        webcam('2', vehicleObj);
-
-        // show chart.js 
-        showChartData(vehicleObj);
-
-        //create list of vehicles in degu route
+        
+          //create list of vehicles in degu route
         vehicleObj = vehicleObj.sort((a, b) => (a.id > b.id) ? 1 : -1);
-
-        // Call update function every second
-        setInterval(function(){
-            reqCount++;
-            shuttleOnRoute(daegu_map, reqCount, vehicleObj);
-        }, 1000);
 
         // create select list of vehicle 
         createSelectList(vehicleObj);
+
+        // update status of webcam  
+        webcam('1', vehicleObj);
+        webcam('2', vehicleObj);
+
+        // show chart.js 
+        showChartData(2);
+
+        // Call update function every second
+        daegu_interval = setInterval(function(){
+            reqCount++;
+            shuttleOnRoute(daegu_map, reqCount, vehicleObj);
+            //console.log("daegu_interval is executing");
+        }, 1000);
+      
         deguShuttleArray = deguShuttleArray.sort();
         firstId = deguShuttleArray[0];
         vehicleInfo(daegu_map, firstId);
         changeVehicleInfo(firstId);
     });
     show_div("alertDiv");
+    //alert("daegu_map undefined or not 5:"+daegu_map);
 }
 
 function degreesToRadians(degrees) {
@@ -1170,48 +1255,59 @@ function ETA(vehicleObj, daegu_map){
 }
 
 /* show chart with todays distance passenger count */
-function showChartData(vehicleObj){
+function showChartData(siteId){
     var nameList = [];
     var distanceList = [];
     var passengerList = [];
     var colorList = [];
+    var api_url = "http://115.93.143.2:9103/api/oplogs/by-date/";
+
+    // get todays date 
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    today = yyyy+'-'+mm+'-'+dd;
     
-    // get data using REST api and store in array and pass the array as arguments to today chart function
-    getMethod("oplogs/summary/", function (data) {
-        if(data == undefined)
-            return false;
-        var summary_data = JSON.parse(data);
-        var count = Object.keys(summary_data).length;
-        for(var i = 0; i < count; i++) 
-        {
-            var summary = summary_data[i];
-            for(var j = 0; j < vehicleObj.length; j++)
-            {
-                if(vehicleObj[j].name == summary.vehicle)
-                {          
-                    nameList.push(summary.vehicle);
-                    var distance; 
-                    if(summary.accum_distance == null)
-                        distance = 0;
-                    else
-                        distance = summary.accum_distance;     
+    // send today's date via post method
+    var data = JSON.stringify({
+        "date": "2020-04-06"   // today
+    });
 
-                    distance = 40; // for testing
-                    distanceList.push(distance);
-                    passengerList.push(summary.passenger);
+    postMethod(data, api_url, function (req) {
+        if(req.status == 200){  
+            var summary = JSON.parse(req.response);
+            var count = Object.keys(summary).length;
+            for(var i=0; i<summary.length; i++)
+            {                
+                if(summary[i].site.id == siteId)
+                {
+                    var totalDistance = summary[i].log.distance;
+                    var totalPassenger = summary[i].log.passenger;
+                    var vehicleName = summary[i].site.mid;
 
-                    if(((vehicleObj[j].name).substring(0, 3)) == "SCN")
+                    distanceList.push(totalDistance);
+                    passengerList.push(totalPassenger);
+                    nameList.push(vehicleName);
+         
+                    // check this again
+                    if((JSON.stringify(summary[i].log.distance).substring(0, 3)) == "SCN")
                         colorList.push('#0082C8');
                     else
                         colorList.push('#67BBB1');
-
-                    
-                    todayChart('todayDistance', '총 운행거리', colorList, 'Distance(km)', nameList, distanceList);
-                    todayChart('todayPassenger', '총 탑승자 수', colorList, 'Passenger', nameList, distanceList);
-                }
+                }    
             }
-        }
-    });   
+           // alert("passengerList :"+passengerList);
+          //  todayChart('todayDistance', '총 운행거리', colorList, 'Distance(km)', nameList, nameList);
+            highchart('todayDistance', '총 운행거리', colorList, 'Distance(km)', nameList, distanceList, 'km');
+            highchart('todayPassenger', '총 탑승자 수', colorList, 'Passenger', nameList, passengerList, '명');
+         //   todayChart('todayPassenger', '총 탑승자 수', colorList, 'Passenger', nameList, passengerList);
+        } else if (req.status == 401)
+            alert("Authentication credentials were not provided");
+        else if (req.status == 404)
+            alert("User record not found");
+        console.log("chart data status: " +req.status);
+    });
 }
 
 function checkWebcam(webcamData, imgID, ifImg, elseImg) {
@@ -1277,36 +1373,6 @@ function setPopupBattery(percent)
     }
 }
 
-/*
-// function identifies the model of vehicle(navya, kamo or easymile)
-function identifyMake(vehicle_name)
-{
-    var thirdCharacter = vehicle_name.charAt(2);
-    var dom = document.getElementById('vPopup');
-   // alert("leaflet id  :"+vehicle_name+" thirdCharacter:"+thirdCharacter);
-    if(thirdCharacter == 'E')
-    {
-        dom.style.background = "#67BBB1";
-    }
-       
-    else if(thirdCharacter == 'N') 
-    {
-        alert("vehicle_name id blue:"+vehicle_name);
-        dom.style.background = "#0082C8";
-    }
-      
-    else if(thirdCharacter == 'K')   
-    {
-        alert("vehicle_name id black:"+vehicle_name);
-        dom.style.background = "#5C5C5C";
-    }
-      
-    else{
-
-        alert("vehicle_name id colorless:"+vehicle_name);
-    }
-} 
-*/
 /*
 var prevMarker; // retains value of previous marker
 function showVehicle(request_count, mapInstance, vehicleObj)
@@ -1454,7 +1520,7 @@ function getMethod(api_name, callback) {
     var password = localStorage.getItem("userPwd"); 
     var base64Credentials = "Basic " + btoa(username + ":" + password);
     var request = new XMLHttpRequest();
-    var base_url = "https://115.93.143.2:9103/api/";
+    var base_url = "http://115.93.143.2:9103/api/";
 
     // get and return data 
     request.open('GET', base_url + api_name, true);
@@ -1504,13 +1570,14 @@ function showRouteInfo(mapInstance, api_name, icon_path, site_no) {
                 if (api_name == "stations/")
                 {
                     stationWp_array.push(L.latLng(iconData[i].lat, iconData[i].lon)); // array for station location on route
-                    var stationTitle = iconData[i].mid;
+                    var stationTitle = iconData[i].name;
+                    var kiosk_title = iconData[i].mid;
                     var stationLat = iconData[i].lat;
                     var stationLon = iconData[i].lon;
                     stationTitleArray.push(stationTitle); // array for station title
                                 
                     // check if kiosk for the station is available in kiosk api
-                    var kioskTitle = "KIS" + stationTitle.substring(3);
+                    var kioskTitle = "KIS" +kiosk_title.substring(3);
                     var status = stationTitleArray.includes(kioskTitle);
 
                     // array of kiosk title 
@@ -1598,11 +1665,20 @@ function createRoute(map, waypoints, stationTitle,kioskTitle) {
 
 // creates map with given mapcenter and zoom level
 function createMap(map_center, zoom, mapInstance, mapId) {
-    if (mapInstance != undefined || mapInstance != null) 
+    /*if (mapInstance != undefined || mapInstance != null) 
     {
-        mapInstance.remove();
         mapInstance.off();
-    }
+        mapInstance.remove();
+        $("#deguMap").html("");
+        var container = L.DomUtil.get('deguMap');
+        if(container != null){
+            container._leaflet_id = null;
+        }
+        
+        //mapInstance = undefined;
+        //document.getElementById('deguMap').innerHTML = "";
+    }*/
+   // alert("should be undefined:"+mapInstance);
     mapInstance = L.map(mapId, {
         zoomSnap: 0.15,      
         dragging: true, //false
@@ -1651,9 +1727,59 @@ function sangamRoute() {
 }
 
 function sejongRoute() {
+    //daegu_interval.clearInterval();
+    clearInterval(daegu_interval);
+    clearInterval(interval);
+
     hide_div("graph1_div");
     hide_div("graph2_div");
+    open_tab('degu_window',3);
+
+    // clear hidden cameras 
+    document.getElementById("hidden_cam1").style.background= "";
+    document.getElementById("hidden_cam2").style.background= "";
+    document.getElementById("webcam_div1").style.background= "#828282";
+    document.getElementById("webcam_div2").style.background= "#828282";
+    if(document.getElementById("pausePlayButton1").src= "images/cctv/play.svg")
+        document.getElementById("pausePlayButton1").src= "images/cctv/pause.svg";
+    if(document.getElementById("pausePlayButton2").src= "images/cctv/play.svg")
+        document.getElementById("pausePlayButton2").src= "images/cctv/pause.svg";
+    
+    playPause("webcam_div1", 'pausePlayButton1');
+    playPause("webcam_div2", 'pausePlayButton1');
+ 
+    // update status of webcam  
+    show_div("webcam_div");
+    document.getElementById('webcam_div1').style.display = "inline-block";
+    document.getElementById('webcam_div2').style.display = "inline-block";
+    
+    //webcam('1', null);
+    //webcam('2', null);
+    var sejongShuttleArray=[];
+    var vehicleObj=[];
+    // Reset vehicle information 
+    /*var select = document.getElementById("vehicleSelect");
+    var length = select.options.length;
+    for (i = length-1; i >= 0; i--) {
+        select.options[i] = null;
+    }*/
+
+    /*document.getElementById('speed_v1').innerHTML=0;
+    document.getElementById('heading_v1').innerHTML=0;
+    document.getElementById('passengerCount').innerHTML=0;
+    document.getElementById('v_status1').innerHTML='STOPPED';
+    document.getElementById('vehicleVersion').innerHTML='version : 0.0.0';
+    document.getElementById('vehicleID').innerHTML='No Shuttle';
+    
+    setBatteryPercent(0); */
+  
+    //document.getElementById('speed_v1').innerHTML=0;
     var map_center = [36.499951, 127.270606];
+
+    var container = L.DomUtil.get('sejongMap');
+    if(container != null)
+      container._leaflet_id = null;
+
     var sejong_map = createMap(map_center, 18, sejong_map,'sejongMap');
     var waypoints = [
         L.latLng(36.499351, 127.270606),
@@ -1664,10 +1790,54 @@ function sejongRoute() {
     showRouteInfo(sejong_map, "stations/", "route/station_kiosk.svg", 3);
     showRouteInfo(sejong_map, "garages/", "route/garageIcon.svg", 3);
     showDataCenter(sejong_map, 3);
-
+        
     // show V2X on Degu route
     show_v2x(sejong_map, "v2x/");
     sejong_map.invalidateSize();
+
+    // get all vehicle Id's of route 3 (Sejong).
+    getMethod("vehicles/", function (data) {
+        var vehicle_data = JSON.parse(data).results;
+        if (vehicle_data == undefined) 
+            vehicle_data = JSON.parse(data);
+        var count = Object.keys(vehicle_data).length;
+
+        //alert("count :"+count+" Sejong vehicles: "+vehicle_data );
+        // create vehicle obj and store in array
+        for (var i = 0; i < count; i++) {
+            var vehicle = vehicle_data[i];
+            if (vehicle.site == 3){             
+                sejongShuttleArray.push(vehicle.id); // array of vehicle ID 
+                var vehicle = {
+                    id:vehicle.id,
+                    mid:vehicle.mid,
+                    name: vehicle.name,
+                    speed:vehicle.speed,
+                    lat:vehicle.lat,
+                    lon:vehicle.lon,
+                    heading : vehicle.heading,
+                    battery : vehicle.battery,
+                    drive : vehicle.drive,
+                    webcam1 : vehicle.webcam1,
+                    webcam2 : vehicle.webcam2,
+                }
+                vehicleObj.push(vehicle);
+           }
+        }
+        //create list of vehicles in degu route
+        vehicleObj = vehicleObj.sort((a, b) => (a.id > b.id) ? 1 : -1);
+
+        // create select list of vehicle 
+        createSelectList(vehicleObj);
+
+        // update status of webcam  
+        webcam('1', vehicleObj);
+        webcam('2', vehicleObj);
+
+        firstId = sejongShuttleArray[0];
+        vehicleInfo(sejong_map, firstId);
+        //changeVehicleInfo(firstId);
+    });
 }
 
 function showMarkerIcon(iconUrl, title, lat, long, map) 
@@ -1716,7 +1886,7 @@ function open_tab( window_id, site_id) {
 
 function logout() {
     var email = document.getElementById("loggedin_userid").innerText;
-    var api_url = "https://115.93.143.2:9103/api/auth/logout/";
+    var api_url = "http://115.93.143.2:9103/api/auth/logout/";
     postMethod(JSON.stringify(email), api_url, function (status_code) {
         if (status_code == 200)
             window.location.href = "index.html";
@@ -1815,9 +1985,9 @@ function setSiteInfo(site_id){
     getMethod(api_url, function (sites_data) {
         var site_data = JSON.parse(sites_data);
         var site_title = site_data.summary.indexOf('\r');
-        var site_title_slice = site_data.summary.substring(0, site_title);
+        var site_title_slice = site_data.summary;//.substring(0, site_title);
         var summary_start = site_data.summary.indexOf('<b>');
-        var remaining_summary = site_data.summary.substring(summary_start);
+        var remaining_summary = site_data.summary2.substring(summary_start);
         document.getElementById("site_name").innerHTML = site_data.name;
         document.getElementById('site_title').innerHTML = site_title_slice;
         document.getElementById("site_summary").innerHTML = remaining_summary;
@@ -1929,7 +2099,7 @@ function manager_list(site_manager_array)
     for (var i = 0; i < site_manager_array.length; i++) {
         var api_url = "users/" + site_manager_array[i] + "/";
         getMethod(api_url, function (site_manager_data) {
-            alert("site_manager_data :"+site_manager_data);
+            //alert("site_manager_data :"+site_manager_data);
             var site_manager_data = JSON.parse(site_manager_data);
             var option = document.createElement('option');
             option.text = site_manager_data.username;
@@ -2076,6 +2246,7 @@ function close_div() {
 
 function showMarker(mapInstance, iconUrl, stationTitle, kioskTitle, lat, long) {
     var kioskIcon;
+   // alert(stationTitle);
 
     // get first 3 characters of string 
     var title = stationTitle.substring(0, 3);
@@ -2143,7 +2314,14 @@ function setDateTime() {
     setTimeout(setDateTime, 20000);
 }
 
-function highchart(graph1, title, color, yAxisLable, vehicleList, yAxisList) {
+function highchart(graph1, title, color, yAxisLable, vehicleList, yAxisList, y_unit) {
+   // vehicleList.push('');
+    //vehicleList.push('');
+    //vehicleList.push('');
+    for (var i = vehicleList.length; i < 4; i++) {
+        vehicleList.push("");
+      }
+
     if (graph1 == 'graph2')
         document.getElementById('graphTitle1').innerHTML = title;
     else
@@ -2173,7 +2351,9 @@ function highchart(graph1, title, color, yAxisLable, vehicleList, yAxisList) {
             yAxis: {
                 min: 0,
                 title: {
-                    text: 'Distance (km)'
+                    text: 'Distance (km)',
+                    position: "left",
+                    rotation: 90
                 }
             },
 
@@ -2211,24 +2391,35 @@ function highchart(graph1, title, color, yAxisLable, vehicleList, yAxisList) {
             
                 scales: {
                     xAxes: [{
+                        barThickness: 15,
+                        categoryPercentage: 0,
+                        barPercentage: 0,
                         gridLines: {
                             display: false,
+                            drawBorder : false,
                         },
                         ticks: {
                             fontSize: 8,
                             fontFamily: "Roboto",
                             fontStyle: "bold",
-                        }
+                            scaleStepWidth : 30,
+                        },
                     }],
                     yAxes: [{
+                        scaleLabel: {
+                            display: false,
+                            labelString:y_unit,
+                        },
                         gridLines: {
                             display: true,
+                            drawBorder : false,
                         },
                         ticks: {
                             fontSize: 8,
                             fontFamily: "Roboto",
                             fontStyle: "bold",
-                            stepSize: 300,
+                            beginAtZero: true,
+                            // stepSize: 300,
                         }
                     }]
                 }
@@ -2237,106 +2428,12 @@ function highchart(graph1, title, color, yAxisLable, vehicleList, yAxisList) {
     }
 }
 
-//create chart.js (horizontal bar chart) - under development 
-function todayChart(graph1, title, color, yAxisLable, vehicleList, distanceList) {
-    
-    var ctx = document.getElementById(graph1).getContext('2d');
-        var chart = new Chart(ctx, {
-            type: 'horizontalBar',
-            data: {
-                labels: vehicleList,
-                datasets: [{
-                    label: yAxisLable,
-                    backgroundColor: 'rgb(255, 99, 132)',
-                    borderColor: 'rgb(255, 99, 132)',
-                    data: distanceList,
-                    backgroundColor: color,
-                    barPercentage: 0.3,
-                    categoryPercentage: 1.0,
-                }]
-            },
-            title: {
-                text: title,
-                fontSize: '0px',
-                fontFamily: 'Noto Sans KR',
-            },
-            yAxis: {
-                min: 0,
-                gridLines:{
-                    drawBorder: false
-                },
-                title: {
-                    text: 'Distance (km)'
-                }
-            },
-
-            // Configuration options go here
-            options: {
-                plugins: {
-                    datalabels: {
-                      anchor: 'end',
-                      align: 'top',
-                      formatter: Math.round,
-                      font: {
-                        weight: 'bold',
-                        size: '0'
-                      }
-                    }
-                  },
-                options: {
-                    hover: {
-                        intersect: false,
-                    }
-                },
-                title: {
-                    display: false,
-                    text: '총 운행거리',
-                    ticks: {
-                        fontSize: 8,
-                        fontFamily: "Noto Sans KR"
-                    },
-                },
-                legend: {
-                    display: false,
-                },
-                responsive: false,
-                maintainAspectRatio: false,
-            
-                scales: {
-                    xAxes: [{
-                        gridLines: {
-                            display: false,
-                            drawBorder:false,
-                        },
-                        ticks: {
-                            fontSize: 8,
-                            fontFamily: "Roboto",
-                            fontStyle: "bold",
-                        },
-                        
-                    }],
-                    yAxes: [{
-                        gridLines: {
-                            display: false,
-                            drawBorder:false,
-                        },
-                        ticks: {
-                            fontSize: 8,
-                            fontFamily: "Roboto",
-                            fontStyle: "bold",
-                            stepSize: 300,
-                        }
-                    }]
-                }
-            }
-        });
-}
-
 function playPause(webcam_div, pausePlayButton)
 {    
     // Event listener for the play/pause button
     var pausePlayButtons = document.getElementById(pausePlayButton);
     var fifthChar = pausePlayButtons.src.substring((pausePlayButtons.src).length - 5);
+
     if(fifthChar == "y.svg")
     {
         // Update the button text to 'Pause'
@@ -2351,7 +2448,6 @@ function playPause(webcam_div, pausePlayButton)
         pausePlayButtons.src = "images/cctv/play.svg"; 
         if(webcam_div == "webcam_div1")
             document.getElementById(webcam_div).style.background = document.getElementById("hidden_cam1").style.background;
-        
         else if(webcam_div == "webcam_div2")
             document.getElementById(webcam_div).style.background = document.getElementById("hidden_cam2").style.background ;
         document.getElementById(webcam_div).style.backgroundSize="contain";
@@ -2360,35 +2456,45 @@ function playPause(webcam_div, pausePlayButton)
 
 
 function webcam(webcamId, vehicle) {
-    //console.log("*vehicle"+vehicle);
-
-    var vehicleObj = vehicle[0];
-    // console.log("*vehicleObj"+vehicleObj.toString());
-    show_div('webcam_div');
   
+    show_div('webcam_div');
+
     // close div with off camer=a button
-    document.getElementById("offCameraDiv1").style.display = "none";
-    document.getElementById("offCameraDiv2").style.display = "none";
+    if(vehicle[0].webcam1 != null)
+       document.getElementById("offCameraDiv1").style.display = "none";
+
+    if(vehicle[0].webcam2 != null)
+        document.getElementById("offCameraDiv2").style.display = "none";
     
     // open div with play camera and fullscreen icon
     document.getElementById("playButtonDiv1").style.display = "block";
     document.getElementById("playButtonDiv2").style.display = "block";
 
     var button_id = "cameraButton" + webcamId;
+
+    //If vehicle data is not available 
+    // if(vehicle == null)
+    //    return false;
+   
     //alert("webcamId :"+webcamId);
     if (webcamId == '1') 
     {
-        var webcam1 = vehicleObj.webcam1;
+        if(vehicle != null)
+            var vehicleObj = vehicle[0];
+        if(vehicleObj != null)
+            var webcam1 = vehicleObj.webcam1;
+          
         if (webcam1 != null) {
-            //alert("webcam() if");
             document.getElementById("webcam_div1").style.display = "inline-block";
             document.getElementById("hidden_cam1").style.background = 'url('+webcam1+')'; 
         }
     }
     if (webcamId == '2') {
-        //alert("webcam() else");
+        if(vehicle != null)
+            var vehicleObj = vehicle[0];
         document.getElementById("cameraButton2").src = "images/cctv/video2Active.svg";
-        var webcam2 = vehicleObj.webcam2;
+        if(vehicleObj != null)
+            var webcam2 = vehicleObj.webcam2;
         if (webcam2 != null) {
             document.getElementById("webcam_div2").style.display = "inline-block";
             document.getElementById("hidden_cam2").style.background = 'url('+webcam2+')';
@@ -2400,7 +2506,6 @@ function webcam(webcamId, vehicle) {
 function scale_image(hidden_cam) {
     document.getElementById("myModal").style.display = "block";
     var div_url = document.getElementById(hidden_cam).style.background;
-    //alert("div_url:"+div_url);
     document.getElementById("img01").style.backgroundImage = div_url;
 }
 
@@ -2575,7 +2680,7 @@ function resetPassword()
         "new_password1": input_new_pwd,
         "new_password2": input_repeat_pwd,
     });
-    var api_url = "https://115.93.143.2:9103/api/auth/password/change/";
+    var api_url = "http://115.93.143.2:9103/api/auth/password/change/";
     postMethod(data, api_url, function (req) {
         var res = JSON.parse(req.response);
         var pwdErrorDom = document.getElementById("pwdResetError");
@@ -2639,4 +2744,33 @@ function oddFileDownload(){
         document.body.appendChild(oddDom);
         oddDom.click();
     });
+}
+
+webSocket();
+function webSocket()
+{
+    // Create WebSocket connection.
+    const socket = new WebSocket('ws://115.93.143.2:9103/api/event/door/');
+
+    // Connection opened
+    socket.addEventListener('open', function (event) {
+        socket.send('Hello Server!');
+    });
+
+    // Listen for messages
+    socket.addEventListener('message', function (event) {
+        console.log('Message from server ', event.data);
+    });
+
+/*
+var socket = io('ws://115.93.143.2:9103', {transports: ['websocket']});
+socket.on('connect', function () {
+  console.log('connected!');
+  socket.emit('greet', { message: 'Hello Mr.Server!' });
+});
+
+socket.on('respond', function (data) {
+  console.log(data);
+});*/
+    
 }

@@ -561,27 +561,39 @@ display:none;
 .chartTitle1{
 font-family : Noto_medium; color: #185786;
 font-size: 13px; margin-left: 10px;  margin-top: 7px;
+margin-bottom: 5px;
 }
 
 .distanceChart1{
 display: none; 
 position: absolute;
-width: 359px;
-height: 130px;    z-index: 1001;
+width: 264px;
+height: 204px;    
+z-index: 1001;
 left: 598px;
-top: 922px;background: #FFFFFF;
+top: 850px;
+background: #FFFFFF;
 box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12), 0px 0px 2px rgba(0, 0, 0, 0.14);
 border-radius: 5px;
 }    
 
 .passangerChart2{
 display: none; position: absolute;
-width: 240px;
-height: 128px; z-index: 1001;
+width: 264px;
+height: 204px; z-index: 1001;
 left: 977px;
-top: 922px;background: #FFFFFF;
+top: 850px;
+background: #FFFFFF;
 box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12), 0px 0px 2px rgba(0, 0, 0, 0.14);
 border-radius: 5px;
+}
+
+.scaleUnit{
+color: grey;
+font-size: 12px;
+font-family: roboto;
+margin-bottom: 5px;
+margin-left: 10px;
 }
 
 .scrolly{
