@@ -233,6 +233,8 @@ function showContent(tabId) {
     var tabArray = ['integrated_control', 'integrated_Dashboard'];
     if (tabId == "integrated_control")
         window.location.href = "main.html";
+    else if(tabId == "integrated_Dashboard")
+        window.location.href = "dashboard.html";
 }
 
 // Show weather information on main.html
