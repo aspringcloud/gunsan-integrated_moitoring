@@ -15,6 +15,7 @@
     <!--image cropper-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js"></script>
     <script src="js/map_function.js"></script>
+    <script src="js/includeHTML.js"></script>
     <script src="js/validation.js"></script>
     <pre id="api-response"></pre>
     <!--open weather map API-->
@@ -150,100 +151,10 @@
         <p class="scaleUnit">명</p>
         <canvas id="todayPassenger" width="240px" height="150px" style="margin-left: 8px;"></canvas>
     </div>
-    <div class="main_div">
-        <div class="mainTop">
-            <p class="mr-3 ml-5 display_inline_block">
-                <a href="http://www.aimobility.io" target="_blank"><img class="spring_cloud_logo" alt="spring cloud" src="images\login\sc_logo.svg"/></a>
-            </p>
-            <p class="logo_p1">
-                <a href="http://www.aimobility.io" target="_blank"><img class="ai_mobility_logo" alt="ai.mobility" src="images\ai_mobility.jpg"/></a>
-            </p>
-            <!-- main tabs-->
-            <div class="inline_element tab_elements">
-                <p class="font_regular tabButton" onclick="showContent('integrated_control');" id="integrated_control" title="Integrated control">통합관제 </p>
-                <p onclick="showContent('integrated_Dashboard')" id="integrated_Dashboard" title="Integrated Dashboard">통합대시보드</p>
-                <p onclick="showContent('diagnostics')" title="Diagnostics and Error Analysis">진단 및 오류 분석 </p>
-                <p onclick="showContent('accident_prediction')" title="Accident Prediction Model and Data Analysis">사고 예측 모델 및 데이터분석</p>
-                <p onclick="alertfun();" title="STEP">STEP</p>
-                <p onclick="alertfun();" title="Springgo Test Mode">스프링고 테스트모드 </p>
-                <p onclick="alertfun();" title="Data center">데이터센터</p>
-            </div>
-            <div class="tab_elements date_time_div">
-                <!--Current date time-->
-                <div class="divStyle1">
-                    <p class="count_p1" id="currentDate"></p>
-                    <p class="count_p2" id="currentTime"></p>
-                </div>
-                <div class="divStyle2">
-                    <!--Notice Modal-->
-                    <div class="message">
-                        <img class="noticeImg" src="images/notice.svg" onclick="notice_modal();"></i>
-                    </div>
-                    <img class="message msgImg" src="images/msg.svg" onclick="msg_modal();"/>
-                    <img class="userImg" id="user_img" src="images/userIcon.svg"/>
-                    <!--Display logged-in username-->
-                    <div class='display_inline_block divStyle3'>
-                        <span class='greetSpan'>안녕하세요,</span>
-                        <br>
-                        <span id="active_username" class="userName">Test</span>
-                    </div>
-                    <!--opens user settings window-->
-                    <img class="display_inline_block dropDownStyle" src="images/dropDownArrow.svg" onclick="toggle_div('logoutSetting')"/>
-                    <div id="logoutSetting" class="logoutSettings">
-                        <button class="setting_P" onclick="settings();"><img src="images/setting.svg"/>Setting</button>
-                        <button class="setting_P" onclick="logout();"><img src="images/logout.svg" />Logout </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+    
+    <div include-html="main_div.html"></div>
+    <script>includeHTML();</script>
 
-        <!--Setings button (Active user information)settingModal-->
-        <div id="settingDialog">
-        <div class="settingDiv" id="settingDiv">
-            <div class="settingTitle">
-                <p>환경설정</p>
-                <img src="images/closing_button.svg" onclick="hide_div('settingDiv');"/>
-            </div>
-            <div class="settingDiv1">
-                <button onclick="settings();">로그인 정보</button>
-                <button onclick="passwordChange2();">비밀번호 변경</button>
-            </div>
-            <div class="settingDiv2" id="settingDiv2">
-                <label class="settingDiv_label">이메일 ID</label>
-                <span class="settingDiv_span" id="activeEmail"></span>
-                <label class="settingDiv_label">이름</label>
-                <span class="settingDiv_span" id="activeName"></span>
-                <label class="settingDiv_label">팀</label>
-                <span class="settingDiv_span" id="activeTeam"></span>
-                <label class="settingDiv_label">휴대폰</label>
-                <span class="settingDiv_span" id="activePhone"></span>
-                <label class="settingDiv_label">권한</label>
-                <span class="settingDiv_span" id="activeLevel"></span>
-            </div>
-            <div class="settingDiv3" id="settingDiv3">
-                <span><img src="images/userIcon.svg" id="activeUserImg"></span>
-                <button>사진 변경하기</button>
-            </div>
-            <!--Update password window-->
-            <div class="settingDiv21" id="settingDiv21">
-                <label class="settingDiv_label">현재 비밀번호</label>
-                <input class="settingDiv_span" id="currentPwd" type="password" disabled/>
-                <label class="settingDiv_label">새 비밀번호</label>
-                <input class="settingDiv_span" id="newPwd" type="password" placeholder="새로운 비밀번호를 입력하세요."/>
-                <label class="settingDiv_label">새 비밀번호 확인</label>
-                <input class="settingDiv_span" id="confirmPwd" type="password" placeholder="새로운 비밀번호를 다시 입력하세요." />
-                <span class="error" id="pwdResetError"></span>
-                <div>
-                    <span class="settingNotice">※ 비밀번호에 이메일ID, 이름을 포함할 수 없습니다.</span>
-                    <span class="settingNotice">※ 비밀번호는 8글자 이상이어야 합니다.</span>
-                    <span class="settingNotice">※ 비밀번호는 숫자로만 입력은 불가능합니다. </span>
-                </div>
-            </div>
-            <div class="settingDiv31" id="settingDiv31">
-                <button onclick="resetPassword()">변경하기</button>
-            </div>
-        </div>
-    </div>
     <div class="map_zindex">
         <div id="hide_test" class="round_button">
             <button onclick="switchMap(this)" id="degu_button">대구</button>
