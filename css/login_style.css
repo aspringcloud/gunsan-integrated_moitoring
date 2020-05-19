@@ -1662,7 +1662,7 @@ font-weight: 500;
 }
 
 
-.tabButton{ color:#185786; }
+.tabButton{ color:#2E92B0 !important; }
 
 .noticeBullet1{
 display: inline-block;vertical-align:super; float: left;margin-top: 7px; margin-right: 4px;
@@ -2801,12 +2801,17 @@ top: 0px;
 position: absolute;
 width: 100%;
 background-color: #ffffff;
-box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
+border-bottom: 1px solid #D9D9D9;
 }
 
 .mainTop{
 position: absolute;
 top:23px;
+width: 100%;
+}
+
+.tab_elements>p{
+    color:#555;
 }
 
 /* modal image*/
@@ -3264,19 +3269,24 @@ margin-right: 130px;
 
 .divStyle1{
 display:inline-block; 
-margin-left:65px;
+position: absolute; top:0px; right: 300px;
 }
 .count_p1{
 font-size: 15px; 
 margin-bottom: -10px;
 color: #555555;
+letter-spacing: -0.016em;
+font-weight: 100;
 }
 
 .count_p2{
 font-size: 24px !important ;
+color: #555;
+letter-spacing: -0.036em;
 }
+
 .divStyle2{
-margin-left : 70px; vertical-align:top;  float:right;
+vertical-align:top; position: absolute; top:0px; right: 30px;
 }
 
 .noticeImg{
