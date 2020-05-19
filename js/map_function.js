@@ -460,8 +460,15 @@ function vehicleInfo(map, vId)
 }
 
 function updateShuttleInfo(vehicle)
-{
-    if(vehicle.speed > 0) 
+{  
+    if(vehicle.drive_mode == 1)
+        document.getElementById("driveStatus").innerHTML = "AUTONOMOUS";
+    else
+        document.getElementById("driveStatus").innerHTML = "MANUAL";
+
+    if(vehicle.isparked == true)
+        vehicleStatus("rgb(128,128,128)", "PARKED", "rgb(128,128,128)", "#57AE66");
+    else if(vehicle.speed > 0) 
         vehicleStatus("rgba(115, 192, 95, 0.4)", "DRIVING", "#57AE66", "#57AE66");
     else
         vehicleStatus("rgba(202, 64, 64, 0.4)", "STOPPED", "#CA4040", "#BDBDBD");
@@ -815,8 +822,10 @@ function setPopupContent(e, mapInstance)
 
 function vehicleStatus(color, status, statusBg, frontBG)
 {
+   // alert("driving status :"+status);
     // Driving button 
     document.getElementById("v_status1").innerHTML = status;
+    
     document.getElementById("v_status1").style.background = statusBg;
 
     // front
