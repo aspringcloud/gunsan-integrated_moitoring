@@ -14,9 +14,11 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <!--image cropper-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js"></script>
+
+    <!--javascript function files-->
     <script src="js/map_function.js"></script>
-    <script src="js/includeHTML.js"></script>
     <script src="js/validation.js"></script>
+    <script src="js/includeHTML.js"></script>
     <pre id="api-response"></pre>
     <!--open weather map API-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -58,10 +60,9 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.7.3/dist/Chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
 
-    <!-- Web socket-->
-    <script src="http://yourwebsite.com:12345/socket.io/socket.io.js"></script>
+    <!-- Web socket
+    <script src="http://yourwebsite.com:12345/socket.io/socket.io.js"></script>-->
     
-
     <!--chart.js 
         <script src="Chart.js/Chart.js"></script>
         <script src="Chart.js/Chart.min.js"></script>
@@ -152,8 +153,8 @@
         <canvas id="todayPassenger" width="240px" height="150px" style="margin-left: 8px;"></canvas>
     </div>
     
-    <div include-html="main_div.html"></div>
-    <script>includeHTML();</script>
+    <!--navifation tab html-->
+    <div include-html="main_div.html" id="includedContent"></div>
 
     <div class="map_zindex">
         <div id="hide_test" class="round_button">
@@ -399,17 +400,20 @@
            <p id="loggedin_userid" hidden></p>
         <p id="currentMap" hidden></p>
     </div>
-
+  
     <script>
+        includeHTML();
+   
         // Get the <span> element that closes the modal
         // When the user clicks on <span> (x), close the modal
         var span = document.getElementsByClassName("close")[0];
         span.onclick = function () {
             document.getElementById("myModal").style.display = "none";
         }
+
         showCluster(); // show cluster data on map
         showSummary(); // show count of site summary
-        setDateTime(); // Update dateTime
+        //setDateTime(); // Update dateTime
       
         // Get the modal 
         var modal = document.getElementById('siteListModal');
@@ -424,10 +428,10 @@
         }
 
         //Update weather information after every 20 minutes 
-      //  getweather(35.8368,128.6835);
-        /*setInterval(function() {
+        getweather(35.8368,128.6835);
+        setInterval(function() {
             getweather(35.8368,128.6835);
-        }, 20 * 60000); */
+        }, 60 * 60000); 
     </script>
 </body>
 </html>
