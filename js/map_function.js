@@ -614,6 +614,7 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo){
                 if(vehicleObj.isparked == true )
                 {
                     var marker = createHtmlMarker(vehicleObj, greyRippleIcon);
+                    marker.options.rotationAngle = vehicleObj.heading;     
                 }
                 else if (vehicleObj.speed > 0 ) // || vehicleObj.drive == true
                 {

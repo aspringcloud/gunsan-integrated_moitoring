@@ -2780,15 +2780,15 @@ animation: ring-1 2s 1.5s ease-out infinite;
 animation: ring-1 2s 2s ease-out infinite;
 }
 
-/* grey color ripple *?
-/* green color */
+/* grey color ripple */
+
 .shuttle_ring1_grey,
 .shuttle_ring2_grey,
 .shuttle_ring3_grey,
 .shuttle_ring4_grey {
 width: 100px;
 height: 100px;
-background: rgb(128,128,128);
+background: #999999;
 border-radius: 50%;
 left: -35px;
 top: -55px;
@@ -2801,12 +2801,12 @@ animation: ring-1 2s 0.5s ease-out infinite;
 }
 
 .shuttle_ring2_grey {
-animation: ring-1 2s 1s ease-out infinite;
+animation: ring-1 2s 1.3s ease-out infinite;
 }
-
+/*
 .shuttle_ring3_grey {
 animation: ring-1 2s 1.5s ease-out infinite;
-}
+}*/
 
 .leaflet-marker-icon {
 background-color: transparent;
