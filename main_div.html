@@ -8,12 +8,12 @@
             </p>
             <!-- main tabs-->
             <div class="inline_element tab_elements">
-                <p class="font_regular tabButton" onclick="showContent('integrated_control');" id="integrated_control" title="Integrated control">통합관제 </p>
-                <p onclick="showContent('integrated_Dashboard')" id="integrated_Dashboard" title="Integrated Dashboard">통합대시보드 </p>
-                <p onclick="showContent('diagnostics')" title="Diagnostics and Error Analysis">진단 및 오류 분석 </p>
-                <p onclick="showContent('accident_prediction')" title="Accident Prediction Model and Data Analysis">사고 예측 모델 및 데이터분석</p>
-                <p onclick="alertfun();" title="Springgo Test Mode">스프링고 테스트모드 </p>
-                <p onclick="alertfun();" title="Data center">데이터센터</p>
+                <p class="font_regular" onclick="showContent('integrated_control');" id="integrated_control" title="Integrated control">통합관제 </p>
+                <p class="font_regular" onclick="showContent('integrated_Dashboard')" id="integrated_Dashboard" title="Integrated Dashboard">통합대시보드 </p>
+                <p class="font_regular" onclick="showContent('diagnostics')" title="Diagnostics and Error Analysis">진단 및 오류 분석 </p>
+                <p class="font_regular" onclick="showContent('accident_prediction')" title="Accident Prediction Model and Data Analysis">사고 예측 모델 및 데이터분석</p>
+                <p class="font_regular" onclick="alertfun();" title="Springgo Test Mode">스프링고 테스트모드 </p>
+                <p class="font_regular" onclick="alertfun();" title="Data center">데이터센터</p>
             </div>
             <div class="tab_elements date_time_div">
                 <!--Current date time-->
@@ -30,7 +30,7 @@
                     <img class="userImg" id="user_img" src="images/userIcon.svg"/>
                     <!--Display logged-in username-->
                     <div class='display_inline_block divStyle3'>
-                        <span class='greetSpan'>안녕하세요,</span>
+                        <span class='greetSpan'>안녕하세요</span>
                         <br>
                         <span id="active_username" class="userName">Test</span>
                     </div>
@@ -93,4 +93,26 @@
     </div>
 <script>
      setDateTime(); // Update dateTime
+     changeTabButtonColor();
+
+     function getPageName(){
+        var url = window.document.URL;
+        var splitUrl = url.split('/');
+        return splitUrl[splitUrl.length-1];
+    }
+
+    function changeTabButtonColor(){
+
+        var pageName = getPageName();
+        console.log(pageName);
+        switch(pageName){
+            case 'main.html':
+                $('#integrated_control').addClass('tabButton');
+                break;
+            case 'dashboard.html':
+                $('#integrated_Dashboard').addClass('tabButton');
+                break;
+        }
+    }
+
 </script>
