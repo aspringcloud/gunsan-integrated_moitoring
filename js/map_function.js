@@ -596,13 +596,26 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo){
                                 '<div id="ring3" class="shuttle_ring3_g"></div>'+
                                 '<div id="ring4" class="shuttle_ring4_g"></div>'+
                             '</div>';
+                            // green ripple marker html
+            var greyIconHtml = '<div id="vehicleRippleDiv" class="shuttle_icon">'+
+                                    '<div id="ring1" class="shuttle_ring1_grey"></div>'+
+                                    '<div id="ring2" class="shuttle_ring2_grey"></div>'+
+                                    '<div id="ring3" class="shuttle_ring3_grey"></div>'+
+                                    '<div id="ring4" class="shuttle_ring4_grey"></div>'+
+                                '</div>';
         
             const redRippleIcon = L.divIcon({html: redIconHtml});
             const greenRippleIcon = L.divIcon({html: greenIconHtml});
+            const greyRippleIcon = L.divIcon({html: greyIconHtml});
+
             if (request_count == 1) 
             {
                 // create Icon for ripple marker as per the speed value
-                if (vehicleObj.speed > 0 ) // || vehicleObj.drive == true
+                if(vehicleObj.isparked == true )
+                {
+                    var marker = createHtmlMarker(vehicleObj, greyRippleIcon);
+                }
+                else if (vehicleObj.speed > 0 ) // || vehicleObj.drive == true
                 {
                     var marker = createHtmlMarker(vehicleObj, greenRippleIcon);
                     marker.options.rotationAngle = vehicleObj.heading;                // rotate marker of speed is greater then 0 to avoid abnormal data
@@ -668,7 +681,12 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo){
                     currentRipple.setLatLng(newLatLng);                                         // update the location of ripple marker
 
                     // change speed status in left side window
-                    if (vehicleObj.speed > 0 ) //|| vehicleObj.drive == true
+                    if (vehicleObj.isparked == true)
+                    {
+                        currentRipple.setIcon(greyRippleIcon);
+                        currentRipple.options.rotationAngle = vehicleObj.heading;
+                    }
+                    else if (vehicleObj.speed > 0 ) //|| vehicleObj.drive == true
                     {                  
                         currentRipple.setIcon(greenRippleIcon);
                         currentRipple.options.rotationAngle = vehicleObj.heading;
