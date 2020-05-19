@@ -154,7 +154,7 @@
     </div>
     
     <!--navifation tab html-->
-    <div include-html="main_div.html" id="includedContent"></div>
+    <div id="includedContent"></div>
 
     <div class="map_zindex">
         <div id="hide_test" class="round_button">
@@ -402,7 +402,9 @@
     </div>
   
     <script>
-        includeHTML();
+        $(document).ready(function(){
+            $("#includedContent").load("main_div.html");
+        });
    
         // Get the <span> element that closes the modal
         // When the user clicks on <span> (x), close the modal

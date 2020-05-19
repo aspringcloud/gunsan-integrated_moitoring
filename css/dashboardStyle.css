@@ -77,8 +77,6 @@
     left:275px;
     top: 30px;
     background-image: url('../images/dashboard/before_4h.svg');
-    background-repeat: no-repeat;
-    background-size: auto;
     cursor: pointer;
 }
 
@@ -90,27 +88,29 @@
     left: 290px;
     top: 30px;
     background-image: url('../images/dashboard/before_10h.svg');
-    background-repeat: no-repeat;
-    background-size: auto;
     cursor: pointer;
 }
 
 #kibana_id{
     display: inline-block;
-    position: relative;
+    position: absolute;
+    background-image: url('../images/dashboard/kibana_id.svg');
     width: 145px;
     height: 30px;
     right: 30px;
     top: 15px;
+    z-index: 1001;
 }
 
-#kibana_id{
+#kibana_pw{
     display: inline-block;
-    position: relative;
+    position: absolute;
+    background-image: url('../images/dashboard/kibana_pw.svg');
     width: 145px;
     height: 30px;
     right: 30px;
-    top: 15px;
+    top: 50px;
+    z-index: 1001;
 }
 
 #dashboard{

@@ -42,8 +42,9 @@
     <script src="mjpeg-video-webcomponent/fullscreen-api-polyfill.js"></script>
 </head>
 <body>
-    <div include-html="main_div.html"></div>
-    <script>includeHTML();</script>
+    <!--navifation tab html-->
+    <div id="includedContent"></div>
+    
     <div id="nav_left"><span>Demo - 1</span></div>
     <div id="nav_time">
         <span id="before_5m" onclick="setDashBoardTime('5m')"></span>
@@ -60,20 +61,29 @@
     </div>
     <script>
         $(document).ready(function(){
+            $("#includedContent").load("main_div.html");
             //resize dashboard div width and height
-            $('#dashboard').css('width', $(window).width() - 148);        
+            $('#dashboard').css('width', $(window).width() - 142);        
             $('#dashboard').css('height', $(window).height() - 185);
             //resize nav_left div height
             $('#nav_left').css('height', $(window).height() - 90);
 
         });
         
+        function activeBtnImage(){
+            var img = $(this).css("background-image").replace(/url\("*|"*\)/g, "");
+            console.log(img);
+            //$(this).css('background-image', 'url(../images/dashboard/kibana_pw.svg');
+            //$(this).css('backgreou');
+        }
         function setDashBoardTime(time){
             $('#dashboard').children("iframe").attr("src"
             , 'http://115.93.143.2:5601/app/kibana#/dashboard/e1105200-9427-11ea-b299-8b93b2b9a332?embed=true&_g=(refreshInterval%3A(pause%3A!t%2Cvalue%3A1000)%2Ctime%3A(from%3Anow-'
             + time 
             + '%2Cto%3Anow))');
+            activeBtnImage();
         }
+
     </script>
 </body>
 </html>
