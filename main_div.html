@@ -1,6 +1,6 @@
     <div class="main_div">
         <div class="mainTop">
-            <p class="mr-3 ml-5 display_inline_block">
+            <p class="mr-3 ml-4 display_inline_block">
                 <a href="http://www.aimobility.io" target="_blank"><img class="spring_cloud_logo" alt="spring cloud" src="images\login\sc_logo.svg"/></a>
             </p>
             <p class="logo_p1">
@@ -27,23 +27,24 @@
                         <img class="noticeImg" src="images/notice.svg" onclick="notice_modal();"></i>
                     </div>
                     <img class="message msgImg" src="images/msg.svg" onclick="msg_modal();"/>
-                    <img class="userImg" id="user_img" src="images/userIcon.svg"/>
                     <!--Display logged-in username-->
-                    <div class='display_inline_block divStyle3'>
+                    <div class='divStyle3'>
+                        <img class="userImg" id="user_img" src="images/userIcon.svg"/>
                         <span class='greetSpan'>안녕하세요</span>
-                        <br>
                         <span id="active_username" class="userName">Test</span>
-                    </div>
-                    <!--opens user settings window-->
-                    <img class="display_inline_block dropDownStyle" src="images/dropDownArrow.svg" onclick="toggle_div('logoutSetting')"/>
-                    <div id="logoutSetting" class="logoutSettings">
-                        <button class="setting_P" onclick="settings();"><img src="images/setting.svg"/>Setting</button>
-                        <button class="setting_P" onclick="logout();"><img src="images/logout.svg" />Logout </button>
+                        <!--opens user settings window-->
+                        <img class="dropDownStyle" src="images/dropDownArrow.svg" onclick="toggle_div('logoutSetting')"/>
+                        <div id="logoutSetting" class="logoutSettings">
+                            <button class="setting_P" onclick="settings();"><img src="images/setting.svg"/>Setting</button>
+                            <button class="setting_P" onclick="logout();"><img src="images/logout.svg" />Logout </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
+        <div class=mainBottomLine>
+            <span id="bottomline"></span>
+        </div>
         <!--Setings button (Active user information)settingModal-->
         <div id="settingDialog">
         <div class="settingDiv" id="settingDiv">
@@ -95,8 +96,8 @@
 
     
 <script>
-     setDateTime(); // Update dateTime
-     changeTabButtonColor();
+    changeTabButtonColor();
+    setDateTime(); // Update dateTime
 
      function getPageName(){ 
         var url = window.document.URL;
@@ -105,15 +106,18 @@
     }
 
     function changeTabButtonColor(){
-
         var pageName = getPageName();
         console.log(pageName);
         switch(pageName){
             case 'main.html':
                 $('#integrated_control').addClass('tabButton');
+                $('#bottomline').css('width', '70px');
+                $('#bottomline').css('left', '229px');
                 break;
             case 'dashboard.html':
                 $('#integrated_Dashboard').addClass('tabButton');
+                $('#bottomline').css('width', '101px');
+                $('#bottomline').css('left', '344px');
                 break;
         }
     }
