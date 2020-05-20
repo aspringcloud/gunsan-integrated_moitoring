@@ -627,14 +627,226 @@ background: #555;
 .pull-right{float:right}
 .main_popup{width:350px; height:430px; border:3px solid #3E4156;background-color: white;}
 .popup_bottom{
-    background-color: #3E4156;
-    color: white;
-    height: 25px;
-    padding: 2px 10px 3px 10px;
-    width:330px;
-  
+background-color: #3E4156;
+color: white;
+height: 25px;
+padding: 2px 10px 3px 10px;
+width:330px;
 }
+
 .imgStyle{
  height :600px;
  width:490px;
+}
+
+/*sejeong layer */
+.subMenu{
+width: 434px;
+height: 120px;
+background: #0893BF;
+border-radius: 0px 5px 5px 0px;
+display: none;/*
+left: 122px;*/
+top: 60px;
+position: absolute;
+z-index: 1011;
+}
+
+.subMenu button{
+color: #FFFFFF;
+font-family: noto_medium;
+font-size: 18px;
+display: flex;
+align-items: flex-end;
+letter-spacing: 0.1em;
+margin: 0px 0px 0px 0px;
+background-color: transparent;
+outline: none;
+width: 434px;
+height: 60px;
+border: 0px;
+padding-left: 25px;
+}
+
+/* Custom popup 3 */
+.custom-popup3 .leaflet-popup-content-wrapper {
+background: #FFFFFF;
+color: black;
+width: 170px;
+height: 120px;
+padding: 0px;
+}
+
+.custom-popup3 .leaflet-popup-close-button {
+display: none
+}
+
+/*.custom-popup3 .leaflet-popup-content-wrapper p {
+margin: 0px;
+padding-left: 28%;
+padding-top: 3px;
+font-size: 14px;
+text-align: center;
+}*/
+
+.custom-popup3 .leaflet-popup-content {
+margin: 0px;
+padding: 0px;
+}
+
+.custom-popup3 .leaflet-popup-content p{
+/*margin: 0px;
+padding: 3px;*/
+margin: 8px 0;
+}
+
+.garagePopup2{
+text-align:'center'; 
+height:120px;
+width:170px;
+border-radius: 2px 2px 0px 0px;
+color:white;
+align-content: center;
+background: #FFFFFF;
+box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.garageDiv1{
+width: 170px;
+height: 37px;
+background: #BDBDBD;
+border-radius: 2px 2px 0px 0px;
+}
+
+.garagePopup2div{
+width :50%;
+display:inline-block;
+height: 50px;
+}
+
+.garageP1{
+text-align: center; 
+color: #888888; 
+font-size: 14px; 
+font-family: noto_medium;
+}
+
+.garageMargin1{
+
+margin-top: 5px;
+}
+
+.garageP2{
+text-align: center; 
+color: #333333; 
+font-size: 18px; 
+font-family: noto_medium;
+}
+
+.garageP3{
+color: #2E92B0; 
+}
+
+.garageTitle{
+text-align: center; 
+color: #ffffff; 
+font-size: 20px; 
+font-family: roboto_medium;
+float: left;
+/*margin: 15px 0px 15px 5px;*/
+padding-left: 5px;
+}
+
+.garageDoor_black{
+text-align: center; 
+color: #333333; 
+font-size: 13px; 
+font-family: noto_medium;
+float:right;
+padding: 3px 8px 0px 0px;
+}
+
+.garageDoor_red{
+text-align: center; 
+color: #CA4040;
+font-size: 13px; 
+font-family: noto_medium;
+float:right;
+padding: 3px 8px 0px 0px;
+}
+
+.subMenuModal {
+display: none;
+position: fixed;
+z-index: 1011;
+/*padding: 3%;*/
+left: 122px;
+top: 90px;
+width: 100%;
+height: 100%;
+overflow: auto;
+background-color: rgb(0, 0, 0);
+background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* Emergency contact button */
+.emergency{
+width: 153px;
+height: 34px;
+color: #CA4040;
+border-color: #CA4040;
+font-size: 14px;
+font-family: noto_medium;
+border: 0.5px solid #CA4040;
+background-color: transparent;
+padding: 0px 0px 0px 3px;
+}
+
+.contactModal{
+display: none;
+position: fixed;
+z-index: 1011;
+
+align-self: center;
+width: 100%;
+height: 100%;
+overflow: auto;
+background-color: rgb(0, 0, 0);
+background-color: rgba(0, 0, 0, 0.9);    
+}
+.contactDiv1
+{
+    position:absolute; left: 200px; top:60px
+}
+
+.contactDiv1 div{
+    height: 57px;background: #F4F4F4; border-radius: 3px 3px 0px 0px;
+}
+
+.contactDiv1 p{
+    font-family:noto_medium;font-size: 18px; color: #333333;padding: 15px 0px 0px 15px; display:inline-block
+}
+
+.contactImg1{
+    float:right; padding: 15px 15px 0px 0px;
+}
+
+.contactImg2{
+    width: 1425px;height: 733px;
+}
+
+.sejongHover1:hover
+{
+    background: #93C3D1;
+    color: #333333;
+    border:0px;
+    border-radius: 0px 5px 0px 0px;
+}
+
+.sejongHover2:hover
+{
+    background: #93C3D1;
+    color: #333333;
+    border:0px;
+    border-radius: 0px 0px 5px 0px;
 }

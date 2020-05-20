@@ -21,7 +21,9 @@ function switchMap(obj)
         show_div("alertDiv");
     }
     else if(obj.id == "sejong_button")
-    {
+    {       
+        show_div("sejongSubmenu");
+
         for(var i = 0; i < mapList.length; i++)
             hide_div(mapList[i]);
         show_div("sejongMap");
@@ -424,11 +426,12 @@ function arraivalTime(mapInstance, shuttleLocation,speedArray,count, request_cou
     */
 }
 
-
 // show vehicle info like speed, heading, gnss battery etc.
 var interval;
 function vehicleInfo(map, vId)
 {   
+    // clear interval 
+    clearInterval(interval);
    
     var request_count = 0;
     var count15 = 0;
@@ -552,7 +555,7 @@ function changeVehicleInfo(obj)
     var activeMap =  mapList[mapList.length - 1];
     clearInterval(interval);
     if(typeof(obj) == 'number')
-    {
+    {    
         interval = vehicleInfo(activeMap, obj);
     }
     else
@@ -654,6 +657,12 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo){
                 vehicleMarker.on('click', function(e) {           
                     // vehicle marker on click function ---> updates vehicle popup data every second 
                     setPopupContent(e, mapInstance);
+                    // Update vehicle info on left window
+                    //updateShuttleInfo(vehicleObj);
+                   
+                  //  document.getElementById('vehicleSelect').value = vehicleObj.name;
+                   // changeVehicleInfo(vehicleObj.id);
+                   
             });
 
             if(vehicleObj.speed > 0)
@@ -745,8 +754,8 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo){
                                 speedWeight ="normal";
                         }
 
-                        if(vehicleObj.id == 1)
-                        console.log("%%%%vehicleObj.version:"+vehicleObj.model.version+ " vehicleObj.battery:"+vehicleObj.battery);
+                        //if(vehicleObj.id == 1)
+                        //console.log("%%%%vehicleObj.version:"+vehicleObj.model.version+ " vehicleObj.battery:"+vehicleObj.battery);
                     
                         currentMarker._popup.setContent("<div class="+popupColor+" id='vPopup'>"+
                         "<p class='popupTitle'>" +vehicleObj.name+ "<img class='activeGreenPopup' src='images/status/active_green.svg'></p>"+
@@ -831,9 +840,13 @@ function setPopupContent(e, mapInstance)
                                                 "<div class='popupParent'></div>"+
                                             "</div>")
                     setPopupBattery(shuttleMarkerArray[k].battery);                // update popup battery value 
-                    setPopupSpeed(shuttleMarkerArray[k].speed);                               // update popup speed value 
+                    setPopupSpeed(shuttleMarkerArray[k].speed);                    // update popup speed value 
                 }
             });
+
+            // Update left window vehicle info. when vehicle popup is clicked
+            document.getElementById('vehicleSelect').value = shuttleMarkerArray[k].name;  
+            vehicleInfo(mapInstance, shuttleMarkerArray[k].markId);
             break;
         }
     }
@@ -1336,7 +1349,7 @@ function showChartData(siteId){
             alert("Authentication credentials were not provided");
         else if (req.status == 404)
             alert("User record not found");
-        console.log("chart data status: " +req.status);
+        //console.log("chart data status: " +req.status);
     });
 }
 
@@ -1525,7 +1538,7 @@ function setPopupSpeed(speed)
     // change css to show changes in speed.
     if(speed < 18)
     {
-        console.log("<18:"+popup_speed.style.color);
+        //console.log("<18:"+popup_speed.style.color);
         popup_speed.style.color="#4F4F4F";
         popup_speed.style.fontWeight ="normal";
     }
@@ -1758,6 +1771,8 @@ function sangamRoute() {
 
 function sejongRoute() {
     //daegu_interval.clearInterval();
+
+    document.getElementById("subMenuModal").style.display = "block";
     clearInterval(daegu_interval);
     clearInterval(interval);
 
@@ -2275,27 +2290,26 @@ function close_div() {
 }
 
 function showMarker(mapInstance, iconUrl, stationTitle, kioskTitle, lat, long) {
-    var kioskIcon;
-   // alert(stationTitle);
-
+    var markerIcon;
+  
     // get first 3 characters of string 
     var title = stationTitle.substring(0, 3);
     if(title == "GAR")
     {
-        kioskIcon = new L.DivIcon({
+        markerIcon = new L.DivIcon({
             html: '<img src='+iconUrl+'>' +
                 '<span class="garageMarkerLable">' +stationTitle+ '</span>',
            });
     } 
     else if(kioskTitle == 'false') 
     {
-        kioskIcon = new L.DivIcon({
+        markerIcon = new L.DivIcon({
             html: '<img src='+iconUrl+'>' +
                 '<span class="markerLable">' +stationTitle+ '</span>'});
     } 
     else
     {
-        kioskIcon = new L.DivIcon({
+        markerIcon = new L.DivIcon({
         //  Fake station icons 
         /*  html: '<img src='+iconUrl+'>' +
             '<span class="markerLable">' +stationTitle+ '</span>' +
@@ -2303,23 +2317,85 @@ function showMarker(mapInstance, iconUrl, stationTitle, kioskTitle, lat, long) {
         })
     }
 
-    var kioskMarker = L.marker([lat, long], {
-        draggable: false, // Make the icon dragable
-        icon: kioskIcon
-    });
-    
+    //tEMPORARY 
+    if(title == "GAR")
+    {
+        var marker = L.marker([35.83618, 128.68272], {
+            draggable: false, // Make the icon dragable
+            icon: markerIcon
+        });
+    }
+    else{
+        var marker = L.marker([lat, long], {
+            draggable: false, // Make the icon dragable
+            icon: markerIcon
+        });
+    }
+      
     //const customPopup = "<ul><li>" + stationTitle + "</li><ul>";
     //const customOptions = {'className': 'custom-popup', autoPan: false, autoClose: false }
-    kioskMarker.addTo(mapInstance);
+    marker.addTo(mapInstance);
     var popup;
-    kioskMarker.on('mouseover', function(e) {
+    marker.on('mouseover', function(e) {
         var stringLat = ((Number(lat)).toFixed(6)).toString();
         var stringLon = ((Number(long)).toFixed(6)).toString();
         var content = stringLat+", "+ stringLon;
         popup = L.popup( {className : "garagePopup"}).setLatLng(e.latlng).setContent(content).openOn(mapInstance);
     });
-    kioskMarker.on('mouseout', function (e) { 
+    marker.on('mouseout', function (e) { 
         mapInstance.closePopup(popup);
+    });
+    
+    if(title == "GAR")
+    {
+        var customPopup = "";
+        const customOptions = {'className': 'custom-popup3'};
+        marker.bindPopup(customPopup, customOptions);//.openPopup();
+        marker.on('click', function(e) {           
+            // garage marker on click function ---> updates garage popup data every second 
+            marker.openPopup(); 
+            updateGaragePopup(marker, stationTitle);
+        });
+    }
+}
+
+function updateGaragePopup(marker, garageTitle)
+{   
+    var garageId = garageTitle.slice(-1);
+    var apiUrl = "garages/"+garageId+"/";
+    getMethod(apiUrl, function (data) {
+        var garageData = JSON.parse(data);
+        var door;
+        var doorClass;
+        var charger;
+        if(garageData.door == false)
+        {
+            door = "Door closed";
+            doorClass = "garageDoor_black";
+        }
+        else
+        {
+            door = "Door open";
+            doorClass = "garageDoor_red";
+        }
+
+        if(garageData.charger == false)
+            charger = "Not in use";
+        else
+            charger = "In use";
+    
+        marker._popup.setContent("<div id='garagePopup2' class='garagePopup2'>"+
+                            "<div class='garageDiv1'><p class='garageTitle'>"+garageData.name+"</p><p class="+doorClass+">"+door+"</p></div>"+
+                            "<div class='garagePopup2div'>"+
+                                "<p class='garageP1 garageMargin1'>Temp</p>"+
+                                "<p class='garageP2'>"+garageData.temperature+" ℃</p>"+
+                            "</div>"+
+                            "<div class='garagePopup2div'>"+
+                                "<p class='garageP1 garageMargin1'>Humidity</p>"+
+                                "<p class='garageP2'>"+garageData.humidity+"%</p>"+
+                            "</div>"+
+                            "<div style='text-align:center'><p class='garageP1 display_inline_block'>Charger</p> <p class='garageP3 display_inline_block'>"+charger+"</p></div>"
+                        );
     });
 }
 
@@ -2776,31 +2852,34 @@ function oddFileDownload(){
     });
 }
 
-//webSocket();
+webSocket();
 function webSocket()
 {
     // Create WebSocket connection.
-    const socket = new WebSocket('ws://115.93.143.2:9103/ws/vehicle/');
+    const socket = new WebSocket('ws://115.93.143.2:9103/ws/vehicle');
 
     // Connection opened
     socket.addEventListener('open', function (event) {
         socket.send('Hello Server!');
+        console.log("Web socket connection is opened");
+        alert("Web socket connection is opened");
     });
+    
+socket.onmessage = ({data}) => {
+    console.log(data)
+    alert(data);
+}
 
     // Listen for messages
     socket.addEventListener('message', function (event) {
         console.log('Message from server ', event.data);
+        alert('Message from server ', event.data);
     });
+}
 
-/*
-var socket = io('ws://115.93.143.2:9103', {transports: ['websocket']});
-socket.on('connect', function () {
-  console.log('connected!');
-  socket.emit('greet', { message: 'Hello Mr.Server!' });
-});
+/* Emergency contact information */
+function showEmergencyContact()
+{
+    document.getElementById('contactDiv').style.display="block";
 
-socket.on('respond', function (data) {
-  console.log(data);
-});*/
-    
 }

@@ -317,12 +317,29 @@
             </div><!--hide-div-->
             <hr style="margin-top: 25px;"/>
             <!--Emergency contacts(currently static)-->
-            <div class="managerInfo1">
+            <!--<div class="managerInfo1">
                 <p class="numberP1">보험사</p><p class="display_inline_block">1588-5656</p>
             </div>
             <div class="managerInfo2">
                 <p class="numberP2">사고접수</p><p class="display_inline_block">013-3366-5656</p>
+            </div>-->
+
+            <button class="emergency" onclick ="showEmergencyContact();" id="contact_button">Emergency Contact</button>
+
+         
+            <br>
+            <br>
+        </div>
+    </div>
+
+        
+    <div class = "contactModal" id="contactDiv">
+        <div class="contactDiv1">
+            <div>
+                <p>Emergency Contact</p>
+                <img class="contactImg1" src = "images/closing_button.svg"/>
             </div>
+            <img class="contactImg2" src="images/emergency_contact/sejong.svg">
         </div>
     </div>
     <!--</div>-->
@@ -394,6 +411,15 @@
             </div>
         </div>
     </div>
+
+    <!--Sejong Sub Menu Modal-->
+    <div id="subMenuModal" class="subMenuModal">
+        <div id="sejongSubmenu" class="subMenu">
+            <button class="sejongHover1">세종호수공원</button>    
+            <button class="sejongHover2">규제자유특구 실증구간(4-2)</button>    
+        </div>
+    </div>
+ 
     <div id="hidden_cam1" hidden></div> <!--style="height:500px;width:500px; z-index: 1010;position: absolute; left:600px;top:600px;border:1px solid black"-->
     <div id="hidden_cam2" hidden></div>
            <p id="loggedin_userid" hidden></p>
@@ -433,6 +459,36 @@
         setInterval(function() {
             getweather(35.8368,128.6835);
         }, 60 * 60000); */
+        
+    /* Sejong submenu */
+    var subMenuModal = document.getElementById("subMenuModal");
+    subMenuModal.onclick=function(event)
+    {
+        // When the user clicks anywhere outside of the modal, close it
+        if(subMenuModal.style.display == "block")
+        {                   
+            if (event.target == subMenuModal) 
+                subMenuModal.style.display = "none";
+        } 
+    }
+
+    window.onclick = function(event) {
+        /* Close the sejong submenu modal */
+        if(subMenuModal.style.display == "block")
+        { 
+            if (event.target.id != "sejong_button") {
+                $("#subMenuModal").hide();
+            }
+        }
+
+        /* Close emergency contact image */
+        if(document.getElementById("contactDiv").style.display == "block")
+        { 
+            if (event.target.id != "contact_button") {
+                $("#contactDiv").hide();
+            }
+        }
+    }
     </script>
 </body>
 </html>

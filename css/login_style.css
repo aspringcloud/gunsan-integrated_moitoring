@@ -2266,7 +2266,7 @@ text-align:center;
 content: attr(data-content);
 font-family: NanumSquareRound;
 font-weight:bolder;
-line-height: 2.5;
+line-height: 2;
 font-size: var(--fontSize, 12px);/*12px;*/
 /*   border-top: 0.3px solid #E0E0E0;
 border-bottom: 0.3px solid #E0E0E0;*/
@@ -2359,7 +2359,7 @@ margin-left:240px;
 width:44px;
 height:44px;
 position:absolute;
-top:5.5px;
+top:6px;
 left:5.91px;
 border: 0.2px solid #828282;
 border-radius:50%;
@@ -3483,13 +3483,13 @@ margin-left :25px; font-family: Noto_medium; margin-top :13px; font-size: 13px;
 }
 
 .graph1{
-right: 480px;
-position: fixed;
+left: 1130px;
+top: 750px;
 }
 
 .graph2{
-right: 110px;
-position: fixed;
+left: 1480px;
+top: 750px;
 }
 
 .camDiv{

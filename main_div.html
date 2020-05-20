@@ -91,11 +91,14 @@
             </div>
         </div>
     </div>
+
+
+    
 <script>
      setDateTime(); // Update dateTime
      changeTabButtonColor();
 
-     function getPageName(){
+     function getPageName(){ 
         var url = window.document.URL;
         var splitUrl = url.split('/');
         return splitUrl[splitUrl.length-1];
