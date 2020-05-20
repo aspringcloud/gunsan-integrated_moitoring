@@ -8,13 +8,13 @@ margin-bottom: 15px;
 }
 
 .ai_mobility_logo {
-width: 50px;
-height: 38px;
+width: 42px;
+height: 32px;
 }
 
 .spring_cloud_logo {
-width: 46px;
-height: 26px;
+width: 41px;
+height: 23px;
 }
 
 .width-height-input {
@@ -487,9 +487,6 @@ z-index: 1;
 top: 76%;
 }
 
-img {
-max-width: 100%;
-}
 
 #canvas {
 height: 600px;
@@ -1052,11 +1049,16 @@ left: 100px;
 display: inline;
 }
 
-.tab_elements p {
-font-size: 15px;
-font-family: Noto_medium;
-cursor: pointer;
-margin-right: 47px;
+.tab_elements>p {
+    color:#555;
+    font-family: Noto Sans KR;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 16px;
+    margin-right: 47px;
+    letter-spacing: -0.016em;
+    cursor: pointer;
 }
 
 .date_time_div {
@@ -2490,10 +2492,6 @@ vertical-align: middle; padding-bottom: 15px;font-size: 14px;color: #4F4F4F;font
 .noticeSelect{
 font-size: 14px; border: 0px;vertical-align: top;color: #4F4F4F;font-family: NanumSquareRound;display: inline-block;
 }
-.noticeImg{
-float:right;
-display: inline-block;
-}
 
 .siteManager{
 border:0px;font-size: 14px;color: #4F4F4F;font-family: NanumSquareRound;display: inline-block;
@@ -2810,8 +2808,20 @@ top:23px;
 width: 100%;
 }
 
-.tab_elements>p{
-    color:#555;
+.mainBottomLine{
+position: relative;
+top:86px;
+width: 100%;
+height: 4px;
+}
+
+#bottomline{
+    display: inline-block;
+    position: absolute;
+    height: 4px;
+    background-color: #2E92B0;
+    border: 1px solid #2E92B0;
+    border-radius: 2px;
 }
 
 /* modal image*/
@@ -2934,12 +2944,12 @@ width: 100%;
 }
 }
 
-.message {
-display: inline-block;
-margin-right: 10px;
-margin-top: 20px;
-vertical-align: top;
-}
+/* .message {
+    display: inline-block;
+    margin-right: 10px;
+    margin-top: 20px;
+    vertical-align: top;
+} */
 
 .message_div {
 display: none;
@@ -3264,55 +3274,92 @@ color: black;
 /* New CSS */
 .logo_p1{
 display:inline-block;
-margin-right: 130px;
+margin-right: 100px;
 }
 
 .divStyle1{
 display:inline-block; 
-position: absolute; top:0px; right: 300px;
+position: absolute; top:-2px; right: 410px;
 }
 .count_p1{
 font-size: 15px; 
 margin-bottom: -10px;
 color: #555555;
-letter-spacing: -0.016em;
-font-weight: 100;
+letter-spacing: -0.03em;
+font-family: Roboto;
+font-style: normal;
+font-weight: normal;
+font-size: 15px;
+line-height: 20px;
 }
 
 .count_p2{
 font-size: 24px !important ;
+font-family: Roboto;
+font-weight: 400;
 color: #555;
 letter-spacing: -0.036em;
 }
 
 .divStyle2{
-vertical-align:top; position: absolute; top:0px; right: 30px;
+vertical-align:top; position: absolute; top:-5px; right: 30px;
 }
 
 .noticeImg{
-margin-right:10px; vertical-align: top; cursor: pointer;
+cursor: pointer;
+position: absolute;
+right: 305px;
+top: 15px;
 }
 
-.msgImg
-{
-cursor: pointer; margin-right:15px;
+.msgImg{
+    cursor: pointer;
+    position: absolute;
+    top: 19px;
+    right: 245px;
 }
 
 .userImg{
-width: 41px; height: 41px;box-sizing: border-box;border: 2px solid rgba(24, 87, 134, 0.8); border-radius: 5px; margin-top: -25px;
+    position: absolute;
+    top:0px; left: 0px;
+    width: 43px; height: 43px; box-sizing: border-box; border-radius: 22px;
+}
+
+.userName{
+    display: inline-block;
+    position: absolute;
+    top:25px;
+    left: 50px;
+    font-weight: 500;
+    font-size: 14px !important;
+    line-height: 14px;
 }
 
 .greetSpan{
-margin-bottom: -5px; font-size: 14px; font-style: normal !important; color: #555555;
+    display: inline-block;
+    height: 14px;
+    position: absolute;
+    top: 6px;
+    left: 50px;
+    margin-bottom: -5px; font-size: 14px; line-height: 14px; font-style: normal !important; color: #555555;
 }
-.divStyle3
-{
-margin-left:8px;
+
+.divStyle3{
+    position: absolute;
+    right: 30px;
+    top:3px;
+    width: 168px;
+    height: 43px;
+    letter-spacing: -0.02em;
+    margin-left:8px;
 }
 
 .dropDownStyle{
-margin-left:60px;
-padding-bottom: 25px; cursor: pointer;
+    position: absolute;
+    top: 18px;
+    right: 0px;
+    margin-left:60px;
+    padding-bottom: 25px; cursor: pointer;
 }
 
 .setting_P button{
