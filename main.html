@@ -3,72 +3,94 @@
     <title>Main</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <!--jquery-->
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
     <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script> 
-    <!--Bootstrap-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <!--image cropper-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js"></script>
 
     <!--javascript function files-->
     <script src="js/map_function.js"></script>
     <script src="js/validation.js"></script>
-    <pre id="api-response"></pre>
+   <!-- <pre id="api-response"></pre>-->
+    
     <!--open weather map API-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+    <!--Leaflet files-->
+    <link rel="stylesheet" href="leaflet/leaflet.css">
+    <link rel="stylesheet" href="leaflet-routing-machine-3.2.12/dist/leaflet-routing-machine.css">
+
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="leaflet/leaflet.js"></script>
+    <script src="leaflet-routing-machine-3.2.12/dist/leaflet-routing-machine.js"></script>
+
+    <!-- Leaflet moving marker-->
+    <script type="text/javascript" src="LeafletMovingMarker/MovingMarker.js"></script>
+
+    <!-- Leaflet rotated marker-->
+    <script type="text/javascript" src="LeafletRotatedMarker/leaflet.rotatedMarker.js"></script>
+
+    <!--leaflet marker direction-->
+    <script type="text/javascript" src="leaflet-marker-direction-master/src/marker-direction.js"></script>
+    <script type="text/javascript" src="leaflet-marker-direction-master/src/marker-direction.min.js"></script>
+
+    <!--Leaflet cluster files -->
+    <link rel="stylesheet" href="Leaflet.markercluster-1.4.1/dist/MarkerCluster.css">
+    <link rel="stylesheet" href="Leaflet.markercluster-1.4.1/dist/MarkerCluster.Default.css">
+    <script src="Leaflet.markercluster-1.4.1/dist/leaflet.markercluster.js"></script>
+
+    <!-- Leaflet zoom home(default zoom)-->
+    <link rel="stylesheet" href="leaflet.zoomhome/dist/leaflet.zoomhome.css" />
+    <script src="leaflet.zoomhome/dist/leaflet.zoomhome.min.js"></script>
+
+    <!--my css files-->
+    <link rel="stylesheet" href="css/login_style.css">
+    <link rel="stylesheet" href="css/mainStyle.css">
+    
+    <!--chart.js -->
+    <script src="Chart.js/Chart.js"></script>
+    <script src="Chart.js/Chart.min.js"></script>
+    <script src="Chart.js/Chart.bundle.min.js"></script>
+    <script src="Chart.js/Chart.bundle.js"></script>
+    <link rel="stylesheet" href="Chart.js/Chart.css">
+    <link rel="stylesheet" href="Chart.js/Chart.min.css">
+
+    <!--Bootstrap-->
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>-->
+
+    <!--image cropper-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js"></script>-->
+
     <!--Sumo select-->
-    <script src="sumoSelect/jquery.sumoselect.min.js"></script>
-    <link href="sumoSelect/sumoselect.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.js"></script>
+    <!--<script src="sumoSelect/jquery.sumoselect.min.js"></script>
+    <link href="sumoSelect/sumoselect.css" rel="stylesheet" />-->
+
+    <!-- if local disk chart.js file diesn't work uncomment this-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
     <link rel="stylesheet" href="Chart.js/Chart.css">
-    <link rel="stylesheet" href="Chart.js/Chart.min.css">
-    <!--Leaflet files-->
-    <link rel="stylesheet" href="leaflet/leaflet.css">
-    <link rel="stylesheet" href="leaflet-routing-machine-3.2.12/dist/leaflet-routing-machine.css">
-    <!-- Make sure you put this AFTER Leaflet's CSS -->
-    <script src="leaflet/leaflet.js"></script>
-    <script src="leaflet-routing-machine-3.2.12/dist/leaflet-routing-machine.js"></script>
-    <!-- Leaflet moving marker-->
-    <script type="text/javascript" src="LeafletMovingMarker/MovingMarker.js"></script>
-    <!-- Leaflet rotated marker-->
-    <script type="text/javascript" src="LeafletRotatedMarker/leaflet.rotatedMarker.js"></script>
-    <!--leaflet marker direction-->
-    <script type="text/javascript" src="leaflet-marker-direction-master/src/marker-direction.js"></script>
-    <script type="text/javascript" src="leaflet-marker-direction-master/src/marker-direction.min.js"></script>
-    <!--Leaflet cluster files -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.1.0/dist/MarkerCluster.css">
+    <link rel="stylesheet" href="Chart.js/Chart.min.css">-->
+    
+    <!--<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.1.0/dist/MarkerCluster.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.1.0/dist/MarkerCluster.Default.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>
-    <!-- Leaflet zoom home-->
-    <link rel="stylesheet" href="leaflet.zoomhome/dist/leaflet.zoomhome.css" />
-    <script src="leaflet.zoomhome/dist/leaflet.zoomhome.min.js"></script>
-    <!--font awesome icon-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/login_style.css">
-    <link rel="stylesheet" href="css/mainStyle.css">
-    <!--chart.js datalabel plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>-->
+
+    <!--chart.js datalabel plugin 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.7.3/dist/Chart.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>-->
 
     <!-- Web socket
     <script src="http://yourwebsite.com:12345/socket.io/socket.io.js"></script>-->
     
-    <!--chart.js 
-        <script src="Chart.js/Chart.js"></script>
-        <script src="Chart.js/Chart.min.js"></script>
-        <script src="Chart.js/Chart.bundle.min.js"></script>
-        <script src="Chart.js/Chart.bundle.js"></script>
-        <link rel="stylesheet" href="Chart.js/Chart.css">
-        <link rel="stylesheet" href="Chart.js/Chart.min.css">-->
+    <!--font awesome icon--> <!--currently cpmments but id css is broken : uncomment this-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body class="standardRatio bodyMargin">
@@ -76,7 +98,7 @@
     <div id="noticeModal" class="message_div">
         <div class="message-content">
             <div class="message-header">
-                <div class="noticeDiv2"> <p class="noticeP1">공지사항 : </p></div>
+                <div class="noticeDiv2"  style="display: inline-block;" > <p class="noticeP1">공지사항 : </p></div>
                     <select id="select_notice" class="noticeSelect">
                         <option value= "0" selected="selected">전체</option>
                         <option value= "1" >통합관제</option>
@@ -87,9 +109,11 @@
                         <option value= "6">스프링고 테스트모드</option>
                         <option value= "7">데이터센터</option>
                     </select>
-                    <img class="noticeImg" src="images/closing_button.svg" onclick="hide_div('noticeModal');">
+                    <span onclick="hide_div('noticeModal');" style="font-size:40px;float: right;    margin-right: 15px;
+                    margin-top: 5px; ">&times;</span>
+                   <!--<img class="noticeImg" style="display: inline-block;" src="images/closing_button.svg" onclick="hide_div('noticeModal');">--> 
                 </div>
-                <hr>
+                <!--<hr style="border: 0.5px solid #BDBDBD;">-->
             <div class="notice-body" id="noticeBody"> </div>
         </div>
     </div>
@@ -100,7 +124,7 @@
                 <div class="msgDiv1">
                     <p class="msgSendP">메시지 보내기 </p>
                     <span class="msg_close" onclick="hide_div('messageModal')">
-                        <img src="images/closing_button.svg">
+                        <img src="images/closing_button.svg" style="margin-top: 15px;">
                     </span>
                 </div>
             </div>
@@ -126,12 +150,12 @@
             </div>
         </div>
     </div>
-    <div class="standardRatio" id="mapid"></div>
-    <div class="standardRatio hideMap" id="deguMap"></div>
-    <div class="standardRatio hideMap" id="sejongMap"></div>
-    <div class="standardRatio hideMap" id="sangamMap"></div>
-    <div class="standardRatio hideMap" id="gunsanMap"></div>
-    <div class="standardRatio hideMap" id="gangrungMap"></div>
+    <div class="mapPosition" id="offsiteMap"></div>
+    <div class="mapPosition hideMap" id="deguMap"></div>
+    <div class="mapPosition hideMap" id="sejongMap"></div>
+    <div class="mapPosition hideMap" id="sangamMap"></div>
+    <div class="mapPosition hideMap" id="gunsanMap"></div>
+    <div class="mapPosition hideMap" id="gangrungMap"></div>
     <div class="alertDiv" id="alertDiv"> 
         <button class="eventButton"><img src="images/event.svg" style="margin-right: 10px;vertical-align: baseline;"/>Event 발생 알림</button>
         <div id="batteryAlert" class="batteryAlert">
@@ -152,8 +176,9 @@
         <canvas id="todayPassenger" width="240px" height="150px" style="margin-left: 8px;"></canvas>
     </div>
     
-    <!--navifation tab html-->
+    <!--navigation tab html-->
     <div id="includedContent"></div>
+    <!--main div here-->
 
     <div class="map_zindex">
         <div id="hide_test" class="round_button">
@@ -191,7 +216,7 @@
             <div id="leftMarginDiv" class="siteDiv1">
                 <p id="site_title" class="siteTitle">TEST</p>
                 <div class="marginDiv2">
-                    <p class="font-weight-bold display_inline_block">관리자 </p>
+                    <p class="font-weight-bold managerLabel">관리자 </p>
                     <select id="manager_selectlist" name="manager_selectlist" class="select1"></select>
                     <button class="msgButton display_inline_block" onclick="siteMsgSend();">메시지 보내기</button>
                 </div>
@@ -239,7 +264,7 @@
                     </div>
                 </div>
                 <!-- Div for vehicle information-->
-                <hr style="clear: both;">
+                <hr style="clear: both; border: 0.5px solid #BDBDBD; margin-bottom: 20px;">
                 <!--list of available vehicles on route-->   
                 <!--odd file for route-->  
                 <div>
@@ -253,24 +278,43 @@
                     <div class="divStyle5" id="vehicleDiv">
                         <div class="titleDiv1">
                             <p id="vehicleID">SCN000</p>
-                            <span id="vehicleVersion" >version: 0.00.0</span>
+                            <span id="vehicleVersion">version: 0.00.0</span>
                         </div>
-                        <div class="infoDiv1">
-                            <div><label id="gnss_v1" class="gnssLabel">GNSS</label></div>
-                            <div><label class="vehicleLabel" id="driveStatus">AUTONOMOUS</label></div>
+
+                       <!-- <div class="" style="display:inline-block; width:120px">
+                           
+                            <label id="gnss_v1" class="gnssLabel">GNSS</label>
+                           <label class="vehicleLabel" id="driveStatus">AUTONOMOUS</label>
+                        </div>-->
+                       <div class="infoDiv1">
+                           
+                            <label id="gnss_v1" class="gnssLabel">GNSS</label>
+                           <label class="vehicleLabel" id="driveStatus">AUTONOMOUS</label>
                         </div>
                     </div> 
                     <!--status of vehicle-->
-                    <div class="infoDiv2">
+                    <!--second div start-->
+                    <div style="width: 357px;  height:195px; ">
+                
+                        <div style=" display: inline-block;  height: 195px;position: absolute; width:152px;left: 18px;">
+                            <div class="vehicleDiv3">
+                                <span class="cameraAngle" style="float:left "> Rear </span>
+                                <span class="cameraAngle" style="float:right" id="v_front"> Front </span>
+                                <img id="doorStatus"/>
+                            </div>
+                            <span id="v_status1" class="drivingButton"> STOPPED </span>
+                        </div>
+                   <!-- <div class="infoDiv2">
                         <div class="vehicleDiv3">
                             <span class="cameraAngle" style="float:left "> Rear </span>
                             <span class="cameraAngle" style="float:right" id="v_front"> Front </span>
                             <img id="doorStatus"/>
                         </div>
                         <span id="v_status1" class="drivingButton"> STOPPED </span>
-                    </div>
+                    </div>-->
+                    <!--speed div start-->
                     <div class="speedDiv">
-                        <!-- speed of vehicle-->
+                       <!--  speed of vehicle-->
                         <div class="speedDiv1">
                             <span class="v_p1">Speed</span>
                             <span class="v_p2" id="speed_v1">0</span>
@@ -295,27 +339,34 @@
                                 <label>Battery</label>
                                 <div style="margin-top: 40px;">
                                     <div class="batteryBorder"> 
-                                    <div id="battery" class="inverted-bar3" data-content=""></div>
-                                </div>
+                                        <div id="battery" class="inverted-bar3" data-content=""></div>
+                                    </div>
+                                </div>    
                                 <div class="parent3 display_inline_block"></div>
                             </div> 
-                        </div>
-                        <!--passenger status-->
-                        <div class="passengerDiv1">
-                            <label>Passengers</label>
-                            <br>
-                            <div class="passengerDiv2">
-                                <p id="passengerCount" class="passengerDiv3">8</p>
-                                <p class="display_inline_block">/15</p>
+                            <div class="passengerDiv1"> <!--class="passengerDiv1" style="display: inline-block; background: cyan;-->
+                                <label>Passengers</label>
+                                <br>
+                                <div class="passengerDiv2">
+                                    <p id="passengerCount" class="passengerDiv3">8</p>
+                                    <p class="display_inline_block">/15</p>
+                                </div>
                             </div>
                         </div>
-                        <!--hidden elements for camera-->
-                        <img id="cameraButton1" onclick="webcam('1');" src = "images/cctv/video1.svg" hidden/>
-                        <img id="cameraButton2" onclick="webcam('2');" src = "images/cctv/video2.svg" hidden/>
-                    </div>
-                </div> <!--left margin Div-->
+                        <!--passenger status-->
+                       
+                    </div>   <!--SpeedDiv end-->
+                </div> <!--second div start-->
+            </div> <!--Vehicle info div-->
+            <hr style="margin-top: 25px; border: 0.5px solid #BDBDBD; margin-bottom: 20px;"/>
+            <button class="emergency" onclick ="showEmergencyContact();" id="contact_button">Emergency Contact</button>
+            <br/>
+
+            <br/>
+            <br/>
+            </div> <!--left margin Div-->
             </div><!--hide-div-->
-            <hr style="margin-top: 25px;"/>
+      
             <!--Emergency contacts(currently static)-->
             <!--<div class="managerInfo1">
                 <p class="numberP1">보험사</p><p class="display_inline_block">1588-5656</p>
@@ -324,12 +375,15 @@
                 <p class="numberP2">사고접수</p><p class="display_inline_block">013-3366-5656</p>
             </div>-->
 
-            <button class="emergency" onclick ="showEmergencyContact();" id="contact_button">Emergency Contact</button>
+    
 
          
             <br>
             <br>
         </div>
+          <!--hidden elements for camera-->
+          <img id="cameraButton1" onclick="webcam('1');" src = "images/cctv/video1.svg" hidden/>
+          <img id="cameraButton2" onclick="webcam('2');" src = "images/cctv/video2.svg" hidden/>
     </div>
 
         
@@ -345,7 +399,7 @@
     <!--</div>-->
     <!--offsite div count of Route, vehicle, station, kiosk and garage-->
     <div class="div_box" id="countInfoDiv">
-        <div>
+        <div style="margin-top: -95px;">
             <p id="routeCount" class="p2"></p>
             <p class="p3">총 운영 노선</p>
         </div>
@@ -403,7 +457,7 @@
     </div>
     <!-- The Modal -->
     <div id="myModal" class="modal">
-        <span class="close">&times;</span>
+        <span class="close2">&times;</span>
         <div class="modal-content" id="img01"> 
             <div class="buttonDiv">
                 <!--<img id="pausePlayButton3" src="images/cctv/pause.svg" onclick="playPause('img01', 'pausePlayButton3')"/>-->
@@ -433,7 +487,7 @@
    
         // Get the <span> element that closes the modal
         // When the user clicks on <span> (x), close the modal
-        var span = document.getElementsByClassName("close")[0];
+        var span = document.getElementsByClassName("close2")[0];
         span.onclick = function () {
             document.getElementById("myModal").style.display = "none";
         }
@@ -455,10 +509,10 @@
         }
 
         //Update weather information after every 20 minutes 
-      /*  getweather(35.8368,128.6835);
+        getweather(35.8368,128.6835);
         setInterval(function() {
             getweather(35.8368,128.6835);
-        }, 60 * 60000); */
+        }, 60 * 60000);
         
     /* Sejong submenu */
     var subMenuModal = document.getElementById("subMenuModal");

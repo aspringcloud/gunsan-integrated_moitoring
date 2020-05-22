@@ -1,12 +1,13 @@
     <div class="main_div">
-        <div class="mainTop">
-            <p class="mr-3 ml-4 display_inline_block">
+    
+            <p class=" display_inline_block">
                 <a href="http://www.aimobility.io" target="_blank"><img class="spring_cloud_logo" alt="spring cloud" src="images\login\sc_logo.svg"/></a>
             </p>
             <p class="logo_p1">
                 <a href="http://www.aimobility.io" target="_blank"><img class="ai_mobility_logo" alt="ai.mobility" src="images\ai_mobility.jpg"/></a>
             </p>
             <!-- main tabs-->
+            <div class="mainTop">
             <div class="inline_element tab_elements">
                 <p class="font_regular" onclick="showContent('integrated_control');" id="integrated_control" title="Integrated control">통합관제 </p>
                 <p class="font_regular" onclick="showContent('integrated_Dashboard')" id="integrated_Dashboard" title="Integrated Dashboard">통합대시보드 </p>
@@ -112,12 +113,12 @@
             case 'main.html':
                 $('#integrated_control').addClass('tabButton');
                 $('#bottomline').css('width', '70px');
-                $('#bottomline').css('left', '229px');
+                $('#bottomline').css('left', '220px');
                 break;
             case 'dashboard.html':
                 $('#integrated_Dashboard').addClass('tabButton');
                 $('#bottomline').css('width', '101px');
-                $('#bottomline').css('left', '344px');
+                $('#bottomline').css('left', '340px');
                 break;
         }
     }

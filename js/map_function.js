@@ -5,12 +5,12 @@
 // Checks which route button is clicked and 
 // Calls the function associated for that route 
 var mapList = [];               // stores the id of open map 
-mapList.push("mapid");          //  push id of offsite map on login  
+mapList.push("offsiteMap");          //  push id of offsite map on login  
 var daegu_map;
 function switchMap(obj)
 {   
     if(obj.id == "degu_button")
-    {           
+    {   
         for(var i = 0 ; i < mapList.length; i++)
             hide_div(mapList[i]);
         show_div("deguMap");
@@ -70,14 +70,14 @@ function offsite() {
         hide_div(mapList[i]);
     
     hide_div("listItem");
-    mapList.push("mapid"); 
+    mapList.push("offsiteMap"); 
     hide_div("alertDiv");
     hide_div("distanceChart1");
     hide_div("passangerChart2");
     hide_div("webcam_div");
 
     // show all div's of offsite
-    show_div("mapid");
+    show_div("offsiteMap");
     show_div("graph1_div");
     show_div("graph2_div");
     show_div("countInfoDiv");  
@@ -175,7 +175,7 @@ function showCluster()
     
     // show data for offsite.
     showGraphs();
-    show_div("mapid");
+    show_div("offsiteMap");
     show_div("graph1_div");
     show_div("graph2_div");
     show_div("countInfoDiv");
@@ -193,7 +193,7 @@ function showCluster()
 
         // create offsite map(replace create map code width 'createMap' function in future)
         var map_center = [35.902, 128.013];
-        var cluster_map = L.map('mapid', {
+        var cluster_map = L.map('offsiteMap', {
             zoomSnap: 0.15,      
             dragging: true, //false
             draggable:true,
@@ -640,8 +640,8 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo){
                 var iconUrl = "images/route/shuttleIcon.svg";  
                 var vehicleIcon = L.icon({                                            // Create icon for marker.               
                     iconSize: [37, 52],
-                    popupAnchor: [10, -25],
-                    iconAnchor: [26, 45],
+                    popupAnchor: [5, -45],
+                    iconAnchor: [26, 35],
                     iconUrl: iconUrl,
                 });
 
@@ -2204,7 +2204,7 @@ function notice_modal() {
                                 '<div id = "noticeDetails' +i+ '" class = "noticeDiv1">'+
                                     '<p>' +obj[0].contents+ '</p>'+
                                 '</div>'+
-                                '<hr/>'+
+                                '<hr style="border: 0.5px solid #BDBDBD; width:97%; float:left; margin:5px 0px 5px 0px" />'+
                             '</div>';
             }
             else{
@@ -2213,12 +2213,14 @@ function notice_modal() {
                                 '<button class = "divButton" id="noticeButton' +i+ '" onclick=" toggle_div2(noticeDetails' +i+ ', ' +i+ ')" >'+
                                 '<i class = "fa fa-angle-down" style = "vertical-align: top;"></i> </button>' +
                                 '<br/>' +
-                                '<lable class="noticeLabel1">' +obj[0].created_on+'</lable>' +
+                              
+                                '<lable style="margin-top:15px;" class="noticeLabel1">' +obj[0].created_on+'</lable>' +
+                                '<br/>' +
                                 '<br/>' +
                                 '<div id = "noticeDetails' +i+ '" class = "noticeDiv1">' +
                                     '<p>' +obj[0].contents+ '</p>' +
                                 '</div>' +
-                                '<hr/>' +
+                                '<hr style="border: 0.5px solid #BDBDBD;/>' +
                             '</div>';
             }
             $('#noticeBody').append(html);
@@ -2318,19 +2320,18 @@ function showMarker(mapInstance, iconUrl, stationTitle, kioskTitle, lat, long) {
     }
 
     //tEMPORARY 
-    if(title == "GAR")
+   /* if(title == "GAR")
     {
         var marker = L.marker([35.83618, 128.68272], {
             draggable: false, // Make the icon dragable
             icon: markerIcon
         });
     }
-    else{
-        var marker = L.marker([lat, long], {
-            draggable: false, // Make the icon dragable
-            icon: markerIcon
-        });
-    }
+    else{ }*/
+    var marker = L.marker([lat, long], {
+        draggable: false, // Make the icon dragable
+        icon: markerIcon
+    });
       
     //const customPopup = "<ul><li>" + stationTitle + "</li><ul>";
     //const customOptions = {'className': 'custom-popup', autoPan: false, autoClose: false }
@@ -2852,7 +2853,7 @@ function oddFileDownload(){
     });
 }
 
-webSocket();
+//webSocket();
 function webSocket()
 {
     // Create WebSocket connection.
@@ -2862,18 +2863,11 @@ function webSocket()
     socket.addEventListener('open', function (event) {
         socket.send('Hello Server!');
         console.log("Web socket connection is opened");
-        alert("Web socket connection is opened");
     });
-    
-socket.onmessage = ({data}) => {
-    console.log(data)
-    alert(data);
-}
 
     // Listen for messages
     socket.addEventListener('message', function (event) {
         console.log('Message from server ', event.data);
-        alert('Message from server ', event.data);
     });
 }
 
@@ -2881,5 +2875,4 @@ socket.onmessage = ({data}) => {
 function showEmergencyContact()
 {
     document.getElementById('contactDiv').style.display="block";
-
 }

@@ -1,11 +1,15 @@
 /*setting div css*/
 .standardRatio{
-width:1920px;
-height:1080px;
+    width: 1920px;
+    height: 1080px;
 }
 
-.bodyMargin{
-margin-top: -18px;
+.bodyMargin{/*
+margin-top: -21px;*/
+}
+
+#mapid2{
+ height: 100%;
 }
 
 .msgSendP{
@@ -14,7 +18,7 @@ color: #333333;
 font-family: Noto_medium;
 font-size: 18px; 
 display: inline-block;
-line-height: 3; 
+line-height: 1; 
 margin-left: 20px;
 display:inline-block
 }
@@ -67,7 +71,7 @@ background-color: rgba(0, 0, 0, 0.5);
 }
 
 .buttonDiv{
-position :absolute; bottom:5px; right:10px;
+position :fixed; bottom:50px; right:240px;
 }
 
 .buttonDiv img{
@@ -108,8 +112,8 @@ font-size: 18px;
 font-family: Noto_regular;
 color: #333333;
 position: absolute;
-left: 29px;
-top: 15px;
+left: 29px;/*
+top: 15px;*/
 display:inline-block;
 }
 
@@ -266,6 +270,11 @@ margin-top: 150px;
 border:0px;
 }
 
+.managerLabel{
+    display: inline-block;
+    line-height: 0.1;
+}
+
 /*Leaflet map cuatom controll buttons */
 .btn-success{
 position: absolute;
@@ -317,13 +326,17 @@ font-size: 14px;
 color:#FFFFFF; 
 display: inline-block;
 margin-left: 10px;
+line-height: 0.1;
 }
-.titleDiv1
-{
+
+.titleDiv1{
 display:inline-block;
 float:left; 
 margin-left: 15px;
-margin-top: 5px;
+line-height: 0px;/*
+margin-top: -10px;*/
+position: absolute;
+left: 30px;
 }
 
 .titleSpan1 img{
@@ -349,13 +362,14 @@ align-items: flex-end;
 
 .infoDiv2{
 display: inline-block; 
-float:left; 
-border-right: 0.5px solid #BDBDBD;
+/*float:left; 
+border-right: 0.5px solid #BDBDBD;*/
 height:205px;
+width:152px;
 }
 
 .speedDiv{
-display: inline-block; float:left; margin-top:15px;
+display: inline-block;margin-left: 135px; margin-top:15px;
 }
 
 .speedDiv1{
@@ -801,12 +815,15 @@ padding: 0px 0px 0px 3px;
 
 .contactModal{
 display: none;
-position: fixed;
+position: absolute;
 z-index: 1011;
-
-align-self: center;
+top:90px;
+left:0px;
+align-self: center;/*
 width: 100%;
-height: 100%;
+height: 100%;*/
+width: 1920px;
+height: 990px;
 overflow: auto;
 background-color: rgb(0, 0, 0);
 background-color: rgba(0, 0, 0, 0.9);    
