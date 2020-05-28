@@ -20,7 +20,22 @@ function switchMap(obj)
         deguRoute(daegu_map); 
         show_div("alertDiv");
     }
-    else if(obj.id == "sejong_button")
+    else if(obj.id == "sejong_button" )
+    {       
+        show_div("subMenuModal");
+        show_div("sejongSubmenu");
+        
+/*
+        for(var i = 0; i < mapList.length; i++)
+            hide_div(mapList[i]);
+        show_div("sejongMap");
+        mapList.push("sejongMap");
+        hide_div('webcam_div1');
+        hide_div('webcam_div2');
+        sejongRoute(); 
+        show_div("alertDiv");*/
+    }
+    else if(obj.id == "sejong_button1")
     {       
         show_div("sejongSubmenu");
 
@@ -31,6 +46,19 @@ function switchMap(obj)
         hide_div('webcam_div1');
         hide_div('webcam_div2');
         sejongRoute(); 
+        show_div("alertDiv");
+    }
+    else if(obj.id == "sejong_button2")
+    {       
+        show_div("sejongSubmenu");
+
+        for(var i = 0; i < mapList.length; i++)
+            hide_div(mapList[i]);
+        show_div("sejongMap2");
+        mapList.push("sejongMap2");
+        hide_div('webcam_div1');
+        hide_div('webcam_div2');
+        sejongRoute2(); 
         show_div("alertDiv");
     }
     else if(obj.id == "sangam_button")
@@ -456,25 +484,28 @@ function vehicleInfo(map, vId)
                 if(request_count==1)
                     arraivalTime(map, shuttleLocation,speedArray,count15, request_count);
             }
-            updateShuttleInfo(vehicle); 
+            updateShuttleInfo(vehicle, request_count); 
         });
     }, 1500);
     return interval;
 }
 
-function updateShuttleInfo(vehicle)
-{  
-    if(vehicle.drive_mode == 1)
-        document.getElementById("driveStatus").innerHTML = "AUTONOMOUS";
+function updateShuttleInfo(vehicle, request_count)
+{ 
+    var frontBG;
+    if(vehicle.isparked == true || vehicle.speed > 0)
+        frontBG = "#57AE66";
     else
-        document.getElementById("driveStatus").innerHTML = "MANUAL";
+        frontBG = "#BDBDBD";
 
-    if(vehicle.isparked == true)
-        vehicleStatus("rgb(128,128,128)", "PARKED", "rgb(128,128,128)", "#57AE66");
-    else if(vehicle.speed > 0) 
-        vehicleStatus("rgba(115, 192, 95, 0.4)", "DRIVING", "#57AE66", "#57AE66");
+  
+    if(vehicle.speed > 0) 
+        vehicleStatus( "DRIVING", "#57AE66");
     else
-        vehicleStatus("rgba(202, 64, 64, 0.4)", "STOPPED", "#CA4040", "#BDBDBD");
+        vehicleStatus( "STOPPED", "#CA4040");
+
+    // front
+    document.getElementById("v_front").style.background = frontBG;
     
     // Vehicle name and version     
     document.getElementById("vehicleID").innerHTML = vehicle.name;
@@ -496,18 +527,32 @@ function updateShuttleInfo(vehicle)
     document.getElementById("angleDegree").style = 'transform: rotate('+reverseHeading+'deg)';
     var vehicleMid = (vehicle.name).substring(0, 3); // trim first 3 characters
 
-    // show passenger status    
-    passengerStatus(vehicle.passenger);
     if (vehicle.gnss == true)
         document.getElementById("gnss_v1").style.backgroundColor = "#57AE66";
     else
         document.getElementById("gnss_v1").style.backgroundColor = "#CA4040";
 
-    // show door status      
-    if (vehicle.door == false)
-        document.getElementById("doorStatus").src = "images/door/door_closed.svg";
-    else
-        document.getElementById("doorStatus").src = "images/door/door_open.svg";
+    if(request_count == 1)
+    {
+        // show door status ---> this will be updated by web socket    
+        if (vehicle.door == false)
+            document.getElementById("doorStatus").src = "images/door/door_closed.svg";
+        else
+            document.getElementById("doorStatus").src = "images/door/door_open.svg";
+        
+        // Update drive mode of vehicle  
+        if(vehicle.drive_mode == 1)
+            document.getElementById("driveStatus").innerHTML = "AUTONOMOUS";
+        else
+            document.getElementById("driveStatus").innerHTML = "MANUAL";
+
+        // show passenger status    
+        passengerStatus(vehicle.passenger);    
+
+        // update parking status fir first time 
+        if(vehicle.isparked == true)
+            vehicleStatus("PARKED", "rgb(128,128,128)");
+    }
     
     // show battery status
     setBatteryPercent(vehicle.battery);
@@ -551,7 +596,6 @@ function changeVehicleInfo(obj)
 {
     // check if which sites map is open 
     // return the last element of array 
-    //alert("changeVehicleInfo:"+obj);
     var activeMap =  mapList[mapList.length - 1];
     clearInterval(interval);
     if(typeof(obj) == 'number')
@@ -580,11 +624,12 @@ var rippleMarkerArray = [];
 var shuttleMarkerArray = [];
 function showVehicleRipple(request_count, mapInstance, vehicleInfo){ 
         var vehicleMarker;
-        // loop throght array vehicles of route
+        // loop throught array vehicles of route
         for(var j = 0; j < vehicleInfo.length; j++)
         {        
+            console.log("vehicleInfo array"+vehicleInfo[j].name );
             var vehicleObj = vehicleInfo[j];
-           // red ripple marker html
+            // red ripple marker html
             var redIconHtml = '<div id="vehicleRippleDiv" class="shuttle_icon">'+
                                 '<div id="ring1" class="shuttle_ring1"></div>'+
                                 '<div id="ring2" class="shuttle_ring2"></div>'+
@@ -599,7 +644,8 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo){
                                 '<div id="ring3" class="shuttle_ring3_g"></div>'+
                                 '<div id="ring4" class="shuttle_ring4_g"></div>'+
                             '</div>';
-                            // green ripple marker html
+            
+            // grey ripple marker html
             var greyIconHtml = '<div id="vehicleRippleDiv" class="shuttle_icon">'+
                                     '<div id="ring1" class="shuttle_ring1_grey"></div>'+
                                     '<div id="ring2" class="shuttle_ring2_grey"></div>'+
@@ -617,9 +663,9 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo){
                 if(vehicleObj.isparked == true )
                 {
                     var marker = createHtmlMarker(vehicleObj, greyRippleIcon);
-                    marker.options.rotationAngle = vehicleObj.heading;     
+                  
                 }
-                else if (vehicleObj.speed > 0 ) // || vehicleObj.drive == true
+                else if (vehicleObj.speed > 0 && vehicleObj.isparked == false) // || vehicleObj.drive == true
                 {
                     var marker = createHtmlMarker(vehicleObj, greenRippleIcon);
                     marker.options.rotationAngle = vehicleObj.heading;                // rotate marker of speed is greater then 0 to avoid abnormal data
@@ -641,7 +687,7 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo){
                 var vehicleIcon = L.icon({                                            // Create icon for marker.               
                     iconSize: [37, 52],
                     popupAnchor: [5, -45],
-                    iconAnchor: [26, 35],
+                    iconAnchor: [20, 45],
                     iconUrl: iconUrl,
                 });
 
@@ -659,14 +705,12 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo){
                     setPopupContent(e, mapInstance);
                     // Update vehicle info on left window
                     //updateShuttleInfo(vehicleObj);
-                   
-                  //  document.getElementById('vehicleSelect').value = vehicleObj.name;
-                   // changeVehicleInfo(vehicleObj.id);
-                   
+                        //  document.getElementById('vehicleSelect').value = vehicleObj.name;
+                    // changeVehicleInfo(vehicleObj.id);
             });
 
-            if(vehicleObj.speed > 0)
-                vehicleMarker.options.rotationAngle = vehicleObj.heading;
+            //if(vehicleObj.speed > 0)
+                //vehicleMarker.options.rotationAngle = vehicleObj.heading;
 
             vehicleMarker.addTo(mapInstance);                                                 // show vehicle icon on route
             var shuttleMarkerObj = {                                                          // store marker in array 
@@ -685,7 +729,7 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo){
             {           
                 if(vehicleObj.id == rippleMarkerArray[i].markId)                                // check if ripple marker is present in array
                 {
-                   // console.log("else Lat:"+vehicleObj.lat+ "Lon:"+vehicleObj.lon+ "name :"+vehicleObj.name);
+                    //console.log("else Lat:"+vehicleObj.lat+ "Lon:"+vehicleObj.lon+ "name :"+vehicleObj.name);
                     var newLatLng = new L.LatLng(vehicleObj.lat, vehicleObj.lon);
                     var currentRipple = rippleMarkerArray[i].marker;
                     currentRipple.setLatLng(newLatLng);                                         // update the location of ripple marker
@@ -694,9 +738,8 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo){
                     if (vehicleObj.isparked == true)
                     {
                         currentRipple.setIcon(greyRippleIcon);
-                        currentRipple.options.rotationAngle = vehicleObj.heading;
                     }
-                    else if (vehicleObj.speed > 0 ) //|| vehicleObj.drive == true
+                    else if (vehicleObj.speed > 0 && vehicleObj.isparked == false ) //|| vehicleObj.drive == true
                     {                  
                         currentRipple.setIcon(greenRippleIcon);
                         currentRipple.options.rotationAngle = vehicleObj.heading;
@@ -718,8 +761,8 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo){
                     currentVehicle.setLatLng(newLatLng);                                       // update the location of vehicle marker
                     currentVehicle._leaflet_id = vehicleObj.name;
 
-                    if(vehicleObj.speed > 0) 
-                        currentVehicle.options.rotationAngle = vehicleObj.heading;
+                    //if(vehicleObj.speed > 0) 
+                        //currentVehicle.options.rotationAngle = vehicleObj.heading;
                     currentVehicle.addTo(mapInstance);
                                       
                     // If current markers popup is open then set the content of popup
@@ -753,10 +796,7 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo){
                             else
                                 speedWeight ="normal";
                         }
-
-                        //if(vehicleObj.id == 1)
-                        //console.log("%%%%vehicleObj.version:"+vehicleObj.model.version+ " vehicleObj.battery:"+vehicleObj.battery);
-                    
+                  
                         currentMarker._popup.setContent("<div class="+popupColor+" id='vPopup'>"+
                         "<p class='popupTitle'>" +vehicleObj.name+ "<img class='activeGreenPopup' src='images/status/active_green.svg'></p>"+
                         "<span class='popupVersion'>VER:"+shuttleMarkerArray[k].version+"</span>"+
@@ -852,23 +892,18 @@ function setPopupContent(e, mapInstance)
     }
 }
 
-function vehicleStatus(color, status, statusBg, frontBG)
+function vehicleStatus( status, statusBg)
 {
-   // alert("driving status :"+status);
     // Driving button 
     document.getElementById("v_status1").innerHTML = status;
-    
     document.getElementById("v_status1").style.background = statusBg;
-
-    // front
-    document.getElementById("v_front").style.background = frontBG;
 }
 
 // Show multiple vehicles on route (under development)
-function shuttleOnRoute(mapInstance, reqCount, vehicleObj)
+function shuttleOnRoute(mapInstance, reqCount)
 {
     var vLocationArray=[];
-        getMethod("vehicles/", function(data){  
+    getMethod("vehicles/", function(data){  
         var vehicle_data = JSON.parse(data).results;
         if (vehicle_data == undefined) 
             vehicle_data = JSON.parse(data);
@@ -877,16 +912,16 @@ function shuttleOnRoute(mapInstance, reqCount, vehicleObj)
         // create vehicle obj and store in array
         for (var i = 0; i < count; i++) {
             var vehicle = vehicle_data[i];
-            if (vehicle.site == 2){//&& vehicle.name =="SCE999") { 
+            if (vehicle.site == 2){
                 vLocationArray.push(vehicle); // array of vehicle ID
             }
         }
+        vLocationArray = vLocationArray.sort((a, b) => (a.id > b.id) ? 1 : -1);
         showVehicleRipple(reqCount,mapInstance,vLocationArray);
     });
 }
 
 var daegu_interval;
-
 // Daegu monitoring
 function deguRoute(daegu_map) 
 {
@@ -949,9 +984,11 @@ function deguRoute(daegu_map)
         // create vehicle obj and store in array
         for (var i = 0; i < count; i++) {
             var vehicle = vehicle_data[i];
+            //alert("for id:"+vehicle.id)
             if (vehicle.site == 2){//&& vehicle.name =="SCE999") { 
                 deguShuttleArray.push(vehicle.id); // array of vehicle ID 
-                var vehicle = {
+              
+              /*  var vehicle = {
                     id:vehicle.id,
                     mid:vehicle.mid,
                     name: vehicle.name,
@@ -963,8 +1000,11 @@ function deguRoute(daegu_map)
                     drive : vehicle.drive,
                     webcam1 : vehicle.webcam1,
                     webcam2 : vehicle.webcam2,
-                }
+                    firmware : vehicle.model.firmware,
+                    isparked: vehicle.isparked
+                }*/
                 vehicleObj.push(vehicle);
+               
               /*  if(vehicle.name =="SCN001")
                 {
                     console.log("vehicle obj value :"+vehicle.speed);
@@ -975,6 +1015,7 @@ function deguRoute(daegu_map)
           //create list of vehicles in degu route
         vehicleObj = vehicleObj.sort((a, b) => (a.id > b.id) ? 1 : -1);
 
+        //alert("vehicleObj:"+vehicleObj);
         // create select list of vehicle 
         createSelectList(vehicleObj);
 
@@ -986,19 +1027,28 @@ function deguRoute(daegu_map)
         showChartData(2);
 
         // Call update function every second
-        daegu_interval = setInterval(function(){
+        /*daegu_interval = setInterval(function(){
+            reqCount++;
+            shuttleOnRoute(daegu_map, reqCount); //vehicleObj
+            //console.log("daegu_interval is executing");
+        }, 1000);*/
+
+        daegu_interval = setInterval(function() {
+            reqCount++;
+            shuttleOnRoute(daegu_map, reqCount); //vehicleObj
+          }, 1000)
+
+       /* daegu_interval = setTimeout(function(){ 
             reqCount++;
             shuttleOnRoute(daegu_map, reqCount, vehicleObj);
-            //console.log("daegu_interval is executing");
         }, 1000);
-      
+      */
         deguShuttleArray = deguShuttleArray.sort();
         firstId = deguShuttleArray[0];
         vehicleInfo(daegu_map, firstId);
         changeVehicleInfo(firstId);
     });
     show_div("alertDiv");
-    //alert("daegu_map undefined or not 5:"+daegu_map);
 }
 
 function degreesToRadians(degrees) {
@@ -1600,6 +1650,8 @@ function showSummary() {
 // show station, garage, datahub and kiosk on route
 function showRouteInfo(mapInstance, api_name, icon_path, site_no) {
     var stationWp_array = [];
+
+  //  alert("api_name :"+api_name);
     getMethod(api_name, function(data) {
         var iconData = JSON.parse(data).results;
         if (iconData == undefined)
@@ -1610,29 +1662,56 @@ function showRouteInfo(mapInstance, api_name, icon_path, site_no) {
         var kioskTitleArray=[];
         for (var i = 0; i < count; i++) {
             if (iconData[i].site == site_no) {
-                if (api_name == "stations/")
+                if (api_name == "stations/" ) //&& site_no != 18
                 {
                     stationWp_array.push(L.latLng(iconData[i].lat, iconData[i].lon)); // array for station location on route
+                    
                     var stationTitle = iconData[i].name;
                     var kiosk_title = iconData[i].mid;
                     var stationLat = iconData[i].lat;
                     var stationLon = iconData[i].lon;
                     stationTitleArray.push(stationTitle); // array for station title
+
+                   // console.log("SEjong lat long:"+stationLat+","+stationLon);
+
+                   // console.log("stationTitleArray:"+stationTitleArray);
+                   // console.log("kioskTitleArray:"+kioskTitleArray);
                                 
                     // check if kiosk for the station is available in kiosk api
                     var kioskTitle = "KIS" +kiosk_title.substring(3);
-                    var status = stationTitleArray.includes(kioskTitle);
+                    if(iconData.iskiosk ==true)
+                         status = true;//stationTitleArray.includes(kioskTitle);
+                    else
+                     status = false
+
+                    //alert("site_no :"+site_no);
 
                     // array of kiosk title 
                     if(status == true)
                         kioskTitleArray.push(kioskTitle);
-                    else
+                    //else
                         kioskTitleArray.push(kioskTitle);
 
-                    if (status == true)
+                       // alert("site_no :"+site_no);
+
+                    if (status == true ) //|| site_no == 18
+                    {
+                        //alert("status true"+kioskTitle);
+                       // alert("true")
                         showMarker(mapInstance, "images/" + icon_path, stationTitle, kioskTitle, stationLat, stationLon);
-                    else
+                    }/*
+                    else if(status == false || site_no == 18)
+                    {
                         showMarker(mapInstance, "images/" + icon_path, stationTitle, 'false', stationLat, stationLon);
+                    }*/
+                       
+                    else
+                    {
+                      
+                       //alert("status false");
+                        showMarker(mapInstance, "images/" + icon_path, stationTitle, 'false', stationLat, stationLon);
+                    }
+                       
                 }
                 else
                 {
@@ -1658,13 +1737,44 @@ function showRouteInfo(mapInstance, api_name, icon_path, site_no) {
                     L.latLng(37.57518, 126.89837),
                     L.latLng(37.581296, 126.885693)];
             }
-            createRoute(mapInstance, stationWp_array, stationTitleArray, kioskTitleArray);
+          else if( site_no == 18)
+            {
+                stationWp_array = [
+                    L.latLng(36.4994300000000000,127.3284000000000000),
+                    L.latLng(36.50078,127.32962),
+                    L.latLng(36.4996800000000000,127.3323300000000000),
+                    L.latLng(36.4945400000000000,127.3258500000000000),
+                    L.latLng(36.49448,127.32282),
+                    L.latLng(36.4974200000000000,127.3227800000000000),
+                    L.latLng(36.49836, 127.32659),
+                    L.latLng(36.4994300000000000,127.3284000000000000)];
+
+             
+            }
+            /*if( site_no == 18)
+            {
+                sejongWaypoints = [
+                    L.latLng(36.4994300000000000,127.3284000000000000),
+                    L.latLng(36.50078,127.32962),
+                    L.latLng(36.4996800000000000,127.3323300000000000),
+                    L.latLng(36.4945400000000000,127.3258500000000000),
+                    L.latLng(36.49448,127.32282),
+                    L.latLng(36.4974200000000000,127.3227800000000000),
+                    L.latLng(36.49836, 127.32659),
+                    L.latLng(36.4994300000000000,127.3284000000000000)];
+                createRoute(mapInstance, sejongWaypoints, stationTitleArray, kioskTitleArray);
+            }
+      
+            else*/
+                createRoute(mapInstance, stationWp_array, stationTitleArray, kioskTitleArray, site_no);
         }
     });
 }
 
 // create route using control routing plugin leaflet 
-function createRoute(map, waypoints, stationTitle,kioskTitle) {
+function createRoute(mapInstance, waypoints, stationTitle,kioskTitle, site_no) {
+    //alert("mapInstance:"+mapInstance+" waypoints:"+waypoints);
+   // alert("stationTitle:" +stationTitle);
     var iconUrl= 'images/route/station_kiosk.svg';
     var control = L.Routing.control({
         waypoints: waypoints,
@@ -1673,11 +1783,19 @@ function createRoute(map, waypoints, stationTitle,kioskTitle) {
         createMarker: function (i, wp) {
             if(stationTitle[i] != undefined)
             {
-                var stationIcon = new L.DivIcon({
+                if(site_no == 18)
+                {
+                    var stationIcon = new L.DivIcon({
+                     
+                    });
+                }
+                else{
+                    var stationIcon = new L.DivIcon({
                     html :'<img src= '+iconUrl+'>'+
                         '<span class="markerLable">'+stationTitle[i]+'</span>'+
                         '<span class="markerLable">'+kioskTitle[i]+'</span>' 
-                    });  
+                    });
+                }  
                 var marker = L.marker(wp.latLng, {
                     icon: stationIcon,
                     draggable: false,
@@ -1687,23 +1805,23 @@ function createRoute(map, waypoints, stationTitle,kioskTitle) {
                     var latlon= (wp.latLng).toString();
                     var trimStr = latlon.substr(7); // trim first 7 characters
                     var content = trimStr.substring(0, trimStr.length - 1); // trim last character
-                    popup = L.popup({className: "stationPopup"}).setLatLng(e.latlng).setContent(content).openOn(map);//.openPopup();
+                    popup = L.popup({className: "stationPopup"}).setLatLng(e.latlng).setContent(content).openOn(mapInstance);//.openPopup();
                 });
                 marker.on('mouseout', function (e) { 
-                    map.closePopup(popup);
+                    mapInstance.closePopup(popup);
                     });
                 return marker;
             }
         },
-       
+          
         routeWhileDragging: false,
         lineOptions: {styles: [{ color: '#7cc3e2', weight: 6 }]},     
         autoRoute: true,
         showAlternatives: false,
         show: false,
      
-    }).addTo(map);
-    L.Routing.errorControl(control).addTo(map);
+    }).addTo(mapInstance);
+    L.Routing.errorControl(control).addTo(mapInstance);
 }
 
 // creates map with given mapcenter and zoom level
@@ -1771,7 +1889,6 @@ function sangamRoute() {
 
 function sejongRoute() {
     //daegu_interval.clearInterval();
-
     document.getElementById("subMenuModal").style.display = "block";
     clearInterval(daegu_interval);
     clearInterval(interval);
@@ -1802,23 +1919,6 @@ function sejongRoute() {
     //webcam('2', null);
     var sejongShuttleArray=[];
     var vehicleObj=[];
-    // Reset vehicle information 
-    /*var select = document.getElementById("vehicleSelect");
-    var length = select.options.length;
-    for (i = length-1; i >= 0; i--) {
-        select.options[i] = null;
-    }*/
-
-    /*document.getElementById('speed_v1').innerHTML=0;
-    document.getElementById('heading_v1').innerHTML=0;
-    document.getElementById('passengerCount').innerHTML=0;
-    document.getElementById('v_status1').innerHTML='STOPPED';
-    document.getElementById('vehicleVersion').innerHTML='version : 0.0.0';
-    document.getElementById('vehicleID').innerHTML='No Shuttle';
-    
-    setBatteryPercent(0); */
-  
-    //document.getElementById('speed_v1').innerHTML=0;
     var map_center = [36.499951, 127.270606];
 
     var container = L.DomUtil.get('sejongMap');
@@ -1881,6 +1981,105 @@ function sejongRoute() {
 
         firstId = sejongShuttleArray[0];
         vehicleInfo(sejong_map, firstId);
+        //changeVehicleInfo(firstId);
+    });
+}
+
+
+function sejongRoute2() {
+    //daegu_interval.clearInterval();
+
+    document.getElementById("subMenuModal").style.display = "block";
+    clearInterval(daegu_interval);
+    clearInterval(interval);
+
+    hide_div("graph1_div");
+    hide_div("graph2_div");
+    open_tab('degu_window',3);
+
+    // clear hidden cameras 
+    document.getElementById("hidden_cam1").style.background= "";
+    document.getElementById("hidden_cam2").style.background= "";
+    document.getElementById("webcam_div1").style.background= "#828282";
+    document.getElementById("webcam_div2").style.background= "#828282";
+    if(document.getElementById("pausePlayButton1").src= "images/cctv/play.svg")
+        document.getElementById("pausePlayButton1").src= "images/cctv/pause.svg";
+    if(document.getElementById("pausePlayButton2").src= "images/cctv/play.svg")
+        document.getElementById("pausePlayButton2").src= "images/cctv/pause.svg";
+    
+    playPause("webcam_div1", 'pausePlayButton1');
+    playPause("webcam_div2", 'pausePlayButton1');
+ 
+    // update status of webcam  
+    show_div("webcam_div");
+    document.getElementById('webcam_div1').style.display = "inline-block";
+    document.getElementById('webcam_div2').style.display = "inline-block";
+    
+    //webcam('1', null);
+    //webcam('2', null);
+    var sejongShuttleArray=[];
+    var vehicleObj=[];
+    var map_center = [36.499951, 127.270606];
+    var container = L.DomUtil.get('sejongMap2');
+    if(container != null)
+      container._leaflet_id = null;
+
+    var sejong_map2 = createMap(map_center, 1, sejong_map2,'sejongMap2');
+    var waypoints = [
+        L.latLng(36.499351, 127.270606),
+        L.latLng(36.501690, 127.272315),
+    ];
+  
+    // show stations, kiosk, garage on degu route.
+    showRouteInfo(sejong_map2, "stations/", "route/station_kiosk.svg", 18);
+    showRouteInfo(sejong_map2, "garages/", "route/garageIcon.svg", 18);
+    showDataCenter(sejong_map2, 18);
+        
+    // show V2X on Degu route
+    show_v2x(sejong_map2, "v2x/");
+    sejong_map2.invalidateSize();
+
+    // get all vehicle Id's of route 3 (Sejong).
+    getMethod("vehicles/", function (data) {
+        var vehicle_data = JSON.parse(data).results;
+        if (vehicle_data == undefined) 
+            vehicle_data = JSON.parse(data);
+        var count = Object.keys(vehicle_data).length;
+
+        //alert("count :"+count+" Sejong vehicles: "+vehicle_data );
+        // create vehicle obj and store in array
+        for (var i = 0; i < count; i++) {
+            var vehicle = vehicle_data[i];
+            if (vehicle.site == 3){             
+                sejongShuttleArray.push(vehicle.id); // array of vehicle ID 
+                var vehicle = {
+                    id:vehicle.id,
+                    mid:vehicle.mid,
+                    name: vehicle.name,
+                    speed:vehicle.speed,
+                    lat:vehicle.lat,
+                    lon:vehicle.lon,
+                    heading : vehicle.heading,
+                    battery : vehicle.battery,
+                    drive : vehicle.drive,
+                    webcam1 : vehicle.webcam1,
+                    webcam2 : vehicle.webcam2,
+                }
+                vehicleObj.push(vehicle);
+           }
+        }
+        //create list of vehicles in degu route
+        vehicleObj = vehicleObj.sort((a, b) => (a.id > b.id) ? 1 : -1);
+
+        // create select list of vehicle 
+        createSelectList(vehicleObj);
+
+        // update status of webcam  
+        webcam('1', vehicleObj);
+        webcam('2', vehicleObj);
+
+        firstId = sejongShuttleArray[0];
+        vehicleInfo(sejong_map2, firstId);
         //changeVehicleInfo(firstId);
     });
 }
@@ -2401,6 +2600,7 @@ function updateGaragePopup(marker, garageTitle)
 }
 
 function setDateTime() {
+    // set the date time 
     const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
     var currentdate = new Date();
     var strDate = currentdate.getDate()+" " +months[currentdate.getMonth()]+ ", " +currentdate.getFullYear();
@@ -2414,20 +2614,19 @@ function setDateTime() {
     var strTime = currentHour+ ":" +currentdate.getMinutes()+ ' ' +hour_status;
     document.getElementById("currentDate").innerHTML = strDate;
     document.getElementById("currentTime").innerHTML = strTime;
+
+    // store the logged in user name in local storage
     var userName = localStorage.getItem("activeUserID");
     // trim email id to username
     var trimName = userName.substring(0, userName.indexOf('@'));
     document.getElementById("active_username").innerHTML = trimName;
-    setTimeout(setDateTime, 20000);
+    // update date and time after every 20 seconds
+    setTimeout(setDateTime, 20000);  
 }
 
 function highchart(graph1, title, color, yAxisLable, vehicleList, yAxisList, y_unit) {
-   // vehicleList.push('');
-    //vehicleList.push('');
-    //vehicleList.push('');
-    for (var i = vehicleList.length; i < 4; i++) {
+    for (var i = vehicleList.length; i < 4; i++) 
         vehicleList.push("");
-      }
 
     if (graph1 == 'graph2')
         document.getElementById('graphTitle1').innerHTML = title;
@@ -2850,24 +3049,6 @@ function oddFileDownload(){
         oddDom.href=filePath;
         document.body.appendChild(oddDom);
         oddDom.click();
-    });
-}
-
-//webSocket();
-function webSocket()
-{
-    // Create WebSocket connection.
-    const socket = new WebSocket('ws://115.93.143.2:9103/ws/vehicle');
-
-    // Connection opened
-    socket.addEventListener('open', function (event) {
-        socket.send('Hello Server!');
-        console.log("Web socket connection is opened");
-    });
-
-    // Listen for messages
-    socket.addEventListener('message', function (event) {
-        console.log('Message from server ', event.data);
     });
 }
 

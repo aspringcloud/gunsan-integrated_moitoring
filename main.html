@@ -12,6 +12,8 @@
     <!--javascript function files-->
     <script src="js/map_function.js"></script>
     <script src="js/validation.js"></script>
+    <script src="js/web_socket.js"></script>
+    <script src="js/event.js"></script>
    <!-- <pre id="api-response"></pre>-->
     
     <!--open weather map API-->
@@ -156,14 +158,20 @@
     <div class="mapPosition hideMap" id="sangamMap"></div>
     <div class="mapPosition hideMap" id="gunsanMap"></div>
     <div class="mapPosition hideMap" id="gangrungMap"></div>
-    <div class="alertDiv" id="alertDiv"> 
-        <button class="eventButton"><img src="images/event.svg" style="margin-right: 10px;vertical-align: baseline;"/>Event 발생 알림</button>
-        <div id="batteryAlert" class="batteryAlert">
+    <div class="mapPosition hideMap" id="sejongMap2"></div>
+
+    <!--Web socket event alert-->
+    <div id="alertDiv">
+    <button class="alertButton"><img src="images/event.svg" style="margin-right: 10px;vertical-align: baseline;"/>Event 발생 알림</button>
+    <div class="alertDiv" id="eventsDiv"> 
+        
+      <!--<div class="batteryAlert">
             <span>SCN001</span>
             <p>배터리 충전이 필요합니다.</p>
-            <button>확인</button>
-        </div>
+            <button id="closeEvent" >확인</button>
+        </div> -->         
     </div>
+</div>
     <!--chart.js graphs-->
     <div class="distanceChart1" id="distanceChart1">
         <p class="chartTitle1">금일 총 운행거리 </p>
@@ -182,6 +190,7 @@
 
     <div class="map_zindex">
         <div id="hide_test" class="round_button">
+            <button onclick="" id="unknown_button">전체운행노선</button>
             <button onclick="switchMap(this)" id="degu_button">대구</button>
             <button onclick="switchMap(this);/*sejongRoute(); open_tab(this.id, 'degu_window',3);*/" id="sejong_button">세종 </button>
             <button onclick="switchMap(this);/*sangamRoute(); open_tab(this.id, 'degu_window',4);*/" id="sangam_button">상암 </button>
@@ -295,8 +304,7 @@
                     <!--status of vehicle-->
                     <!--second div start-->
                     <div style="width: 357px;  height:195px; ">
-                
-                        <div style=" display: inline-block;  height: 195px;position: absolute; width:152px;left: 18px;">
+                        <div style=" display: inline-block;  height:212px;position: absolute; width:152px;left: 18px; border-right: 0.5px solid #BDBDBD;">
                             <div class="vehicleDiv3">
                                 <span class="cameraAngle" style="float:left "> Rear </span>
                                 <span class="cameraAngle" style="float:right" id="v_front"> Front </span>
@@ -469,8 +477,8 @@
     <!--Sejong Sub Menu Modal-->
     <div id="subMenuModal" class="subMenuModal">
         <div id="sejongSubmenu" class="subMenu">
-            <button class="sejongHover1">세종호수공원</button>    
-            <button class="sejongHover2">규제자유특구 실증구간(4-2)</button>    
+            <button class="sejongHover1" id="sejong_button1" onclick="switchMap(this);" >세종호수공원</button>    
+            <button class="sejongHover2" onclick="switchMap(this);" id="sejong_button2">규제자유특구 실증구간(4-2)</button>    
         </div>
     </div>
  
@@ -509,11 +517,11 @@
         }
 
         //Update weather information after every 20 minutes 
-        getweather(35.8368,128.6835);
+       /* getweather(35.8368,128.6835);
         setInterval(function() {
             getweather(35.8368,128.6835);
         }, 60 * 60000);
-        
+        */
     /* Sejong submenu */
     var subMenuModal = document.getElementById("subMenuModal");
     subMenuModal.onclick=function(event)
@@ -525,7 +533,6 @@
                 subMenuModal.style.display = "none";
         } 
     }
-
     window.onclick = function(event) {
         /* Close the sejong submenu modal */
         if(subMenuModal.style.display == "block")
@@ -546,3 +553,4 @@
     </script>
 </body>
 </html>
+

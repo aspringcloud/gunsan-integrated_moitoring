@@ -988,7 +988,7 @@ border: none;
 font-size: 18px;
 font-family: Noto_bold;
 font-style: normal;
-width: 123px;
+width: 148px;
 height: 60px;
 border: 0px;
 z-index: 1001;
@@ -1026,7 +1026,7 @@ position: absolute;
 left: 0px;
 top: 90px;
 z-index: 1001;
-width: 123px;
+width: 148px;
 height: 990px;/*1021px;*/
 background-color: #0893BF;
 box-shadow: 4px 0px 4px rgba(0, 0, 0, 0.15);
@@ -1071,9 +1071,7 @@ display: inline;
 
 .tab_elements>p {
     color:#555;
-    font-family: Noto Sans KR;
-    font-style: normal;
-    font-weight: bold;
+    font-family: noto_regular;
     font-size: 16px;
     line-height: 16px;
     margin-right: 47px;
@@ -1103,7 +1101,7 @@ position: absolute;
 position: absolute;
 width: 434px;
 height:990px; /*1021px;*/
-left: 122px;
+left: 148px;
 top: 0px;
 display: block;
 background: #FFFFFF;
@@ -1141,7 +1139,6 @@ float: right;
 color: white;
 font-size: 14px;
 position : absolute;
-top:5px;
 margin-left: 5px; 
 font-family: Noto_medium;
 text-shadow: 0px 0px 4px rgba(0, 0, 0, 0.35);
@@ -1685,10 +1682,10 @@ font-weight: 500;
 }
 
 
-.tabButton{ color:#2E92B0 !important; }
+.tabButton{ color:#2E92B0 !important; font-family: noto_medium; }
 
 .noticeBullet1{
-display: inline-block;vertical-align:super; float:left;margin-top: 7px; margin-right: 4px;
+display: inline-block;vertical-align:super; float:left; margin-top: 7px; margin-right: 4px;
 }        
 
 .noticeSpan1{
@@ -2370,11 +2367,10 @@ border-bottom: 7px solid #2E92B0;
 width:56px;
 height:56px;
 position:absolute;
-left:48px;
+left:288px;
 border: 0.2px solid #828282;
 border-radius:50%;
 display: inline-block; 
-margin-left:240px;
 }
 
 .smallCircle{
@@ -3360,30 +3356,28 @@ display:inline-block;
 position: absolute;
 width: 42px;
 height: 32px;
-
 }
 
 .divStyle1{
 display:inline-block; 
 position: absolute; top:-17px; right: 410px;
 }
+
 .count_p1{
 font-size: 15px; 
 margin-bottom: -10px;
 color: #555555;
 letter-spacing: -0.03em;
-font-family: Roboto;
+font-family: Roboto_regular;
 font-style: normal;
-font-weight: normal;
 font-size: 15px;/*
 line-height: 20px;*/
 }
 
 .count_p2{
 font-size: 24px !important ;
-font-family: Roboto;
-font-weight: 400;
-color: #555;
+font-family: Roboto_medium;
+color: #555555;
 letter-spacing: -0.036em;
 margin-top: 8px;
 margin-left: -5px;
@@ -3429,6 +3423,7 @@ top: 15px;
     position: absolute;
     top: 6px;
     left: 50px;
+    font-family: noto_regular;
     margin-bottom: -5px; font-size: 14px; line-height: 14px; font-style: normal !important; color: #555555;
 }
 

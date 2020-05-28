@@ -380,7 +380,7 @@ display: inline-block;width: 100px;
 margin-top:23px;
 margin-bottom:23px
 }
-.eventButton{
+.alertButton{
 background: #CA4040;
 box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3);
 border-radius: 2px;
@@ -393,6 +393,10 @@ text-align: center;
 border: 0px;
 outline: none;
 margin-bottom: 10px;
+position: absolute;
+top: 15.2%;
+right:4.11%;
+z-index:1001;
 }
 
 .batteryAlert{
@@ -414,6 +418,7 @@ color: #FFFFFF;
 font-size: 14px;
 text-align: center;
 position: absolute;
+line-height: 1.6;
 }
 
 .batteryAlert p{
@@ -425,14 +430,15 @@ text-align: center;
 }
 
 .batteryAlert button{
-font-weight: bold;
-color: #4F4F4F;
+font-family: noto_regular;
+color: white;
+background: #0082C8;
 font-size: 14px;
 width:55px;
 height: 24px;
 position: absolute;
 text-align: center;
-margin-top: -10px;
+margin-top: -3px;
 margin-left: 60px;
 box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25);
 border-radius: 1px;
@@ -462,7 +468,19 @@ font-family:Noto_medium; color: #000000;font-size: 14px; display: inline-block; 
 .numberP2{
 font-family:Noto_medium; font-size: 14px; color: #000000; display: inline-block; margin-right: 10px;
 }
+
 .alertDiv{
+z-index: 1001;
+right: 4.11%;
+top:185px;
+position: absolute;
+background-color: transparent;
+display: block;
+height: 875px;
+overflow-y: hidden;
+}
+
+.eventDiv{
 z-index: 1001;
 right: 100px;
 top:120px;
@@ -582,7 +600,7 @@ width: 264px;
 height: 204px;    
 z-index: 1001;
 left: 598px;
-top: 850px;
+top: 875px;
 background: #FFFFFF;
 box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12), 0px 0px 2px rgba(0, 0, 0, 0.14);
 border-radius: 5px;
@@ -592,8 +610,8 @@ border-radius: 5px;
 display: none; position: absolute;
 width: 264px;
 height: 204px; z-index: 1001;
-left: 977px;
-top: 850px;
+left: 882px;
+top: 875px;
 background: #FFFFFF;
 box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12), 0px 0px 2px rgba(0, 0, 0, 0.14);
 border-radius: 5px;
@@ -602,7 +620,7 @@ border-radius: 5px;
 .scaleUnit{
 color: grey;
 font-size: 12px;
-font-family: roboto;
+font-family: Roboto_regular;
 margin-bottom: 5px;
 margin-left: 10px;
 }
@@ -658,7 +676,7 @@ background: #0893BF;
 border-radius: 0px 5px 5px 0px;
 display: none;/*
 left: 122px;*/
-top: 60px;
+top: 120px;
 position: absolute;
 z-index: 1011;
 }
@@ -762,7 +780,7 @@ color: #2E92B0;
 text-align: center; 
 color: #ffffff; 
 font-size: 20px; 
-font-family: roboto_medium;
+font-family: Roboto_medium;
 float: left;
 /*margin: 15px 0px 15px 5px;*/
 padding-left: 5px;
@@ -791,7 +809,7 @@ display: none;
 position: fixed;
 z-index: 1011;
 /*padding: 3%;*/
-left: 122px;
+left: 148px;
 top: 90px;
 width: 100%;
 height: 100%;
