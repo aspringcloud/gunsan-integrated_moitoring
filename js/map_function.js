@@ -4,52 +4,110 @@
 
 // Checks which route button is clicked and 
 // Calls the function associated for that route 
+'use strict';
+
 var mapList = [];               // stores the id of open map 
 mapList.push("offsiteMap");          //  push id of offsite map on login  
+
 var daegu_map;
+var sejong_map;
+var sangam_map;
+var sejong_map2;
+var gunsan_map;
+
+var deguClickCount = 0;
+var sejong1ClickCount = 0;
+var sejong2ClickCount = 0;
+var gunsanClickCount = 0;
+var sangamClickCount = 0;
+
 function switchMap(obj)
-{   
+{    
     if(obj.id == "degu_button")
-    {   
+    {  
+        deguClickCount++;
+        if(daegu_map == undefined)
+        {
+            daegu_map = L.map('deguMap',{
+                zoom : 17,
+                center:[35.83731,128.68384],
+                zoomControl: false,
+            });
+        }
+
         for(var i = 0 ; i < mapList.length; i++)
             hide_div(mapList[i]);
+
+        // alert("daegu_map instance:"+daegu_map);
+
         show_div("deguMap");
         mapList.push("deguMap");
         document.getElementById('webcam_div1').style.display = "inline-block";
         document.getElementById('webcam_div2').style.display = "inline-block";
         deguRoute(daegu_map); 
         show_div("alertDiv");
+        document.getElementById('currentSiteId').innerHTML="2";
     }
-    else if(obj.id == "sejong_button" )
-    {       
+    
+    else if(obj.id == "main_site_button" )
+    {   
+        hide_div("offsite_window");
+        show_div("graph_div");
+        
         show_div("subMenuModal");
         show_div("sejongSubmenu");
-        
-/*
-        for(var i = 0; i < mapList.length; i++)
-            hide_div(mapList[i]);
-        show_div("sejongMap");
-        mapList.push("sejongMap");
-        hide_div('webcam_div1');
-        hide_div('webcam_div2');
-        sejongRoute(); 
-        show_div("alertDiv");*/
+        document.getElementById('currentSiteId').innerHTML="0";
+    }
+
+    else if(obj.id == "sejong_button" )
+    {   
+        show_div("subMenuModal");
+        show_div("sejongSubmenu");
+        document.getElementById('currentSiteId').innerHTML="3";
     }
     else if(obj.id == "sejong_button1")
     {       
+        sejong1ClickCount++;
+        if(sejong_map == undefined)
+        {
+            sejong_map = L.map('sejongMap',{
+                zoom : 18,
+                center:[36.499951, 127.270606],
+                zoomControl: false,
+            });
+        }
+
+        if(daegu_interval != null)
+            clearInterval(daegu_interval);
+
+        //show_div("subMenuModal");    
         show_div("sejongSubmenu");
 
         for(var i = 0; i < mapList.length; i++)
             hide_div(mapList[i]);
         show_div("sejongMap");
         mapList.push("sejongMap");
+        hide_div('countInfoDiv');
         hide_div('webcam_div1');
         hide_div('webcam_div2');
         sejongRoute(); 
         show_div("alertDiv");
+        document.getElementById('currentSiteId').innerHTML="3.1";
     }
     else if(obj.id == "sejong_button2")
     {       
+        if(daegu_interval != null)
+            clearInterval(daegu_interval);
+
+        if(sejong_map2 == undefined)
+        {
+            sejong_map2 = L.map('sejongMap2',{
+                zoom : 1,
+                center:[36.499951, 127.270606],
+                zoomControl: false,
+            });
+        }    
+
         show_div("sejongSubmenu");
 
         for(var i = 0; i < mapList.length; i++)
@@ -58,32 +116,63 @@ function switchMap(obj)
         mapList.push("sejongMap2");
         hide_div('webcam_div1');
         hide_div('webcam_div2');
+        hide_div('countInfoDiv');
         sejongRoute2(); 
         show_div("alertDiv");
+        document.getElementById('currentSiteId').innerHTML="3.2";
     }
     else if(obj.id == "sangam_button")
     {
+        if(sangam_map == undefined)
+        {
+            sangam_map = L.map('sangamMap',{
+                zoom : 16,
+                center:[37.579333, 126.889036],
+                zoomControl: false,
+            });
+        }
+           // var map_center = [37.579333, 126.889036];
+         //   var sangam_map = createMap(map_center, 16, sangam_map,'sangamMap');
+
+        if(daegu_interval != null)
+            clearInterval(daegu_interval);
         for(var i = 0; i < mapList.length; i++)
             hide_div(mapList[i]);
         show_div("sangamMap");
         mapList.push("sangamMap");
         hide_div('webcam_div1');
         hide_div('webcam_div2');
+        hide_div('countInfoDiv');
         sangamRoute(); 
         open_tab('degu_window',4);
         show_div("alertDiv");
+        document.getElementById('currentSiteId').innerHTML="4";
     }
     else if(obj.id == "gunsan_button")
     {
+        if(daegu_interval != null)
+            clearInterval(daegu_interval);
+
+        if(gunsan_map == undefined)
+        {
+            gunsan_map = L.map('gunsanMap',{
+                zoom : 16,
+                center:[35.812484, 126.409100],
+                zoomControl: false,
+            });
+        }
+
         for(var i = 0; i < mapList.length; i++)
             hide_div(mapList[i]);
         show_div("gunsanMap");
         mapList.push("gunsanMap");
         hide_div('webcam_div1');
         hide_div('webcam_div2');
+        hide_div('countInfoDiv');
         gunsanRoute(); 
         open_tab('degu_window',1);
         show_div("alertDiv");
+        document.getElementById('currentSiteId').innerHTML="1";
     }
     else if(obj.id == "gangrung_button") 
     {
@@ -92,9 +181,104 @@ function switchMap(obj)
     }
 }
 
+// Fullscreen ON/OFf
+/*
+$("switchButton").on('change', function() {
+    if ($(this).is(':checked')) {
+        switchStatus = $(this).is(':checked');
+        //alert(switchStatus);// To verify
+    }
+    else {
+       switchStatus = $(this).is(':checked');
+      // alert(switchStatus);// To verify
+    }
+});
+*/
+var switchStatus =false;
+function toggledSwitch()
+{
+    if(switchStatus == false)
+        switchStatus =true;
+    else
+        switchStatus = false;
+
+    if(switchStatus)
+    {
+        if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen();
+          } else if (document.documentElement.msRequestFullscreen) {
+            document.documentElement.msRequestFullscreen();
+          } else if (document.documentElement.mozRequestFullScreen) {
+            document.documentElement.mozRequestFullScreen();
+          } else if (document.documentElement.webkitRequestFullscreen) {
+            document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+          }
+    }   
+    else
+    {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+          } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+          } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+          } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+          }
+    } 
+    
+    //var switchStatus =  document.getElementById('switchButton').ischeck//$(this).is(':checked');
+   // alert(switchStatus);
+}
+
+/*
+// detect F11 keypress
+window.onresize = function (event) {
+    var maxHeight = window.screen.height,
+        maxWidth = window.screen.width,
+        curHeight = window.innerHeight,
+        curWidth = window.innerWidth;
+
+    if (maxWidth == curWidth && maxHeight == curHeight) {
+        toggledSwitch();
+    }
+}*/
+
+//document.onkeydown = keydown;
+document.onkeypress = keypress;
+function keypress(e) {
+    var fullscreenElement = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement;
+    alert("fullscreenElement :"+document.fullscreenElement);
+ /* var evtobj = window.event ? event : e;
+  if(document.fullscreenElement == null)
+  {
+    switchStatus =true;
+  }
+  else
+  {
+    switchStatus = false;
+  }
+
+  $("#switchButton").prop('checked', switchStatus);*/
+  /*if (evtobj.keyCode == 122 )
+  {
+        if(switchStatus == false)
+        {
+            switchStatus =true;
+        }
+        else
+        {
+            switchStatus = false;
+        }
+        //alert(evtobj.keyCode+ " switch:"+switchStatus);
+        $("#switchButton").prop('checked', switchStatus);
+  }
+    */
+}
+
 function offsite() {
     // hide all div's from site route
-    for(var i=0 ; i< mapList.length; i++)
+    for(var i = 0; i < mapList.length; i++)
         hide_div(mapList[i]);
     
     hide_div("listItem");
@@ -106,9 +290,12 @@ function offsite() {
 
     // show all div's of offsite
     show_div("offsiteMap");
-    show_div("graph1_div");
-    show_div("graph2_div");
-    show_div("countInfoDiv");  
+    hide_div("graph_div");
+    hide_div("countInfoDiv");
+
+    // change center of map 
+    var map_center = [35.902, 128.013];
+    cluster_map.panTo(new L.LatLng(map_center));
     
     // create list to show all site info.
     var offsite_list = document.getElementById("offsite_list");
@@ -160,11 +347,18 @@ function showGraphs() {
         var vehicleList = [];
         var passengerList = [];
         var distanceList = [];
-        for (i = 0; i < count; i++) {
+        for (var i = 0; i < count; i++) {
             vehicleList.push(graph_data[i].vehicle);
             passengerList.push(graph_data[i].accum_passenger);
             distanceList.push(graph_data[i].accum_distance);
         }
+
+        //document.getElementById('totalData').innerHTML = ;
+        //distanceList
+        document.getElementById('totalDistance').innerHTML = Number(distanceList.reduce(function(pv, cv) { return pv + cv; }, 0)).toLocaleString('en');
+        //passengerList
+        document.getElementById('totalPassenger').innerHTML = Number(passengerList.reduce(function(pv, cv) { return pv + cv; }, 0)).toLocaleString('en');
+
         highchart('graph2', '총 운행거리', '#f1ca3f', 'Distance(km)', vehicleList, passengerList, 'km');
         highchart('graph1', '총 탑승자 수', '#3bc7d1', 'Passenger', vehicleList, distanceList, '명');
     });
@@ -204,8 +398,8 @@ function showCluster()
     // show data for offsite.
     showGraphs();
     show_div("offsiteMap");
-    show_div("graph1_div");
-    show_div("graph2_div");
+    show_div("graph_div");
+   // show_div("graph2_div");
     show_div("countInfoDiv");
   
     // array to store lat-lon of cluster 
@@ -220,7 +414,7 @@ function showCluster()
         }
 
         // create offsite map(replace create map code width 'createMap' function in future)
-        var map_center = [35.902, 128.013];
+        var map_center = [35.951,133.066];
         var cluster_map = L.map('offsiteMap', {
             zoomSnap: 0.15,      
             dragging: true, //false
@@ -233,7 +427,7 @@ function showCluster()
         });
 
         // create openstreet tile layer
-        clusterLayer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+        var clusterLayer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         });
 
@@ -307,33 +501,8 @@ function passengerStatus(activePassenger) {
         if((Number(prevCount))-1 == Number(activePassenger))
             return false;
     }
-    passivePassenger = 15 - activePassenger;
+   // var passivePassenger = 15 - activePassenger;
     document.getElementById("passengerCount").innerHTML = (activePassenger + 1);
-}
-
-// function to calculate distance between two locations
-// Note - not used in version 0.2
-function onDemand(map)
-{
-    // static waypoint for test 
-    var waypoints = [
-        L.latLng(35.8363080000000000, 128.6815470000000000),
-        L.latLng(35.8386730000000000, 128.6878920000000000),
-    ];
-
-    // Use routing control leaflet plugin to draw route on map
-    var control = L.Routing.control({
-        waypoints: waypoints,
-        serviceUrl: 'http://115.93.143.2:8104/route/v1',
-        profile: 'foot'
-    }).addTo(map);
-
-    control.on('routesfound',function(e){
-        var distanceKm = (e.routes[0].summary.totalDistance)/1000 + ' km';
-        var minutes = Math.round(e.routes[0].summary.totalTime % 3600/ 60)+ ' minutes';
-        console.log("distanc:"+distanceKm);
-        console.log("min:"+minutes);
-    });
 }
 
 // Get distance between two location using leaflet function
@@ -611,7 +780,7 @@ function changeVehicleInfo(obj)
 
 function createHtmlMarker(vehicleObj, iconHtml)
 {
-    marker = L.marker([vehicleObj.lat, vehicleObj.lon], {
+    var marker = L.marker([vehicleObj.lat, vehicleObj.lon], {
         draggable: false,
         icon: iconHtml,
     });
@@ -623,11 +792,12 @@ function createHtmlMarker(vehicleObj, iconHtml)
 var rippleMarkerArray = [];
 var shuttleMarkerArray = [];
 function showVehicleRipple(request_count, mapInstance, vehicleInfo){ 
+        //console.log("showVehicleRipple():"+mapInstance);
         var vehicleMarker;
         // loop throught array vehicles of route
         for(var j = 0; j < vehicleInfo.length; j++)
         {        
-            console.log("vehicleInfo array"+vehicleInfo[j].name );
+            ///console.log("vehicleInfo array"+vehicleInfo[j].name );
             var vehicleObj = vehicleInfo[j];
             // red ripple marker html
             var redIconHtml = '<div id="vehicleRippleDiv" class="shuttle_icon">'+
@@ -687,7 +857,7 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo){
                 var vehicleIcon = L.icon({                                            // Create icon for marker.               
                     iconSize: [37, 52],
                     popupAnchor: [5, -45],
-                    iconAnchor: [20, 45],
+                    iconAnchor: [20, 40],
                     iconUrl: iconUrl,
                 });
 
@@ -734,6 +904,7 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo){
                     var currentRipple = rippleMarkerArray[i].marker;
                     currentRipple.setLatLng(newLatLng);                                         // update the location of ripple marker
 
+                    //alert("nbn:"+vehicleObj.isparked);
                     // change speed status in left side window
                     if (vehicleObj.isparked == true)
                     {
@@ -902,6 +1073,7 @@ function vehicleStatus( status, statusBg)
 // Show multiple vehicles on route (under development)
 function shuttleOnRoute(mapInstance, reqCount)
 {
+   // console.log("shuttleOnRoute()"+mapInstance);
     var vLocationArray=[];
     getMethod("vehicles/", function(data){  
         var vehicle_data = JSON.parse(data).results;
@@ -925,13 +1097,14 @@ var daegu_interval;
 // Daegu monitoring
 function deguRoute(daegu_map) 
 {
+    //console.log("daegu_map: "+daegu_map);
     if(interval != null)
         clearInterval(interval);
     var deguShuttleArray=[]; // stores info of each vehicle in object form on degu route
     document.getElementById("degu_button").backgroundColor = "#ffffff";
     document.getElementById("degu_button").color = "#185786";
-    hide_div("graph1_div");
-    hide_div("graph2_div");
+    hide_div("graph_div");
+    //hide_div("graph2_div");
     hide_div("countInfoDiv");
     hide_div("listItem");
     hide_div("offsite_window");
@@ -954,21 +1127,19 @@ function deguRoute(daegu_map)
     // daegu map center
     var map_center = [35.83731,128.68384];
      
-    /* Check this --> map_function.js:717 Uncaught TypeError: Cannot read property 'style' of null*/
-    var container = L.DomUtil.get('deguMap');
-    if(container != null)
-        container._leaflet_id = null;
+  
+    // alert( createMap(map_center, 17, daegu_map, 'deguMap'));
 
-    daegu_map = createMap(map_center, 17, daegu_map, 'deguMap');
-
-    // show stations, kiosk, garage on degu route.
-    showRouteInfo(daegu_map, "stations/", "route/station_kiosk.svg", 2);
-    showRouteInfo(daegu_map, "garages/", "route/garageIcon.svg", 2);
-    showDataCenter(daegu_map, 2);
-
-    // show V2X on Degu route
-    show_v2x(daegu_map, "v2x/");
-
+    //var container = L.DomUtil.get('deguMap');
+    if(deguClickCount <= 1)
+    {     daegu_map = createMap(map_center, 17, daegu_map, 'deguMap');
+         // show stations, kiosk, garage, V2X on degu route.
+        showRouteInfo(daegu_map, "stations/", "route/station_kiosk.svg", 2);
+        showRouteInfo(daegu_map, "garages/", "route/garageIcon.svg", 2);
+        showDataCenter(daegu_map, 2);
+        show_v2x(daegu_map, "v2x/");
+    }
+   
     // Show All the shuttles on degu route
     var reqCount = 0;
     var firstId; 
@@ -1004,11 +1175,6 @@ function deguRoute(daegu_map)
                     isparked: vehicle.isparked
                 }*/
                 vehicleObj.push(vehicle);
-               
-              /*  if(vehicle.name =="SCN001")
-                {
-                    console.log("vehicle obj value :"+vehicle.speed);
-                }*/
             }
         }
         
@@ -1035,14 +1201,10 @@ function deguRoute(daegu_map)
 
         daegu_interval = setInterval(function() {
             reqCount++;
+            //console.log("shuttleOnRoute  setInterval:"+daegu_map+ " reqCount:"+reqCount);
             shuttleOnRoute(daegu_map, reqCount); //vehicleObj
           }, 1000)
 
-       /* daegu_interval = setTimeout(function(){ 
-            reqCount++;
-            shuttleOnRoute(daegu_map, reqCount, vehicleObj);
-        }, 1000);
-      */
         deguShuttleArray = deguShuttleArray.sort();
         firstId = deguShuttleArray[0];
         vehicleInfo(daegu_map, firstId);
@@ -1215,43 +1377,6 @@ function ETA(vehicleObj, daegu_map){
     // distance between garage to vehicle 
     var distanceGtoA = getDistance(vehicleLoc, L.latLng(35.835155, 128.682617)); //garage location
 
-    // check if vehicle is parked
-   /* if(distanceGtoA <= 0.2 || distance_V_to_A <= 0.2 ) //distanceList[0].distance == distanceList[1].distance ||
-    //min if XX = true 
-    {
-        // reset all the stations - this a start of route
-        var stationAArrived = false;
-        var stationBArrived = false;
-        var stationCArrived = false;
-        var stationDArrived = false;
-    }
-    //min if XX = 
-
-    // Check the next visiting station by the sequence
-
-    console.log("1 #### firstsmallest:"+firstsmallest+ " secondsmallest:"+secondsmallest);
-    if(firstsmallest=='A' && secondsmallest =='B') // chect all stations withh alll stations
-        firstsmallest = 'B'
-    else if (firstsmallest=='B' && secondsmallest =='C')   
-        firstsmallest = 'C'
-    else if (firstsmallest=='C' && secondsmallest =='D')   
-        firstsmallest = 'D'
-    else if (firstsmallest=='D' && secondsmallest =='A')   
-        firstsmallest = 'A'
-
-    console.log("2 ^^^^^^firstsmallest:"+firstsmallest);
-  
-    // check if station is already covered by vehicle or not, if covered next station 
-   if(firstsmallest == 'A' && stationAArrived == true)
-        firstsmallest = 'B';
-    else if(firstsmallest == 'B' && stationBArrived == true)
-        firstsmallest ='C';
-    else if(firstsmallest == 'C' && stationCArrived == true)
-        firstsmallest ='D';
-    else if(firstsmallest == 'D' && stationDArrived == true)
-        firstsmallest ='A';
-
-    console.log("3 ^^^^^^firstsmallest:"+firstsmallest);*/
     // Latitute and longitude of all stations
     var LocC = L.latLng(35.83705, 128.690044); //staC
     var LocD = L.latLng(35.83459, 128.68652); //staD
@@ -1640,7 +1765,7 @@ function showSummary() {
     getMethod("sites/summary/", function (getSummary) {
         var summary = JSON.parse(getSummary);
         document.getElementById("routeCount").innerHTML = summary.route_count;
-        document.getElementById("vehicleCount").innerHTML = summary.vehicle_count;
+         document.getElementById("vehicleCount").innerHTML = summary.vehicle_count;
         document.getElementById("StationCount").innerHTML = summary.station_count;
         document.getElementById("kioskCount").innerHTML = summary.kiosk_count;
         document.getElementById("garageCount").innerHTML = summary.garage_count;
@@ -1671,11 +1796,6 @@ function showRouteInfo(mapInstance, api_name, icon_path, site_no) {
                     var stationLat = iconData[i].lat;
                     var stationLon = iconData[i].lon;
                     stationTitleArray.push(stationTitle); // array for station title
-
-                   // console.log("SEjong lat long:"+stationLat+","+stationLon);
-
-                   // console.log("stationTitleArray:"+stationTitleArray);
-                   // console.log("kioskTitleArray:"+kioskTitleArray);
                                 
                     // check if kiosk for the station is available in kiosk api
                     var kioskTitle = "KIS" +kiosk_title.substring(3);
@@ -1684,34 +1804,16 @@ function showRouteInfo(mapInstance, api_name, icon_path, site_no) {
                     else
                      status = false
 
-                    //alert("site_no :"+site_no);
-
                     // array of kiosk title 
                     if(status == true)
                         kioskTitleArray.push(kioskTitle);
                     //else
                         kioskTitleArray.push(kioskTitle);
 
-                       // alert("site_no :"+site_no);
-
                     if (status == true ) //|| site_no == 18
-                    {
-                        //alert("status true"+kioskTitle);
-                       // alert("true")
                         showMarker(mapInstance, "images/" + icon_path, stationTitle, kioskTitle, stationLat, stationLon);
-                    }/*
-                    else if(status == false || site_no == 18)
-                    {
-                        showMarker(mapInstance, "images/" + icon_path, stationTitle, 'false', stationLat, stationLon);
-                    }*/
-                       
                     else
-                    {
-                      
-                       //alert("status false");
                         showMarker(mapInstance, "images/" + icon_path, stationTitle, 'false', stationLat, stationLon);
-                    }
-                       
                 }
                 else
                 {
@@ -1779,15 +1881,14 @@ function createRoute(mapInstance, waypoints, stationTitle,kioskTitle, site_no) {
     var control = L.Routing.control({
         waypoints: waypoints,
         serviceUrl: 'http://115.93.143.2:8104/route/v1',
-        dragging:true,
+        dragging:false,
+        routeWhileDragging:false,
         createMarker: function (i, wp) {
             if(stationTitle[i] != undefined)
             {
                 if(site_no == 18)
                 {
-                    var stationIcon = new L.DivIcon({
-                     
-                    });
+                    var stationIcon = new L.DivIcon();
                 }
                 else{
                     var stationIcon = new L.DivIcon({
@@ -1814,42 +1915,29 @@ function createRoute(mapInstance, waypoints, stationTitle,kioskTitle, site_no) {
             }
         },
           
-        routeWhileDragging: false,
         lineOptions: {styles: [{ color: '#7cc3e2', weight: 6 }]},     
-        autoRoute: true,
+        routeWhileDragging: false,
+        fitSelectedRoutes: true,
+        draggableWaypoints: false,
+        addWaypoints: false,
+        //autoRoute: true,
         showAlternatives: false,
         show: false,
      
     }).addTo(mapInstance);
+    //control.autoRoute.disabled();
     L.Routing.errorControl(control).addTo(mapInstance);
 }
 
 // creates map with given mapcenter and zoom level
 function createMap(map_center, zoom, mapInstance, mapId) {
-    /*if (mapInstance != undefined || mapInstance != null) 
-    {
-        mapInstance.off();
-        mapInstance.remove();
-        $("#deguMap").html("");
-        var container = L.DomUtil.get('deguMap');
-        if(container != null){
-            container._leaflet_id = null;
-        }
-        
-        //mapInstance = undefined;
-        //document.getElementById('deguMap').innerHTML = "";
-    }*/
-   // alert("should be undefined:"+mapInstance);
-    mapInstance = L.map(mapId, {
-        zoomSnap: 0.15,      
-        dragging: true, //false
-        draggable:true,
-        scrollWheelZoom: true, //false
-        zoomControl: false,
-        zoom:zoom,
-        center:map_center
-    });
-    deguLayer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+    
+    mapInstance.zoomSnap = 0.15;
+   // mapInstance.zoomControl.disable();
+    mapInstance.scrollWheelZoom.enable();
+    mapInstance.dragging.enable();
+
+    var deguLayer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     });
     deguLayer.addTo(mapInstance);
@@ -1860,22 +1948,26 @@ function createMap(map_center, zoom, mapInstance, mapId) {
 }
 
 function gunsanRoute() {
-    hide_div("graph1_div");
-    hide_div("graph2_div");
+   // daegu_interval
+    if(daegu_interval != null)
+        clearInterval(daegu_interval);
+    hide_div("graph_div");
+    //hide_div("graph2_div");
     var map_center = [35.812484, 126.409100];
-    var gunsan_map = createMap(map_center, 16, gunsan_map, 'gunsanMap');
+    gunsan_map = createMap(map_center, 16, gunsan_map, 'gunsanMap');
     showRouteInfo(gunsan_map, "stations/", "route/station_kiosk.svg", 1);
     showRouteInfo(gunsan_map, "garages/", "garage_daegu.svg", 1);
     gunsan_map.invalidateSize();
 }
 
 function sangamRoute() {
-    hide_div("graph1_div");
-    hide_div("graph2_div");
+    
+    hide_div("graph_div");
+    //hide_div("graph2_div");
     
     /* Check this --> map_function.js:717 Uncaught TypeError: Cannot read property 'style' of null*/
     var map_center = [37.579333, 126.889036];
-    var sangam_map = createMap(map_center, 16, sangam_map,'sangamMap');
+    sangam_map = createMap(map_center, 16, sangam_map,'sangamMap');
    
     // show stations, kiosk, garage on degu route.
     showRouteInfo(sangam_map, "stations/", "route/station_kiosk.svg", 4);
@@ -1893,8 +1985,8 @@ function sejongRoute() {
     clearInterval(daegu_interval);
     clearInterval(interval);
 
-    hide_div("graph1_div");
-    hide_div("graph2_div");
+    hide_div("graph_div");
+    //hide_div("graph2_div");
     open_tab('degu_window',3);
 
     // clear hidden cameras 
@@ -1920,12 +2012,7 @@ function sejongRoute() {
     var sejongShuttleArray=[];
     var vehicleObj=[];
     var map_center = [36.499951, 127.270606];
-
-    var container = L.DomUtil.get('sejongMap');
-    if(container != null)
-      container._leaflet_id = null;
-
-    var sejong_map = createMap(map_center, 18, sejong_map,'sejongMap');
+    sejong_map = createMap(map_center, 18, sejong_map,'sejongMap');
     var waypoints = [
         L.latLng(36.499351, 127.270606),
         L.latLng(36.501690, 127.272315),
@@ -1979,7 +2066,7 @@ function sejongRoute() {
         webcam('1', vehicleObj);
         webcam('2', vehicleObj);
 
-        firstId = sejongShuttleArray[0];
+        var firstId = sejongShuttleArray[0];
         vehicleInfo(sejong_map, firstId);
         //changeVehicleInfo(firstId);
     });
@@ -1993,8 +2080,8 @@ function sejongRoute2() {
     clearInterval(daegu_interval);
     clearInterval(interval);
 
-    hide_div("graph1_div");
-    hide_div("graph2_div");
+    hide_div("graph_div");
+    //hide_div("graph2_div");
     open_tab('degu_window',3);
 
     // clear hidden cameras 
@@ -2020,11 +2107,7 @@ function sejongRoute2() {
     var sejongShuttleArray=[];
     var vehicleObj=[];
     var map_center = [36.499951, 127.270606];
-    var container = L.DomUtil.get('sejongMap2');
-    if(container != null)
-      container._leaflet_id = null;
-
-    var sejong_map2 = createMap(map_center, 1, sejong_map2,'sejongMap2');
+    sejong_map2 = createMap(map_center, 1, sejong_map2,'sejongMap2');
     var waypoints = [
         L.latLng(36.499351, 127.270606),
         L.latLng(36.501690, 127.272315),
@@ -2078,8 +2161,8 @@ function sejongRoute2() {
         webcam('1', vehicleObj);
         webcam('2', vehicleObj);
 
-        firstId = sejongShuttleArray[0];
-        vehicleInfo(sejong_map2, firstId);
+        var first_id = sejongShuttleArray[0];
+        vehicleInfo(sejong_map2, first_id);
         //changeVehicleInfo(firstId);
     });
 }
@@ -2227,6 +2310,7 @@ function setSiteInfo(site_id){
 
     var api_url = "sites/" + site_id + "/";
     getMethod(api_url, function (sites_data) {
+        //console.log("sites_data :"+sites_data);
         var site_data = JSON.parse(sites_data);
         var site_title = site_data.summary.indexOf('\r');
         var site_title_slice = site_data.summary;//.substring(0, site_title);
@@ -2332,6 +2416,7 @@ function show_v2x(mapInstance, api_name){
 
 function manager_list(site_manager_array) 
 {
+    //alert("site_manager_array :"+site_manager_array);
     // add managers to select list, 
     var select = document.getElementById("manager_selectlist");
     select.options.length = 0;
@@ -2346,8 +2431,10 @@ function manager_list(site_manager_array)
             //alert("site_manager_data :"+site_manager_data);
             var site_manager_data = JSON.parse(site_manager_data);
             var option = document.createElement('option');
+            //alert("site_manager_data.username :"+site_manager_data.username);
             option.text = site_manager_data.username;
             option.value = site_manager_data.email;
+            
             select.add(option, i + 1);
         });
     }
@@ -2518,15 +2605,6 @@ function showMarker(mapInstance, iconUrl, stationTitle, kioskTitle, lat, long) {
         })
     }
 
-    //tEMPORARY 
-   /* if(title == "GAR")
-    {
-        var marker = L.marker([35.83618, 128.68272], {
-            draggable: false, // Make the icon dragable
-            icon: markerIcon
-        });
-    }
-    else{ }*/
     var marker = L.marker([lat, long], {
         draggable: false, // Make the icon dragable
         icon: markerIcon
@@ -2540,7 +2618,10 @@ function showMarker(mapInstance, iconUrl, stationTitle, kioskTitle, lat, long) {
         var stringLat = ((Number(lat)).toFixed(6)).toString();
         var stringLon = ((Number(long)).toFixed(6)).toString();
         var content = stringLat+", "+ stringLon;
-        popup = L.popup( {className : "garagePopup"}).setLatLng(e.latlng).setContent(content).openOn(mapInstance);
+        if(title == "GAR")
+            popup = L.popup( {className : "garagePopup"}).setLatLng(e.latlng).setContent(content).openOn(mapInstance);
+        else    
+            popup = L.popup( {className : "stationPopup"}).setLatLng(e.latlng).setContent(content).openOn(mapInstance);
     });
     marker.on('mouseout', function (e) { 
         mapInstance.closePopup(popup);
@@ -2625,10 +2706,10 @@ function setDateTime() {
 }
 
 function highchart(graph1, title, color, yAxisLable, vehicleList, yAxisList, y_unit) {
-    for (var i = vehicleList.length; i < 4; i++) 
+    for(var i = vehicleList.length; i < 4; i++) 
         vehicleList.push("");
 
-    if (graph1 == 'graph2')
+    if(graph1 == 'graph2')
         document.getElementById('graphTitle1').innerHTML = title;
     else
         document.getElementById('graphTitle2').innerHTML = title;
@@ -2819,7 +2900,35 @@ function setByte(str) {
     document.getElementById("msg_byte").innerText = "/200 bytes";
 }
 
-function selectSite(select, site_no, managerName) {
+function siteMsgSend() {
+    // Send message to manager of the site. 
+    // Get email from session variable.
+    var optionCount = $('#manager_selectlist option').length;
+    var e = document.getElementById("manager_selectlist");
+    // If manager list is empty don't open message window 
+    if(optionCount == 0)
+        return false;
+
+    document.getElementById('messageModal').style.display = "block";
+
+    // current selected site is
+    var currentSiteId = document.getElementById('currentSiteId').innerHTML;
+    
+    // get the site number and selected manager from the select box. 
+    var t = document.getElementById("select_site");
+    t.selectedIndex = currentSiteId; 
+    
+    // currently selected manager's info.
+    var selectedUserInfo = {
+        name :e.options[e.selectedIndex].innerHTML,
+        email : e.options[e.selectedIndex].value
+    }
+ 
+    var current_siteId = document.getElementById('currentSiteId').innerHTML;
+    selectSite('all',current_siteId,selectedUserInfo);
+}
+
+function selectSite(select, site_no, selectedUserInfo) {
     var selectValue;
     var managerSelect = document.getElementById('select_siteManager');
    
@@ -2833,36 +2942,19 @@ function selectSite(select, site_no, managerName) {
         managerSelect.innerText = null;
         alert("No managers are available");
     } 
-    else if(selectValue == "0") {
-        // assign all managers to the option list from site api. 
-        var api3 = "users/";
-        getMethod(api3, function (managersData) {
-            var managerInfo = JSON.parse(managersData).results;
-            var managerCount = Object.keys(managerInfo).length;
-            for (var i = 0; i < managerCount; i++)
-                createOption(managerSelect, managerInfo[i].username, managerInfo[i].email, managerInfo[i].photo,site_no, managerName);
-        });
+    else {
+        // assign username to select dropdown list
+        // Show manager name on main window 
+        // delete all previous manager suin the list 
+        managerSelect.length = 0;
+
+        managerSelect.style.fontSize = "14px";
+        var option = document.createElement("option");
+        option.text = selectedUserInfo.name;
+        option.value = selectedUserInfo.email;
+        option.style.fontSize = "14px";
+        managerSelect.appendChild(option);
     } 
-    else
-    {
-        // Find site managers from "sites/" api.
-        var api_name = "sites/" + selectValue; 
-        getMethod(api_name, function (managerList) {
-            var managerList = JSON.parse(managerList).manager;
-            if (managerList != null)
-                var managerCount = Object.keys(managerList).length;
-            var api2;
-            managerSelect.innerText = null;
-            for (var i = 0; i < managerCount; i++) {
-                api2 = "users/" +managerList[i]+ "/";
-                getMethod(api2, function(managerData) {
-                    var managerInfo = JSON.parse(managerData);
-                    // assign username to select dropdown list
-                    createOption(managerSelect, managerInfo.username, managerInfo.email, managerInfo.photo, site_no, managerName);
-                });
-            }
-        });
-    }
 }
 
 function change_info(name, src_a, src_b) {
@@ -2892,7 +2984,7 @@ function createOption(selectDom, username, email, photo,site_no, managerName) {
     option.text = username;
     option.value = email;
     option.style.fontSize = "14px";
-    console.log("username :"+username+" = managerName :"+managerName);
+    alert("selectDom:"+selectDom+" username :"+username+" = managerName :"+managerName);
     console.log("site_no :"+site_no);
     if(site_no != "0")
     {   if(username == managerName)

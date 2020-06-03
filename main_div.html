@@ -16,6 +16,13 @@
                 <p class="font_regular" onclick="alertfun();" title="Springgo Test Mode">스프링고 테스트모드 </p>
                 <p class="font_regular" onclick="alertfun();" title="Data center">데이터센터</p>
             </div>
+            <div id="screenToggleDiv">
+                <p>전체화면 모드</p>
+                <label class="switch">
+                    <input type="checkbox" id="switchButton" onchange="toggledSwitch()">
+                    <span class="slider round"></span>
+                  </label>
+            </div>
             <div class="tab_elements date_time_div">
                 <!--Current date time-->
                 <div class="divStyle1">
@@ -94,8 +101,7 @@
         </div>
     </div>
 
-
-    
+   
 <script>
     changeTabButtonColor();
     setDateTime(); // Update dateTime

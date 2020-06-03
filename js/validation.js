@@ -63,7 +63,7 @@ function backArrow(id) {
 function findid_validation(button_id) {
     var input_name_error = document.getElementById('input_name_error');
     var input_email_error = document.getElementById('input_email_error');
-
+s
     input_name_error.innerHTML = "";
     input_email_error.innerHTML = "";
 
@@ -111,20 +111,6 @@ function sendEmailAPI(postdata) {
             alert("Email not found");
         console.log("Send password on email status: " + status_code);
     });
-}
-
-function siteMsgSend() {
-    // Send message to manager of the site. 
-    // Get email from session variable.
-    document.getElementById('messageModal').style.display = "block";
-
-    // get the site number and selected manager from the select box. 
-    var t = document.getElementById("select_site");
-    t.selectedIndex = -1; 
-    t.selectedIndex = 2; 
-    var e = document.getElementById("manager_selectlist");
-    var strUser = e.options[e.selectedIndex].innerHTML;
-    selectSite('all','2',strUser);
 }
 
 // send email on given email id
@@ -404,6 +390,26 @@ function saveID_localstorage() {
 window.onload = function () {
     var input_id = document.getElementById("input_id");
     if (input_id != null) {
-         input_id.value = localStorage.getItem("localStorage_inputId");
+        input_id.value = localStorage.getItem("localStorage_inputId");
+        //alert("radio checked");
+       // document.getElementById('saveId_checkbox').checked = true;
     }
 }
+/*
+window.onload = function () {
+    var input_id = document.getElementById("input_id");
+    var localStorage_inputId = localStorage.getItem("localStorage_inputId");
+    if (localStorage_inputId != null) {
+        input_id.value = localStorage_inputId;
+
+        alert("localStorage_inputId :"+localStorage_inputId);
+        if(input_id.value != localStorage_inputId )
+            document.getElementById('saveId_checkbox').checked = false;
+        else
+            document.getElementById('saveId_checkbox').checked = true;
+    }
+    else{
+        document.getElementById('saveId_checkbox').checked = false;
+    }
+}
+*/

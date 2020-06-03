@@ -9,11 +9,6 @@
     <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script> 
 
-    <!--javascript function files-->
-    <script src="js/map_function.js"></script>
-    <script src="js/validation.js"></script>
-    <script src="js/web_socket.js"></script>
-    <script src="js/event.js"></script>
    <!-- <pre id="api-response"></pre>-->
     
     <!--open weather map API-->
@@ -59,7 +54,7 @@
     <link rel="stylesheet" href="Chart.js/Chart.css">
     <link rel="stylesheet" href="Chart.js/Chart.min.css">
 
-    <!--Bootstrap-->
+      <!--Bootstrap-->
     <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -93,9 +88,15 @@
     
     <!--font awesome icon--> <!--currently cpmments but id css is broken : uncomment this-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!--javascript function files-->
+  <script src="js/map_function.js"></script>
+  <script src="js/validation.js"></script>
+  <script src="js/web_socket.js"></script>
+  <script src="js/event.js"></script>
 </head>
 
 <body class="standardRatio bodyMargin">
+
     <!-- Notice Modal -->
     <div id="noticeModal" class="message_div">
         <div class="message-content">
@@ -111,7 +112,7 @@
                         <option value= "6">스프링고 테스트모드</option>
                         <option value= "7">데이터센터</option>
                     </select>
-                    <span onclick="hide_div('noticeModal');" style="font-size:40px;float: right;    margin-right: 15px;
+                    <span onclick="hide_div('noticeModal');" style="font-size:40px;float: right;margin-right: 15px; cursor: pointer;
                     margin-top: 5px; ">&times;</span>
                    <!--<img class="noticeImg" style="display: inline-block;" src="images/closing_button.svg" onclick="hide_div('noticeModal');">--> 
                 </div>
@@ -132,7 +133,7 @@
             </div>
             <div class="message-body2">
                 <div class="msgDiv2" >
-                    <select id="select_site" onchange="selectSite(this,'0','0');">
+                    <select id="select_site" onchange="selectSite(this,'0','0');" class="select2">
                         <option id="0" selected="selected">전체</option>
                         <option id="1">군산</option>
                         <option id="2">대구</option>
@@ -140,7 +141,7 @@
                         <option id="4">상암</option>
                         <option id=" ">강릉</option>
                     </select>
-                    <select id="select_siteManager" onchange="/*selectSite(this,'0','0')*/">전체</select>
+                    <select id="select_siteManager" onchange="/*selectSite(this,'0','0')*/" class="select2">전체</select>
                 </div>
                 <textarea id="msgArea" class="textArea" rows="10" cols="30" name="contents" onkeyup="fnChkByte(this,'200')"></textarea>
             </div>
@@ -188,10 +189,59 @@
     <div id="includedContent"></div>
     <!--main div here-->
 
+    <!--Setings button (Active user information)settingModal-->
+    <div id="settingDialog">
+    <div class="settingDiv" id="settingDiv">
+        <div class="settingTitle">
+            <p>환경설정</p>
+            <img src="images/closing_button.svg" onclick="hide_div('settingDiv');"/>
+        </div>
+        <div class="settingDiv1">
+            <button onclick="settings();">로그인 정보</button>
+            <button onclick="passwordChange2();">비밀번호 변경</button>
+        </div>
+        <div class="settingDiv2" id="settingDiv2">
+            <label class="settingDiv_label">이메일 ID</label>
+            <span class="settingDiv_span" id="activeEmail"></span>
+            <label class="settingDiv_label">이름</label>
+            <span class="settingDiv_span" id="activeName"></span>
+            <label class="settingDiv_label">팀</label>
+            <span class="settingDiv_span" id="activeTeam"></span>
+            <label class="settingDiv_label">휴대폰</label>
+            <span class="settingDiv_span" id="activePhone"></span>
+            <label class="settingDiv_label">권한</label>
+            <span class="settingDiv_span" id="activeLevel"></span>
+        </div>
+        <div class="settingDiv3" id="settingDiv3">
+            <span><img src="images/userIcon.svg" id="activeUserImg"></span>
+            <button style="cursor:pointer">사진 변경하기</button>
+        </div>
+        <!--Update password window-->
+        <div class="settingDiv21" id="settingDiv21">
+            <label class="settingDiv_label">현재 비밀번호</label>
+            <input class="settingDiv_span" id="currentPwd" type="password" disabled/>
+            <label class="settingDiv_label">새 비밀번호</label>
+            <input class="settingDiv_span" id="newPwd" type="password" placeholder="새로운 비밀번호를 입력하세요."/>
+            <label class="settingDiv_label">새 비밀번호 확인</label>
+            <input class="settingDiv_span" id="confirmPwd" type="password" placeholder="새로운 비밀번호를 다시 입력하세요." />
+            <span class="error" id="pwdResetError"></span>
+            <div>
+                <span class="settingNotice">※ 비밀번호에 이메일ID, 이름을 포함할 수 없습니다.</span>
+                <span class="settingNotice">※ 비밀번호는 8글자 이상이어야 합니다.</span>
+                <span class="settingNotice">※ 비밀번호는 숫자로만 입력은 불가능합니다. </span>
+            </div>
+        </div>
+        <div class="settingDiv31" id="settingDiv31">
+            <button onclick="resetPassword()" style="cursor: pointer;">변경하기</button>
+        </div>
+    </div>
+</div>
+
+
     <div class="map_zindex">
         <div id="hide_test" class="round_button">
-            <button onclick="" id="unknown_button">전체운행노선</button>
-            <button onclick="switchMap(this)" id="degu_button">대구</button>
+            <button onclick="switchMap(this);" id="main_site_button">전체운행노선</button>
+            <button onclick="switchMap(this);" id="degu_button">대구</button>
             <button onclick="switchMap(this);/*sejongRoute(); open_tab(this.id, 'degu_window',3);*/" id="sejong_button">세종 </button>
             <button onclick="switchMap(this);/*sangamRoute(); open_tab(this.id, 'degu_window',4);*/" id="sangam_button">상암 </button>
             <button onclick="switchMap(this);/*gunsanRoute(); open_tab(this.id, 'degu_window',1);*/" id="gunsan_button">군산 </button>
@@ -406,40 +456,63 @@
     </div>
     <!--</div>-->
     <!--offsite div count of Route, vehicle, station, kiosk and garage-->
-    <div class="div_box" id="countInfoDiv">
-        <div style="margin-top: -95px;">
-            <p id="routeCount" class="p2"></p>
-            <p class="p3">총 운영 노선</p>
+    <div class="div_box" id="countInfoDiv"> <!--class="div_box"-->
+        <img src="images/table_background.svg"/>
+        <p id="routeCount" class="p2" style="left: 65px;"></p>
+        <p id="vehicleCount" class="p2" style="left: 315px;"></p>
+        <p id="StationCount" class="p2" style="left: 540px;"></p>
+        <p id="kioskCount" class="p2" style="left: 780px;"></p>
+        <p id="garageCount" class="p2" style="left: 1030px;"></p>
+    </div>
+
+    <div id="graph_div" >
+
+        <!--Total accumulated data graph-->
+        <div id="graph3_div" class="graphDiv graph3">
+            <div class="graphDivLeft">
+                <p id="graphTitle3" class="graphTitle">총 데이터 용량</p>
+                <p class="p6">Total Accumulated Data</p>
+            </div>
+            <div class="graphDivRight">
+                <p class="p7" id="totalData">0</p>
+                <p class="p8">GB</p>
+            </div>
+            <hr class="hr3">
+            <p class="scaleUnit">km</p>
+            <canvas id="graph3"></canvas>
         </div>
-        <div>
-            <p id="vehicleCount" class="p2"></p>
-            <p class="p3">총 운영 차량 </p>
+
+        <!--Total travel distance graph-->
+        <div id="graph2_div" class="graphDiv graph1">
+            <div class="graphDivLeft">
+                <p id="graphTitle1" class="graphTitle"></p>
+                <p class="p6">Total Operation Distance</p>
+            </div>
+            <div class="graphDivRight">
+                <p class="p7" id="totalDistance">1,234</p>
+                <p class="p8">km</p>
+            </div>
+            <hr class="hr3">
+            <p class="scaleUnit">km</p>
+            <canvas id="graph2"></canvas>
         </div>
-        <div>
-            <p id="StationCount" class="p2"></p>
-            <p class="p3">총 운영 정류장 </p>
-        </div>
-        <div>
-            <p id="kioskCount" class="p2"></p>
-            <p class="p3">총 운영 키오스크</p>
-        </div>
-        <div>
-            <p id="garageCount" class="p2"></p>
-            <p class="p3">총 운영 차고지 </p>
+
+        <!--Total passengers graph-->
+        <div id="graph1_div" class="graphDiv graph2">
+            <div class="graphDivLeft">
+                <p id="graphTitle2" class="graphTitle" ></p>
+                <p class="p6">Total Passenger</p>
+            </div>
+            <div class="graphDivRight">
+                <p class="p7" id="totalPassenger">456</p>
+                <p class="p8">명</p>
+            </div>
+            <hr class="hr3">
+            <p class="scaleUnit">명</p>
+            <canvas id="graph1"></canvas>
         </div>
     </div>
-    <!--Total travel distance graph-->
-    <div id="graph2_div" class="graphDiv graph1">
-        <p id="graphTitle1"></p>
-        <p class="scaleUnit">km</p>
-        <canvas id="graph2"></canvas>
-    </div>
-    <!--Total passengers graph-->
-    <div id="graph1_div" class="graphDiv graph2">
-        <p id="graphTitle2"></p>
-        <p class="scaleUnit">명</p>
-        <canvas id="graph1"></canvas>
-    </div>
+   
     <!-- Webcam div--><!--</div>-->
     <div id="webcam_div" class="webcam_div">
         <div id="webcam_div1" class="webcam_div2">
@@ -488,6 +561,7 @@
         <p id="currentMap" hidden></p>
     </div>
   
+    <p id="currentSiteId" hidden></p>
     <script>
         $(document).ready(function(){
             $("#includedContent").load("main_div.html");
@@ -517,11 +591,11 @@
         }
 
         //Update weather information after every 20 minutes 
-       /* getweather(35.8368,128.6835);
+        getweather(35.8368,128.6835);
         setInterval(function() {
             getweather(35.8368,128.6835);
         }, 60 * 60000);
-        */
+        
     /* Sejong submenu */
     var subMenuModal = document.getElementById("subMenuModal");
     subMenuModal.onclick=function(event)

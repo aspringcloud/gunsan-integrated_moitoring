@@ -16,12 +16,11 @@ function createAlertDiv(eventData)
         selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
 
         id = (JSON.parse(eventData)).door.vehicle_id;
-        vehicleID = "SCN"+(JSON.parse(eventData)).door.vehicle_id;
+        vehicleID = (JSON.parse(eventData)).door.vehicle_mid;
        
         if((JSON.parse(eventData)).door.value == true )
         {
             eventMessage = "Doors are open"; 
-            //console.log("vehicleID :"+vehicleID+" selectedId: "+selectedId);
             if(id == selectedId)
                 document.getElementById("doorStatus").src = "images/door/door_open.svg";
         }
@@ -36,7 +35,7 @@ function createAlertDiv(eventData)
     {
         selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
         id = (JSON.parse(eventData)).drive.vehicle_id;
-        vehicleID = "SCN"+(JSON.parse(eventData)).drive.vehicle_id;
+        vehicleID = (JSON.parse(eventData)).drive.vehicle_mid;
         if((JSON.parse(eventData)).drive.value == true)
         {
             eventMessage = "Drive is Autonomous"; 
@@ -54,14 +53,14 @@ function createAlertDiv(eventData)
     {
         id = (JSON.parse(eventData)).message.vehicle_id;
         selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
-        vehicleID = "SCN"+(JSON.parse(eventData)).message.vehicle_id;
+        vehicleID = (JSON.parse(eventData)).message.vehicle_mid;
         eventMessage = (JSON.parse(eventData)).message.value; 
     }
     else if(dataAttribute == "parking")
     {
         id = (JSON.parse(eventData)).parking.vehicle_id;
         selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
-        vehicleID = "SCN"+(JSON.parse(eventData)).parking.vehicle_id;
+        vehicleID = (JSON.parse(eventData)).parking.vehicle_mid;
       
         if((JSON.parse(eventData)).parking.value == true)
         {
@@ -77,7 +76,7 @@ function createAlertDiv(eventData)
     {
         id = (JSON.parse(eventData)).passenger.vehicle_id;
         selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
-        vehicleID = "SCN"+(JSON.parse(eventData)).passenger.vehicle_id;
+        vehicleID = (JSON.parse(eventData)).passenger.vehicle_mid;
         eventMessage = "Current passengers: "+(JSON.parse(eventData)).passenger.current_passenger; 
         if(id == selectedId)
             passengerStatus((JSON.parse(eventData)).passenger.current_passenger);
@@ -86,7 +85,7 @@ function createAlertDiv(eventData)
     {
         id = (JSON.parse(eventData)).power.vehicle_id;
         selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
-        vehicleID = "SCN"+(JSON.parse(eventData)).power.vehicle_id;
+        vehicleID = (JSON.parse(eventData)).power.vehicle_mid;
         if((JSON.parse(eventData)).power.value == true )
             eventMessage = "Power is ON"; 
         else
