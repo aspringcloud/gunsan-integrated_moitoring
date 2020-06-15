@@ -1,13 +1,23 @@
 <!DOCTYPE html>
 <head>
-    <title>Main</title>
+    <title>통합관제 </title>
     <meta charset="utf-8">
+    <meta name="description" content="Integrated Monitoring System Spring Cloud AUTONOMOUS Shuttle, 통합관제">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!--jquery-->
+    <!--jquery
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
     <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-    <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script> 
+    <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script> -->
+<!--
+    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <script src="jquery-ui-1.12.1/jquery-ui.js"></script> -->
+    <link rel="stylesheet" href="jquery-ui-1.12.1/jquery-ui.css">
+    <!--<script src="jquery-ui-1.12.1/jquery-1.10.2.js"></script>
+    <script src="jquery-ui-1.12.1/jquery.min.js"></script>-->
+   
+
+<!--jquery-ui-1.12.1-->
 
    <!-- <pre id="api-response"></pre>-->
     
@@ -40,6 +50,7 @@
 
     <!-- Leaflet zoom home(default zoom)-->
     <link rel="stylesheet" href="leaflet.zoomhome/dist/leaflet.zoomhome.css" />
+    <!--<script src="leaflet.zoomhome/dist/leaflet.zoomhome.js"></script>-->
     <script src="leaflet.zoomhome/dist/leaflet.zoomhome.min.js"></script>
 
     <!--my css files-->
@@ -54,6 +65,8 @@
     <link rel="stylesheet" href="Chart.js/Chart.css">
     <link rel="stylesheet" href="Chart.js/Chart.min.css">
 
+    <!--<link rel="shortcut icon" href="~/favicon.ico">-->
+
       <!--Bootstrap-->
     <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -67,8 +80,8 @@
     <!--<script src="sumoSelect/jquery.sumoselect.min.js"></script>
     <link href="sumoSelect/sumoselect.css" rel="stylesheet" />-->
 
-    <!-- if local disk chart.js file diesn't work uncomment this-->
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.js"></script>
+    <!-- if local disk chart.js file diesn't work uncomment this
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
@@ -126,7 +139,7 @@
             <div class="message-header2">
                 <div class="msgDiv1">
                     <p class="msgSendP">메시지 보내기 </p>
-                    <span class="msg_close" onclick="hide_div('messageModal')">
+                    <span class="msg_close" onclick="hide_div('messageModal'); $('#msgArea').val('');document.getElementById('messageSendStatus').innerHTML =  '';">
                         <img src="images/closing_button.svg" style="margin-top: 15px;">
                     </span>
                 </div>
@@ -144,16 +157,18 @@
                     <select id="select_siteManager" onchange="/*selectSite(this,'0','0')*/" class="select2">전체</select>
                 </div>
                 <textarea id="msgArea" class="textArea" rows="10" cols="30" name="contents" onkeyup="fnChkByte(this,'200')"></textarea>
+                <p id="messageSendStatus" class="msgStatus"></p>
+                <p class="noto_regular msgP2">
+                    <span id="byteInfo">0</span>/200 bytes
+                </p>
             </div>
             <div class="message-footer2">
-                <p class="noto_regular msgP2">
-                    <span id="byteInfo">0</span> / 200bytes
-                </p>
+                
                 <button class="send_button" onclick="sendMail();">보내기</button>
             </div>
         </div>
     </div>
-    <div class="mapPosition" id="offsiteMap"></div>
+    <div class="mapPosition hideMap" id="offsiteMap"></div>
     <div class="mapPosition hideMap" id="deguMap"></div>
     <div class="mapPosition hideMap" id="sejongMap"></div>
     <div class="mapPosition hideMap" id="sangamMap"></div>
@@ -237,6 +252,10 @@
     </div>
 </div>
 
+<!-- ##offsite{
+width : uncheck    
+}-->
+
 
     <div class="map_zindex">
         <div id="hide_test" class="round_button">
@@ -245,7 +264,7 @@
             <button onclick="switchMap(this);/*sejongRoute(); open_tab(this.id, 'degu_window',3);*/" id="sejong_button">세종 </button>
             <button onclick="switchMap(this);/*sangamRoute(); open_tab(this.id, 'degu_window',4);*/" id="sangam_button">상암 </button>
             <button onclick="switchMap(this);/*gunsanRoute(); open_tab(this.id, 'degu_window',1);*/" id="gunsan_button">군산 </button>
-            <button onclick="offsite(); open_tab('offsite_window',0); " id="offsite_button"> 운행 종료<br> 노선</button>
+            <button onclick="switchMap(this);/*offsite(); */open_tab('offsite_window',0);" id="offsite_button"> 운행 종료<br> 노선</button>
         </div>
         <div class="button_window hide_div list_style_blue" id="offsite_window">
             <ul id="offsite_list" class="button_window_ul button_window_hr"></ul>
@@ -273,16 +292,18 @@
             </div>
             <!--Site title and summary-->
             <div id="leftMarginDiv" class="siteDiv1">
-                <p id="site_title" class="siteTitle">TEST</p>
+                <p id="site_title" class="siteTitle"></p>
                 <div class="marginDiv2">
                     <p class="font-weight-bold managerLabel">관리자 </p>
-                    <select id="manager_selectlist" name="manager_selectlist" class="select1"></select>
+                    <div style="width:103px;  position: absolute; top: 50px;">
+                        <select id="manager_selectlist" name="manager_selectlist" class="select1"></select>
+                    </div>
                     <button class="msgButton display_inline_block" onclick="siteMsgSend();">메시지 보내기</button>
                 </div>
                 <div style=" width: 350px; height: 28px;"> 
                     <span class="titleSpan1">
                         <p id="hideP">숨기기</p>
-                        <img id="arrowImg" onclick="siteSummary('info_content');" src="images/openArrow.svg"/>
+                        <img id="arrowImg" onclick="siteSummary('info_content');" src="images/closeArrow.svg"/>
                     </span>
                 </div>
                 <div class="infoDetail" id="info_content">
@@ -291,45 +312,34 @@
                 <!--ETA of vehicle-->
                 <div class="station_table" id="station_table" >
                     <p class="window_p1">정류장</p>
-                    <div class="timeDiv1">
-                        <p>
-                            <span class="timeSpan1">SW 융합 기술 지원센터</span>
-                            <span class ="timeSpan2">STA001</span>
-                        </p>
-                        <p>
-                            <span class="timeSpan1" style="padding-top: 14px;">롯데몰 북편</span>
-                            <span class ="timeSpan2">STA002</span>
-                        </p>
-                        <p>
-                            <span class="timeSpan1" style="padding-top: 13px;">롯데몰 동편</span>
-                            <span class ="timeSpan2">STA003</span>
-                        </p>
-                        <p>
-                            <span class="timeSpan1" style="padding-top: 13px;">광명테크 앞</span>
-                            <span class ="timeSpan2">STA004</span>
-                        </p>
-                    </div>
-                    <ul class="bar">
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    <div class="timeDiv2">
-                        <p style="padding-top: 3px;" id="deguStationA">곧 도착 또는 출발</p>
-                        <p style="padding-top: 30px;" id="deguStationB">0분 후 도착</p>
-                        <p style="padding-top: 31px;" id="deguStationC">0분 후 도착</p>
-                        <p style="padding-top: 31px;" id="deguStationD">0분 후 도착</p>
+                    <div style="margin-left: 44px;">
+                        <div class="timeDiv1" id="stationList" style="display: inline-block;">
+                        
+                        </div>
+                        <div id="station_li" style="width: 20px;
+                        display: inline-block;
+                        position: absolute;">
+                    
+                        <!-- <ul  id="station_ul" class="bar">
+                            
+                            </ul>-->
+                        </div>
+                        <div class="timeDiv2" id="eta_list" >
+                            <!-- <p style="padding-top: 3px;" id="deguStationA">곧 도착 또는 출발</p>
+                            <p style="padding-top: 30px;" id="deguStationB">0분 후 도착</p>
+                            <p style="padding-top: 31px;" id="deguStationC">0분 후 도착</p>
+                            <p style="padding-top: 31px;" id="deguStationD">0분 후 도착</p>-->
+                        </div>
                     </div>
                 </div>
                 <!-- Div for vehicle information-->
-                <hr style="clear: both; border: 0.5px solid #BDBDBD; margin-bottom: 20px;">
+                <hr style="clear: both; border: 0.5px solid #BDBDBD; margin-bottom: 21px;">
                 <!--list of available vehicles on route-->   
                 <!--odd file for route-->  
                 <div>
                     <span class="window_p1">차량</span>
-                    <select class="vehicleList" id="vehicleSelect" onchange="changeVehicleInfo(this);"></select>
-                    <span class="oddButton" onclick="oddFileDownload()"><a id="oddFile" target="_blank" href="" download></a></span>
+                    <select class="vehicleList" id="vehicleSelect" onchange="changeVehicleInfo(this); oddButtonStatus();"></select>
+                    <span class="oddButton"  onclick="oddFileDownload()" id="oddFileSpan"><a id="oddFile" target="_blank" href="" download></a></span>
                 </div>
                 <!--Vehicle info div-->
                 <div class="vehicleDiv1">
@@ -382,13 +392,13 @@
                         <div class="vehicleDiv2">
                             <p class="v_p4">Heading</p> 
                             <div class="directionNorth">N</div>
-                            <div class="eastDiv"><p>E</p></div> 
+                            <div class="eastDiv"><p>W</p></div> 
                             <div id="bigCircle" class="bigCircle">
                                 <div class="dot">
                                     <div class="smallCircle" id="angleDegree"><span id="heading_v1">100</span></div>
                                 </div>
                             </div>
-                            <div class="directionWest"><p>W</p></div>
+                            <div class="directionWest"><p>E</p></div>
                             <div class="directionSouth">S</div>
                         </div>
                         <!--battery status-->
@@ -432,11 +442,7 @@
             <div class="managerInfo2">
                 <p class="numberP2">사고접수</p><p class="display_inline_block">013-3366-5656</p>
             </div>-->
-
-    
-
-         
-            <br>
+             <br>
             <br>
         </div>
           <!--hidden elements for camera-->
@@ -444,16 +450,30 @@
           <img id="cameraButton2" onclick="webcam('2');" src = "images/cctv/video2.svg" hidden/>
     </div>
 
-        
+
     <div class = "contactModal" id="contactDiv">
         <div class="contactDiv1">
             <div>
                 <p>Emergency Contact</p>
-                <img class="contactImg1" src = "images/closing_button.svg"/>
+                <img class="contactImg1" src = "images/closing_button.svg" onclick="hide_div('contactDiv')"/>
             </div>
-            <img class="contactImg2" src="images/emergency_contact/sejong.svg">
+            <img class="contactImg2" id="emergency_contactImg" alt="Emergency contact" src="">
         </div>
     </div>
+
+    <!--<div id="contactDiv" class="message_div">
+        <div class="message-content">
+            <div class="message-header">
+                <div class="noticeDiv2" style="display: inline-block;"><p class="noticeP1">공지사항 : </p></div>
+                    <span onclick="hide_div('noticeModal');" style="font-size:40px;float: right;margin-right: 15px; cursor: pointer;
+                    margin-top: 5px; ">&times;</span>
+                </div>
+            <div class="notice-body" id="noticeBody"> </div>
+        </div>
+    </div>
+-->
+
+
     <!--</div>-->
     <!--offsite div count of Route, vehicle, station, kiosk and garage-->
     <div class="div_box" id="countInfoDiv"> <!--class="div_box"-->
@@ -478,7 +498,7 @@
                 <p class="p8">GB</p>
             </div>
             <hr class="hr3">
-            <p class="scaleUnit">km</p>
+            <p class="scaleUnit">GB</p>
             <canvas id="graph3"></canvas>
         </div>
 
@@ -538,7 +558,7 @@
     </div>
     <!-- The Modal -->
     <div id="myModal" class="modal">
-        <span class="close2">&times;</span>
+        <span class="close2" onclick="stopVideoStreaming();">&times;</span>
         <div class="modal-content" id="img01"> 
             <div class="buttonDiv">
                 <!--<img id="pausePlayButton3" src="images/cctv/pause.svg" onclick="playPause('img01', 'pausePlayButton3')"/>-->
@@ -562,7 +582,9 @@
     </div>
   
     <p id="currentSiteId" hidden></p>
+
     <script>
+
         $(document).ready(function(){
             $("#includedContent").load("main_div.html");
         });
@@ -574,7 +596,8 @@
             document.getElementById("myModal").style.display = "none";
         }
 
-        showCluster(); // show cluster data on map
+        $("#main_site_button").click();
+        // showCluster(cluster_map); // show cluster data on map
         showSummary(); // show count of site summary
         //setDateTime(); // Update dateTime
       
@@ -591,10 +614,10 @@
         }
 
         //Update weather information after every 20 minutes 
-        getweather(35.8368,128.6835);
+      /*  getweather(35.8368,128.6835);
         setInterval(function() {
             getweather(35.8368,128.6835);
-        }, 60 * 60000);
+        }, 60 * 60000);*/
         
     /* Sejong submenu */
     var subMenuModal = document.getElementById("subMenuModal");
@@ -616,13 +639,18 @@
             }
         }
 
-        /* Close emergency contact image */
-        if(document.getElementById("contactDiv").style.display == "block")
-        { 
-            if (event.target.id != "contact_button") {
-                $("#contactDiv").hide();
+        $(document).click(function(event) {
+
+         /*   if(event.target.id != "contact_button")
+                document.getElementById("contactDiv").style.display = "block" */
+            
+            //if you click on anything except the modal itself or the "open modal" link, close the modal
+            if(document.getElementById("contactDiv").style.display == "block")
+            {
+                if(event.target.id == "contactDiv") 
+                    $("#contactDiv").hide();
             }
-        }
+        });
     }
     </script>
 </body>

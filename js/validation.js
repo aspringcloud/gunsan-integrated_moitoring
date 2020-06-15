@@ -34,13 +34,11 @@ function login_validation() {
             // store map id for toggle
             window.location.href = "main.html";
         }
-        else if (request.status == 400)
-            credential_error.innerHTML = "Email-id or password is wrong";
-        else if (request.status == 401)
-            alert("Authentication credentials were not provided");
-        else if (request.status == 404) 
-            alert("User record not found");
-        console.log("Login status: " + request.status);
+        else 
+        {
+            credential_error.innerHTML = "일치하는 사용자가 없습니다. <br> 이메일 또는 비밀번호를 확인해 주세요.";
+        }
+        console.log("Login status: " +request.status);
     });
 }
 
@@ -63,7 +61,7 @@ function backArrow(id) {
 function findid_validation(button_id) {
     var input_name_error = document.getElementById('input_name_error');
     var input_email_error = document.getElementById('input_email_error');
-s
+
     input_name_error.innerHTML = "";
     input_email_error.innerHTML = "";
 
@@ -91,10 +89,11 @@ s
             document.getElementById('FindId_div1').style.display = 'none';
             document.getElementById('FindId_div2').style.display = 'block';
             document.getElementById('page2').id = "page3";
-        } else if (status_code == 401)
-            alert("Authentication credentials were not provided");
-        else if (status_code == 404)
-            alert("User record not found");
+        } 
+        else 
+        {
+            input_email_error.innerHTML = " 일치하는 사용자가 없습니다. <br> 이메일 또는 비밀번호를 확인해 주세요.";
+        }
         console.log("Login status: " + status_code);
     });
     return false;
@@ -104,11 +103,15 @@ function sendEmailAPI(postdata) {
     var api_url = "http://115.93.143.2:9103/api/users/sendmessage/";
     postMethod(postdata, api_url, function (status_code) {
         if (status_code == 200)
-            alert("Email send successful");
-        else if (status_code == 401)
-            alert("Authentication credentials were not provided");
-        else if (status_code == 404)
-            alert("Email not found");
+        {
+            document.getElementById('messageSendStatus').innerHTML = "메시지를 보냈습니다.";
+            document.getElementById('messageSendStatus').style.color = "#2E92B0";
+        }
+        else 
+        {
+            document.getElementById('messageSendStatus').innerHTML = "메시지를 보낼 수 없습니다. 관리자에게 문의 바랍니다.";
+            document.getElementById('messageSendStatus').style.color = "#EB5757";
+        }
         console.log("Send password on email status: " + status_code);
     });
 }
@@ -160,14 +163,6 @@ function authenticateUser(username, password)
     // Base64 Encoding -> btoa
     var base64Credentials = "Basic " + btoa(username + ":" + password);
     return base64Credentials;
-}
-
-/* Check if old and new password is same */
-function check_password() {
-    if (document.getElementById('input_new_pwd').value == document.getElementById('input_repeat_pwd').value)
-        alert("Password validated")
-    else
-        alert("Not same");
 }
 
 /* Registration page: browse image_file and crop it using cropper.js*/
@@ -235,79 +230,6 @@ function inputEmailCheck(email_id, error_p_dom, error_msg) {
         error_p_dom.innerHTML = error_msg;
         return false;
     }
-    return true;
-}
-
-/* Validation for registeration page */
-function register_validation() {
-    var level_error = document.getElementById('level_error');
-    var signup_id_error = document.getElementById('signup_id_error');
-    var team_error = document.getElementById('team_error');
-    var signup_name_error = document.getElementById('signup_name_error');
-    var signup_phone_error = document.getElementById('signup_phone_error');
-    var signup_affiliation_error = document.getElementById('signup_affiliation_error');
-
-    signup_id_error.innerHTML = "";
-    signup_phone_error.innerHTML = "";
-    signup_name_error.innerHTML = "";
-    signup_affiliation_error.innerHTML = "";
-
-    var input_level = $("#select_level").val();
-    var input_email = $("#signup_id").val();
-    var input_team = $("#sel_team").val();
-    var input_phone = $("#signup_phone").val();
-    var input_username = $("#signup_name").val();
-    var input_affiliate = $("#signup_affiliation").val();
-
-    if (!inputLengthCheck(input_level, level_error, '등급지정 선택하세요'))
-        return false;
-    else
-        level_error.innerHTML = "";
-
-    if (!inputLengthCheck(input_email, signup_id_error, 'E-mail을 다시 확인 해 주세요.'))
-        return false;
-
-    if (!inputLengthCheck(input_team, team_error, '선택하세요'))
-        return false;
-    else
-        team_error.innerHTML = "";
-
-    if (input_team != "직접입력")
-        input_email = input_email + "@" + input_team;
-    if (!inputEmailCheck(input_email, signup_id_error, 'E-mail을 다시 확인 해 주세요.'))
-        return false;
-    if (!inputLengthCheck(input_phone, signup_phone_error, '전화번호를 다시 확인 해 주세요.'))
-        return false;
-    if (!inputMobileCheck(input_phone, signup_phone_error, '전화번호를 다시 확인 해 주세요.'))
-        return false;
-    if (!inputLengthCheck(input_username, signup_name_error, '이름을 다시 확인 해 주세요.'))
-        return false;
-    if (!inputLengthCheck(input_affiliate, signup_affiliation_error, '소속을 다시 확인 해 주세요.'))
-        return false;
-
-    var file = document.getElementById("imageUpload").files[0];
-    var data = JSON.stringify({
-        "username": input_username,
-        "email": input_email,
-        "affiliate": input_affiliate,
-        "phone": input_phone,
-        "level": Number(input_level.substr(input_level.length - 1)),
-    });
-
-    var api_url = "http://115.93.143.2:9103/api/users/"
-    postMethod(data, api_url, function (status_code) {
-        if (status_code == 200 || status_code == 201 || status_code == 400) {
-            getMethod(api_url, function (user_data) {
-                show_userList(user_data);
-                document.getElementById('registration_div').style.display = "none";
-                document.getElementById('userlist_table_div').style.display = "block";
-            });
-        } else if (status_code == 401)
-            alert("Authentication credentials were not provided");
-        else if (status_code == 404)
-            alert("Email not found");
-        console.log("Register user status(POST): " + status_code);
-    });
     return true;
 }
 
@@ -391,8 +313,6 @@ window.onload = function () {
     var input_id = document.getElementById("input_id");
     if (input_id != null) {
         input_id.value = localStorage.getItem("localStorage_inputId");
-        //alert("radio checked");
-       // document.getElementById('saveId_checkbox').checked = true;
     }
 }
 /*

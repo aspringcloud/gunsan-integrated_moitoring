@@ -14,57 +14,120 @@ var sejong_map;
 var sangam_map;
 var sejong_map2;
 var gunsan_map;
+var cluster_map ;
 
 var deguClickCount = 0;
 var sejong1ClickCount = 0;
 var sejong2ClickCount = 0;
 var gunsanClickCount = 0;
 var sangamClickCount = 0;
+var clusterMapCount = 0;
+
+var zoomHome_main;
+
+function activeButton(element)
+{
+    var buttonList = ["main_site_button", "degu_button", "sejong_button", "sangam_button", "gunsan_button", "offsite_button"];
+    for(var i = 0; i < buttonList.length; i++)
+    {
+        if(buttonList[i] == element.id)
+        {
+            element.style.backgroundColor = "#ffffff";
+            element.style.color = "#185786";
+        }
+        else
+        {                           
+            document.getElementById(buttonList[i]).style.backgroundColor = "#0893BF";
+            document.getElementById(buttonList[i]).style.color = "#ffffff";
+        }
+    }
+}
 
 function switchMap(obj)
-{    
+{        
+    activeButton(obj);
+    //document.getElementById(obj.id).style.backgroundColor = "#ffffff";
+    //document.getElementById(obj.id).style.color = "#185786";
+
     if(obj.id == "degu_button")
     {  
         deguClickCount++;
         if(daegu_map == undefined)
         {
             daegu_map = L.map('deguMap',{
-                zoom : 17,
+                 zoom : 17,
                 center:[35.83731,128.68384],
                 zoomControl: false,
             });
         }
-
+         
         for(var i = 0 ; i < mapList.length; i++)
             hide_div(mapList[i]);
 
-        // alert("daegu_map instance:"+daegu_map);
-
-        show_div("deguMap");
         mapList.push("deguMap");
         document.getElementById('webcam_div1').style.display = "inline-block";
         document.getElementById('webcam_div2').style.display = "inline-block";
-        deguRoute(daegu_map); 
+        hideMaps('deguMap');
+        showSite(daegu_map, 2, deguClickCount); 
         show_div("alertDiv");
         document.getElementById('currentSiteId').innerHTML="2";
     }
     
-    else if(obj.id == "main_site_button" )
+    else if(obj.id == "main_site_button")
     {   
-        hide_div("offsite_window");
+        clusterMapCount++;
+        var elementsToHide = ["offsite_window", "webcam_div", "webcam_div1", "webcam_div2",  "distanceChart1", "passangerChart2"];
+        hideElements(elementsToHide);
+        hideMaps('offsiteMap');
+
+       //hide_div("offsite_window");
         show_div("graph_div");
+        show_div("countInfoDiv");
+        //show_div("subMenuModal");
+        //show_div("sejongSubmenu");
+  
+        //var elementsToShow = ["webcam_div", "degu_window"];
+        //showElements(elementsToShow);
+
+        // create offsite map
+        var leftCenter = [35.951,133.066];
+        if(cluster_map == undefined)
+        {            
+            cluster_map = L.map('offsiteMap', {
+                zoomSnap: 0.15,      
+                dragging: true, //false
+                draggable:true,
+                scrollWheelZoom: true, //false
+                color: "rgba(8, 148, 19)",
+                zoomControl: false,
+                zoom:7,
+                center:leftCenter
+            });
+            zoomHome_main = L.Control.zoomHome();
+            zoomHome_main.addTo(cluster_map);   
+        }
+        else
+        {
+            cluster_map.panTo(leftCenter);
+            cluster_map.setView(leftCenter);
+          //  cluster_map.setView([35.902, 128.013], 7)
+            zoomHome_main.setHomeCoordinates([35.951,133.066], 7);
+        }
         
-        show_div("subMenuModal");
-        show_div("sejongSubmenu");
+        //cluster_map.panTo(leftCenter);
+        show_div("graph_div");
+        // show_div("graph2_div");
+        show_div("countInfoDiv");
+        showCluster(cluster_map);
         document.getElementById('currentSiteId').innerHTML="0";
     }
 
     else if(obj.id == "sejong_button" )
     {   
         show_div("subMenuModal");
-        show_div("sejongSubmenu");
-        document.getElementById('currentSiteId').innerHTML="3";
+        show_div("sejongSubmenu");       
     }
+
     else if(obj.id == "sejong_button1")
     {       
         sejong1ClickCount++;
@@ -75,10 +138,13 @@ function switchMap(obj)
                 center:[36.499951, 127.270606],
                 zoomControl: false,
             });
+   
         }
 
         if(daegu_interval != null)
             clearInterval(daegu_interval);
+
+        hideMaps('sejongMap'); 
 
         //show_div("subMenuModal");    
         show_div("sejongSubmenu");
@@ -88,41 +154,57 @@ function switchMap(obj)
         show_div("sejongMap");
         mapList.push("sejongMap");
         hide_div('countInfoDiv');
-        hide_div('webcam_div1');
-        hide_div('webcam_div2');
-        sejongRoute(); 
+       // var elementsToHide = [ "webcam_div1", "webcam_div2", "webcam_div"];
+       // hideElements(elementsToHide);
+       // show_div("webcam_div");
+       // show_div('webcam_div1');
+        //show_div('webcam_div2');
+        showSite(sejong_map, 3, sejong1ClickCount); 
+        //sejongRoute(); 
+        open_tab('degu_window',3);
         show_div("alertDiv");
-        document.getElementById('currentSiteId').innerHTML="3.1";
+        document.getElementById('currentSiteId').innerHTML="3";
     }
     else if(obj.id == "sejong_button2")
     {       
+        sejong2ClickCount++;
         if(daegu_interval != null)
             clearInterval(daegu_interval);
 
         if(sejong_map2 == undefined)
         {
             sejong_map2 = L.map('sejongMap2',{
-                zoom : 1,
-                center:[36.499951, 127.270606],
+                zoom : 14,
+                center:[36.492,125.793],
                 zoomControl: false,
             });
         }    
 
         show_div("sejongSubmenu");
-
+        hideMaps('sejongMap2'); 
         for(var i = 0; i < mapList.length; i++)
             hide_div(mapList[i]);
-        show_div("sejongMap2");
+        // show_div("sejongMap2");
         mapList.push("sejongMap2");
-        hide_div('webcam_div1');
-        hide_div('webcam_div2');
+       // var elementsToHide = [ "webcam_div1", "webcam_div2", "webcam_div"];     
+        //hideElements(elementsToHide);
+       
+        //hide_div('webcam_div2');
         hide_div('countInfoDiv');
-        sejongRoute2(); 
+        //sejongRoute2(); 
+        showSite(sejong_map2, 18, sejong2ClickCount); 
+        open_tab('degu_window',18);
         show_div("alertDiv");
-        document.getElementById('currentSiteId').innerHTML="3.2";
+        document.getElementById('currentSiteId').innerHTML="18";
     }
     else if(obj.id == "sangam_button")
     {
+        console.log("sangam button is clicked");
+        sangamClickCount++;
+        if(daegu_interval != null)
+            clearInterval(daegu_interval);
+
+        console.log("sangam_map :"+sangam_map);
         if(sangam_map == undefined)
         {
             sangam_map = L.map('sangamMap',{
@@ -131,25 +213,27 @@ function switchMap(obj)
                 zoomControl: false,
             });
         }
-           // var map_center = [37.579333, 126.889036];
-         //   var sangam_map = createMap(map_center, 16, sangam_map,'sangamMap');
-
-        if(daegu_interval != null)
-            clearInterval(daegu_interval);
+    
+       
+        //alert(document.getElementById("sangamMap").style.display);
+        //show_div("sangamMap");
         for(var i = 0; i < mapList.length; i++)
+        {
             hide_div(mapList[i]);
-        show_div("sangamMap");
+            //alert("hide:"+mapList[i]);
+        }        
+        
         mapList.push("sangamMap");
-        hide_div('webcam_div1');
-        hide_div('webcam_div2');
+        hideMaps("sangamMap");
         hide_div('countInfoDiv');
-        sangamRoute(); 
+        showSite(sangam_map, 4, sangamClickCount); 
         open_tab('degu_window',4);
         show_div("alertDiv");
-        document.getElementById('currentSiteId').innerHTML="4";
+        document.getElementById('currentSiteId').innerHTML = "4";
     }
     else if(obj.id == "gunsan_button")
     {
+        gunsanClickCount++;
         if(daegu_interval != null)
             clearInterval(daegu_interval);
 
@@ -164,36 +248,213 @@ function switchMap(obj)
 
         for(var i = 0; i < mapList.length; i++)
             hide_div(mapList[i]);
-        show_div("gunsanMap");
+        hideMaps("gunsanMap");
         mapList.push("gunsanMap");
-        hide_div('webcam_div1');
-        hide_div('webcam_div2');
+        //var elementsToHide = [ "webcam_div1", "webcam_div2", "webcam_div"];     
+       // hideElements(elementsToHide);
+   
         hide_div('countInfoDiv');
-        gunsanRoute(); 
+        //gunsanRoute(1); 
+        showSite(gunsan_map, 1, gunsanClickCount); 
         open_tab('degu_window',1);
         show_div("alertDiv");
         document.getElementById('currentSiteId').innerHTML="1";
+    }
+    else if(obj.id == "offsite_button")
+    {
+        clusterMapCount++;
+        // create offsite map
+        var rightCenter = [35.902, 128.013];
+        if(cluster_map == undefined)
+        {
+            cluster_map = L.map('offsiteMap', {
+                zoomSnap: 0.15,      
+                dragging: true, //false
+                draggable:true,
+                scrollWheelZoom: true, //false
+                color:"rgba(8, 148, 19)",
+                zoomControl: false,
+                zoom:7,
+                center:rightCenter
+            });
+        }
+       
+        cluster_map.setView([35.902, 128.013], 7)
+        zoomHome_main.setHomeCoordinates([35.902, 128.013]);
+        cluster_map.invalidateSize();
+        var elementsToHide = [ "graph_div", "countInfoDiv", "webcam_div", "webcam_div1", "webcam_div2", "distanceChart1", "passangerChart2"];     
+        hideElements(elementsToHide);
+         
+        mapList.push("offsiteMap"); 
+        hide_div("alertDiv");
+        hideMaps("offsiteMap");
+        hide_div("webcam_div1");
+        hide_div("webcam_div2");
+        hide_div("webcam_div");
+        hide_div("distanceChart1");
+        hide_div("passangerChart2");
+        offsite();
+        showCluster(cluster_map);
+        document.getElementById('currentSiteId').innerHTML = "0";
+    
     }
     else if(obj.id == "gangrung_button") 
     {
         // this will be developed in next version
         mapList.push("gangrungMap");  
+      
     }
 }
 
-// Fullscreen ON/OFf
-/*
-$("switchButton").on('change', function() {
-    if ($(this).is(':checked')) {
-        switchStatus = $(this).is(':checked');
-        //alert(switchStatus);// To verify
+
+var daegu_interval;
+// Daegu monitoring
+function showSite(mapInstance, currentSiteId, clickCount, mapToShow) 
+{
+    //hideMaps(mapToShow);
+    if(interval != null)
+        clearInterval(interval);
+
+    if(daegu_interval != null)
+        clearInterval(daegu_interval);
+        
+    var deguShuttleArray=[]; // stores info of each vehicle in object form on degu route
+    
+    // clear events div
+    document.getElementById("eventsDiv").innerHTML = ''; 
+    
+    var elementsToHide = ["graph_div", "countInfoDiv", "listItem", "offsite_window"];
+    var elementsToShow = ["webcam_div", "degu_window"];
+
+    hideElements(elementsToHide);
+    showElements(elementsToShow);
+    open_tab('degu_window',currentSiteId);
+         
+    if(clickCount <= 1)
+    {   
+        //var start2 = Date.now();
+        mapInstance = createMap( mapInstance);
+        // show stations, kiosk, garage, V2X on degu route.
+        showRouteInfo(mapInstance, "stations/", "route/station_kiosk.svg", currentSiteId);
+        //alert("stationArray");
+        showRouteInfo(mapInstance, "garages/", "route/garageIcon.svg", currentSiteId);
+        showDataCenter(mapInstance, currentSiteId);
+        show_v2x(mapInstance, "v2x/", currentSiteId);
+        //var responseTime2 = Date.now()-start2;
+       // console.log("Response 2 time seconds:"+((responseTime2 % 60000) / 1000).toFixed(0)+" seconds");
     }
-    else {
-       switchStatus = $(this).is(':checked');
-      // alert(switchStatus);// To verify
+   
+    // Show All the shuttles on degu route
+    var reqCount = 0;
+    var firstId; 
+    var vehicleObj=[];
+
+    // var beginTime = System.currentTimeMillis();
+    var start = Date.now();
+    //console.log("start time :"+Math.floor(start / 1000)+" Milli seconds");
+    // console.log("Begin time Vehicle API :"+System.currentTimeMillis());
+    // get all vehicle Id's.
+    getMethod("vehicles/", function (data) {
+       var responseTime = Date.now()-start;
+        //console.log("Response Time milliseconds :"+responseTime);
+        console.log("Response time seconds:"+((responseTime % 60000) / 1000).toFixed(0)+" seconds");
+        var vehicle_data = JSON.parse(data).results;
+        if (vehicle_data == undefined) 
+            vehicle_data = JSON.parse(data);
+        var count = Object.keys(vehicle_data).length;
+
+        // create vehicle obj and store in array
+        for (var i = 0; i < count; i++) {
+            var vehicle = vehicle_data[i];
+            if (vehicle.site == currentSiteId){
+                //console.log("currentSiteId:"+ JSON.stringify(vehicle));
+                deguShuttleArray.push(vehicle.id); // array of vehicle ID 
+                vehicleObj.push(vehicle);
+            }
+        }
+        
+        //create list of vehicles in degu route
+        vehicleObj = vehicleObj.sort((a, b) => (a.id > b.id) ? 1 : -1);
+
+        // show chart.js 
+        showChartData(currentSiteId);
+        if(vehicleObj.length > 0)
+        {
+            daegu_interval = setInterval(function() {
+                reqCount++;
+                shuttleOnRoute(mapInstance, reqCount, currentSiteId); //vehicleObj
+            }, 1000)
+        }
+
+        // create select list of vehicle 
+        createSelectList(vehicleObj);
+
+        if(deguShuttleArray.length >0 )
+        {
+            deguShuttleArray = deguShuttleArray.sort();
+            firstId = deguShuttleArray[0];
+            vehicleInfo(mapInstance, firstId);
+            changeVehicleInfo(firstId);
+            oddButtonStatus();
+        }
+        else
+        {
+            noVehicleInfo();
+        }
+
+        // update ETA
+        updateETA(currentSiteId);
+ 
+        // update status of webcam  
+        document.getElementById("hidden_cam1").style.background= "";
+        document.getElementById("hidden_cam2").style.background= "";
+        document.getElementById("webcam_div1").style.background= "#828282";
+        document.getElementById("webcam_div2").style.background= "#828282";
+        if(document.getElementById("pausePlayButton1").src= "images/cctv/play.svg")
+            document.getElementById("pausePlayButton1").src= "images/cctv/pause.svg";
+        if(document.getElementById("pausePlayButton2").src= "images/cctv/play.svg")
+            document.getElementById("pausePlayButton2").src= "images/cctv/pause.svg";
+
+        webcam('1', vehicleObj);
+        webcam('2', vehicleObj);
+        // get all vehicle Id's.
+        getMethod("sites/"+currentSiteId+"/", function (data) {
+            if(JSON.parse(data).image == null)
+            {
+                document.getElementById('emergency_contactImg').src = '';
+                document.getElementById('contact_button').style.backgroundColor = "#BDBDBD"; 
+                document.getElementById('contact_button').style.border  = "0.5px solid #BDBDBD";
+                document.getElementById('contact_button').style.pointerEvents ="none";
+                document.getElementById('contact_button').style.color = "#FFFFFF";
+            }
+            else
+            {
+                document.getElementById('emergency_contactImg').src = JSON.parse(data).image;
+                /*document.getElementById('contact_button').style.backgroundColor = "#CA4040"; */
+                document.getElementById('contact_button').style.backgroundColor = "#ffffff";
+                document.getElementById('contact_button').style.border  = "0.5px solid #CA4040";
+                document.getElementById('contact_button').style.color = "#CA4040";
+                document.getElementById('contact_button').style.pointerEvents ="auto";
+            }
+        });
+    });
+    show_div("alertDiv");
+
+    // websocket connection
+    openWSConnection();
+}
+
+function launchFullScreen(element) {
+    //alert("launching");
+    if(element.requestFullScreen) {
+      element.requestFullScreen();
+    } else if(element.mozRequestFullScreen) {
+      element.mozRequestFullScreen();
+    } else if(element.webkitRequestFullScreen) {
+      element.webkitRequestFullScreen();
     }
-});
-*/
+  }
+  
 var switchStatus =false;
 function toggledSwitch()
 {
@@ -201,101 +462,76 @@ function toggledSwitch()
         switchStatus =true;
     else
         switchStatus = false;
+    
+    //alert("switchStatus :"+switchStatus);
+      //  fullscreen();
 
     if(switchStatus)
     {
         if (document.documentElement.requestFullscreen) {
-            document.documentElement.requestFullscreen();
+            document.documentElement.requestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
           } else if (document.documentElement.msRequestFullscreen) {
-            document.documentElement.msRequestFullscreen();
+            document.documentElement.msRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
           } else if (document.documentElement.mozRequestFullScreen) {
-            document.documentElement.mozRequestFullScreen();
+            document.documentElement.mozRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
           } else if (document.documentElement.webkitRequestFullscreen) {
             document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
           }
     }   
     else
     {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
+          if (document.exitFullscreen) {
+            document.exitFullscreen(Element.ALLOW_KEYBOARD_INPUT).catch(err => Promise.resolve(console.log(err)));
           } else if (document.msExitFullscreen) {
-            document.msExitFullscreen();
+            document.msExitFullscreen(Element.ALLOW_KEYBOARD_INPUT);
           } else if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen();
+            document.mozCancelFullScreen(Element.ALLOW_KEYBOARD_INPUT);
           } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
+            document.webkitExitFullscreen(Element.ALLOW_KEYBOARD_INPUT);
           }
     } 
-    
-    //var switchStatus =  document.getElementById('switchButton').ischeck//$(this).is(':checked');
-   // alert(switchStatus);
 }
 
-/*
-// detect F11 keypress
+// detect F11 keypress // update switch button on F11 key event
 window.onresize = function (event) {
-    var maxHeight = window.screen.height,
+   var maxHeight = window.screen.height,
         maxWidth = window.screen.width,
         curHeight = window.innerHeight,
         curWidth = window.innerWidth;
 
     if (maxWidth == curWidth && maxHeight == curHeight) {
-        toggledSwitch();
-    }
-}*/
-
-//document.onkeydown = keydown;
-document.onkeypress = keypress;
-function keypress(e) {
-    var fullscreenElement = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement;
-    alert("fullscreenElement :"+document.fullscreenElement);
- /* var evtobj = window.event ? event : e;
-  if(document.fullscreenElement == null)
-  {
-    switchStatus =true;
-  }
-  else
-  {
-    switchStatus = false;
-  }
-
-  $("#switchButton").prop('checked', switchStatus);*/
-  /*if (evtobj.keyCode == 122 )
-  {
-        if(switchStatus == false)
-        {
-            switchStatus =true;
-        }
-        else
-        {
-            switchStatus = false;
-        }
-        //alert(evtobj.keyCode+ " switch:"+switchStatus);
+        switchStatus = true;
         $("#switchButton").prop('checked', switchStatus);
-  }
-    */
+    }
+    else{
+        switchStatus = false;
+        $("#switchButton").prop('checked', switchStatus);
+    }
 }
+
 
 function offsite() {
     // hide all div's from site route
     for(var i = 0; i < mapList.length; i++)
         hide_div(mapList[i]);
     
-    hide_div("listItem");
-    mapList.push("offsiteMap"); 
-    hide_div("alertDiv");
-    hide_div("distanceChart1");
+   // hide_div("listItem");
+   // mapList.push("offsiteMap"); 
+    //hide_div("alertDiv");
+    
+
+   /* hide_div("distanceChart1");
     hide_div("passangerChart2");
-    hide_div("webcam_div");
+    hide_div("webcam_div");*/
 
     // show all div's of offsite
-    show_div("offsiteMap");
-    hide_div("graph_div");
-    hide_div("countInfoDiv");
+   // hideMaps("offsiteMap");
+   // hide_div("graph_div");
+   // hide_div("countInfoDiv");
 
     // change center of map 
-    var map_center = [35.902, 128.013];
-    cluster_map.panTo(new L.LatLng(map_center));
+    //var map_center = [35.902, 128.013];
+    //cluster_map.panTo(map_center);
     
     // create list to show all site info.
     var offsite_list = document.getElementById("offsite_list");
@@ -359,6 +595,7 @@ function showGraphs() {
         //passengerList
         document.getElementById('totalPassenger').innerHTML = Number(passengerList.reduce(function(pv, cv) { return pv + cv; }, 0)).toLocaleString('en');
 
+        highchart('graph3', '총 데이터 용량', '#3bc7d1', 'Data', vehicleList, distanceList, 'GB');
         highchart('graph2', '총 운행거리', '#f1ca3f', 'Distance(km)', vehicleList, passengerList, 'km');
         highchart('graph1', '총 탑승자 수', '#3bc7d1', 'Passenger', vehicleList, distanceList, '명');
     });
@@ -387,67 +624,57 @@ function defaultZoom()
 }
 */
 
-function showCluster() 
+function showCluster(cluster_map)
 {
     // hide data of other sites if open 
-    hide_div("deguMap");
-    hide_div("sejongMap");
-    hide_div("webcam_div");
+    hideMaps('offsiteMap');
     hide_div("alertDiv");
-    
+    hide_div("degu_window");
     // show data for offsite.
     showGraphs();
-    show_div("offsiteMap");
-    show_div("graph_div");
-   // show_div("graph2_div");
-    show_div("countInfoDiv");
-  
     // array to store lat-lon of cluster 
     var addressPoints = []; 
-    // get location of clusters using REST api
-    getMethod("routes/", function (routes_data) {
-        var cluster_data = JSON.parse(routes_data).results;
-        var count = Object.keys(cluster_data).length;
-        for (i = 0; i < count; i++) {
-            if(cluster_data[i].start != '')
-                addressPoints.push(cluster_data[i].start);
-        }
+    if(clusterMapCount <= 1)
+    {
+        // get location of clusters using REST api
+        getMethod("routes/", function (routes_data) {
+            var cluster_data = JSON.parse(routes_data).results;
+            var count = Object.keys(cluster_data).length;
+            for (i = 0; i < count; i++) {
+                if(cluster_data[i].start != '')
+                    addressPoints.push(cluster_data[i].start);
+            }
 
-        // create offsite map(replace create map code width 'createMap' function in future)
-        var map_center = [35.951,133.066];
-        var cluster_map = L.map('offsiteMap', {
-            zoomSnap: 0.15,      
-            dragging: true, //false
-            draggable:true,
-            scrollWheelZoom: true, //false
-            color: "rgba(8, 148, 19)",
-            zoomControl: false,
-            zoom:7,
-            center:map_center
+            // create openstreet tile layer
+            var clusterLayer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            });
+
+            // add layer to map with zoom level
+            clusterLayer.addTo(cluster_map);
+           // var zoomHome = L.Control.zoomHome();
+
+          //  zoomHome.addTo(cluster_map);     
+            
+            // create markers and add it to layer
+            var markers = L.markerClusterGroup();
+            for (var i = 0; i < addressPoints.length; i++) {
+                var location = addressPoints[i];
+                var clusterIcon = L.icon({
+                    iconUrl: "images/singleCluster.svg",
+                }); 
+                var marker = L.marker(new L.LatLng(location[0], location[1]),{
+                    icon : clusterIcon
+                })
+                markers.addLayer(marker);
+            }
+
+            // add layer to the map instance.
+            cluster_map.addLayer(markers);
+            cluster_map.invalidateSize(); // refresh map 
+            //alert("cluster_map :"+cluster_map);
         });
-
-        // create openstreet tile layer
-        var clusterLayer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        });
-
-        // add layer to map with zoom level
-        clusterLayer.addTo(cluster_map);
-        var zoomHome = L.Control.zoomHome();
-        zoomHome.addTo(cluster_map);     
-        
-        // create markers and add it to layer
-        var markers = L.markerClusterGroup();
-        for (var i = 0; i < addressPoints.length; i++) {
-            var location = addressPoints[i];
-            var marker = L.marker(new L.LatLng(location[0], location[1]));
-            markers.addLayer(marker);
-        }
-
-        // add layer to the map instance.
-        cluster_map.addLayer(markers);
-        cluster_map.invalidateSize(); // refresh map 
-    });
+    }
 }
 
 // function to switch between main tabs (different projects)
@@ -501,8 +728,11 @@ function passengerStatus(activePassenger) {
         if((Number(prevCount))-1 == Number(activePassenger))
             return false;
     }
-   // var passivePassenger = 15 - activePassenger;
-    document.getElementById("passengerCount").innerHTML = (activePassenger + 1);
+    // var passivePassenger = 15 - activePassenger;
+    if(activePassenger == null)
+        document.getElementById("passengerCount").innerHTML = 0;
+    else
+        document.getElementById("passengerCount").innerHTML = (activePassenger + 1);
 }
 
 // Get distance between two location using leaflet function
@@ -641,7 +871,7 @@ function vehicleInfo(map, vId)
             var vehicle = JSON.parse(data);
             var shuttleLocation = L.latLng(vehicle.lat, vehicle.lon);
             // calculate ETA after every 15 seconds
-            if(count15 == 16)
+           /* if(count15 == 16)
             {  
                 count15 = 0;             
                 arraivalTime(map, shuttleLocation,speedArray,count15,request_count);
@@ -652,7 +882,7 @@ function vehicleInfo(map, vId)
                 speedArray.push(vehicle.speed);
                 if(request_count==1)
                     arraivalTime(map, shuttleLocation,speedArray,count15, request_count);
-            }
+            }*/
             updateShuttleInfo(vehicle, request_count); 
         });
     }, 1500);
@@ -661,74 +891,119 @@ function vehicleInfo(map, vId)
 
 function updateShuttleInfo(vehicle, request_count)
 { 
-    var frontBG;
-    if(vehicle.isparked == true || vehicle.speed > 0)
-        frontBG = "#57AE66";
-    else
-        frontBG = "#BDBDBD";
+    if(vehicle == null)
+    {
+        vehicleStatus( "NO DATA", "#CA4040");
+        // front
+        document.getElementById("v_front").style.background = "#BDBDBD";
+        // Vehicle name and version     
+        document.getElementById("vehicleID").innerHTML = "NA";
+        document.getElementById("vehicleVersion").innerHTML = "version : NA";
+        updateFrontStaus(null, 0)
+        showVehicleHeading(null);
+        updateDrive(null);
+        updateGnssBgcolor(false);
+        setBatteryPercent(0);
+        passengerStatus(null);    
+        updateDoor(false);
+        setVehicleSpeed(0);
+        return false;
+    }
 
-  
-    if(vehicle.speed > 0) 
+    updateFrontStaus(vehicle.parkingbrake, vehicle.speed );
+    // change driving color
+    if(vehicle.parkingbrake == '1' || vehicle.parkingbrake == null)
+        vehicleStatus("PARKED", "rgb(128,128,128)");
+    else if(vehicle.speed > 0) 
         vehicleStatus( "DRIVING", "#57AE66");
     else
         vehicleStatus( "STOPPED", "#CA4040");
-
-    // front
-    document.getElementById("v_front").style.background = frontBG;
-    
+   
     // Vehicle name and version     
     document.getElementById("vehicleID").innerHTML = vehicle.name;
     document.getElementById("vehicleVersion").innerHTML = "version : "+vehicle.model.firmware;
                         
     // show speed of vehicle
     setVehicleSpeed(vehicle.speed);
-    if(vehicle.heading == null)
-        var heading = 0;
-    else
-        var heading = vehicle.heading;    
-    document.getElementById("heading_v1").innerHTML = heading + "&deg";
-    
-    // rotate heading
-    document.getElementById("bigCircle").style = 'transform:rotate('+vehicle.heading+'deg)';
-    
-    // reverse rotate heading
-    var reverseHeading = -(heading);
-    document.getElementById("angleDegree").style = 'transform: rotate('+reverseHeading+'deg)';
-    var vehicleMid = (vehicle.name).substring(0, 3); // trim first 3 characters
-
-    if (vehicle.gnss == true)
-        document.getElementById("gnss_v1").style.backgroundColor = "#57AE66";
-    else
-        document.getElementById("gnss_v1").style.backgroundColor = "#CA4040";
+    showVehicleHeading(vehicle.heading);
+    // updates background color of gnss
+    updateGnssBgcolor(vehicle.gnss);
 
     if(request_count == 1)
     {
         // show door status ---> this will be updated by web socket    
-        if (vehicle.door == false)
-            document.getElementById("doorStatus").src = "images/door/door_closed.svg";
-        else
-            document.getElementById("doorStatus").src = "images/door/door_open.svg";
-        
+        updateDoor(vehicle.door);
         // Update drive mode of vehicle  
-        if(vehicle.drive_mode == 1)
-            document.getElementById("driveStatus").innerHTML = "AUTONOMOUS";
-        else
-            document.getElementById("driveStatus").innerHTML = "MANUAL";
-
+        updateDrive(vehicle.drive_mode);
         // show passenger status    
         passengerStatus(vehicle.passenger);    
-
         // update parking status fir first time 
-        if(vehicle.isparked == true)
-            vehicleStatus("PARKED", "rgb(128,128,128)");
+        // if(vehicle.isparked == true)
+          //  vehicleStatus("PARKED", "rgb(128,128,128)");
+
+        // oddFile Status update
+      //  oddFileDownload(vehicle.odd);
     }
-    
     // show battery status
     setBatteryPercent(vehicle.battery);
 
+    
     // show webcam
     checkWebcam(vehicle.webcam1, 'cameraButton1', 'video1', 'video1Active');
     checkWebcam(vehicle.webcam2, 'cameraButton2', 'video2', 'video2Active');
+}
+
+function updateFrontStaus(parkingBreak, speed)
+{
+    var frontBG;
+    if(parkingBreak == 0 || speed > 0)
+        frontBG = "#57AE66";
+    else
+        frontBG = "#BDBDBD";
+    document.getElementById("v_front").style.background = frontBG;
+}
+
+function updateGnssBgcolor(gnss_status)
+{
+    if (gnss_status == true)
+        document.getElementById("gnss_v1").style.backgroundColor = "#57AE66";
+    else
+        document.getElementById("gnss_v1").style.backgroundColor = "#CA4040";
+}
+
+function updateDrive(drive_mode)
+{
+    //I considered drive_mode as 1,2 or null
+    if(drive_mode == 1)
+        document.getElementById("driveStatus").innerHTML = "AUTONOMOUS";
+    else if(drive_mode == 2)
+        document.getElementById("driveStatus").innerHTML = "MANUAL";
+    else    
+        document.getElementById("driveStatus").innerHTML = "NO DATA";
+}
+
+function updateDoor(doorStatus)
+{
+    if (doorStatus == false)
+        document.getElementById("doorStatus").src = "images/door/door_closed.svg";
+    else
+        document.getElementById("doorStatus").src = "images/door/door_open.svg";
+}
+
+function showVehicleHeading(headingAngle)
+{
+    if(headingAngle == null)
+        var heading = 0;
+    else
+        var heading = headingAngle;    
+    document.getElementById("heading_v1").innerHTML = heading + "&deg";
+
+    // rotate heading
+    document.getElementById("bigCircle").style = 'transform:rotate('+heading+'deg)';
+
+    // reverse rotate heading
+    var reverseHeading = -(heading);
+    document.getElementById("angleDegree").style = 'transform: rotate('+reverseHeading+'deg)';
 }
 
 // create select box options
@@ -744,22 +1019,6 @@ function createSelectList(objArray)
         selectDom.add(option);
     }
 }
-
-// switch between the vehicle info when select option is changed. 
-/*
-function changeVehicleInfo(map, obj)
-{
-    clearInterval(interval);
-    if(typeof(obj) == 'number')
-    {
-        interval= vehicleInfo(map, obj);
-    }
-    else
-    {
-        var selectedId = obj.options[obj.selectedIndex].id;
-        interval= vehicleInfo(map, selectedId);
-    }
-}*/
 
 function changeVehicleInfo(obj)
 {
@@ -780,6 +1039,10 @@ function changeVehicleInfo(obj)
 
 function createHtmlMarker(vehicleObj, iconHtml)
 {
+   // if(vehicleObj.lat == null )
+       // return false;
+
+    //alert("create html marker :"+vehicleObj.lat+" "+vehicleObj.lon+ "mid : "+vehicleObj.mid);
     var marker = L.marker([vehicleObj.lat, vehicleObj.lon], {
         draggable: false,
         icon: iconHtml,
@@ -799,6 +1062,10 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo){
         {        
             ///console.log("vehicleInfo array"+vehicleInfo[j].name );
             var vehicleObj = vehicleInfo[j];
+
+            if(vehicleObj.lat == null || vehicleObj.lon == null)
+                continue;
+
             // red ripple marker html
             var redIconHtml = '<div id="vehicleRippleDiv" class="shuttle_icon">'+
                                 '<div id="ring1" class="shuttle_ring1"></div>'+
@@ -827,15 +1094,15 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo){
             const greenRippleIcon = L.divIcon({html: greenIconHtml});
             const greyRippleIcon = L.divIcon({html: greyIconHtml});
 
+           // console.log("vehicleObj :"+ JSON.stringify(vehicleObj));
             if (request_count == 1) 
             {
                 // create Icon for ripple marker as per the speed value
-                if(vehicleObj.isparked == true )
+                if(vehicleObj.parkingbrake == "1" || vehicleObj.parkingbrake == null) //vehicleObj.isparked == true |
                 {
                     var marker = createHtmlMarker(vehicleObj, greyRippleIcon);
-                  
                 }
-                else if (vehicleObj.speed > 0 && vehicleObj.isparked == false) // || vehicleObj.drive == true
+                else if (vehicleObj.speed > 0) // || vehicleObj.drive == true // && vehicleObj.isparked == false
                 {
                     var marker = createHtmlMarker(vehicleObj, greenRippleIcon);
                     marker.options.rotationAngle = vehicleObj.heading;                // rotate marker of speed is greater then 0 to avoid abnormal data
@@ -864,8 +1131,19 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo){
                 // Create vehicle marker 
                 vehicleMarker = createHtmlMarker(vehicleObj, vehicleIcon);            
                 vehicleMarker._leaflet_id = vehicleObj.name;
-                if(vehicleObj.speed > 0)                                              // to avoid abnormal data of heading, update heading data only if speed is > 0 
-               
+                //if(vehicleObj.speed > 0)                                              // to avoid abnormal data of heading, update heading data only if speed is > 0 
+
+                /*if (vehicleObj.speed > 0  ) //|| vehicleObj.drive == true
+                {
+                    marker.options.rotationAngle = vehicleObj.heading;
+                    vehicleMarker.options.rotationAngle = vehicleObj.heading;
+                }*/
+
+                 if (vehicleObj.speed > 0) // || vehicleObj.drive == true
+                {
+                    vehicleMarker.options.rotationAngle = vehicleObj.heading;               // rotate marker of speed is greater then 0 to avoid abnormal data
+                }
+                  
                 // create html and append to popup div
                 var customPopup = "";
                 const customOptions = {'className': 'custom-popup2'};
@@ -873,15 +1151,12 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo){
                 vehicleMarker.on('click', function(e) {           
                     // vehicle marker on click function ---> updates vehicle popup data every second 
                     setPopupContent(e, mapInstance);
-                    // Update vehicle info on left window
-                    //updateShuttleInfo(vehicleObj);
-                        //  document.getElementById('vehicleSelect').value = vehicleObj.name;
-                    // changeVehicleInfo(vehicleObj.id);
+             
             });
 
             //if(vehicleObj.speed > 0)
                 //vehicleMarker.options.rotationAngle = vehicleObj.heading;
-
+            //alert("vehicleMarker._leaflet_id :"+vehicleMarker._leaflet_id);
             vehicleMarker.addTo(mapInstance);                                                 // show vehicle icon on route
             var shuttleMarkerObj = {                                                          // store marker in array 
                 marker : vehicleMarker,
@@ -906,11 +1181,11 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo){
 
                     //alert("nbn:"+vehicleObj.isparked);
                     // change speed status in left side window
-                    if (vehicleObj.isparked == true)
+                    if ( vehicleObj.parkingbrake =='1' || vehicleObj.parkingbrake == null ) //vehicleObj.isparked == true ||
                     {
                         currentRipple.setIcon(greyRippleIcon);
                     }
-                    else if (vehicleObj.speed > 0 && vehicleObj.isparked == false ) //|| vehicleObj.drive == true
+                    else if (vehicleObj.speed > 0 ) //|| vehicleObj.drive == true //&& vehicleObj.isparked == false 
                     {                  
                         currentRipple.setIcon(greenRippleIcon);
                         currentRipple.options.rotationAngle = vehicleObj.heading;
@@ -934,6 +1209,12 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo){
 
                     //if(vehicleObj.speed > 0) 
                         //currentVehicle.options.rotationAngle = vehicleObj.heading;
+
+                    if (vehicleObj.speed > 0 ) //|| vehicleObj.drive == true
+                    {   
+                       currentVehicle.options.rotationAngle = vehicleObj.heading;
+                    }
+
                     currentVehicle.addTo(mapInstance);
                                       
                     // If current markers popup is open then set the content of popup
@@ -1058,6 +1339,7 @@ function setPopupContent(e, mapInstance)
             // Update left window vehicle info. when vehicle popup is clicked
             document.getElementById('vehicleSelect').value = shuttleMarkerArray[k].name;  
             vehicleInfo(mapInstance, shuttleMarkerArray[k].markId);
+            oddButtonStatus();
             break;
         }
     }
@@ -1071,7 +1353,7 @@ function vehicleStatus( status, statusBg)
 }
 
 // Show multiple vehicles on route (under development)
-function shuttleOnRoute(mapInstance, reqCount)
+function shuttleOnRoute(mapInstance, reqCount, currentSiteId)
 {
    // console.log("shuttleOnRoute()"+mapInstance);
     var vLocationArray=[];
@@ -1084,7 +1366,7 @@ function shuttleOnRoute(mapInstance, reqCount)
         // create vehicle obj and store in array
         for (var i = 0; i < count; i++) {
             var vehicle = vehicle_data[i];
-            if (vehicle.site == 2){
+            if (vehicle.site == currentSiteId){
                 vLocationArray.push(vehicle); // array of vehicle ID
             }
         }
@@ -1093,124 +1375,10 @@ function shuttleOnRoute(mapInstance, reqCount)
     });
 }
 
-var daegu_interval;
-// Daegu monitoring
-function deguRoute(daegu_map) 
+function noVehicleInfo()
 {
-    //console.log("daegu_map: "+daegu_map);
-    if(interval != null)
-        clearInterval(interval);
-    var deguShuttleArray=[]; // stores info of each vehicle in object form on degu route
-    document.getElementById("degu_button").backgroundColor = "#ffffff";
-    document.getElementById("degu_button").color = "#185786";
-    hide_div("graph_div");
-    //hide_div("graph2_div");
-    hide_div("countInfoDiv");
-    hide_div("listItem");
-    hide_div("offsite_window");
-    show_div("webcam_div");
-    show_div("degu_window");
-    open_tab('degu_window',2);
-    document.getElementById("distanceChart1").style.display = "inline-block";
-    document.getElementById("passangerChart2").style.display = "inline-block";
-
-    // clear hidden cameras 
-    document.getElementById("hidden_cam1").style.background= "";
-    document.getElementById("hidden_cam2").style.background= "";
-    document.getElementById("webcam_div1").style.background= "#828282";
-    document.getElementById("webcam_div2").style.background= "#828282";
-    if(document.getElementById("pausePlayButton1").src= "images/cctv/play.svg")
-        document.getElementById("pausePlayButton1").src= "images/cctv/pause.svg";
-    if(document.getElementById("pausePlayButton2").src= "images/cctv/play.svg")
-        document.getElementById("pausePlayButton2").src= "images/cctv/pause.svg";
- 
-    // daegu map center
-    var map_center = [35.83731,128.68384];
-     
-  
-    // alert( createMap(map_center, 17, daegu_map, 'deguMap'));
-
-    //var container = L.DomUtil.get('deguMap');
-    if(deguClickCount <= 1)
-    {     daegu_map = createMap(map_center, 17, daegu_map, 'deguMap');
-         // show stations, kiosk, garage, V2X on degu route.
-        showRouteInfo(daegu_map, "stations/", "route/station_kiosk.svg", 2);
-        showRouteInfo(daegu_map, "garages/", "route/garageIcon.svg", 2);
-        showDataCenter(daegu_map, 2);
-        show_v2x(daegu_map, "v2x/");
-    }
-   
-    // Show All the shuttles on degu route
-    var reqCount = 0;
-    var firstId; 
-    var vehicleObj=[];
-
-    // get all vehicle Id's.
-    getMethod("vehicles/", function (data) {
-        var vehicle_data = JSON.parse(data).results;
-        if (vehicle_data == undefined) 
-            vehicle_data = JSON.parse(data);
-        var count = Object.keys(vehicle_data).length;
-
-        // create vehicle obj and store in array
-        for (var i = 0; i < count; i++) {
-            var vehicle = vehicle_data[i];
-            //alert("for id:"+vehicle.id)
-            if (vehicle.site == 2){//&& vehicle.name =="SCE999") { 
-                deguShuttleArray.push(vehicle.id); // array of vehicle ID 
-              
-              /*  var vehicle = {
-                    id:vehicle.id,
-                    mid:vehicle.mid,
-                    name: vehicle.name,
-                    speed:vehicle.speed,
-                    lat:vehicle.lat,
-                    lon:vehicle.lon,
-                    heading : vehicle.heading,
-                    battery : vehicle.battery,
-                    drive : vehicle.drive,
-                    webcam1 : vehicle.webcam1,
-                    webcam2 : vehicle.webcam2,
-                    firmware : vehicle.model.firmware,
-                    isparked: vehicle.isparked
-                }*/
-                vehicleObj.push(vehicle);
-            }
-        }
-        
-          //create list of vehicles in degu route
-        vehicleObj = vehicleObj.sort((a, b) => (a.id > b.id) ? 1 : -1);
-
-        //alert("vehicleObj:"+vehicleObj);
-        // create select list of vehicle 
-        createSelectList(vehicleObj);
-
-        // update status of webcam  
-        webcam('1', vehicleObj);
-        webcam('2', vehicleObj);
-
-        // show chart.js 
-        showChartData(2);
-
-        // Call update function every second
-        /*daegu_interval = setInterval(function(){
-            reqCount++;
-            shuttleOnRoute(daegu_map, reqCount); //vehicleObj
-            //console.log("daegu_interval is executing");
-        }, 1000);*/
-
-        daegu_interval = setInterval(function() {
-            reqCount++;
-            //console.log("shuttleOnRoute  setInterval:"+daegu_map+ " reqCount:"+reqCount);
-            shuttleOnRoute(daegu_map, reqCount); //vehicleObj
-          }, 1000)
-
-        deguShuttleArray = deguShuttleArray.sort();
-        firstId = deguShuttleArray[0];
-        vehicleInfo(daegu_map, firstId);
-        changeVehicleInfo(firstId);
-    });
-    show_div("alertDiv");
+    //vehicleInfo(null , null);
+    updateShuttleInfo(null , null);
 }
 
 function degreesToRadians(degrees) {
@@ -1474,6 +1642,9 @@ function ETA(vehicleObj, daegu_map){
 
 /* show chart with todays distance passenger count */
 function showChartData(siteId){
+    document.getElementById("distanceChart1").style.display = "inline-block";
+    document.getElementById("passangerChart2").style.display = "inline-block";
+    
     var nameList = [];
     var distanceList = [];
     var passengerList = [];
@@ -1495,15 +1666,15 @@ function showChartData(siteId){
     postMethod(data, api_url, function (req) {
         if(req.status == 200){  
             var summary = JSON.parse(req.response);
-            var count = Object.keys(summary).length;
+            //var count = Object.keys(summary).length;
             for(var i=0; i<summary.length; i++)
             {                
                 if(summary[i].site.id == siteId)
                 {
                     var totalDistance = summary[i].log.distance;
                     var totalPassenger = summary[i].log.passenger;
-                    var vehicleName = summary[i].site.mid;
-
+                    var vehicleName = summary[i].vehicle.mid;
+              
                     distanceList.push(totalDistance);
                     passengerList.push(totalPassenger);
                     nameList.push(vehicleName);
@@ -1520,10 +1691,10 @@ function showChartData(siteId){
             highchart('todayDistance', '총 운행거리', colorList, 'Distance(km)', nameList, distanceList, 'km');
             highchart('todayPassenger', '총 탑승자 수', colorList, 'Passenger', nameList, passengerList, '명');
          //   todayChart('todayPassenger', '총 탑승자 수', colorList, 'Passenger', nameList, passengerList);
-        } else if (req.status == 401)
+        } /*else if (req.status == 401)
             alert("Authentication credentials were not provided");
         else if (req.status == 404)
-            alert("User record not found");
+            alert("User record not found");*/
         //console.log("chart data status: " +req.status);
     });
 }
@@ -1591,118 +1762,6 @@ function setPopupBattery(percent)
     }
 }
 
-/*
-var prevMarker; // retains value of previous marker
-function showVehicle(request_count, mapInstance, vehicleObj)
-{
-    var popupMarker;
-    var iconUrl = "images/route/shuttleIcon.svg";  
-    var vehicleIcon = L.icon({
-        iconSize: [37, 52],
-        popupAnchor: [10, -25],
-        iconAnchor: [26, 45], //20,40
-        iconUrl: iconUrl,
-    });
-
-    if(request_count <= 1)
-    {        
-        // Create vehicle marker 
-        var vehicleMarker = L.marker([vehicleObj.lat, vehicleObj.lon], {
-            draggable: false,
-            icon: vehicleIcon,
-        });
-
-        // not in use currently
-        //vehicleMarker._leaflet_id = vehicleObj.id; 
-        if(vehicleObj.speed > 0) 
-            vehicleMarker.options.rotationAngle = vehicleObj.heading;
-              
-        // update speed status 
-        var speedColor;
-        var speedWeight;
-        if(vehicleObj.speed < 18)
-        {
-            speedColor="#4F4F4F";
-            speedWeight ="normal";
-        }
-        else if(vehicleObj.speed > 18)
-        {
-            if(vehicleObj.speed > 30)
-            {
-                speedColor="#CA4040";
-                speedWeight ="bold";
-            }
-            else{
-                speedColor="#CA4040";
-                speedWeight ="normal";
-            }
-        }
-        
-        // create html and append to popup div
-        var customPopup = "<div class='popup' id='vPopup'>"+
-                            "<p class='popupTitle'>" +vehicleObj.name+ "<img class='activeGreenPopup' src='images/status/active_green.svg'></p>"+
-                            "<span class='popupVersion'>VER:"+vehicleObj.model.firmware+"</span>"+
-                        "</div><br>"+
-                        "<div class='popupSpeedDiv'>"+
-                            "<span>Speed</span><br>"+
-                            "<span id='popup_speed' class='popupSpeed' style='color:"+speedColor+";font-weight:"+speedWeight+"'>"+vehicleObj.speed+"</span><br>"+
-                            "<span class='popupSpeedUnit'>km/hr</span>"+
-                        "</div>"+
-                        "<div class='popupBatteryDiv'>"+
-                            "<span style='vertical-align:top'>Battery</span>"+
-                            "<div id='popupBattery' class='popup-battery' data-content=''></div>"+
-                            "<div class='popupParent'></div>"+
-                        "</div>";
-        const customOptions = {'className': 'custom-popup2'};
-        vehicleMarker.bindPopup(customPopup, customOptions).openPopup();
-        vehicleMarker.on('click', function(e) {identifyMake(vehicleObj.name);});
-        vehicleMarker.addTo(mapInstance);
-        prevMarker = vehicleMarker;
-        popupMarker = vehicleMarker;
-    } 
-    else 
-    {
-        // update location of old marker 
-        var newLatLng = new L.LatLng(vehicleObj.lat, vehicleObj.lon);
-        prevMarker.setLatLng(newLatLng);
-        
-        if(vehicleObj.speed > 0) 
-            prevMarker.options.rotationAngle = vehicleObj.heading;
- 
-        prevMarker.addTo(mapInstance);
-        popupMarker = prevMarker;
-        //setPopupSpeed(vehicleObj.speed, vehicleObj.name);
-
-      
-        for(var i = 0; i <vMarkerArray.length;i++ )
-        {
-               if(vehicleObj.id == vMarkerArray[i].markId)
-               {
-            //   alert("id:"+vehicleObj.id+" marker id:"+vMarkerArray[i].id);
-                  var newLatLng = new L.LatLng(vehicleObj[j].lat, vehicleObj[j].lon);
-                  vMarkerArray[i].marker.setLatLng(newLatLng);
-                  console.log("!!!!!!!!!!i:"+i);
-                }
-            
-        }
-    
-    }
-
-    // open vehicle popup onclick to show shuttle battery and speed info.
-    var popup_battery = document.getElementById("popup_battery");
-    if (popup_battery != null)
-        popup_battery.innerText = vehicleObj.battery;
-
-    popupMarker.on('onClick', function(){
-        var popupDiv = document.getElementById("batteryPercent1") ;
-        if(popupDiv != null)
-        {
-            popupDiv.style.width = "60%";
-            popupDiv.style.color = "green";
-        }
-    });
-}
-*/
 // function not in use currently
 function setPopupSpeed(speed)
 {
@@ -1746,9 +1805,9 @@ function getMethod(api_name, callback) {
         if (request.status == 200) {
             callback(request.response);
         } else if (request.status == 401)
-            alert("Authentication credentials were not provided");
+            console.log("Authentication credentials were not provided");
         else if (request.status == 403)
-            alert("Unauthorized access to accounts")
+            console.log("Unauthorized access to accounts")
         console.log("GET data status: " + request.status);
     };
     request.onerror = function (status) {
@@ -1773,18 +1832,20 @@ function showSummary() {
 }
 
 // show station, garage, datahub and kiosk on route
+
 function showRouteInfo(mapInstance, api_name, icon_path, site_no) {
     var stationWp_array = [];
-
-  //  alert("api_name :"+api_name);
+    //  alert("api_name :"+api_name);
     getMethod(api_name, function(data) {
         var iconData = JSON.parse(data).results;
         if (iconData == undefined)
             var iconData = JSON.parse(data);
                     
         var count = Object.keys(iconData).length;
-        var stationTitleArray=[];
+       
         var kioskTitleArray=[];
+        var stationTitleArray=[];
+        
         for (var i = 0; i < count; i++) {
             if (iconData[i].site == site_no) {
                 if (api_name == "stations/" ) //&& site_no != 18
@@ -1796,7 +1857,7 @@ function showRouteInfo(mapInstance, api_name, icon_path, site_no) {
                     var stationLat = iconData[i].lat;
                     var stationLon = iconData[i].lon;
                     stationTitleArray.push(stationTitle); // array for station title
-                                
+                  
                     // check if kiosk for the station is available in kiosk api
                     var kioskTitle = "KIS" +kiosk_title.substring(3);
                     if(iconData.iskiosk ==true)
@@ -1873,6 +1934,65 @@ function showRouteInfo(mapInstance, api_name, icon_path, site_no) {
     });
 }
 
+function updateETA(site_no)
+{
+    var stationArray=[];
+    var station_mid = [];
+
+    getMethod("stations/", function(data) {
+        var stationData = JSON.parse(data);
+        var count = Object.keys(stationData).length;
+        for (var i = 0; i < count; i++) {
+           // alert("site :"+stationData[i].site+ " site no :"+site_no);
+            if (stationData[i].site == site_no)
+            {
+                stationArray.push(stationData[i].name);
+                station_mid.push(stationData[i].mid);
+            }
+        }
+
+    // station list
+    var divElement = document.getElementById('stationList');
+    divElement.innerHTML = "";
+
+    // list element - blue line
+    $("#station_li").empty();
+
+    // eta list 
+    $("#eta_list").empty();
+    //
+    //alert("stationArray :"+stationArray);
+
+    for(var j = 0; j < stationArray.length; j++)
+    { 
+        // station name 
+        var stationHtml = "<p style='margin-bottom:15px'>"+
+                        "<span class='timeSpan1'>"+stationArray[j]+"</span>"+
+                        "<span class ='timeSpan2'>STA00"+(j+1)+"</span>"+
+                        "</p>";
+
+        divElement.insertAdjacentHTML('beforeend', stationHtml);
+                    
+        // blue line which indicate ETA
+       // $("#station_li ul").append('<li></li>');
+       $("#station_li").append(' <p class="eta_circle"></p>');
+      // $("#station_li").append(' <span class="eta_line"></span>');
+       
+
+        //alert("height:"+$("#station_li ul").scrollHeight);
+        //let myElement = document.querySelector("#station_li ul");
+       //// myElement.style.height = (myElement.style.height + 155)+"px";
+        // $("#station_li ul").height = ""($("#station_li ul")[0].height+55)+"px";
+        //ul.bar 
+
+        // ETA in minutes
+        var p = "<p style='margin-bottom:30px;'>곧 도착 또는 출발</p>";
+        $("#eta_list ").append(p);
+
+        }
+    });
+}
+
 // create route using control routing plugin leaflet 
 function createRoute(mapInstance, waypoints, stationTitle,kioskTitle, site_no) {
     //alert("mapInstance:"+mapInstance+" waypoints:"+waypoints);
@@ -1930,241 +2050,30 @@ function createRoute(mapInstance, waypoints, stationTitle,kioskTitle, site_no) {
 }
 
 // creates map with given mapcenter and zoom level
-function createMap(map_center, zoom, mapInstance, mapId) {
+function createMap(mapInstance) {
     
+
     mapInstance.zoomSnap = 0.15;
    // mapInstance.zoomControl.disable();
     mapInstance.scrollWheelZoom.enable();
     mapInstance.dragging.enable();
 
-    var deguLayer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+    var mapLayer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     });
-    deguLayer.addTo(mapInstance);
+    mapLayer.addTo(mapInstance);
+   // alert("createMap");
     var zoomHome = L.Control.zoomHome();
-    zoomHome.addTo(mapInstance);
+    zoomHome.addTo(mapInstance);  
+  
+  //  var zoomHome = L.Control.zoomHome();
+    //cluster_map.setView([35.902, 128.013], 7)
+  //  mapInstance.setView(mapCenter);
+   // zoomHome.setHomeCoordinates(mapCenter);
+    //cluster_map.zoomHome.setHomeCoordinates(mapCenter);
+    //zoomHome.addTo(mapInstance);
     mapInstance.invalidateSize();
     return mapInstance;
-}
-
-function gunsanRoute() {
-   // daegu_interval
-    if(daegu_interval != null)
-        clearInterval(daegu_interval);
-    hide_div("graph_div");
-    //hide_div("graph2_div");
-    var map_center = [35.812484, 126.409100];
-    gunsan_map = createMap(map_center, 16, gunsan_map, 'gunsanMap');
-    showRouteInfo(gunsan_map, "stations/", "route/station_kiosk.svg", 1);
-    showRouteInfo(gunsan_map, "garages/", "garage_daegu.svg", 1);
-    gunsan_map.invalidateSize();
-}
-
-function sangamRoute() {
-    
-    hide_div("graph_div");
-    //hide_div("graph2_div");
-    
-    /* Check this --> map_function.js:717 Uncaught TypeError: Cannot read property 'style' of null*/
-    var map_center = [37.579333, 126.889036];
-    sangam_map = createMap(map_center, 16, sangam_map,'sangamMap');
-   
-    // show stations, kiosk, garage on degu route.
-    showRouteInfo(sangam_map, "stations/", "route/station_kiosk.svg", 4);
-    showRouteInfo(sangam_map, "garages/", "route/garageIcon.svg", 4);
-    showDataCenter(sangam_map, 4);
-
-    // show V2X on Degu route
-    show_v2x(sangam_map, "v2x/");
-    sangam_map.invalidateSize();
-}
-
-function sejongRoute() {
-    //daegu_interval.clearInterval();
-    document.getElementById("subMenuModal").style.display = "block";
-    clearInterval(daegu_interval);
-    clearInterval(interval);
-
-    hide_div("graph_div");
-    //hide_div("graph2_div");
-    open_tab('degu_window',3);
-
-    // clear hidden cameras 
-    document.getElementById("hidden_cam1").style.background= "";
-    document.getElementById("hidden_cam2").style.background= "";
-    document.getElementById("webcam_div1").style.background= "#828282";
-    document.getElementById("webcam_div2").style.background= "#828282";
-    if(document.getElementById("pausePlayButton1").src= "images/cctv/play.svg")
-        document.getElementById("pausePlayButton1").src= "images/cctv/pause.svg";
-    if(document.getElementById("pausePlayButton2").src= "images/cctv/play.svg")
-        document.getElementById("pausePlayButton2").src= "images/cctv/pause.svg";
-    
-    playPause("webcam_div1", 'pausePlayButton1');
-    playPause("webcam_div2", 'pausePlayButton1');
- 
-    // update status of webcam  
-    show_div("webcam_div");
-    document.getElementById('webcam_div1').style.display = "inline-block";
-    document.getElementById('webcam_div2').style.display = "inline-block";
-    
-    //webcam('1', null);
-    //webcam('2', null);
-    var sejongShuttleArray=[];
-    var vehicleObj=[];
-    var map_center = [36.499951, 127.270606];
-    sejong_map = createMap(map_center, 18, sejong_map,'sejongMap');
-    var waypoints = [
-        L.latLng(36.499351, 127.270606),
-        L.latLng(36.501690, 127.272315),
-    ];
-  
-    // show stations, kiosk, garage on degu route.
-    showRouteInfo(sejong_map, "stations/", "route/station_kiosk.svg", 3);
-    showRouteInfo(sejong_map, "garages/", "route/garageIcon.svg", 3);
-    showDataCenter(sejong_map, 3);
-        
-    // show V2X on Degu route
-    show_v2x(sejong_map, "v2x/");
-    sejong_map.invalidateSize();
-
-    // get all vehicle Id's of route 3 (Sejong).
-    getMethod("vehicles/", function (data) {
-        var vehicle_data = JSON.parse(data).results;
-        if (vehicle_data == undefined) 
-            vehicle_data = JSON.parse(data);
-        var count = Object.keys(vehicle_data).length;
-
-        //alert("count :"+count+" Sejong vehicles: "+vehicle_data );
-        // create vehicle obj and store in array
-        for (var i = 0; i < count; i++) {
-            var vehicle = vehicle_data[i];
-            if (vehicle.site == 3){             
-                sejongShuttleArray.push(vehicle.id); // array of vehicle ID 
-                var vehicle = {
-                    id:vehicle.id,
-                    mid:vehicle.mid,
-                    name: vehicle.name,
-                    speed:vehicle.speed,
-                    lat:vehicle.lat,
-                    lon:vehicle.lon,
-                    heading : vehicle.heading,
-                    battery : vehicle.battery,
-                    drive : vehicle.drive,
-                    webcam1 : vehicle.webcam1,
-                    webcam2 : vehicle.webcam2,
-                }
-                vehicleObj.push(vehicle);
-           }
-        }
-        //create list of vehicles in degu route
-        vehicleObj = vehicleObj.sort((a, b) => (a.id > b.id) ? 1 : -1);
-
-        // create select list of vehicle 
-        createSelectList(vehicleObj);
-
-        // update status of webcam  
-        webcam('1', vehicleObj);
-        webcam('2', vehicleObj);
-
-        var firstId = sejongShuttleArray[0];
-        vehicleInfo(sejong_map, firstId);
-        //changeVehicleInfo(firstId);
-    });
-}
-
-
-function sejongRoute2() {
-    //daegu_interval.clearInterval();
-
-    document.getElementById("subMenuModal").style.display = "block";
-    clearInterval(daegu_interval);
-    clearInterval(interval);
-
-    hide_div("graph_div");
-    //hide_div("graph2_div");
-    open_tab('degu_window',3);
-
-    // clear hidden cameras 
-    document.getElementById("hidden_cam1").style.background= "";
-    document.getElementById("hidden_cam2").style.background= "";
-    document.getElementById("webcam_div1").style.background= "#828282";
-    document.getElementById("webcam_div2").style.background= "#828282";
-    if(document.getElementById("pausePlayButton1").src= "images/cctv/play.svg")
-        document.getElementById("pausePlayButton1").src= "images/cctv/pause.svg";
-    if(document.getElementById("pausePlayButton2").src= "images/cctv/play.svg")
-        document.getElementById("pausePlayButton2").src= "images/cctv/pause.svg";
-    
-    playPause("webcam_div1", 'pausePlayButton1');
-    playPause("webcam_div2", 'pausePlayButton1');
- 
-    // update status of webcam  
-    show_div("webcam_div");
-    document.getElementById('webcam_div1').style.display = "inline-block";
-    document.getElementById('webcam_div2').style.display = "inline-block";
-    
-    //webcam('1', null);
-    //webcam('2', null);
-    var sejongShuttleArray=[];
-    var vehicleObj=[];
-    var map_center = [36.499951, 127.270606];
-    sejong_map2 = createMap(map_center, 1, sejong_map2,'sejongMap2');
-    var waypoints = [
-        L.latLng(36.499351, 127.270606),
-        L.latLng(36.501690, 127.272315),
-    ];
-  
-    // show stations, kiosk, garage on degu route.
-    showRouteInfo(sejong_map2, "stations/", "route/station_kiosk.svg", 18);
-    showRouteInfo(sejong_map2, "garages/", "route/garageIcon.svg", 18);
-    showDataCenter(sejong_map2, 18);
-        
-    // show V2X on Degu route
-    show_v2x(sejong_map2, "v2x/");
-    sejong_map2.invalidateSize();
-
-    // get all vehicle Id's of route 3 (Sejong).
-    getMethod("vehicles/", function (data) {
-        var vehicle_data = JSON.parse(data).results;
-        if (vehicle_data == undefined) 
-            vehicle_data = JSON.parse(data);
-        var count = Object.keys(vehicle_data).length;
-
-        //alert("count :"+count+" Sejong vehicles: "+vehicle_data );
-        // create vehicle obj and store in array
-        for (var i = 0; i < count; i++) {
-            var vehicle = vehicle_data[i];
-            if (vehicle.site == 3){             
-                sejongShuttleArray.push(vehicle.id); // array of vehicle ID 
-                var vehicle = {
-                    id:vehicle.id,
-                    mid:vehicle.mid,
-                    name: vehicle.name,
-                    speed:vehicle.speed,
-                    lat:vehicle.lat,
-                    lon:vehicle.lon,
-                    heading : vehicle.heading,
-                    battery : vehicle.battery,
-                    drive : vehicle.drive,
-                    webcam1 : vehicle.webcam1,
-                    webcam2 : vehicle.webcam2,
-                }
-                vehicleObj.push(vehicle);
-           }
-        }
-        //create list of vehicles in degu route
-        vehicleObj = vehicleObj.sort((a, b) => (a.id > b.id) ? 1 : -1);
-
-        // create select list of vehicle 
-        createSelectList(vehicleObj);
-
-        // update status of webcam  
-        webcam('1', vehicleObj);
-        webcam('2', vehicleObj);
-
-        var first_id = sejongShuttleArray[0];
-        vehicleInfo(sejong_map2, first_id);
-        //changeVehicleInfo(firstId);
-    });
 }
 
 function showMarkerIcon(iconUrl, title, lat, long, map) 
@@ -2193,7 +2102,7 @@ function showMarkerIcon(iconUrl, title, lat, long, map)
     // add marker to map
     marker.addTo(map);
     const customPopup = "<ul><li>" + title + "</li><li>" + kiosk_title + "</li><ul>";
-    const customOptions = { 'className': 'custom-popup', autoPan: false, autoClose: false }
+    const customOptions = { 'className': 'custom-popup', autoClose: false }
     marker.bindPopup(customPopup, customOptions).openPopup();
     map.invalidateSize();
 }
@@ -2217,11 +2126,6 @@ function logout() {
     postMethod(JSON.stringify(email), api_url, function (status_code) {
         if (status_code == 200)
             window.location.href = "index.html";
-        else if (status_code == 401)
-            alert("Authentication credentials were not provided");
-        else if (status_code == 404)
-            alert("Not found");
-        console.log("Logout status: " + status_code);
     });
 }
 
@@ -2286,7 +2190,8 @@ function vehicle_info(vehicle_id) {
 }
 
 // update site(title, summary) info
-function siteSummary(divId)
+var dowun
+function siteSummary(divId, obj)
 {
     var dom = document.getElementById(divId);
  
@@ -2294,7 +2199,8 @@ function siteSummary(divId)
     {
         dom.style.display = "none";
         document.getElementById("hideP").innerHTML = "더보기";
-        document.getElementById("arrowImg").src="images/openArrow.svg"
+        document.getElementById("arrowImg").src="images/openArrow.svg" //up arrow
+
     }
     else
     {
@@ -2302,6 +2208,7 @@ function siteSummary(divId)
         document.getElementById("hideP").innerHTML ="숨기기";
         document.getElementById("arrowImg").src="images/closeArrow.svg";
     }
+
 }
 
 function setSiteInfo(site_id){
@@ -2363,7 +2270,7 @@ function showDataCenter(mapInstance, siteId){
 }
 
 // plot v2x on route
-function show_v2x(mapInstance, api_name){
+function show_v2x(mapInstance, api_name, currentSiteId){
     var icon_html;
     if (api_name == "v2x/") 
     {
@@ -2388,7 +2295,7 @@ function show_v2x(mapInstance, api_name){
 
         // create v2x marker with ripple animation.
         for (var i = 0; i < count; i++) {
-            if (ripple_data[i].site == 2) {
+            if (ripple_data[i].site == currentSiteId) {
                 var lat = ripple_data[i].lat;
                 var lon = ripple_data[i].lon;
                 marker = L.marker([lat,lon], {
@@ -2428,13 +2335,10 @@ function manager_list(site_manager_array)
     for (var i = 0; i < site_manager_array.length; i++) {
         var api_url = "users/" + site_manager_array[i] + "/";
         getMethod(api_url, function (site_manager_data) {
-            //alert("site_manager_data :"+site_manager_data);
             var site_manager_data = JSON.parse(site_manager_data);
             var option = document.createElement('option');
-            //alert("site_manager_data.username :"+site_manager_data.username);
             option.text = site_manager_data.username;
             option.value = site_manager_data.email;
-            
             select.add(option, i + 1);
         });
     }
@@ -2442,7 +2346,7 @@ function manager_list(site_manager_array)
 
 function msg_modal() {
     show_div('messageModal');
-    selectSite('all', "0","0");
+    selectSite('all', null,null);
 }
 
 // updates notice
@@ -2542,15 +2446,64 @@ function toggle_div(div_id) {
 }
 
 function hide_div(div_id) {
-    var id = document.getElementById(div_id);
-    if (id != null)
-        id.style.display = "none";
+    var div_dom = document.getElementById(div_id);
+    if (div_dom != null)
+        div_dom.style.display = "none";
+}
+
+function hideElements(div_array) {
+    for(var i = 0; i < div_array.length; i++)
+    {
+        var div_dom = document.getElementById(div_array[i]);
+        //console.log( "div_array[i] :"+div_array[i]);
+        if (div_dom != null)
+        {
+            div_dom.style.display = "none";
+        }
+    }
+}
+
+function showElements(div_array) {
+    for(var i = 0; i < div_array.length; i++)
+    {
+        var div_dom = document.getElementById(div_array[i]);
+        if (div_dom != null)
+            div_dom.style.display = "block";
+    }
 }
 
 function show_div(div_id) {
     var id = document.getElementById(div_id);
     if (id != null)
         id.style.display = "block";
+}
+
+function hideMaps(activeMap)
+{   
+    var mapList = ['offsiteMap', 'deguMap', 'sejongMap', 'sejongMap2', 'sangamMap', 'gunsanMap'];
+    
+    for(var i = 0; i < mapList.length; i++)
+    {
+        //console.log("mapList:"+mapList[i]+ " activeMap:"+activeMap);
+        var div_dom = document.getElementById(mapList[i]);
+        if (mapList[i] == activeMap)
+        {
+            if(div_dom.style.display != "block")
+            {
+                div_dom.style.display = "block";
+                console.log("block "+activeMap+ " map : display: " +div_dom.style.display);
+               // alert(mapList[i] + " : " + div_dom.style.display);
+            }
+        }
+        else
+        {
+            if(div_dom.style.display != "none")
+            {
+                div_dom.style.display = "none";
+               // alert(mapList[i] + " : " + div_dom.style.display);
+            }
+        }
+    }
 }
 
 function hide_div_list(div_id) {
@@ -2607,7 +2560,8 @@ function showMarker(mapInstance, iconUrl, stationTitle, kioskTitle, lat, long) {
 
     var marker = L.marker([lat, long], {
         draggable: false, // Make the icon dragable
-        icon: markerIcon
+        icon: markerIcon,
+        autoPan : true
     });
       
     //const customPopup = "<ul><li>" + stationTitle + "</li><ul>";
@@ -2686,13 +2640,33 @@ function setDateTime() {
     var currentdate = new Date();
     var strDate = currentdate.getDate()+" " +months[currentdate.getMonth()]+ ", " +currentdate.getFullYear();
     var currentHour = currentdate.getHours();
-    var hour_status;
-    if (currentHour > 12)
-        hour_status = "PM";
-    else
-        hour_status = "AM";
 
-    var strTime = currentHour+ ":" +currentdate.getMinutes()+ ' ' +hour_status;
+    // AM or PM
+     var hour_status;
+     if (currentHour > 12)
+         hour_status = "PM";
+     else
+         hour_status = "AM";
+
+
+    // calculate hours 
+
+    if(currentHour > 12)
+        currentHour = currentHour - 12;
+      
+    if (currentHour < 10)
+        currentHour = "0"+currentHour;
+
+   
+
+    // calculate minutes
+    var minutes;
+    if(currentdate.getMinutes() < 10)
+        minutes = "0"+currentdate.getMinutes();
+    else
+        minutes = currentdate.getMinutes();
+
+    var strTime = currentHour+ ":" +minutes+ ' ' +hour_status;
     document.getElementById("currentDate").innerHTML = strDate;
     document.getElementById("currentTime").innerHTML = strTime;
 
@@ -2778,9 +2752,9 @@ function highchart(graph1, title, color, yAxisLable, vehicleList, yAxisList, y_u
             
                 scales: {
                     xAxes: [{
-                        barThickness: 15,
-                        categoryPercentage: 0,
-                        barPercentage: 0,
+                        //barThickness: 15,
+                        //categoryPercentage: 0,
+                        //barPercentage: 0,
                         gridLines: {
                             display: false,
                             drawBorder : false,
@@ -2793,6 +2767,9 @@ function highchart(graph1, title, color, yAxisLable, vehicleList, yAxisList, y_u
                         },
                     }],
                     yAxes: [{
+                        barPercentage: 0.3,
+                        categoryPercentage: 1.0,
+
                         scaleLabel: {
                             display: false,
                             labelString:y_unit,
@@ -2843,8 +2820,12 @@ function playPause(webcam_div, pausePlayButton)
 
 
 function webcam(webcamId, vehicle) {
+    if(vehicle[0] == undefined)
+        return false;
   
     show_div('webcam_div');
+    document.getElementById("webcam_div1").style.display = "inline-block";
+    document.getElementById("webcam_div2").style.display = "inline-block";
 
     // close div with off camer=a button
     if(vehicle[0].webcam1 != null)
@@ -2872,8 +2853,9 @@ function webcam(webcamId, vehicle) {
             var webcam1 = vehicleObj.webcam1;
           
         if (webcam1 != null) {
-            document.getElementById("webcam_div1").style.display = "inline-block";
+            //document.getElementById("webcam_div1").style.display = "inline-block";
             document.getElementById("hidden_cam1").style.background = 'url('+webcam1+')'; 
+            //alert("hiddeb:"+ document.getElementById("hidden_cam1").style.background);
         }
     }
     if (webcamId == '2') {
@@ -2883,7 +2865,7 @@ function webcam(webcamId, vehicle) {
         if(vehicleObj != null)
             var webcam2 = vehicleObj.webcam2;
         if (webcam2 != null) {
-            document.getElementById("webcam_div2").style.display = "inline-block";
+            //document.getElementById("webcam_div2").style.display = "inline-block";
             document.getElementById("hidden_cam2").style.background = 'url('+webcam2+')';
         }
     }           
@@ -2940,8 +2922,14 @@ function selectSite(select, site_no, selectedUserInfo) {
     if(selectValue == null || selectValue == undefined) 
     {
         managerSelect.innerText = null;
-        alert("No managers are available");
+        //alert("No managers are available");
     } 
+    else if(site_no == null)
+    {
+        //get list of all managers.
+        // under development
+        var userList = [];
+    }
     else {
         // assign username to select dropdown list
         // Show manager name on main window 
@@ -2984,7 +2972,7 @@ function createOption(selectDom, username, email, photo,site_no, managerName) {
     option.text = username;
     option.value = email;
     option.style.fontSize = "14px";
-    alert("selectDom:"+selectDom+" username :"+username+" = managerName :"+managerName);
+   // alert("selectDom:"+selectDom+" username :"+username+" = managerName :"+managerName);
     console.log("site_no :"+site_no);
     if(site_no != "0")
     {   if(username == managerName)
@@ -3018,7 +3006,7 @@ function fnChkByte(obj, maxByte) {
     }
 
     if (rbyte > maxByte) {
-        alert("메세지는 최대 " + maxByte + "byte를 초과할 수 없습니다.")
+        //alert("메세지는 최대 " + maxByte + "byte를 초과할 수 없습니다.")
         str2 = str.substr(0, rlen); // count String
         obj.value = str2;
         fnChkByte(obj, maxByte);
@@ -3086,7 +3074,6 @@ function resetPassword()
         {  
             if (res.detail == "New password has been saved.")
             {
-                alert("PAssword update successfull");
                 pwdErrorDom.innerHTML = "새로운 비밀번호로 변경 됐습니다.";
                 pwdErrorDom.style.color="#2E92B0";
                 localStorage.setItem('userPwd', input_new_pwd);
@@ -3125,8 +3112,31 @@ function resetPassword()
     return true;
 }
 
-// download odd file on button click
-function oddFileDownload(){
+// hide message div
+/*
+document.addEventListener('mouseup', function(e) {
+    var container = document.getElementById('contactDiv');
+    if (!container.contains(e.target)) {
+      container.style.display = 'none';
+    }
+  });
+*/
+
+  $(document).on("click", function(){
+    $('.contactDiv').hide();
+  });
+  
+function stopVideoStreaming()
+{
+    // close full screen 
+    hide_div("myModal");
+
+    // stop video 
+} 
+
+// Odd file status
+function oddButtonStatus()
+{
     var dom = document.getElementById("vehicleSelect");
     var selectedId = dom.options[dom.selectedIndex].id;
     getMethod("vehicles/"+selectedId+"/", function (data) {
@@ -3134,18 +3144,29 @@ function oddFileDownload(){
         var filePath = vehicle.odd; 
         if(filePath == null)
         {
-            alert("Odd file is not available");
+            document.getElementById('oddFileSpan').className = "oddDisabled";
+            var oddDom = document.getElementById("oddFile");
+            oddDom.href = "";
             return false;
         }
-        var oddDom = document.getElementById("oddFile");
-        oddDom.href=filePath;
-        document.body.appendChild(oddDom);
-        oddDom.click();
+        else
+        {
+            document.getElementById('oddFileSpan').className = "oddButton"; 
+            var oddDom = document.getElementById("oddFile");
+            oddDom.href = filePath;
+        }
     });
+}
+
+// download odd file on button click
+function oddFileDownload(){
+    var oddDom = document.getElementById("oddFile");
+    document.body.appendChild(oddDom);
+    oddDom.click();
 }
 
 /* Emergency contact information */
 function showEmergencyContact()
 {
-    document.getElementById('contactDiv').style.display="block";
+    document.getElementById('contactDiv').style.display = "block";
 }

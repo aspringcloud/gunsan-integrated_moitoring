@@ -19,7 +19,7 @@
             <div id="screenToggleDiv">
                 <p>전체화면 모드</p>
                 <label class="switch">
-                    <input type="checkbox" id="switchButton" onchange="toggledSwitch()">
+                    <input type="checkbox" id="switchButton" onchange="toggledSwitch()" >
                     <span class="slider round"></span>
                   </label>
             </div>
@@ -105,6 +105,18 @@
 <script>
     changeTabButtonColor();
     setDateTime(); // Update dateTime
+
+    /*if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen();
+          } else if (document.documentElement.msRequestFullscreen) {
+            document.documentElement.msRequestFullscreen();
+          } else if (document.documentElement.mozRequestFullScreen) {
+            document.documentElement.mozRequestFullScreen();
+          } else if (document.documentElement.webkitRequestFullscreen) {
+            document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+          }*/
+
+    //toggledSwitch(); // fullscreen mode by default
 
      function getPageName(){ 
         var url = window.document.URL;
