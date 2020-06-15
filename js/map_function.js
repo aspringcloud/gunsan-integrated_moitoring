@@ -76,7 +76,7 @@ function switchMap(obj)
     else if(obj.id == "main_site_button")
     {   
         clusterMapCount++;
-        var elementsToHide = ["offsite_window", "webcam_div", "webcam_div1", "webcam_div2",  "distanceChart1", "passangerChart2"];
+        var elementsToHide = ["offsite_window", "webcam_div", "webcam_div1", "webcam_div2", "infoChart", "distanceChart1", "passangerChart2"];
         hideElements(elementsToHide);
         hideMaps('offsiteMap');
 
@@ -282,17 +282,17 @@ function switchMap(obj)
         cluster_map.setView([35.902, 128.013], 7)
         zoomHome_main.setHomeCoordinates([35.902, 128.013]);
         cluster_map.invalidateSize();
-        var elementsToHide = [ "graph_div", "countInfoDiv", "webcam_div", "webcam_div1", "webcam_div2", "distanceChart1", "passangerChart2"];     
+        var elementsToHide = [ "graph_div", "countInfoDiv", "webcam_div", "webcam_div1", "webcam_div2", "infoChart", "distanceChart1", "passangerChart2"];     
         hideElements(elementsToHide);
          
         mapList.push("offsiteMap"); 
         hide_div("alertDiv");
         hideMaps("offsiteMap");
-        hide_div("webcam_div1");
-        hide_div("webcam_div2");
-        hide_div("webcam_div");
-        hide_div("distanceChart1");
-        hide_div("passangerChart2");
+        //hide_div("webcam_div1");
+       // hide_div("webcam_div2");
+       // hide_div("webcam_div");
+        //hide_div("distanceChart1");
+        //hide_div("passangerChart2");
         offsite();
         showCluster(cluster_map);
         document.getElementById('currentSiteId').innerHTML = "0";
@@ -439,6 +439,9 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
         });
     });
     show_div("alertDiv");
+
+    // development history data (underdevelopment)
+    showSummary('site');
 
     // websocket connection
     openWSConnection();
@@ -672,7 +675,6 @@ function showCluster(cluster_map)
             // add layer to the map instance.
             cluster_map.addLayer(markers);
             cluster_map.invalidateSize(); // refresh map 
-            //alert("cluster_map :"+cluster_map);
         });
     }
 }
@@ -1642,6 +1644,7 @@ function ETA(vehicleObj, daegu_map){
 
 /* show chart with todays distance passenger count */
 function showChartData(siteId){
+    document.getElementById("infoChart").style.display = "block";
     document.getElementById("distanceChart1").style.display = "inline-block";
     document.getElementById("passangerChart2").style.display = "inline-block";
     
@@ -1688,8 +1691,14 @@ function showChartData(siteId){
             }
            // alert("passengerList :"+passengerList);
           //  todayChart('todayDistance', '총 운행거리', colorList, 'Distance(km)', nameList, nameList);
-            highchart('todayDistance', '총 운행거리', colorList, 'Distance(km)', nameList, distanceList, 'km');
-            highchart('todayPassenger', '총 탑승자 수', colorList, 'Passenger', nameList, passengerList, '명');
+            var total_distance = distanceList.reduce((a, b) => a + b, 0);
+            var total_passengers = passengerList.reduce((a, b) => a + b, 0);
+            
+            document.getElementById('total_distance').innerHTML = total_distance;
+            document.getElementById('total_passengers').innerHTML = total_passengers;
+      
+            highchart('todayDistance', '총 운행거리', colorList, 'Distance(km)', nameList, distanceList, 'km', total_distance);
+            highchart('todayPassenger', '총 탑승자 수', colorList, 'Passenger', nameList, passengerList, '명', total_passengers);
          //   todayChart('todayPassenger', '총 탑승자 수', colorList, 'Passenger', nameList, passengerList);
         } /*else if (req.status == 401)
             alert("Authentication credentials were not provided");
@@ -1820,15 +1829,25 @@ function getMethod(api_name, callback) {
 
 
 // updates offsite count div
-function showSummary() {
-    getMethod("sites/summary/", function (getSummary) {
-        var summary = JSON.parse(getSummary);
-        document.getElementById("routeCount").innerHTML = summary.route_count;
-         document.getElementById("vehicleCount").innerHTML = summary.vehicle_count;
-        document.getElementById("StationCount").innerHTML = summary.station_count;
-        document.getElementById("kioskCount").innerHTML = summary.kiosk_count;
-        document.getElementById("garageCount").innerHTML = summary.garage_count;
-    });
+function showSummary(site) {
+    if(site == "offsite")
+    {
+        getMethod("sites/summary/", function (getSummary) {
+            var summary = JSON.parse(getSummary);
+            document.getElementById("routeCount").innerHTML = summary.route_count;
+            document.getElementById("vehicleCount").innerHTML = summary.vehicle_count;
+            document.getElementById("StationCount").innerHTML = summary.station_count;
+            document.getElementById("kioskCount").innerHTML = summary.kiosk_count;
+            document.getElementById("garageCount").innerHTML = summary.garage_count;
+        }); 
+    }
+  /*  else{
+          document.getElementById("site_vehicleCount").innerHTML = summary.vehicle_count;
+            document.getElementById("site_StationCount").innerHTML = summary.station_count;
+            document.getElementById("site_kioskCount").innerHTML = summary.kiosk_count;
+            document.getElementById("site_garageCount").innerHTML = summary.garage_count;
+
+    }*/
 }
 
 // show station, garage, datahub and kiosk on route
@@ -2679,7 +2698,7 @@ function setDateTime() {
     setTimeout(setDateTime, 20000);  
 }
 
-function highchart(graph1, title, color, yAxisLable, vehicleList, yAxisList, y_unit) {
+function highchart(graph1, title, color, yAxisLable, vehicleList, yAxisList, y_unit, total) {
     for(var i = vehicleList.length; i < 4; i++) 
         vehicleList.push("");
 

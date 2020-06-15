@@ -70,7 +70,8 @@ width: 85px;
 }
 
 .canvasMargin1{
-margin-right :5px
+margin-right :5px;
+margin-left :22px;
 }
 
 .setting_P img{
@@ -727,29 +728,60 @@ display:none;
 
 .chartTitle1{
 font-family : Noto_medium; color: #185786;
-font-size: 13px; margin-left: 10px;  margin-top: 7px;
-margin-bottom: 5px;
+font-size: 16px; margin-left: 22px;  margin-top: 15px;
+margin-bottom: 5px; display: inline-block;
+
+}
+
+.chartTitle2{
+  display: inline-block;
+  color: #185786;
+  float:right;
+  font-size: 24px;
+  margin: 0px;
+}
+
+.chartTitle3{
+  display: inline-block;
+  color: #185786;
+  float:right;
+  font-size: 14px;
+  margin: 0px;
+  line-height: 2.4;
+}
+
+#infoChart{
+  display: none; 
+position: absolute;
+width: 1260px;
+height: 272px;    
+z-index: 1000;
+left: 581px;
+top: 778px;
+background-image: url("../images/information.svg");
 }
 
 .distanceChart1{
 display: none; 
 position: absolute;
-width: 264px;
-height: 204px;    
+width: 357px;
+height: 244px;    
 z-index: 1001;
-left: 598px;
-top: 840px;
+left: 21px;/*
+top: 840px;*/
 background: #FFFFFF;
 box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12), 0px 0px 2px rgba(0, 0, 0, 0.14);
 border-radius: 5px;
+top:14px;
 }    
 
 .passangerChart2{
 display: none; position: absolute;
-width: 264px;
-height: 204px; z-index: 1001;
-left: 882px;
-top: 840px;
+width: 357px;
+height: 244px; z-index: 1001;
+left: 400px;
+top:14px;
+/*top: 840px;*/
 background: #FFFFFF;
 box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12), 0px 0px 2px rgba(0, 0, 0, 0.14);
 border-radius: 5px;
@@ -760,7 +792,7 @@ color: grey;
 font-size: 12px;
 font-family: Roboto_regular;
 margin-bottom: 5px;
-margin-left: 10px;/*830px;*/
+margin-left: 22px;/*830px;*/
 }
 
 .scrolly{

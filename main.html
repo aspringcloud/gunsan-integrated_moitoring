@@ -189,15 +189,28 @@
     </div>
 </div>
     <!--chart.js graphs-->
-    <div class="distanceChart1" id="distanceChart1">
-        <p class="chartTitle1">금일 총 운행거리 </p>
-        <p class="scaleUnit">km</p>
-        <canvas id="todayDistance" width="240px" height="150px" class="canvasMargin1" style="margin-left: 8px;"></canvas>
-    </div>
-    <div class="passangerChart2" id="passangerChart2"> 
-        <p class="chartTitle1">금일 총 탑승자 수</p>
-        <p class="scaleUnit">명</p>
-        <canvas id="todayPassenger" width="240px" height="150px" style="margin-left: 8px;"></canvas>
+    <div id="infoChart">
+        <!--<p id="site_vehiceCount">3</p>
+        <p id="site_vehiceCount">32</p>
+        <p id="site_vehiceCount">3</p>
+        <p id="site_vehiceCount">23</p> -->
+
+        <div class="distanceChart1" id="distanceChart1">
+            <p class="chartTitle1">금일 총 운행거리 </p>
+            <p class="chartTitle3" style="margin-right:30px;  margin-top: 18px;"> km</p>
+            <p class="chartTitle2" id="total_distance" style="margin-top:18px;  margin-right: 5px;"> 56</p>
+            <hr style="border: 1px solid #BDBDBD; width:313px;"/>
+            <p class="scaleUnit">km</p>
+            <canvas id="todayDistance" width="314px" height="160px" class="canvasMargin1"></canvas>
+        </div>
+        <div class="passangerChart2" id="passangerChart2"> 
+            <p class="chartTitle1">금일 총 탑승자 수</p>
+            <p class="chartTitle3" style="margin-right:30px; margin-top: 15px;"> 명</p>
+            <p class="chartTitle2" style="margin-top:15px; margin-right: 5px;" id="total_passengers"> 56</p>
+            <hr style="border: 1px solid #BDBDBD; width:313px;"/>
+            <p class="scaleUnit">명</p>
+            <canvas id="todayPassenger" width="314px" height="160px" class="canvasMargin1"></canvas>
+        </div>
     </div>
     
     <!--navigation tab html-->
@@ -598,7 +611,7 @@ width : uncheck
 
         $("#main_site_button").click();
         // showCluster(cluster_map); // show cluster data on map
-        showSummary(); // show count of site summary
+        showSummary('offsite'); // show count of site summary
         //setDateTime(); // Update dateTime
       
         // Get the modal 
