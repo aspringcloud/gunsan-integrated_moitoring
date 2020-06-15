@@ -1019,7 +1019,8 @@ outline: 0;
 }
 
 .round_button button:hover {
-opacity: 1
+opacity: 1;
+
 }
 
 .round_button {

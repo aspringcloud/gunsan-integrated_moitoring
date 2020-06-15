@@ -571,7 +571,7 @@ width : uncheck
     </div>
     <!-- The Modal -->
     <div id="myModal" class="modal">
-        <span class="close2" onclick="stopVideoStreaming();">&times;</span>
+        <span class="close2" >&times;</span>
         <div class="modal-content" id="img01"> 
             <div class="buttonDiv">
                 <!--<img id="pausePlayButton3" src="images/cctv/pause.svg" onclick="playPause('img01', 'pausePlayButton3')"/>-->
@@ -607,6 +607,7 @@ width : uncheck
         var span = document.getElementsByClassName("close2")[0];
         span.onclick = function () {
             document.getElementById("myModal").style.display = "none";
+            stopVideoStreaming();
         }
 
         $("#main_site_button").click();
@@ -641,6 +642,50 @@ width : uncheck
         {                   
             if (event.target == subMenuModal) 
                 subMenuModal.style.display = "none";
+            
+                /*
+            // hover previous site button
+            var currentSite = document.getElementById('currentSiteId').innerHTML;
+            var buttonElement;
+            alert("currentSite :"+currentSite);
+            if(buttonElement != undefined)
+            {
+                if(currentSite == '10')
+                {
+                buttonElement = document.getElementById('main_site_button');
+                }
+                else if(currentSite == '2')
+                {
+                    buttonElement = document.getElementById('degu_button');
+                }
+                else if(currentSite == '0')
+                {
+                    buttonElement = document.getElementById('sejong_button');
+                }
+                else if(currentSite == '4')
+                {
+                    buttonElement = document.getElementById('sangam_button');
+                }
+                else if(currentSite == '1')
+                {
+                    buttonElement = document.getElementById('gunsan_button');
+                }
+                else if(currentSite == '0')
+                {
+                    buttonElement = document.getElementById('offsite_button');
+                }
+                else if(currentSite == '3')
+                {
+                    buttonElement = document.getElementById('sejong_button1');
+                }
+                else if(currentSite == '18')
+                {
+                    buttonElement = document.getElementById('sejong_button2');
+                }
+
+                buttonElement.style.backgroundColor = "#ffffff";
+                buttonElement.style.color = "#185786";
+            }*/
         } 
     }
     window.onclick = function(event) {

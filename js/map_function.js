@@ -154,13 +154,7 @@ function switchMap(obj)
         show_div("sejongMap");
         mapList.push("sejongMap");
         hide_div('countInfoDiv');
-       // var elementsToHide = [ "webcam_div1", "webcam_div2", "webcam_div"];
-       // hideElements(elementsToHide);
-       // show_div("webcam_div");
-       // show_div('webcam_div1');
-        //show_div('webcam_div2');
         showSite(sejong_map, 3, sejong1ClickCount); 
-        //sejongRoute(); 
         open_tab('degu_window',3);
         show_div("alertDiv");
         document.getElementById('currentSiteId').innerHTML="3";
@@ -296,16 +290,13 @@ function switchMap(obj)
         offsite();
         showCluster(cluster_map);
         document.getElementById('currentSiteId').innerHTML = "0";
-    
     }
     else if(obj.id == "gangrung_button") 
     {
         // this will be developed in next version
         mapList.push("gangrungMap");  
-      
     }
 }
-
 
 var daegu_interval;
 // Daegu monitoring
@@ -2891,10 +2882,24 @@ function webcam(webcamId, vehicle) {
 }
 
 // under- development
+var active_webcam;
+var activeVideoButton;
 function scale_image(hidden_cam) {
     document.getElementById("myModal").style.display = "block";
     var div_url = document.getElementById(hidden_cam).style.background;
     document.getElementById("img01").style.backgroundImage = div_url;
+
+    if(hidden_cam == "hidden_cam1")
+    {
+        active_webcam = "webcam_div1";
+        activeVideoButton = "pausePlayButton1";
+    }
+    else if(hidden_cam == "hidden_cam2")
+    {
+        active_webcam = "webcam_div2";
+        activeVideoButton = "pausePlayButton2";
+    }
+    //alert("active_webcam :"+active_webcam+ " activeVideoButton:"+activeVideoButton);
 }
 
 function setByte(str) {
@@ -3145,12 +3150,12 @@ document.addEventListener('mouseup', function(e) {
     $('.contactDiv').hide();
   });
   
-function stopVideoStreaming()
+function stopVideoStreaming() //webcam_div, playPauseButton
 {
     // close full screen 
-    hide_div("myModal");
-
-    // stop video 
+    // stop video - make screen grey and show pause button
+    document.getElementById(active_webcam).style.backgroundColor = "grey";
+    document.getElementById(activeVideoButton).src = "images/cctv/pause.svg";
 } 
 
 // Odd file status
