@@ -7,6 +7,7 @@ function login_validation() {
     var input_pwd = $("#input_pwd").val();
     email_error.innerHTML = "";
     pwd_error.innerHTML = "";
+    credential_error.innerHTML = "";
     localStorage.setItem('activeUserID', input_email);
 
     if (!inputLengthCheck(input_email, email_error, "이메일 아이디를 입력해 주세요") && !inputLengthCheck(input_pwd, pwd_error, "비밀번호를 다시 확인 해주세요"))
@@ -26,13 +27,17 @@ function login_validation() {
     var api_url = "http://115.93.143.2:9103/api/auth/login/";
     postMethod(data, api_url, function (request) {
         if (request.status == 200) { 
-            var response = JSON.parse(request.response);
-            var token = response.token;
-            localStorage.setItem('token', token);
             localStorage.setItem('userId', input_email);
             localStorage.setItem('userPwd', input_pwd);
+            saveID_localstorage();
+         
+            //alert("TEst 1:"+request.response.user.username);
             // store map id for toggle
             window.location.href = "main.html";
+           //alert("TEst 1:"+JSON.stringify(request.response.user.username));
+            
+           // console.log("TEst:"+JSON.stringify(request.response.user.username));
+            //document.getElementById("active_username").innerHTML = request.response.user.username;
         }
         else 
         {
@@ -121,11 +126,36 @@ function sendMail() {
     //var x = document.getElementById("manager_selectlist").selectedIndex;
     var input_email = $("#manager_selectlist :selected").val();
     var message = $("#msgArea").val();
-    var postdata = JSON.stringify({
-        "email": input_email,
-        "message" : message
-    });
-    sendEmailAPI(postdata);
+
+   console.log("select site:"+ $('#select_site').val());
+   console.log("select manager:"+ $('#select_siteManager').val());
+    if(!$('#select_site').val() )
+    {
+        document.getElementById('messageSendStatus').innerHTML = "메시지를 보낼 SITE를 선택하세요.";
+        document.getElementById('messageSendStatus').style.color = "#EB5757";
+    }
+    else if(!$('#select_siteManager').val())
+    {
+        document.getElementById('messageSendStatus').innerHTML = "메시지를 보낼 관리자를 선택하세요.";
+        document.getElementById('messageSendStatus').style.color = "#EB5757";
+    }
+    else
+    {
+        if(message.length > 0)
+        {
+            var postdata = JSON.stringify({
+                "email": input_email,
+                "message" : message
+            });
+
+            sendEmailAPI(postdata);
+        }
+        else
+        {
+            document.getElementById('messageSendStatus').innerHTML = "메시지를 입력하세요.";
+            document.getElementById('messageSendStatus').style.color = "#EB5757";
+        }
+    }
 }
 
 function postMethod(data, api_url, callback) {
@@ -226,7 +256,12 @@ function inputMobileCheck(phone_no, error_p_dom, error_msg) {
 }
 
 function inputEmailCheck(email_id, error_p_dom, error_msg) {
-    if (!email_id.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) {
+    if(!email_id.includes('@'))
+    {
+        error_p_dom.innerHTML = '이메일 아이디를 올바르게 입력해 주세요.';
+        return false;
+    }
+    else if(!email_id.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) {
         error_p_dom.innerHTML = error_msg;
         return false;
     }
@@ -304,7 +339,12 @@ function updateUserData() {
 function saveID_localstorage() {
     if ($('#saveId_checkbox').is(':checked')) {
         localStorage.setItem('localStorage_inputId', document.getElementById("input_id").value);
+        localStorage.setItem('localStorage_checked', 'true');
         return false;
+    }
+    else{
+        localStorage.setItem('localStorage_inputId', '');
+        localStorage.setItem('localStorage_checked', 'false');
     }
 }
 
@@ -313,7 +353,12 @@ window.onload = function () {
     var input_id = document.getElementById("input_id");
     if (input_id != null) {
         input_id.value = localStorage.getItem("localStorage_inputId");
-    }
+        checkboxStatus = localStorage.getItem("localStorage_checked");
+        if(checkboxStatus == 'true')
+           document.getElementById("saveId_checkbox").checked = true;
+        else
+           document.getElementById("saveId_checkbox").checked = false;
+     }
 }
 /*
 window.onload = function () {

@@ -26,6 +26,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 
     <!--Leaflet files-->
+    
     <link rel="stylesheet" href="leaflet/leaflet.css">
     <link rel="stylesheet" href="leaflet-routing-machine-3.2.12/dist/leaflet-routing-machine.css">
 
@@ -114,16 +115,16 @@
     <div id="noticeModal" class="message_div">
         <div class="message-content">
             <div class="message-header">
-                <div class="noticeDiv2"  style="display: inline-block;" > <p class="noticeP1">공지사항 : </p></div>
-                    <select id="select_notice" class="noticeSelect">
-                        <option value= "0" selected="selected">전체</option>
-                        <option value= "1" >통합관제</option>
-                        <option value= "2">통합대시보드</option>
-                        <option value= "3">진단 및 오류 분석</option>
-                        <option value= "4">사고 예측 모델 및 데이터분석</option>
-                        <option value= "5">STEP</option>
-                        <option value= "6">스프링고 테스트모드</option>
-                        <option value= "7">데이터센터</option>
+                <div class="noticeDiv2"  style="display: inline-block;"> <p class="noticeP1">공지사항  </p></div>
+                    <select id="select_notice" class="noticeSelect" onchange="changeNotice()">
+                        <option value= "1" selected="selected">전체</option>
+                        <option value= "2" >통합관제</option>
+                        <option value= "3">통합대시보드</option>
+                        <option value= "4">진단 및 오류 분석</option>
+                        <option value= "5">사고 예측 모델 및 데이터분석</option>
+                        <option value= "6">STEP</option>
+                        <option value= "7">스프링고 테스트모드</option>
+                        <option value= "8">데이터센터</option>
                     </select>
                     <span onclick="hide_div('noticeModal');" style="font-size:40px;float: right;margin-right: 15px; cursor: pointer;
                     margin-top: 5px; ">&times;</span>
@@ -139,7 +140,7 @@
             <div class="message-header2">
                 <div class="msgDiv1">
                     <p class="msgSendP">메시지 보내기 </p>
-                    <span class="msg_close" onclick="hide_div('messageModal'); $('#msgArea').val('');document.getElementById('messageSendStatus').innerHTML =  '';">
+                    <span class="msg_close" onclick="clearMessage();">
                         <img src="images/closing_button.svg" style="margin-top: 15px;">
                     </span>
                 </div>
@@ -154,7 +155,7 @@
                         <option id="4">상암</option>
                         <option id=" ">강릉</option>
                     </select>
-                    <select id="select_siteManager" onchange="/*selectSite(this,'0','0')*/" class="select2">전체</select>
+                    <select id="select_siteManager" onchange="/*selectSite(this,'0','0')*/" class="select3">전체</select>
                 </div>
                 <textarea id="msgArea" class="textArea" rows="10" cols="30" name="contents" onkeyup="fnChkByte(this,'200')"></textarea>
                 <p id="messageSendStatus" class="msgStatus"></p>
@@ -163,7 +164,6 @@
                 </p>
             </div>
             <div class="message-footer2">
-                
                 <button class="send_button" onclick="sendMail();">보내기</button>
             </div>
         </div>
@@ -217,16 +217,16 @@
     <div id="includedContent"></div>
     <!--main div here-->
 
-    <!--Setings button (Active user information)settingModal-->
+    <!--Setings button (Active user information)settingModal
     <div id="settingDialog">
     <div class="settingDiv" id="settingDiv">
         <div class="settingTitle">
             <p>환경설정</p>
-            <img src="images/closing_button.svg" onclick="hide_div('settingDiv');"/>
+            <img src="images/closing_button.svg" onclick="clearFields(); hide_div('settingDialog');"/>
         </div>
         <div class="settingDiv1">
-            <button onclick="settings();">로그인 정보</button>
-            <button onclick="passwordChange2();">비밀번호 변경</button>
+            <button onclick="settings();" id="settingOptions" class="blueButton activeSettingButton">로그인 정보</button>
+            <button onclick="passwordChange2();" id="user_pwd_change">비밀번호 변경</button>
         </div>
         <div class="settingDiv2" id="settingDiv2">
             <label class="settingDiv_label">이메일 ID</label>
@@ -244,12 +244,12 @@
             <span><img src="images/userIcon.svg" id="activeUserImg"></span>
             <button style="cursor:pointer">사진 변경하기</button>
         </div>
-        <!--Update password window-->
+        Update password window
         <div class="settingDiv21" id="settingDiv21">
             <label class="settingDiv_label">현재 비밀번호</label>
             <input class="settingDiv_span" id="currentPwd" type="password" disabled/>
             <label class="settingDiv_label">새 비밀번호</label>
-            <input class="settingDiv_span" id="newPwd" type="password" placeholder="새로운 비밀번호를 입력하세요."/>
+            <input class="settingDiv_span" id="newPwd" type="password" onchange="t(ch);" placeholder="새로운 비밀번호를 입력하세요."/>
             <label class="settingDiv_label">새 비밀번호 확인</label>
             <input class="settingDiv_span" id="confirmPwd" type="password" placeholder="새로운 비밀번호를 다시 입력하세요." />
             <span class="error" id="pwdResetError"></span>
@@ -263,27 +263,29 @@
             <button onclick="resetPassword()" style="cursor: pointer;">변경하기</button>
         </div>
     </div>
-</div>
-
-<!-- ##offsite{
-width : uncheck    
-}-->
-
-
+</div>-->
     <div class="map_zindex">
-        <div id="hide_test" class="round_button">
-            <button onclick="switchMap(this);" id="main_site_button">전체운행노선</button>
-            <button onclick="switchMap(this);" id="degu_button">대구</button>
-            <button onclick="switchMap(this);/*sejongRoute(); open_tab(this.id, 'degu_window',3);*/" id="sejong_button">세종 </button>
-            <button onclick="switchMap(this);/*sangamRoute(); open_tab(this.id, 'degu_window',4);*/" id="sangam_button">상암 </button>
-            <button onclick="switchMap(this);/*gunsanRoute(); open_tab(this.id, 'degu_window',1);*/" id="gunsan_button">군산 </button>
-            <button onclick="switchMap(this);/*offsite(); */open_tab('offsite_window',0);" id="offsite_button"> 운행 종료<br> 노선</button>
+        <div id="hide_test" class="round_button navbar">
+            <button class="buttonHover" onclick="switchMap(this);" id="main_site_button">전체운행노선</button>
+            <button class="buttonHover" onclick="switchMap(this);" id="degu_button">대구</button>        
+            <button onmouseover="switchMap(this);"  id="sejong_button">세종 </button>
+            <!--Sejong Sub Menu Modal-->
+            <div id="subMenuModal" class="subMenuModal">
+                <div id="sejongSubmenu" class="subMenu">
+                    <button class="sejongHover1" id="sejong_button1" onclick="switchMap(this);">세종호수공원</button>    
+                    <button class="sejongHover2" onclick="switchMap(this);" id="sejong_button2">규제자유특구 실증구간(4-2)</button>    
+                </div>
+            </div>
+            <button class="buttonHover" onclick="switchMap(this);" id="sangam_button">상암 </button>
+            <button onclick="switchMap(this);" id="gunsan_button">군산 </button>
+            <button onclick="switchMap(this);open_tab('offsite_window',0);" id="offsite_button"> 운행종료노선</button>
         </div>
         <div class="button_window hide_div list_style_blue" id="offsite_window">
             <ul id="offsite_list" class="button_window_ul button_window_hr"></ul>
         </div>
         <!--offsite list and sub-list modal-->
         <div id="siteListModal" class="listModal">
+            <div class="triangle-left" id="leftTriangle"></div>
             <div id="listItem" class="listItem_div">
                 <div style="margin:10px">
                     <span class="offsiteSpan" onclick="hide_div('siteListModal')"><img src="images/itemDiv_close.svg"></span>
@@ -295,16 +297,16 @@ width : uncheck
             </div>
         </div>
         <!--Site Window div-->
-        <div class="button_window hide_div scrolly" id="degu_window">
+        <div class="button_window hide_div " id="degu_window">
             <div id="routeTitleDiv" class="routeTitle">
                 <lable id="site_name" class="window_p display_inline_block font-weight-bold">대구 수성 알파시티</lable>
-                <img class="activeGreen" src="images/status/active_green.svg" />
+                <img id="site_status" class="activeGreen" src="" />
                 <!--Show weather icon and temperature-->
                 <lable class="tempLabel" id="temp_celsicus"></lable>
                 <img class="weatherIcon" id="weather_icon" />
             </div>
             <!--Site title and summary-->
-            <div id="leftMarginDiv" class="siteDiv1">
+            <div id="leftMarginDiv" class="siteDiv1 scrolly">
                 <p id="site_title" class="siteTitle"></p>
                 <div class="marginDiv2">
                     <p class="font-weight-bold managerLabel">관리자 </p>
@@ -319,40 +321,26 @@ width : uncheck
                         <img id="arrowImg" onclick="siteSummary('info_content');" src="images/closeArrow.svg"/>
                     </span>
                 </div>
-                <div class="infoDetail" id="info_content">
-                    <lable class="siteSummary" id="site_summary"></lable>
+                <div class = "infoDetail" id = "info_content">
+                    <lable class ="siteSummary" id = "site_summary"></lable>
                 </div>
                 <!--ETA of vehicle-->
-                <div class="station_table" id="station_table" >
-                    <p class="window_p1">정류장</p>
-                    <div style="margin-left: 44px;">
-                        <div class="timeDiv1" id="stationList" style="display: inline-block;">
-                        
-                        </div>
-                        <div id="station_li" style="width: 20px;
-                        display: inline-block;
-                        position: absolute;">
-                    
-                        <!-- <ul  id="station_ul" class="bar">
-                            
-                            </ul>-->
-                        </div>
-                        <div class="timeDiv2" id="eta_list" >
-                            <!-- <p style="padding-top: 3px;" id="deguStationA">곧 도착 또는 출발</p>
-                            <p style="padding-top: 30px;" id="deguStationB">0분 후 도착</p>
-                            <p style="padding-top: 31px;" id="deguStationC">0분 후 도착</p>
-                            <p style="padding-top: 31px;" id="deguStationD">0분 후 도착</p>-->
-                        </div>
+                <div class = "station_table" id = "station_table">
+                    <p class = "window_p1">정류장</p>
+                    <div style = "margin-left: 44px;">
+                        <div class = "timeDiv1" id = "stationList" style = "display: inline-block;"></div>
+                        <div id = "station_li" style = "width: 20px; display: inline-block; position: absolute;"></div>
+                        <div class = "timeDiv2" id = "eta_list"></div>
                     </div>
                 </div>
                 <!-- Div for vehicle information-->
-                <hr style="clear: both; border: 0.5px solid #BDBDBD; margin-bottom: 21px;">
+                <hr style="clear: both; border: 0.5px solid #BDBDBD; margin: 0px 40px 21px 0px; opacity: 0.3;">
                 <!--list of available vehicles on route-->   
                 <!--odd file for route-->  
                 <div>
                     <span class="window_p1">차량</span>
                     <select class="vehicleList" id="vehicleSelect" onchange="changeVehicleInfo(this); oddButtonStatus();"></select>
-                    <span class="oddButton"  onclick="oddFileDownload()" id="oddFileSpan"><a id="oddFile" target="_blank" href="" download></a></span>
+                    <span class="oddButton" onclick="oddFileDownload()" id="oddFileSpan"><a id="oddFile" target="_blank" href="" download></a></span>
                 </div>
                 <!--Vehicle info div-->
                 <div class="vehicleDiv1">
@@ -377,7 +365,7 @@ width : uncheck
                     <!--status of vehicle-->
                     <!--second div start-->
                     <div style="width: 357px;  height:195px; ">
-                        <div style=" display: inline-block;  height:212px;position: absolute; width:152px;left: 18px; border-right: 0.5px solid #BDBDBD;">
+                        <div style=" display: inline-block;  height:202px;position: absolute; width:152px;left: 18px; border-right: 0.5px solid #BDBDBD;">
                             <div class="vehicleDiv3">
                                 <span class="cameraAngle" style="float:left "> Rear </span>
                                 <span class="cameraAngle" style="float:right" id="v_front"> Front </span>
@@ -439,7 +427,7 @@ width : uncheck
                     </div>   <!--SpeedDiv end-->
                 </div> <!--second div start-->
             </div> <!--Vehicle info div-->
-            <hr style="margin-top: 25px; border: 0.5px solid #BDBDBD; margin-bottom: 20px;"/>
+            <hr style="margin-top: 25px; border: 0.5px solid #BDBDBD; margin: 25px 40px 21px 0px; opacity: 0.3;"/>
             <button class="emergency" onclick ="showEmergencyContact();" id="contact_button">Emergency Contact</button>
             <br/>
 
@@ -507,11 +495,11 @@ width : uncheck
                 <p class="p6">Total Accumulated Data</p>
             </div>
             <div class="graphDivRight">
-                <p class="p7" id="totalData">0</p>
-                <p class="p8">GB</p>
+                <p class="p7" id="totalData"></p>
+                <p class="p8" id="dataSize"></p>
             </div>
             <hr class="hr3">
-            <p class="scaleUnit">GB</p>
+            <p class="scaleUnit" id="dataUnit"></p>
             <canvas id="graph3"></canvas>
         </div>
 
@@ -547,8 +535,8 @@ width : uncheck
     </div>
    
     <!-- Webcam div--><!--</div>-->
-    <div id="webcam_div" class="webcam_div">
-        <div id="webcam_div1" class="webcam_div2">
+    <div id="webcam_div" class="webcam_div" >
+        <div id="webcam_div1" class="webcam_div2" style="margin-right: 15px;" >
             <p class="cam_title">CAMERA-1</p>
             <div id="offCameraDiv1" class="offcam_btn1"> 
                 <img src="images/cctv/videocam_off.svg" onclick=""/> 
@@ -574,26 +562,16 @@ width : uncheck
         <span class="close2" >&times;</span>
         <div class="modal-content" id="img01"> 
             <div class="buttonDiv">
-                <!--<img id="pausePlayButton3" src="images/cctv/pause.svg" onclick="playPause('img01', 'pausePlayButton3')"/>-->
                 <img src="images/cctv/fullscreen_exit.svg" onclick="document.getElementById('myModal').style.display = 'none'"/>    
             </div>
         </div>
     </div>
 
-    <!--Sejong Sub Menu Modal-->
-    <div id="subMenuModal" class="subMenuModal">
-        <div id="sejongSubmenu" class="subMenu">
-            <button class="sejongHover1" id="sejong_button1" onclick="switchMap(this);" >세종호수공원</button>    
-            <button class="sejongHover2" onclick="switchMap(this);" id="sejong_button2">규제자유특구 실증구간(4-2)</button>    
-        </div>
-    </div>
- 
     <div id="hidden_cam1" hidden></div> <!--style="height:500px;width:500px; z-index: 1010;position: absolute; left:600px;top:600px;border:1px solid black"-->
     <div id="hidden_cam2" hidden></div>
            <p id="loggedin_userid" hidden></p>
         <p id="currentMap" hidden></p>
     </div>
-  
     <p id="currentSiteId" hidden></p>
 
     <script>
@@ -635,59 +613,30 @@ width : uncheck
         
     /* Sejong submenu */
     var subMenuModal = document.getElementById("subMenuModal");
-    subMenuModal.onclick=function(event)
+    subMenuModal.onmouseover=function(event)//onclick=function(event)
     {
         // When the user clicks anywhere outside of the modal, close it
         if(subMenuModal.style.display == "block")
         {                   
             if (event.target == subMenuModal) 
                 subMenuModal.style.display = "none";
-            
-                /*
-            // hover previous site button
-            var currentSite = document.getElementById('currentSiteId').innerHTML;
-            var buttonElement;
-            alert("currentSite :"+currentSite);
-            if(buttonElement != undefined)
-            {
-                if(currentSite == '10')
-                {
-                buttonElement = document.getElementById('main_site_button');
-                }
-                else if(currentSite == '2')
-                {
-                    buttonElement = document.getElementById('degu_button');
-                }
-                else if(currentSite == '0')
-                {
-                    buttonElement = document.getElementById('sejong_button');
-                }
-                else if(currentSite == '4')
-                {
-                    buttonElement = document.getElementById('sangam_button');
-                }
-                else if(currentSite == '1')
-                {
-                    buttonElement = document.getElementById('gunsan_button');
-                }
-                else if(currentSite == '0')
-                {
-                    buttonElement = document.getElementById('offsite_button');
-                }
-                else if(currentSite == '3')
-                {
-                    buttonElement = document.getElementById('sejong_button1');
-                }
-                else if(currentSite == '18')
-                {
-                    buttonElement = document.getElementById('sejong_button2');
-                }
-
-                buttonElement.style.backgroundColor = "#ffffff";
-                buttonElement.style.color = "#185786";
-            }*/
         } 
     }
+
+    // close notice modal
+
+    var noticeModal = document.getElementById("noticeModal");
+    noticeModal.onclick=function(event)//onclick=function(event)
+    {
+        // When the user clicks anywhere outside of the modal, close it
+        if(noticeModal.style.display == "block")
+        {                   
+            if (event.target == noticeModal) 
+                noticeModal.style.display = "none";
+        } 
+    }
+    
+
     window.onclick = function(event) {
         /* Close the sejong submenu modal */
         if(subMenuModal.style.display == "block")
@@ -707,6 +656,17 @@ width : uncheck
             {
                 if(event.target.id == "contactDiv") 
                     $("#contactDiv").hide();
+            }
+
+            //password reset setting dialog
+            if(document.getElementById("settingDialog").style.display == "block")
+            {
+                if(event.target.id == "settingDialog")
+                {
+                    $("#settingDialog").hide();
+                    clearFields();
+                } 
+                    
             }
         });
     }

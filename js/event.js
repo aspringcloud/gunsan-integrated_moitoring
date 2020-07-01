@@ -20,13 +20,13 @@ function createAlertDiv(eventData)
        
         if((JSON.parse(eventData)).door.value == true )
         {
-            eventMessage = "Doors are open"; 
+            eventMessage = "문이 열립니다."; 
             if(id == selectedId)
                 document.getElementById("doorStatus").src = "images/door/door_open.svg";
         }
         else
         {
-            eventMessage = "Doors are closed"; 
+            eventMessage = "문이 닫힙니다."; 
             if(id == selectedId)
                 document.getElementById("doorStatus").src = "images/door/door_closed.svg";
         }
@@ -38,13 +38,13 @@ function createAlertDiv(eventData)
         vehicleID = (JSON.parse(eventData)).drive.vehicle_mid;
         if((JSON.parse(eventData)).drive.value == true)
         {
-            eventMessage = "Drive is Autonomous"; 
+            eventMessage = "자율주행 상태입니다."; 
             if(id == selectedId)
                 document.getElementById("driveStatus").innerHTML = "AUTONOMOUS";
         }
         else
         {
-            eventMessage = "Drive is Manual"; 
+            eventMessage = "수동주행 상태입니다."; 
             if(id == selectedId)
                 document.getElementById("driveStatus").innerHTML = "MANUAL";
         }
@@ -64,20 +64,19 @@ function createAlertDiv(eventData)
       
         if((JSON.parse(eventData)).parking.value == true)
         {
-            eventMessage = "Vehice is parked"; 
+            eventMessage = "주차 상태입니다."; 
             if(id == selectedId)
                 vehicleStatus("PARKED", "rgb(128,128,128)");
         }
-            
         else
-            eventMessage = "Vehice is not parked"; 
+            eventMessage = "주차 상태가 아닙니다."; 
     }
     else if(dataAttribute == "passenger")
     {
         id = (JSON.parse(eventData)).passenger.vehicle_id;
         selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
         vehicleID = (JSON.parse(eventData)).passenger.vehicle_mid;
-        eventMessage = "Current passengers: "+(JSON.parse(eventData)).passenger.current_passenger; 
+        eventMessage = "현재 승객 수: "+(JSON.parse(eventData)).passenger.current_passenger+ " 명"; 
         if(id == selectedId)
             passengerStatus((JSON.parse(eventData)).passenger.current_passenger);
     }
@@ -87,9 +86,9 @@ function createAlertDiv(eventData)
         selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
         vehicleID = (JSON.parse(eventData)).power.vehicle_mid;
         if((JSON.parse(eventData)).power.value == true )
-            eventMessage = "Power is ON"; 
+            eventMessage = "전원이 켜졌습니다."; 
         else
-            eventMessage = "Power is OFF"; 
+            eventMessage = "전원이 꺼졌습니다."; 
     }
 
     if(vehicleID == null)

@@ -1,11 +1,8 @@
     <div class="main_div">
-    
-            <p class=" display_inline_block">
-                <a href="http://www.aimobility.io" target="_blank"><img class="spring_cloud_logo" alt="spring cloud" src="images\login\sc_logo.svg"/></a>
-            </p>
-            <p class="logo_p1">
-                <a href="http://www.aimobility.io" target="_blank"><img class="ai_mobility_logo" alt="ai.mobility" src="images\ai_mobility.jpg"/></a>
-            </p>
+      
+        <a target="_blank" class="logo spring_cloud" href="http://www.tasio.io/" alt="spring cloud"></a>       
+        <a target="_blank" class="logo aimo" href="http://www.aimobility.io" alt="ai.mobility"></a>       
+             
             <!-- main tabs-->
             <div class="mainTop">
             <div class="inline_element tab_elements">
@@ -21,7 +18,7 @@
                 <label class="switch">
                     <input type="checkbox" id="switchButton" onchange="toggledSwitch()" >
                     <span class="slider round"></span>
-                  </label>
+                </label>
             </div>
             <div class="tab_elements date_time_div">
                 <!--Current date time-->
@@ -58,11 +55,11 @@
         <div class="settingDiv" id="settingDiv">
             <div class="settingTitle">
                 <p>환경설정</p>
-                <img src="images/closing_button.svg" onclick="hide_div('settingDiv');"/>
+                <img src="images/closing_button.svg" onclick="clearFields();hide_div('settingDialog');"/>
             </div>
             <div class="settingDiv1">
-                <button onclick="settings();">로그인 정보</button>
-                <button onclick="passwordChange2();">비밀번호 변경</button>
+                <button onclick="settings();" id="settingOptions" >로그인 정보</button>
+                <button onclick="passwordChange2();" id="user_pwd_change">비밀번호 변경</button>
             </div>
             <div class="settingDiv2" id="settingDiv2">
                 <label class="settingDiv_label">이메일 ID</label>
@@ -85,9 +82,9 @@
                 <label class="settingDiv_label">현재 비밀번호</label>
                 <input class="settingDiv_span" id="currentPwd" type="password" disabled/>
                 <label class="settingDiv_label">새 비밀번호</label>
-                <input class="settingDiv_span" id="newPwd" type="password" placeholder="새로운 비밀번호를 입력하세요."/>
+                <input class="settingDiv_span" id="newPwd"  type="password"  placeholder="새로운 비밀번호를 입력하세요." class="imeModeDisabled" /> <!--onkeydown="myFunction(event); return true;" -->
                 <label class="settingDiv_label">새 비밀번호 확인</label>
-                <input class="settingDiv_span" id="confirmPwd" type="password" placeholder="새로운 비밀번호를 다시 입력하세요." />
+                <input class="settingDiv_span" id="confirmPwd" type="password" placeholder="새로운 비밀번호를 다시 입력하세요."  class="imeModeDisabled" />
                 <span class="error" id="pwdResetError"></span>
                 <div>
                     <span class="settingNotice">※ 비밀번호에 이메일ID, 이름을 포함할 수 없습니다.</span>
@@ -105,7 +102,7 @@
 <script>
     changeTabButtonColor();
     setDateTime(); // Update dateTime
-
+ 
     /*if (document.documentElement.requestFullscreen) {
             document.documentElement.requestFullscreen();
           } else if (document.documentElement.msRequestFullscreen) {
@@ -117,6 +114,10 @@
           }*/
 
     //toggledSwitch(); // fullscreen mode by default
+
+    
+      
+  
 
      function getPageName(){ 
         var url = window.document.URL;
