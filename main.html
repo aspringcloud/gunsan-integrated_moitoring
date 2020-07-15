@@ -298,12 +298,16 @@
         </div>
         <!--Site Window div-->
         <div class="button_window hide_div " id="degu_window">
+            
             <div id="routeTitleDiv" class="routeTitle">
+                <div id="weatherDiv" style="margin-top: 16px;">
+                    <!--Show weather icon and temperature-->
+                    <img class="weatherIcon" id="weather_icon" />
+                    <lable class="tempLabel" id="temp_celsicus"></lable>
+                    
+               </div>
                 <lable id="site_name" class="window_p display_inline_block font-weight-bold">대구 수성 알파시티</lable>
                 <img id="site_status" class="activeGreen" src="" />
-                <!--Show weather icon and temperature-->
-                <lable class="tempLabel" id="temp_celsicus"></lable>
-                <img class="weatherIcon" id="weather_icon" />
             </div>
             <!--Site title and summary-->
             <div id="leftMarginDiv" class="siteDiv1 scrolly">
@@ -327,9 +331,9 @@
                 <!--ETA of vehicle-->
                 <div class = "station_table" id = "station_table">
                     <p class = "window_p1">정류장</p>
-                    <div style = "margin-left: 44px;">
+                    <div style = "margin-left: 15px; min-height : 20px; max-height:320px;"> <!--margin-left: 44px;-->
                         <div class = "timeDiv1" id = "stationList" style = "display: inline-block;"></div>
-                        <div id = "station_li" style = "width: 20px; display: inline-block; position: absolute;"></div>
+                        <div id = "station_li" style = "margin-top: 3px;margin-left: 3px; width:4px; display: inline-block; position: absolute;background-color: #2E92B0;"></div> <!--width: 20px;-->
                         <div class = "timeDiv2" id = "eta_list"></div>
                     </div>
                 </div>
@@ -339,7 +343,7 @@
                 <!--odd file for route-->  
                 <div>
                     <span class="window_p1">차량</span>
-                    <select class="vehicleList" id="vehicleSelect" onchange="changeVehicleInfo(this); oddButtonStatus();"></select>
+                    <select class="vehicleList" id="vehicleSelect" onchange="changeVehicleInfo(this); oddButtonStatus(); "></select>
                     <span class="oddButton" onclick="oddFileDownload()" id="oddFileSpan"><a id="oddFile" target="_blank" href="" download></a></span>
                 </div>
                 <!--Vehicle info div-->
@@ -605,11 +609,7 @@
             } 
         }
 
-        //Update weather information after every 20 minutes 
-      /*  getweather(35.8368,128.6835);
-        setInterval(function() {
-            getweather(35.8368,128.6835);
-        }, 60 * 60000);*/
+        
         
     /* Sejong submenu */
     var subMenuModal = document.getElementById("subMenuModal");
@@ -624,7 +624,6 @@
     }
 
     // close notice modal
-
     var noticeModal = document.getElementById("noticeModal");
     noticeModal.onclick=function(event)//onclick=function(event)
     {
@@ -636,7 +635,6 @@
         } 
     }
     
-
     window.onclick = function(event) {
         /* Close the sejong submenu modal */
         if(subMenuModal.style.display == "block")

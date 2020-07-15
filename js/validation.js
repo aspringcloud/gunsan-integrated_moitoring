@@ -24,20 +24,14 @@ function login_validation() {
         "password": input_pwd,
     });
 
-    var api_url = "http://115.93.143.2:9103/api/auth/login/";
+    var api_url = "https://test.aspringcloud.com/api/auth/login/";
     postMethod(data, api_url, function (request) {
-        if (request.status == 200) { 
+        if(request.status == 200) { 
             localStorage.setItem('userId', input_email);
             localStorage.setItem('userPwd', input_pwd);
             saveID_localstorage();
-         
-            //alert("TEst 1:"+request.response.user.username);
             // store map id for toggle
             window.location.href = "main.html";
-           //alert("TEst 1:"+JSON.stringify(request.response.user.username));
-            
-           // console.log("TEst:"+JSON.stringify(request.response.user.username));
-            //document.getElementById("active_username").innerHTML = request.response.user.username;
         }
         else 
         {
@@ -86,7 +80,7 @@ function findid_validation(button_id) {
         "email": input_email,
     });
 
-    var api_url = "http://115.93.143.2:9103/api/users/resetpassword/";
+    var api_url = "https://test.aspringcloud.com/api/users/resetpassword/";
     postMethod(postdata, api_url, function (status_code) {
         if (status_code == 200) {
             document.getElementById('id_email_p').innerHTML = input_email;
@@ -105,7 +99,7 @@ function findid_validation(button_id) {
 }
 
 function sendEmailAPI(postdata) {
-    var api_url = "http://115.93.143.2:9103/api/users/sendmessage/";
+    var api_url = "https://test.aspringcloud.com/api/users/sendmessage/";
     postMethod(postdata, api_url, function (status_code) {
         if (status_code == 200)
         {
@@ -127,8 +121,6 @@ function sendMail() {
     var input_email = $("#manager_selectlist :selected").val();
     var message = $("#msgArea").val();
 
-   console.log("select site:"+ $('#select_site').val());
-   console.log("select manager:"+ $('#select_siteManager').val());
     if(!$('#select_site').val() )
     {
         document.getElementById('messageSendStatus').innerHTML = "메시지를 보낼 SITE를 선택하세요.";
@@ -162,25 +154,30 @@ function postMethod(data, api_url, callback) {
     const requestURL = api_url;
     var username = localStorage.getItem("userId"); //"admin@aspringcloud.com";
     var password = localStorage.getItem("userPwd"); //"spring#007";
-    console.log("username:"+username+" password:"+password);
+    //console.log("username:"+username+" password:"+password);
     var base64Credentials = "Basic " + btoa(username + ":" + password);
     var request = new XMLHttpRequest();
+    var baseUrl= "https://test.aspringcloud.com/api/";//"http://115.93.143.2:9103/api/"; //"https://api.aspringcloud.com/api/"
     request.open('POST', requestURL, true);
     request.onload = function (e) {
-        if(api_url == "http://115.93.143.2:9103/api/auth/password/change/" || api_url == "http://115.93.143.2:9103/api/auth/login/" || api_url == "http://115.93.143.2:9103/api/oplogs/by-date/" )
+        if(api_url == "https://test.aspringcloud.com/api/auth/password/change/" || api_url == "https://test.aspringcloud.com/api/auth/login/" || api_url == "https://test.aspringcloud.com/api/oplogs/by-date/" )
+        {
+            console.log("request status :"+request.status);
             callback(request);
+        }
         else
             callback(request.status);
      };
     request.onerror = function(status) {
         console.log("Error (POST).");
     };
-    if(api_url == "http://115.93.143.2:9103/api/auth/login/")
+    if(api_url == "https://test.aspringcloud.com/api/auth/login/")
     {
         request.setRequestHeader("Authorization", authenticateUser((JSON.parse(data)).email, (JSON.parse(data)).password));
         request.setRequestHeader("Content-Type", "application/json;charset=UTF-8;");
     }
-    else{
+    else
+    {
         request.setRequestHeader("Authorization", base64Credentials);
         request.setRequestHeader("Content-Type", "application/json;charset=UTF-8;");
     }

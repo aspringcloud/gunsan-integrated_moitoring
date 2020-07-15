@@ -4,12 +4,14 @@ $(document).on('click','.batteryAlert button', function(){
 
 function createAlertDiv(eventData)
 {
-    var dataAttribute = Object.keys(JSON.parse(eventData))
+    var event_how = (JSON.parse(eventData).how);
+    var dataAttribute = event_how.type;//Object.keys(JSON.parse(eventData))
     var id;
     var vehicleID; 
     var eventMessage;
     var selectList = document.getElementById("vehicleSelect");  // vehicle select list
     var selectedId;// = selectList.options[selectList.selectedIndex].id;  // selected Id 
+    var siteId;
 
     if(dataAttribute == "door")
     {
@@ -51,10 +53,11 @@ function createAlertDiv(eventData)
     }
     else if(dataAttribute == "message")
     {
-        id = (JSON.parse(eventData)).message.vehicle_id;
+        id = event_how.vehicle_id;//(JSON.parse(eventData)).message.vehicle_id;
         selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
-        vehicleID = (JSON.parse(eventData)).message.vehicle_mid;
-        eventMessage = (JSON.parse(eventData)).message.value; 
+        vehicleID = event_how.vehicle_mid;//(JSON.parse(eventData)).message.vehicle_mid;
+        eventMessage = event_how.value;//(JSON.parse(eventData)).message.value; 
+        siteId = event_how.site_id;
     }
     else if(dataAttribute == "parking")
     {
@@ -91,7 +94,8 @@ function createAlertDiv(eventData)
             eventMessage = "전원이 꺼졌습니다."; 
     }
 
-    if(vehicleID == null)
+    //alert("active_site :"+active_site+ "  siteId:"+siteId);
+    if(vehicleID == null || siteId != active_site ) //|| siteId != active_site
         return false;
     
     // Create div to show event information

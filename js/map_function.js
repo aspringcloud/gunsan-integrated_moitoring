@@ -28,6 +28,9 @@ var clusterMapCount = 0;
 // zoom status of cluster map
 var zoomHome_main;
 
+// Active site id 
+var active_site=0; 
+
 function activeButton(element)
 {   var buttonList = ["main_site_button", "degu_button", "sejong_button", "sangam_button", "sejong_button1", "sejong_button2", "gunsan_button", "offsite_button"];
     for(var i = 0; i < buttonList.length; i++)
@@ -53,8 +56,9 @@ function activeButton(element)
     }
 }
 
+var eta_interval;
 function switchMap(obj)
-{        
+{   
     if(obj.id == "sejong_button" )
     {   
         var show_elements = ["subMenuModal","sejongSubmenu"];
@@ -62,6 +66,8 @@ function switchMap(obj)
     }
     else
     {
+        if(eta_interval != null)
+            clearInterval(eta_interval);
         activeButton(obj);
         if(obj.id == "degu_button")
         {  
@@ -81,7 +87,6 @@ function switchMap(obj)
                     zoomControl: false,
                 });
             }
-                  
             showSite(daegu_map, 2, deguClickCount); 
             show_div("alertDiv");
             document.getElementById('currentSiteId').innerHTML="2";
@@ -133,14 +138,17 @@ function switchMap(obj)
             if(sejong_map == undefined)
             {
                 sejong_map = L.map('sejongMap',{
-                    zoom : 18,
-                    center:[36.499951, 127.270606],
+                    zoom : 17,
+                    center:[36.50047,127.27109],//[36.499910, 127.270606],
                     zoomControl: false,
                 });
             }
 
             if(daegu_interval != null)
                 clearInterval(daegu_interval);
+/*
+            if(eta_interval != null)
+                clearInterval(eta_interval);    */
 
             showElements(["sejongSubmenu", "alertDiv"]);
             hide_div('countInfoDiv');
@@ -274,6 +282,7 @@ function buttonHover(element)
 
 // Daegu monitoring
 var daegu_interval;
+//var eta_interval;
 function showSite(mapInstance, currentSiteId, clickCount, mapToShow) 
 {
     if(interval != null)
@@ -291,6 +300,7 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
     hideElements(elementsToHide);
     showElements(elementsToShow);
     open_tab('degu_window',currentSiteId);
+    active_site= currentSiteId;
          
     if(clickCount <= 1)
     {        
@@ -301,6 +311,12 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
         showDataCenter(mapInstance, currentSiteId);
         show_v2x(mapInstance, "v2x/", currentSiteId); 
     }
+    
+    //Update weather information after every 10 minutes 
+    getweather(currentSiteId);
+    setInterval(function() {
+        getweather(currentSiteId);
+    }, 10 * 60000);
 
     mapInstance.invalidateSize();
      
@@ -356,8 +372,13 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
         }
 
         // update ETA
+        /*
         updateETA(currentSiteId);
- 
+        eta_interval = setInterval(function() {
+            updateETA(currentSiteId);
+            console.log("Updating eta after 30 seconds")
+        }, 30000);*/
+        
         // update status of webcam  
         document.getElementById("hidden_cam1").style.background= "";
         document.getElementById("hidden_cam2").style.background= "";
@@ -392,31 +413,19 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
             }
         });
     });
+
     show_div("alertDiv");
 
     // development history data (underdevelopment)
     showSummary('site');
 
-    // websocket connection
-    //openWSConnection();
 }
-/*
-function launchFullScreen(element) {
-    if(element.requestFullScreen) {
-      element.requestFullScreen();
-    } else if(element.mozRequestFullScreen) {
-      element.mozRequestFullScreen();
-    } else if(element.webkitRequestFullScreen) {
-      element.webkitRequestFullScreen();
-    }
-}
- */
 
 var switchStatus = false;
 function toggledSwitch()
 {
     if(switchStatus == false)
-        switchStatus =true;
+        switchStatus = true;
     else
         switchStatus = false;
 
@@ -626,23 +635,31 @@ function showContent(tabId) {
         window.location.href = "dashboard.html";
 }
 
+function setWeather(domElement, weatherStatus)
+{
+    var weatherIconPath;
+    if(weatherStatus == "rainy") 
+        weatherIconPath = "images/weather/rainy.svg";
+    else if(weatherStatus == "good") 
+        weatherIconPath = "images/weather/sunny.svg";
+    else if(weatherStatus == "cloudy") 
+        weatherIconPath = "images/weather/cloudy.svg";
+    else if(weatherStatus == "snow") 
+        weatherIconPath = "images/weather/snowy.svg";
+
+    document.getElementById(domElement).src = weatherIconPath;
+}
+
 // Show weather information on main.html
-function getweather(lat, lon) {
-    var key = '326fceb5cbe3b99fa6f5e0f307732100'; // API key
-    // fetch data from open weather every 20 minutes
-    // Note: Time interval can be chnaged in future
-    setInterval(function () {
-        fetch('https://api.openweathermap.org/data/2.5/weather?lat=' +lat+ '&lon=' +lon+ '&appid=' +key)
-            .then(function (resp) { return resp.json() }) // Convert data to json
-            .then(function (data) {
-                var celcius = Math.round(parseFloat(data.main.temp) - 273.15);
-                document.getElementById('temp_celsicus').innerHTML = celcius+ '&deg;C';
-                document.getElementById('weather_icon').src = "http://openweathermap.org/img/w/" +data.weather[0].icon+ ".png";
-            })
-            .catch(function () {
-                console.log("Unable to fetch open weather map data.");
-            });
-    }, 20000);
+function getweather(site_id) {
+    var url = 'sites/'+site_id+'/';
+    getMethod(url, function(data) {
+        var weatherData =  JSON.parse(data);
+        //set current weather 
+        var currentWeather = JSON.parse((weatherData.current_weather)).weather;
+        document.getElementById('temp_celsicus').innerHTML = Math.round(JSON.parse((weatherData.current_weather)).temp)+ '&deg;C';
+        setWeather('weather_icon', currentWeather);
+    });
 }
 
 // shows passenger count by images icon
@@ -987,6 +1004,14 @@ function changeVehicleInfo(obj)
         var selectedId = obj.options[obj.selectedIndex].id;
         interval = vehicleInfo(activeMap , selectedId);
     }
+    if(eta_interval != null)
+        clearInterval(eta_interval);
+    // update ETA
+    updateETA(active_site);
+    eta_interval = setInterval(function() {
+        updateETA(active_site);
+        //console.log("Updating eta after 30 seconds on select change");
+    }, 30000);
 }
 
 function createHtmlMarker(vehicleObj, iconHtml)
@@ -1002,7 +1027,7 @@ function createHtmlMarker(vehicleObj, iconHtml)
 // This is vehicle ripple effect function. 
 var rippleMarkerArray = [];
 var shuttleMarkerArray = [];
-function showVehicleRipple(request_count, mapInstance, vehicleInfo){ 
+function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteId){ 
         var vehicleMarker;
         // loop throught array vehicles of route
         for(var j = 0; j < vehicleInfo.length; j++)
@@ -1088,7 +1113,7 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo){
                 vehicleMarker.bindPopup(customPopup, customOptions).openPopup();               // bind popup to vehicle marker                   
                 vehicleMarker.on('click', function(e) {           
                     // vehicle marker on click function ---> updates vehicle popup data every second 
-                    setPopupContent(e, mapInstance);
+                    setPopupContent(e, mapInstance, currentSiteId);
             });
    
             vehicleMarker.addTo(mapInstance);                                                 // show vehicle icon on route
@@ -1232,14 +1257,14 @@ function operatingStatus(status_boolean)
     return operatingStatus;
 } 
 
-function setPopupContent(e, mapInstance)
+function setPopupContent(e, mapInstance, site_no)
 {
     // update popup battery 
     for(var k = 0; k < shuttleMarkerArray.length; k++)
     {
         if(e.target._leaflet_id == shuttleMarkerArray[k].name)                 // find the marker in array to update
         {                       
-            (shuttleMarkerArray[k].marker).openPopup();
+            // (shuttleMarkerArray[k].marker).openPopup();
             mapInstance.eachLayer(function (layer) {
                 if(layer._leaflet_id == shuttleMarkerArray[k].name)
                 {
@@ -1272,7 +1297,7 @@ function setPopupContent(e, mapInstance)
                     }
                     var vehicleOperation = operatingStatus(shuttleMarkerArray[k].drive);
                     layer._popup.setContent("<div class="+popupColor+" id='vPopup'>"+
-                                            "<p class='popupTitle'>" +shuttleMarkerArray[k].name+ "<img class='activeGreenPopup' src="+vehicleOperation+"></p>"+
+                                            "<p class='popupTitle'>" +shuttleMarkerArray[k].name+ "<img class='activeGreenPopup'></p>"+ // src="+vehicleOperation+"
                                             "<span class='popupVersion'>VER : "+shuttleMarkerArray[k].version+"</span>"+
                                             "</div><br>"+
                                             "<div class='popupSpeedDiv'>"+
@@ -1284,16 +1309,23 @@ function setPopupContent(e, mapInstance)
                                                 "<span style='vertical-align:top'>Battery</span>"+
                                                 "<div id='popupBattery' class='popup-battery' data-content="+shuttleMarkerArray[k].battery+'%'+"></div>"+
                                                 "<div class='popupParent'></div>"+
-                                            "</div>")
+                                            "</div>");
                     setPopupBattery(shuttleMarkerArray[k].battery);                // update popup battery value 
                     setPopupSpeed(shuttleMarkerArray[k].speed);                    // update popup speed value 
                 }
             });
 
+            (shuttleMarkerArray[k].marker).openPopup();
+
             // Update left window vehicle info. when vehicle popup is clicked
             document.getElementById('vehicleSelect').value = shuttleMarkerArray[k].name;  
             vehicleInfo(mapInstance, shuttleMarkerArray[k].markId);
             oddButtonStatus();
+            updateETA(active_site);
+            eta_interval = setInterval(function() {
+                updateETA(active_site);
+                //console.log("Updating eta after 30 seconds on vehicle icon click");
+            }, 30000);
             break;
         }
     }
@@ -1325,7 +1357,7 @@ function shuttleOnRoute(mapInstance, reqCount, currentSiteId)
             }
         }
         vLocationArray = vLocationArray.sort((a, b) => (a.id > b.id) ? 1 : -1);
-        showVehicleRipple(reqCount, mapInstance, vLocationArray);
+        showVehicleRipple(reqCount, mapInstance, vLocationArray, currentSiteId);
     });
 }
 
@@ -1579,7 +1611,7 @@ function showChartData(siteId){
     var distanceList = [];
     var passengerList = [];
     var colorList = [];
-    var api_url = "http://115.93.143.2:9103/api/oplogs/by-date/";
+    var api_url = "https://api.aspringcloud.com/api/oplogs/by-date/";
 
     // get todays date 
     var today = new Date();
@@ -1727,7 +1759,7 @@ function getMethod(api_name, callback) {
     var password = localStorage.getItem("userPwd"); 
     var base64Credentials = "Basic " + btoa(username + ":" + password);
     var request = new XMLHttpRequest();
-    var base_url = "http://115.93.143.2:9103/api/";
+    var base_url = "https://test.aspringcloud.com/api/";//"http://115.93.143.2:9103/api/";//"https://api.aspringcloud.com/api/";//
 
     // get and return data 
     request.open('GET', base_url + api_name, true);
@@ -1738,7 +1770,7 @@ function getMethod(api_name, callback) {
             console.log("Authentication credentials were not provided");
         else if (request.status == 403)
             console.log("Unauthorized access to accounts")
-        console.log("GET data status: " + request.status);
+       // console.log("GET data status: " + request.status);
     };
     request.onerror = function (status) {
         console.log("GET data error (GET).");
@@ -1780,7 +1812,7 @@ function showRouteInfo(mapInstance, api_name, icon_path, site_no) {
             var iconData = JSON.parse(data);
                     
         var count = Object.keys(iconData).length;
-        var kioskTitleArray=[];
+        var stationMidArray=[];
         var stationTitleArray=[];
         
         for (var i = 0; i < count; i++) {
@@ -1790,14 +1822,14 @@ function showRouteInfo(mapInstance, api_name, icon_path, site_no) {
                     stationWp_array.push(L.latLng(iconData[i].lat, iconData[i].lon)); // array for station location on route
                     
                     var stationTitle = iconData[i].name;
-                    var kiosk_title = iconData[i].mid;
+                    var station_mid = iconData[i].mid;
                     var stationLat = iconData[i].lat;
                     var stationLon = iconData[i].lon;
                     stationTitleArray.push(stationTitle); // array for station title
-                  
+                                     
                     // check if kiosk for the station is available in kiosk api
-                    var kioskTitle = "KIS" +kiosk_title.substring(3);
-                    if(iconData.iskiosk ==true)
+                    // var kioskTitle = "KIS" +kiosk_title.substring(3);
+                    /*if(iconData.iskiosk ==true)
                         status = true;//stationTitleArray.includes(kioskTitle);
                     else
                         status = false
@@ -1805,12 +1837,13 @@ function showRouteInfo(mapInstance, api_name, icon_path, site_no) {
                     // array of kiosk title 
                     if(status == true)
                         kioskTitleArray.push(kioskTitle);
-                    kioskTitleArray.push(kioskTitle);
-
-                    if (status == true ) //|| site_no == 18
-                        showMarker(mapInstance, "images/" + icon_path, stationTitle, kioskTitle, stationLat, stationLon);
-                    else
-                        showMarker(mapInstance, "images/" + icon_path, stationTitle, 'false', stationLat, stationLon);
+                    kioskTitleArray.push(kioskTitle);*/
+                    stationMidArray.push(station_mid);
+                    // if (status == true ) //|| site_no == 18
+                  
+                    showMarker(mapInstance, "images/" + icon_path, stationTitle, station_mid, stationLat, stationLon);
+                    // else
+                    //    showMarker(mapInstance, "images/" + icon_path, stationTitle, 'false', stationLat, stationLon);
                 }
                 else
                 {
@@ -1819,7 +1852,6 @@ function showRouteInfo(mapInstance, api_name, icon_path, site_no) {
                 } 
             }
         }
-
         if(api_name == "stations/")
         {
             if(site_no == 2)
@@ -1848,85 +1880,180 @@ function showRouteInfo(mapInstance, api_name, icon_path, site_no) {
                     L.latLng(36.49836, 127.32659),
                     L.latLng(36.4994300000000000,127.3284000000000000)];
             }
-            createRoute(mapInstance, stationWp_array, stationTitleArray, kioskTitleArray, site_no);
+            else if(site_no == 1)
+            {
+                // Gunsan route part 1 
+                stationWp_array = [
+                    L.latLng(35.8137410000000000, 126.4131030000000000),//12
+                    L.latLng(35.8114720000000000, 126.4164430000000000),//13
+               
+                ];
+                stationTitleArray = ["선착장행 주차장", "유람선 선착장"];
+                stationMidArray = ["STA012", "STA013"];
+                createRoute(mapInstance, stationWp_array, stationTitleArray, stationMidArray, site_no);
+
+                // Gunsan route part 2 
+                stationWp_array =[   
+                    L.latLng(35.8138710000000000, 126.4130100000000000),//11
+                    L.latLng(35.8142630000000000, 126.4098250000000000),//18
+                    L.latLng(35.8117490000000000, 126.4050750000000000),//9
+                ];
+                stationTitleArray = ["테마파크행 주차장", "선유도 해변", "자율주행 테마파크(입)"];
+                stationMidArray = ["STA011", "STA018", "STA009"];
+                createRoute(mapInstance, stationWp_array, stationTitleArray, stationMidArray, site_no);
+
+                // Gunsan route part 3
+                stationWp_array = [
+                    L.latLng(35.8118700000000000, 126.4051900000000000),//19
+                    L.latLng(35.8141840000000000, 126.4098450000000000), //10
+                ];
+                stationTitleArray = ["자율주행 테마파크(출)" , "고군산 탐방센터" ];
+                stationMidArray = ["STA019", "STA010"];
+                createRoute(mapInstance, stationWp_array, stationTitleArray, stationMidArray, site_no);
+
+            }
+            if(site_no != 1)
+                createRoute(mapInstance, stationWp_array, stationTitleArray, stationMidArray, site_no);
         }
-    });
+     });
+}
+/*
+stationWp_array = [
+                    L.latLng(35.8137410000000000, 126.4131030000000000),//12
+                    L.latLng(35.8114720000000000, 126.4164430000000000),//13
+                    L.latLng(35.8138710000000000, 126.4130100000000000),//11
+                    L.latLng(35.8142630000000000, 126.4098250000000000),//18
+                    L.latLng(35.8117490000000000, 126.4050750000000000),//9
+                    L.latLng(35.8118700000000000, 126.4051900000000000),//19
+                    L.latLng(35.8141840000000000, 126.4098450000000000), //10
+                ];
+*/
+function currentVehicleETA(stationData)
+{
+    // get current vehicle id from select list 
+    var dom = document.getElementById("vehicleSelect");
+    var stationDetails; 
+    //console.log("stationData.eta :"+(stationData.eta));
+    //console.log("stationData.eta length :"+(stationData.eta).length);
+    if((stationData.eta).length == 0) //|| stationData.eta == undefined )
+    {
+        stationDetails = {
+            vehicle_id : null,
+            time : "N분 후 도착",
+            id : stationData.id,
+            mid : stationData.mid,
+            name : stationData.name  
+        }
+        return stationDetails;
+    }
+    else
+    {
+        var selectedId = dom.options[dom.selectedIndex].id;
+        for(var k of stationData.eta)
+        {                        
+            var temp = JSON.parse(k);
+            var key = Object.keys(temp);
+            var value = Object.values(temp);
+            for(var k = 0; k < key.length; k++)
+            {                     
+                if(key[k] == selectedId)
+                {       
+                    var time_value;
+                    if(Math.round(value[k]) < 2)
+                        time_value = "잠시 후 도착예정";
+                    else if(Math.round(value[k]) > 2)
+                        time_value = Math.round(value[k])+"분 후 도착​";
+                    else
+                        time_value = "N분 후 도착";
+
+                    stationDetails = {
+                        vehicle_id : key[k],
+                        time : time_value,
+                        id : stationData.id,
+                        mid : stationData.mid,
+                        name : stationData.name  
+                    }
+                }
+                else
+                {
+                    stationDetails = {
+                        vehicle_id : null,
+                        time : "N분 후 도착",
+                        id : stationData.id,
+                        mid : stationData.mid,
+                        name : stationData.name  
+                    }
+                    //return stationDetails;
+                }
+                //console.log("VEhicle ID :"+stationDetails.vehicle_id);
+                return stationDetails;
+            }
+        }
+    }
 }
 
 function updateETA(site_no)
 {
-    var stationArray=[];
-    var station_mid = [];
-
+    //eta_interval = setInterval(function() {
     getMethod("stations/", function(data) {
         var stationData = JSON.parse(data);
         var count = Object.keys(stationData).length;
+        var stationETA = [];
+        //console.log("site_no :"+site_no);
+        // station list
         for (var i = 0; i < count; i++) {
+            
             if (stationData[i].site == site_no)
-            {
-                stationArray.push(stationData[i].name);
-                station_mid.push(stationData[i].mid);
+            {                
+                var gg = currentVehicleETA(stationData[i]);
+                stationETA.push(gg);
+                //console.log("Station data with ETA :"+JSON.stringify(gg));
             }
         }
+        // station list
+        var divElement = document.getElementById('stationList');
+        divElement.innerHTML = "";
 
-    // station list
-    var divElement = document.getElementById('stationList');
-    divElement.innerHTML = "";
-
-    // list element - blue line
-    $("#station_li").empty();
-
-    // eta list 
-    $("#eta_list").empty();
-
-        for(var j = 0; j < stationArray.length; j++)
+        // list element - blue line
+        $("#station_li").empty();
+        // eta list 
+        $("#eta_list").empty();
+        for(var j = 0; j < stationETA.length; j++)
         { 
+            // blue line which indicate ETA
+            if(j < (stationETA.length - 1))
+                $("#station_li").append(' <p class="eta_circle"></p>');
+            else
+              $("#station_li").append(' <p class="eta_circle2"></p>');
+
             // station name 
-            var stationHtml = "<p style='margin-bottom:15px'>"+
-                            "<span class='timeSpan1'>"+stationArray[j]+"</span>"+
-                            "<span class ='timeSpan2'>STA00"+(j+1)+"</span>"+
+            var stationHtml = "<p style ='margin-bottom:15px'>"+
+                            "<span class ='timeSpan1'>"+stationETA[j].name+"</span>"+
+                            "<span class ='timeSpan2'>"+stationETA[j].mid+"</span>"+
                             "</p>";
 
             divElement.insertAdjacentHTML('beforeend', stationHtml);
-                        
-            // blue line which indicate ETA
-            $("#station_li").append(' <p class="eta_circle"></p>');
-    
+             
             // ETA in minutes
-            var p = "<p style='margin-bottom:30px;'>곧 도착 또는 출발</p>";
+            var p = "<p style='margin-bottom:30px;'>"+stationETA[j].time+"곧 도착 또는 출발</p>";
             $("#eta_list ").append(p);
         }
     });
+  //}, 30000);
 }
 
 // create route using control routing plugin leaflet 
 function createRoute(mapInstance, waypoints, stationTitle, kioskTitle, site_no) {
-    if(site_no == 1)
-    {
-        console.log("Route waypoints : "+waypoints);
-        console.log("Route stationTitle : "+stationTitle);
-    }
     var iconUrl= 'images/route/station_kiosk.svg';
     var control = L.Routing.control({
         waypoints: waypoints,
-        serviceUrl: 'http://115.93.143.2:8104/route/v1',
+        serviceUrl:'http://115.93.143.2:8104/route/v1',
         dragging:false,
         routeWhileDragging:false,
         createMarker: function (i, wp) {
             if(stationTitle[i] != undefined)
-            {
-                if(site_no == 18)
-                {
-                    var stationIcon = new L.DivIcon();
-                }
-                else
-                {
-                    var stationIcon = new L.DivIcon({
-                    html :'<img src= '+iconUrl+'>'+
-                        '<span class="markerLable">'+stationTitle[i]+'</span>'+
-                        '<span class="markerLable">'+kioskTitle[i]+'</span>' 
-                    });
-                }  
+            { 
+                var stationIcon = new L.DivIcon();
                 var marker = L.marker(wp.latLng, {
                     icon: stationIcon,
                     draggable: false,
@@ -1953,8 +2080,7 @@ function createRoute(mapInstance, waypoints, stationTitle, kioskTitle, site_no) 
         showAlternatives: false,
         show: false,
     }).addTo(mapInstance);
-    //control.autoRoute.disabled();
-   L.Routing.errorControl(control).addTo(mapInstance);
+    L.Routing.errorControl(control).addTo(mapInstance);
 }
 
 // creates map with given mapcenter and zoom level
@@ -1998,7 +2124,7 @@ function showMarkerIcon(iconUrl, title, lat, long, map)
     const customPopup = "<ul><li>" + title + "</li><li>" + kiosk_title + "</li><ul>";
     const customOptions = { 'className': 'custom-popup', autoClose: false }
     marker.bindPopup(customPopup, customOptions).openPopup();
-    //map.invalidateSize();
+    //map.invalidateSize();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
 }
 
 // switch betwwen site window and offsite window
@@ -2016,7 +2142,7 @@ function open_tab( window_id, site_id) {
 
 function logout() {
     var email = document.getElementById("loggedin_userid").innerText;
-    var api_url = "http://115.93.143.2:9103/api/auth/logout/";
+    var api_url = "https://test.aspringcloud.com/api/auth/logout/";
     postMethod(JSON.stringify(email), api_url, function (status_code) {
         if (status_code == 200)
             window.location.href = "index.html";
@@ -2307,7 +2433,7 @@ function changeNotice(){
                                 //'<img class="noticeBullet1" src = "images/red_bullet.svg">'+
                                 '<span id="noticeTitle' +j+ '" class = "noticeSpan1"> <img class="noticeBullet1" src = "images/red_bullet.svg">' +obj.title+ '</span>'+
                                 '<button class = "divButton" id="noticeButton' +j+ '" onclick=" toggle_div2(noticeDetails' +j+ ', ' +j+ ')" >'+
-                                    '<i class = "fa fa-angle-down" style="vertical-align: top;"></i>'+ 
+                                    '<i id="closeAngleIcon" class = "fa fa-angle-down" style="vertical-align: top;"></i>'+ 
                                     //'<img id="buttonArrow" src="images/openArrow.svg" style = "width: 13px; margin-left: -1px"/>'+
                                 '</button><br/>'+
                                 '<lable class="noticeLabel1">' +createDate+'</lable><br/>'+
@@ -2316,13 +2442,13 @@ function changeNotice(){
                                     '<p>' +obj.contents+ '</p>'+
                                 '</div>'+
                             '</div>';
-             }
+            }
             else
             {
-                var html = '<div id="noticeDiv" style="width: 100%;  margin-top:15px">'+
+                var html = '<div id="noticeDiv" style="width: 100%; margin-top:15px">'+
                                 '<span id="noticeTitle' +j+ '" class = "noticeSpan2">' +obj.title+'</span>'+
                                 '<button class = "divButton" id="noticeButton' +j+ '" onclick=" toggle_div2(noticeDetails' +j+ ', ' +j+ ')" >'+
-                                '<i class = "fa fa-angle-down" data-src="images/openArrow.svg" style = "vertical-align: top;"></i>'+ 
+                                '<i id="openAngleIcon" class = "fa fa-angle-down" data-src="images/openArrow.svg" style = "vertical-align: top; "></i>'+ 
                                    // '<img id="buttonArrow" src="images/openArrow.svg" style = "width: 13px; margin-left: -1px"/>'+
                                 '</button>' +
                                 '<br/>' +
@@ -2353,9 +2479,9 @@ function toggle_div2(divID, i)
         divID.style.display = "none";
         button.style.transform = "rotate(0deg)";
         button.style.backgroundColor = "#FFFFFF";
-        button.style.color = "black";
-
-    } else 
+        button.style.color = "black"
+    }
+    else 
     {
         divID.style.display = "block";
         button.style.backgroundColor = "#2E92B0";
@@ -2447,11 +2573,11 @@ function close_div() {
     document.getElementById('degu_window').style.display = "none";
 }
 
-function showMarker(mapInstance, iconUrl, stationTitle, kioskTitle, lat, long) {
+function showMarker(mapInstance, iconUrl, stationTitle, station_mid, lat, long) {
     var markerIcon;
-  
     // get first 3 characters of string 
     var title = stationTitle.substring(0, 3);
+    
     if(title == "GAR")
     {
         markerIcon = new L.DivIcon({
@@ -2459,29 +2585,34 @@ function showMarker(mapInstance, iconUrl, stationTitle, kioskTitle, lat, long) {
                 '<span class="garageMarkerLable">' +stationTitle+ '</span>',
            });
     } 
-    else if(kioskTitle == 'false') 
+    else //if(station_mid == 'false') 
     {
         markerIcon = new L.DivIcon({
             html: '<img src='+iconUrl+'>' +
-                '<span class="markerLable">' +stationTitle+ '</span>'});
+                '<span class="markerLable">' +stationTitle+ '</span>'},
+                {noHide : false});
     } 
-    else
+ /* else
     {
         markerIcon = new L.DivIcon({
         //  Fake station icons 
-        /*  html: '<img src='+iconUrl+'>' +
-            '<span class="markerLable">' +stationTitle+ '</span>' +
-            '<br><span class="markerLable">' +kioskTitle+ '</span>'*/
+          html: '<img src='+iconUrl+'>' +
+            '<span class="markerLable">' +stationTitle+ '</span>' //+
+            //'<br><span class="markerLable">' +kioskTitle+ '</span>'
         })
-    }
+    }*/
 
     var marker = L.marker([lat, long], {
         draggable: false, // Make the icon dragable
         icon: markerIcon,
-        autoPan : true
+        autoPan : true,
+        
+        //labelAnchor: [36, 0],
+        //title: '4º marker',
     });
       
     marker.addTo(mapInstance);
+
     var popup;
     marker.on('mouseover', function(e) {
         var stringLat = ((Number(lat)).toFixed(6)).toString();
@@ -3034,7 +3165,7 @@ function resetPassword()
             "new_password1": input_new_pwd,
             "new_password2": input_repeat_pwd,
         });
-        var api_url = "http://115.93.143.2:9103/api/auth/password/change/";
+        var api_url = "https://test.aspringcloud.com/api/auth/password/change/";
         postMethod(data, api_url, function (req) 
         {
             var res = JSON.parse(req.response);
@@ -3126,3 +3257,34 @@ function showEmergencyContact()
 //var start2 = Date.now();
 //var responseTime2 = Date.now()-start2;
 // console.log("Response 2 time seconds:"+((responseTime2 % 60000) / 1000).toFixed(0)+" seconds");
+
+//gunsan eta
+
+
+       /* if(site_no == 1)
+        {
+            console.log("Stations before :"+stationArray);
+            stationArray = ["선착장행 주차장", "유람선 선착장", "테마파크행 주차장", "선유도 해변", "자율주행 테마파크(입)", "자율주행 테마파크(출)" , "고군산 탐방센터"]; 
+            console.log("Stations after :"+stationArray);
+            station_mid = ["STA012", "STA013", "STA011", "STA018", "STA009", "STA019", "STA010"];
+            station_id = [12, 13, 11, 18, 9, 19, 10];
+            
+        }*/
+
+        /*for(var j = 0; j < stationArray.length; j++)
+        { 
+            // blue line which indicate ETA
+            $("#station_li").append(' <p class="eta_circle"></p>');
+
+            // station name 
+            var stationHtml = "<p style='margin-bottom:15px'>"+
+                            "<span class='timeSpan1'>"+stationArray[j]+"</span>"+
+                            "<span class ='timeSpan2'>"+station_mid[j]+"</span>"+
+                            "</p>";
+
+            divElement.insertAdjacentHTML('beforeend', stationHtml);
+             
+            // ETA in minutes
+            var p = "<p style='margin-bottom:30px;'>677곧 도착 또는 출발</p>";
+            $("#eta_list ").append(p);
+        }*/

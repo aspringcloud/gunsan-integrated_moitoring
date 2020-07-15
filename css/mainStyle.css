@@ -762,7 +762,6 @@ pointer-events: none;
 
 /* main */
 border: 0.1px solid #BDBDBD;
-
 border-radius: 2px;
   background: url("../images/route/oddDisabled.svg") !important;
 }
@@ -777,12 +776,12 @@ border-radius: 2px;
 
 .routeTitle{
 width: 350px;
-height: 91px;
+height: 92px;
 backdrop-filter: blur(27.1828px);
 box-shadow: 0px 1px 0px #2E92B0;
 position:absolute;
 left:42px;
-line-height: 3.4;
+
 }
 
 /* Video control */
