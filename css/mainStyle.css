@@ -609,7 +609,7 @@ text-align: center;
 
 .select3{
   vertical-align: top;
-  min-width: 103px;
+  width: 103px;
   height:30px;
   font-family: Noto_regular;
   font-size: 14px;

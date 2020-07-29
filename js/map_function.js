@@ -32,7 +32,7 @@ var zoomHome_main;
 var active_site=0; 
 
 function activeButton(element)
-{   var buttonList = ["main_site_button", "degu_button", "sejong_button", "sangam_button", "sejong_button1", "sejong_button2", "gunsan_button", "offsite_button"];
+{   var buttonList = ["main_site_button",  "gunsan_button"]; // "degu_button", "sejong_button", "sangam_button", "sejong_button1", "sejong_button2",, "offsite_button"
     for(var i = 0; i < buttonList.length; i++)
     {
         if(buttonList[i] == element.id)
@@ -82,7 +82,7 @@ function switchMap(obj)
             if(daegu_map == undefined)
             {               
                 daegu_map = L.map('deguMap',{
-                    center:[35.83731,128.68384],//[35.83731,128.68384],
+                    center:[35.83731,128.68384],
                     zoom : 16,
                     zoomControl: false,
                 });
@@ -106,9 +106,9 @@ function switchMap(obj)
             {            
                 cluster_map = L.map('offsiteMap', {
                     zoomSnap: 0.15,      
-                    dragging: true, //false
+                    dragging: true,
                     draggable:true,
-                    scrollWheelZoom: true, //false
+                    scrollWheelZoom: true,
                     color: "rgba(8, 148, 19)",
                     zoomControl: false,
                     zoom:7,
@@ -139,16 +139,13 @@ function switchMap(obj)
             {
                 sejong_map = L.map('sejongMap',{
                     zoom : 17,
-                    center:[36.50047,127.27109],//[36.499910, 127.270606],
+                    center:[36.50047,127.27109],
                     zoomControl: false,
                 });
             }
 
             if(daegu_interval != null)
                 clearInterval(daegu_interval);
-/*
-            if(eta_interval != null)
-                clearInterval(eta_interval);    */
 
             showElements(["sejongSubmenu", "alertDiv"]);
             hide_div('countInfoDiv');
@@ -201,7 +198,6 @@ function switchMap(obj)
                 });
             }
             mapList.push("sangamMap");
-       
             hide_div('countInfoDiv');
             showSite(sangam_map, 4, sangamClickCount); 
             open_tab('degu_window',4);
@@ -222,6 +218,7 @@ function switchMap(obj)
             if(gunsan_map == undefined)
             {
                 gunsan_map = L.map('gunsanMap',{
+                    zoomSnap: 0.75,
                     zoom : 16,
                     center:[35.812484, 126.409100],
                     zoomControl: false,
@@ -480,7 +477,9 @@ function offsite() {
     var offsite_list = document.getElementById("offsite_list");
     offsite_list.innerHTML = '';
     getMethod("sites/", function (sites_data) {
-        var site_data = JSON.parse(sites_data).results;
+      //  console.log("### sites_data : "+JSON.stringify(sites_data));
+      //  console.log("### sites_data : "+JSON.stringify(sites_data).results);
+        var site_data = JSON.parse(sites_data);//.results;
         var count = Object.keys(site_data).length;
         for (i = 0; i < count; i++) {
             var siteId = site_data[i].mid;
@@ -631,8 +630,11 @@ function showContent(tabId) {
     var tabArray = ['integrated_control', 'integrated_Dashboard'];
     if (tabId == "integrated_control")
         window.location.href = "main.html";
-    else if(tabId == "integrated_Dashboard")
-        window.location.href = "dashboard.html";
+    else
+        alert("준비 중입니다.");
+
+   // else if(tabId == "integrated_Dashboard")
+       // window.location.href = "dashboard.html";
 }
 
 function setWeather(domElement, weatherStatus)
@@ -728,87 +730,6 @@ function setVehicleSpeed(speed)
     }
 }
 
-// Calculate ETA of vehicle on each station (under development)
-function arraivalTime(mapInstance, shuttleLocation,speedArray,count, request_count)
-{
-    // ppt speed avg
-     var speed = ((7*2)+(14.2)+(13.6*10))
-    // (7+7+14.2+13.6+13.6+13.6+13.6+13.6+13.6+13.6+13.6+13.6+13.6+14.3)/14;
-    /* Average speed solution 15 sec */
-    /*var sumSpeed = (speedArray.reduce(function(pv, cv) { return pv + cv; }, 0)); 
-    if(sumSpeed == 0 )
-    {
-        console.log("sumSpeed return false");
-        return false;
-    }
-    var speed = sumSpeed/speedArray.length;*/
-    //console.log("arival ETA");
-   // ETA(shuttleLocation, mapInstance); // for on demand
-
-    // distance between vehicle and station A
-  /*  var vtoA = getDistance(shuttleLocation, L.latLng(35.836308, 128.681547));
-    var timeA = vtoA/speed;
-    var staA = document.getElementById("deguStationA");
-    if(timeA < 1)
-    {
-        timeA = Math.floor((Math.abs(timeA) * 60) % 60);
-        staA.innerHTML = Math.round(timeA)+"sec 후 도착";
-    }
-    else
-    {
-        staA.innerHTML = Math.round(timeA)+"분 후 도착";
-    }
-
-    // distance between vehicle and station B
-    var vtoB = getDistance(shuttleLocation, L.latLng(35.838673, 128.687892));
-    var timeB = vtoB/speed;
-    var staB = document.getElementById("deguStationB");
-    if(timeB < 1)
-    {
-        timeB = Math.floor((Math.abs(timeB) * 60) % 60);
-        staB.innerHTML = Math.round(timeB)+"sec 후 도착";
-    }
-    else
-    {
-        staB.innerHTML = Math.round(timeB)+"분 후 도착";
-    }
-
-    // distance between vehicle and station C
-    var vtoC = getDistance(shuttleLocation, L.latLng(35.83705, 128.690044));
-    var staC = document.getElementById("deguStationC");
-    var timeC = vtoC/speed;
-    if(timeC < 1)
-    {
-        timeC = Math.floor((Math.abs(timeC) * 60) % 60);
-        staC.innerHTML = Math.round(timeC)+"sec 후 도착";
-    }
-    else
-    {
-        staC.innerHTML = Math.round(timeC)+"분 후 도착";
-    }
-
-    // distance between vehicle and station D
-    var vtoD = getDistance(shuttleLocation, L.latLng(35.83459, 128.68652));
-    var timeD = vtoD/speed;
-    var staD = document.getElementById("deguStationD");
-    if(timeD < 1)
-    {
-        timeD = Math.floor((Math.abs(timeD) * 60) % 60);
-        staD.innerHTML = Math.round(timeD)+"분 후 도착";
-    }
-    else
-    {
-        staD.innerHTML = Math.round(timeD)+"분 후 도착";
-    }
-   */
-    /* for testing
-    console.log("timeA:"+(timeA)+ " distanceA: "+vtoA);
-    console.log("timeB:"+(timeB)+ " distanceB: "+vtoB);
-    console.log("timeC:"+(timeC)+ " distanceC: "+vtoC);
-    console.log("timeD:"+(timeD)+ " distanceD: "+vtoD);
-    */
-}
-
 // show vehicle info like speed, heading, gnss battery etc.
 var interval;
 function vehicleInfo(map, vId)
@@ -825,19 +746,6 @@ function vehicleInfo(map, vId)
         getMethod(apiUrl, function (data) {
             var vehicle = JSON.parse(data);
             var shuttleLocation = L.LatLng(vehicle.lat, vehicle.lon);
-            // calculate ETA after every 15 seconds
-            /* if(count15 == 16)
-            {  
-                count15 = 0;             
-                arraivalTime(map, shuttleLocation,speedArray,count15,request_count);
-                speedArray=[];
-            }
-            else
-            {
-                speedArray.push(vehicle.speed);
-                if(request_count==1)
-                    arraivalTime(map, shuttleLocation,speedArray,count15, request_count);
-            }*/
             updateShuttleInfo(vehicle, request_count); 
         });
     }, 1500);
@@ -1385,222 +1293,6 @@ function distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
     return earthRadiusKm * c;
 }
 
-/*
-function ETA(vehicleObj, daegu_map){
-    console.log("vehicleObj :"+vehicleObj);
-    //var vehicleLoc = L.latLng(vehicleObj[0].lat, vehicleObj[0].lon);
-    //var vehicleLoc = L.latLng(35.83597,128.69015);
-    var vehicleLoc = vehicleObj;
-    var distance_V_to_A;
-    var distance_V_to_B;
-    var distance_V_to_C;
-    var distance_V_to_D;
-
-
-    // Route VtoA
-   var waypointsVA = [
-        vehicleObj, // vehicle location
-        L.latLng(35.83459, 128.68652), //staD
-        L.latLng(35.836308, 128.681547) //staA
-    ];
-    var controlA = L.Routing.control({
-        waypoints: waypointsVA,
-        serviceUrl: 'http://115.93.143.2:8104/route/v1',
-        dragging:true,
-        routeWhileDragging: false,
-        lineOptions: {styles: [{ color: '#008000', weight: 0 }]},  
-    }).addTo(daegu_map);
-    L.Routing.errorControl(controlA).addTo(daegu_map);
-    controlA.on('routesfound', function(e) {
-        var routes = e.routes;
-        var summary = routes[0].summary;
-        // alert distance and time in km and minutes
-        distance_V_to_A = summary.totalDistance ;
-        console.log('Total distance is ' + summary.totalDistance / 1000 + ' km and total time is ' + Math.round(summary.totalTime % 3600 / 60) + ' minutes');
-     });
-
-    // Route VtoB
-    var waypointsVB = [
-        vehicleObj, // vehicle location
-        L.latLng(35.836308, 128.681547), //staA
-        L.latLng(35.838673, 128.687892), //staB
-    ];
-    var controlB = L.Routing.control({
-        waypoints: waypointsVB,
-        serviceUrl: 'http://115.93.143.2:8104/route/v1',
-        dragging:true,
-        routeWhileDragging: false,
-        lineOptions: {styles: [{ color: '#0000FF', weight: 0 }]},  
-    }).addTo(daegu_map);
-    L.Routing.errorControl(controlB).addTo(daegu_map);
-    controlB.on('routesfound', function(e) {
-        var routes = e.routes;
-        var summary = routes[0].summary;
-        distance_V_to_B = summary.totalDistance;
-        // alert distance and time in km and minutes
-        console.log('Total distance is ' + summary.totalDistance / 1000 + ' km and total time is ' + Math.round(summary.totalTime % 3600 / 60) + ' minutes');
-     });
-
-
-    // Route VtoC
-    var waypointsVC = [
-        vehicleObj, // vehicle location
-        L.latLng(35.838673, 128.687892), //staB
-        L.latLng(35.83705, 128.690044),  // staC
-    ];
-    var controlC = L.Routing.control({
-        waypoints: waypointsVC,
-        serviceUrl: 'http://115.93.143.2:8104/route/v1',
-        dragging:true,
-        routeWhileDragging: false,
-        lineOptions: {styles: [{ color: '#00FF00', weight: 0 }]},  
-    }).addTo(daegu_map);
-    L.Routing.errorControl(controlC).addTo(daegu_map);
-    controlC.on('routesfound', function(e) {
-        var routes = e.routes;
-        var summary = routes[0].summary;
-        distance_V_to_C = summary.totalDistance;
-        // alert distance and time in km and minutes
-        console.log('Total distance is ' + summary.totalDistance / 1000 + ' km and total time is ' + Math.round(summary.totalTime % 3600 / 60) + ' minutes');
-     });
-
-    // Route VtoD
-    var waypointsVD = [
-        vehicleObj, // vehicle location
-        L.latLng(35.83705, 128.690044),  // staC
-        L.latLng(35.83459, 128.68652), //staD
-    ];
-    var controlD = L.Routing.control({
-        waypoints: waypointsVD,
-        serviceUrl: 'http://115.93.143.2:8104/route/v1',
-        dragging:true,
-        routeWhileDragging: false,
-        lineOptions: {styles: [{ color: '#FF0000', weight: 0 }]},  
-    }).addTo(daegu_map);
-    L.Routing.errorControl(controlD).addTo(daegu_map);
-    controlD.on('routesfound', function(e) {
-        var routes = e.routes;
-        var summary = routes[0].summary;
-        distance_V_to_D = summary.totalDistance;
-        // alert distance and time in km and minutes
-        console.log('Total distance is ' + summary.totalDistance / 1000 + ' km and total time is ' + Math.round(summary.totalTime % 3600 / 60) + ' minutes');
-     });
-
-    // create list of objects from with station name and distance between vehicle to each station on route
-    const distanceList = [
-        { station: 'A', distance: distance_V_to_A },
-        { station: 'B', distance: distance_V_to_B },
-        { station: 'C', distance: distance_V_to_C },
-        { station: 'D', distance: distance_V_to_D },
-      ];
-    
-    // sort the list of objects to find the smallest distance.   
-    distanceList.sort((a, b) => (a.distance > b.distance) ? 1 : -1);
-
-    var firstsmallest = distanceList[0].station; // first smallest distance
-    var secondsmallest = distanceList[1].station; // second smallest distance
-
-    console.log("firstsmallest :"+firstsmallest);
-    console.log("secondsmallest: "+secondsmallest);
-
-    // distance between garage to vehicle 
-    var distanceGtoA = getDistance(vehicleLoc, L.latLng(35.835155, 128.682617)); //garage location
-
-    // Latitute and longitude of all stations
-    var LocC = L.latLng(35.83705, 128.690044); //staC
-    var LocD = L.latLng(35.83459, 128.68652); //staD
-    var LocA = L.latLng(35.836308, 128.681547); //staA
-    var LocB = L.latLng(35.838673, 128.687892); //staB
-
-    // static distance between each station
-    var distanceAtoB = 0.72;
-    var distanceBtoC = 0.42;
-    var distanceCtoD = 0.68;
-    var distanceDtoA = 0.68;
-    
-    // Intialize ETA variable for all stations
-    var distancetoA = 0;
-    var distancetoB = 0;
-    var distancetoC = 0;
-    var distancetoD = 0;
-
-    // calculate distance
-    if(firstsmallest == 'A')
-    {
-        console.log("Going to station A");
-        // this means vehicle is going from station D to A
-        // calculate distance between vtoA and vtoD stations
-        var vtoA =  getDistance(vehicleLoc, L.latLng(35.836308, 128.681547));
-        var vtoD =  getDistance(vehicleLoc, L.latLng(35.83459, 128.68652));
-        distancetoA = vtoA;
-        distancetoB = vtoA + distanceAtoB;
-        distancetoC = vtoA + distanceAtoB + distanceBtoC;
-        distancetoD = vtoA + distanceAtoB + distanceBtoC + distanceCtoD;
-
-        if(vtoA <= 0.2)
-            stationAArrived == true;
-            //min set a some value XX
-    }
-    else if(firstsmallest == 'B')
-    {
-        console.log("Going to station B");
-        // this means vehicle is going from station A to B
-        // calculate distance between vtoB and vtoA stations
-        var vtoB =  getDistance(vehicleLoc, L.latLng(35.838673, 128.687892));
-        var vtoA =  getDistance(vehicleLoc, L.latLng(35.836308, 128.681547));
-        distancetoA = vtoB+ distanceBtoC + distanceCtoD + distanceDtoA;
-        distancetoB = vtoB; 
-        distancetoC = vtoB + distanceBtoC;
-        distancetoD = vtoB + distanceBtoC + distanceCtoD;
-        if(vtoB <= 0.2)
-            stationBArrived == true;
-    }
-    else if(firstsmallest == 'C')
-    {
-        console.log("Going to station C");
-        // this means vehicle is going from station B to C
-        var station = "stationC";
-        // calculate distance between vtoC and vtoB stations
-        var vtoC =  getDistance(vehicleLoc, L.latLng(35.83705, 128.690044));
-        var vtoB =  getDistance(vehicleLoc, L.latLng(35.838673, 128.687892));
-    
-        distancetoA = vtoC+ distanceCtoD + distanceDtoA;
-        distancetoB = vtoC+ distanceCtoD + distanceDtoA + distanceAtoB; 
-        distancetoC = vtoC;
-        distancetoD = vtoC + distanceCtoD;
-
-        if(vtoC <= 0.2)
-            stationCArrived == true;
-    }
-    else
-    {
-        console.log("Going to station D");
-        // this means vehicle is going from station C to D
-        var station = "stationD";
-        // calculate distance between vtoC and vtoD stations
-        var vtoD =  getDistance(vehicleLoc, L.latLng(35.83459, 128.68652));
-        var vtoC =  getDistance(vehicleLoc, L.latLng(35.83705, 128.690044));
-        distancetoA = vtoD + distanceDtoA;
-        distancetoB = vtoD+ distanceDtoA + distanceAtoB; 
-        distancetoC = vtoD+ distanceDtoA + distanceAtoB + distanceBtoC; 
-        distancetoD = vtoD;
-
-        if(vtoD <= 0.2)
-            stationDArrived == true;
-    }
-
-    /* for testing 
-    console.log("distanceA: "+distance_V_to_A);
-    console.log("distanceB: "+distance_V_to_B);
-    console.log("distanceC: "+distance_V_to_C);
-    console.log("distanceD: "+distance_V_to_D);
-
-    console.log("timeA:"+(distance_V_to_A/15)+ " distanceA: "+distancetoA);
-    console.log("timeB:"+(distance_V_to_B/15)+ " distanceB: "+distancetoB);
-    console.log("timeC:"+(distance_V_to_C/15)+ " distanceC: "+distancetoC);
-    console.log("timeD:"+(distance_V_to_D/15)+ " distanceD: "+distancetoD);
-}
-*/
 /* show chart with todays distance passenger count */
 function showChartData(siteId){
     document.getElementById("infoChart").style.display = "block";
@@ -1611,7 +1303,7 @@ function showChartData(siteId){
     var distanceList = [];
     var passengerList = [];
     var colorList = [];
-    var api_url = "https://api.aspringcloud.com/api/oplogs/by-date/";
+    var api_url = server_URL+"oplogs/by-date/";
 
     // get todays date 
     var today = new Date();
@@ -1759,7 +1451,7 @@ function getMethod(api_name, callback) {
     var password = localStorage.getItem("userPwd"); 
     var base64Credentials = "Basic " + btoa(username + ":" + password);
     var request = new XMLHttpRequest();
-    var base_url = "https://test.aspringcloud.com/api/";//"http://115.93.143.2:9103/api/";//"https://api.aspringcloud.com/api/";//
+    var base_url = server_URL;//"http://115.93.143.2:9103/api/";//"https://api.aspringcloud.com/api/";//
 
     // get and return data 
     request.open('GET', base_url + api_name, true);
@@ -1807,11 +1499,17 @@ function showSummary(site) {
 function showRouteInfo(mapInstance, api_name, icon_path, site_no) {
     var stationWp_array = [];
     getMethod(api_name, function(data) {
+        //if(api_name =="stations/")
+        //console.log(JSON.parse(data));
         var iconData = JSON.parse(data).results;
         if (iconData == undefined)
             var iconData = JSON.parse(data);
                     
         var count = Object.keys(iconData).length;
+
+        // sort array of object station data according to the sequence number
+        iconData.sort((a, b) => (a.sta_Order > b.sta_Order) ? 1 : -1)
+       
         var stationMidArray=[];
         var stationTitleArray=[];
         
@@ -1819,6 +1517,7 @@ function showRouteInfo(mapInstance, api_name, icon_path, site_no) {
             if (iconData[i].site == site_no) {
                 if (api_name == "stations/" ) //&& site_no != 18
                 {
+                    //console.log("iconData[i] :"+JSON.stringify(iconData[i]));
                     stationWp_array.push(L.latLng(iconData[i].lat, iconData[i].lon)); // array for station location on route
                     
                     var stationTitle = iconData[i].name;
@@ -1890,7 +1589,7 @@ function showRouteInfo(mapInstance, api_name, icon_path, site_no) {
                 ];
                 stationTitleArray = ["선착장행 주차장", "유람선 선착장"];
                 stationMidArray = ["STA012", "STA013"];
-                createRoute(mapInstance, stationWp_array, stationTitleArray, stationMidArray, site_no);
+                createRoute(mapInstance, stationWp_array, stationTitleArray);
 
                 // Gunsan route part 2 
                 stationWp_array =[   
@@ -1900,7 +1599,7 @@ function showRouteInfo(mapInstance, api_name, icon_path, site_no) {
                 ];
                 stationTitleArray = ["테마파크행 주차장", "선유도 해변", "자율주행 테마파크(입)"];
                 stationMidArray = ["STA011", "STA018", "STA009"];
-                createRoute(mapInstance, stationWp_array, stationTitleArray, stationMidArray, site_no);
+                createRoute(mapInstance, stationWp_array, stationTitleArray);
 
                 // Gunsan route part 3
                 stationWp_array = [
@@ -1909,11 +1608,10 @@ function showRouteInfo(mapInstance, api_name, icon_path, site_no) {
                 ];
                 stationTitleArray = ["자율주행 테마파크(출)" , "고군산 탐방센터" ];
                 stationMidArray = ["STA019", "STA010"];
-                createRoute(mapInstance, stationWp_array, stationTitleArray, stationMidArray, site_no);
-
+                createRoute(mapInstance, stationWp_array, stationTitleArray);
             }
             if(site_no != 1)
-                createRoute(mapInstance, stationWp_array, stationTitleArray, stationMidArray, site_no);
+                createRoute(mapInstance, stationWp_array, stationTitleArray);
         }
      });
 }
@@ -1992,22 +1690,21 @@ function currentVehicleETA(stationData)
     }
 }
 
-function updateETA(site_no)
+function updateETA(site_id)
 {
-    //eta_interval = setInterval(function() {
     getMethod("stations/", function(data) {
         var stationData = JSON.parse(data);
+        //console.log("@@@ stationData :"+JSON.stringify(stationData));
         var count = Object.keys(stationData).length;
         var stationETA = [];
-        //console.log("site_no :"+site_no);
+        var passedStation;
         // station list
         for (var i = 0; i < count; i++) {
             
-            if (stationData[i].site == site_no)
+            if (stationData[i].site == site_id)
             {                
-                var gg = currentVehicleETA(stationData[i]);
-                stationETA.push(gg);
-                //console.log("Station data with ETA :"+JSON.stringify(gg));
+                var eta = currentVehicleETA(stationData[i]);
+                stationETA.push(eta);
             }
         }
         // station list
@@ -2035,16 +1732,17 @@ function updateETA(site_no)
             divElement.insertAdjacentHTML('beforeend', stationHtml);
              
             // ETA in minutes
-            var p = "<p style='margin-bottom:30px;'>"+stationETA[j].time+"곧 도착 또는 출발</p>";
+            if(stationETA[j].time < 1)
+                var p = "<p style='margin-bottom:30px;'>곧 도착 또는 출발</p>";
+            else
+                var p = "<p style='margin-bottom:30px;'>"+stationETA[j].time+"</p>";
             $("#eta_list ").append(p);
         }
     });
-  //}, 30000);
 }
 
 // create route using control routing plugin leaflet 
-function createRoute(mapInstance, waypoints, stationTitle, kioskTitle, site_no) {
-    var iconUrl= 'images/route/station_kiosk.svg';
+function createRoute(mapInstance, waypoints, stationTitle) {
     var control = L.Routing.control({
         waypoints: waypoints,
         serviceUrl:'http://115.93.143.2:8104/route/v1',
@@ -2142,7 +1840,7 @@ function open_tab( window_id, site_id) {
 
 function logout() {
     var email = document.getElementById("loggedin_userid").innerText;
-    var api_url = "https://test.aspringcloud.com/api/auth/logout/";
+    var api_url = server_URL+"auth/logout/";
     postMethod(JSON.stringify(email), api_url, function (status_code) {
         if (status_code == 200)
             window.location.href = "index.html";
@@ -2341,6 +2039,7 @@ function show_v2x(mapInstance, api_name, currentSiteId){
 
 function manager_list(site_manager_array) 
 {
+    //console.log("siteUsers :"+site_manager_array);
     // add managers to select list, 
     var select = document.getElementById("manager_selectlist");
     select.options.length = 0;
@@ -2356,21 +2055,20 @@ function manager_list(site_manager_array)
     if( select.disabled == true)
         select.disabled = false;    
     
-    for (var i = 0; i < site_manager_array.length; i++) {
-        var api_url = "users/" + site_manager_array[i] + "/";
-        getMethod(api_url, function (site_manager_data) {
-            var site_manager_data = JSON.parse(site_manager_data);
-            var option = document.createElement('option');
-            option.text = site_manager_data.username;
-            option.value = site_manager_data.email;
-            select.add(option, i + 1);
-        });
+    //var site_manager_data = JSON.parse(site_manager_data);
+
+    for(var i=0 ; i<site_manager_array.length; i++)
+    {
+        var option = document.createElement('option');
+        option.text = site_manager_array[i].username;
+        option.value = site_manager_array[i].email;
+        select.add(option, i + 1);
     }
 }
 
 function msg_modal() {
     show_div('messageModal');
-    selectSite('all', null,null);
+    //selectSite('all', null,null);
 }
 
 // updates notice
@@ -2433,7 +2131,7 @@ function changeNotice(){
                                 //'<img class="noticeBullet1" src = "images/red_bullet.svg">'+
                                 '<span id="noticeTitle' +j+ '" class = "noticeSpan1"> <img class="noticeBullet1" src = "images/red_bullet.svg">' +obj.title+ '</span>'+
                                 '<button class = "divButton" id="noticeButton' +j+ '" onclick=" toggle_div2(noticeDetails' +j+ ', ' +j+ ')" >'+
-                                    '<i id="closeAngleIcon" class = "fa fa-angle-down" style="vertical-align: top;"></i>'+ 
+                                    '<i id="closeAngleIcon" class = "fa fa-angle-down" style="vertical-align: top; margin-left: -1px;"></i>'+ 
                                     //'<img id="buttonArrow" src="images/openArrow.svg" style = "width: 13px; margin-left: -1px"/>'+
                                 '</button><br/>'+
                                 '<lable class="noticeLabel1">' +createDate+'</lable><br/>'+
@@ -2448,7 +2146,7 @@ function changeNotice(){
                 var html = '<div id="noticeDiv" style="width: 100%; margin-top:15px">'+
                                 '<span id="noticeTitle' +j+ '" class = "noticeSpan2">' +obj.title+'</span>'+
                                 '<button class = "divButton" id="noticeButton' +j+ '" onclick=" toggle_div2(noticeDetails' +j+ ', ' +j+ ')" >'+
-                                '<i id="openAngleIcon" class = "fa fa-angle-down" data-src="images/openArrow.svg" style = "vertical-align: top; "></i>'+ 
+                                '<i id="openAngleIcon" class = "fa fa-angle-down" data-src="images/openArrow.svg" style = "vertical-align: top; margin-left: -1px;"></i>'+ 
                                    // '<img id="buttonArrow" src="images/openArrow.svg" style = "width: 13px; margin-left: -1px"/>'+
                                 '</button>' +
                                 '<br/>' +
@@ -2574,6 +2272,12 @@ function close_div() {
 }
 
 function showMarker(mapInstance, iconUrl, stationTitle, station_mid, lat, long) {
+    var markerLabelClass;
+    if(station_mid == "STA019" || station_mid == "STA018" || station_mid == "STA011" )
+        markerLabelClass = "markerLable_top";
+    else
+        markerLabelClass = "markerLable";
+
     var markerIcon;
     // get first 3 characters of string 
     var title = stationTitle.substring(0, 3);
@@ -2585,31 +2289,17 @@ function showMarker(mapInstance, iconUrl, stationTitle, station_mid, lat, long) 
                 '<span class="garageMarkerLable">' +stationTitle+ '</span>',
            });
     } 
-    else //if(station_mid == 'false') 
+    else
     {
         markerIcon = new L.DivIcon({
             html: '<img src='+iconUrl+'>' +
-                '<span class="markerLable">' +stationTitle+ '</span>'},
-                {noHide : false});
+                '<span class='+markerLabelClass+'>' +stationTitle+ '</span>'},{ noHide : false });
     } 
- /* else
-    {
-        markerIcon = new L.DivIcon({
-        //  Fake station icons 
-          html: '<img src='+iconUrl+'>' +
-            '<span class="markerLable">' +stationTitle+ '</span>' //+
-            //'<br><span class="markerLable">' +kioskTitle+ '</span>'
-        })
-    }*/
-
     var marker = L.marker([lat, long], {
         draggable: false, // Make the icon dragable
         icon: markerIcon,
         autoPan : true,
-        
-        //labelAnchor: [36, 0],
-        //title: '4º marker',
-    });
+        });
       
     marker.addTo(mapInstance);
 
@@ -2960,16 +2650,97 @@ function siteMsgSend() {
     // get the site number and selected manager from the select box. 
     var t = document.getElementById("select_site");
     t.selectedIndex = currentSiteId; 
+
+    //console.log("test :"+ e.options[e.selectedIndex]);
+    //console.log("test 2 :"+ e.selectedIndex);
     
     // currently selected manager's info.
     var selectedUserInfo = {
         name :e.options[e.selectedIndex].innerHTML,
-        email : e.options[e.selectedIndex].value
+        email : e.options[e.selectedIndex].value,
+        option_index : e.selectedIndex
+        
     }
  
     var current_siteId = document.getElementById('currentSiteId').innerHTML;
     selectSite('all',current_siteId,selectedUserInfo);
+    selectSite2(selectedUserInfo);
 }
+
+
+function selectSite2(selectedUserInfo) {
+    var e = document.getElementById("manager_selectlist");
+    var managerSelect = document.getElementById('select_site');
+    var selectValue = managerSelect[managerSelect.selectedIndex].id;
+    var userList = document.getElementById('select_siteManager'); 
+    userList.length = 0;
+    var api_url = "sites/";
+    var allUserList = [];
+    if(selectValue == 0)
+    {
+        api_url = "sites/";
+        getMethod(api_url, function (data) {
+            var userData = JSON.parse(data);
+            var count = Object.keys(userData).length;
+            for (var j=0; j<count; j++)
+            {
+                //console.log("DATA 2 :"+JSON.stringify(userData[j].user));
+                var userData2 = userData[j].user;
+                for(var k =0 ;k< userData2.length; k++)
+                {
+                    allUserList.push(userData2[k]);
+                }
+            }
+            
+            if(allUserList.length == 0)
+            {
+                userList.disabled = true;
+            }
+            else
+            {
+                const uniqueAddresses = Array.from(new Set(allUserList.map(a => a.username)))
+                .map(username => {
+                return allUserList.find(a => a.username === username)
+                })
+        
+                userList.disabled = false;
+          
+                for(var i=0;i < uniqueAddresses.length; i++)
+                {
+                    var option = document.createElement("option");
+                    option.text = uniqueAddresses[i].username;
+                    option.value = uniqueAddresses[i].email;
+                    option.style.fontSize = "14px";
+                    userList.appendChild(option);
+                }
+            }
+        });
+    }
+    else
+    {
+        api_url = "sites/"+selectValue+"/";
+        getMethod(api_url, function (data) {
+            var userData = JSON.parse(data).user;
+            var count = Object.keys(userData).length;
+         
+            for (var j=0; j<count; j++)
+            {
+                var option = document.createElement("option");
+                option.text = userData[j].username;
+                if(selectedUserInfo != undefined)
+                {
+                    if( option.text == selectedUserInfo.name)
+                        option.selected = true;
+
+                }
+                option.value = userData[j].email;
+                option.style.fontSize = "14px";
+                userList.appendChild(option);
+            }
+        });
+    }
+}
+
 
 function selectSite(select, site_no, selectedUserInfo) {
     var selectValue;
@@ -3165,11 +2936,11 @@ function resetPassword()
             "new_password1": input_new_pwd,
             "new_password2": input_repeat_pwd,
         });
-        var api_url = "https://test.aspringcloud.com/api/auth/password/change/";
+        var api_url = server_URL+"auth/password/change/";
         postMethod(data, api_url, function (req) 
         {
             var res = JSON.parse(req.response);
-            console.log("pswd reset response :"+JSON.stringify(res));
+            //console.log("pswd reset response :"+JSON.stringify(res));
             if(req.status == 200)
             {  
                 if(res.detail == "New password has been saved.")

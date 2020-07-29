@@ -2,8 +2,16 @@ $(document).on('click','.batteryAlert button', function(){
     $(this).parent('div').fadeOut();
 });
 
+function checkTime(i) {
+    if (i < 10) {
+      i = "0" + i;
+    }
+    return i;
+}
+
 function createAlertDiv(eventData)
 {
+    console.log("eventDiv :"+eventData);
     var event_how = (JSON.parse(eventData).how);
     var dataAttribute = event_how.type;//Object.keys(JSON.parse(eventData))
     var id;
@@ -53,11 +61,29 @@ function createAlertDiv(eventData)
     }
     else if(dataAttribute == "message")
     {
-        id = event_how.vehicle_id;//(JSON.parse(eventData)).message.vehicle_id;
+        console.log("Event Message !");
+       /* id = event_how.vehicle_id;//(JSON.parse(eventData)).message.vehicle_id;
+        vehicleID = event_how.vehicle_mid;
+        document.getElementById("eventMessageModal").style.display = "block";
+        document.getElementById("eventMessageModal").style.display = vehicleID+"에서 보낸 메세지";
+      
         selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
-        vehicleID = event_how.vehicle_mid;//(JSON.parse(eventData)).message.vehicle_mid;
         eventMessage = event_how.value;//(JSON.parse(eventData)).message.value; 
+        
         siteId = event_how.site_id;
+
+        // get current date time 
+        var currentdate = new Date();
+        console.log("date :"+currentdate.getDate());
+        var strDate = currentdate.getFullYear()+ "-"+currentdate.getMonth()+ "-"+currentdate.getDay();  
+        var h = currentdate.getHours();
+        var m = currentdate.getMinutes();
+        m = checkTime(m);
+        var strTime = h+ ":"+m; 
+
+        document.getElementById("eventMsgArea").innerHTML = eventMessage;
+        document.getElementById("eventMessageModal").innerHTML = strDate+" "+strTime+ " 수신"; */
+
     }
     else if(dataAttribute == "parking")
     {
@@ -115,4 +141,9 @@ function createAlertDiv(eventData)
     setTimeout(function() {
         $(divs).fadeOut();
     }, 3000);
+}
+
+function confirmEventMsg(divId)
+{
+    document.getElementById(divId).style.display = "none";
 }

@@ -1,7 +1,7 @@
     <div class="main_div">
       
+        <a target="_blank" class="logo gunsan" href="https://www.gunsan.go.kr/" alt="gunsan"></a>       
         <a target="_blank" class="logo spring_cloud" href="http://www.tasio.io/" alt="spring cloud"></a>       
-        <a target="_blank" class="logo aimo" href="http://www.aimobility.io" alt="ai.mobility"></a>       
              
             <!-- main tabs-->
             <div class="mainTop">
@@ -9,9 +9,9 @@
                 <p class="font_regular" onclick="showContent('integrated_control');" id="integrated_control" title="Integrated control">통합관제 </p>
                 <p class="font_regular" onclick="showContent('integrated_Dashboard')" id="integrated_Dashboard" title="Integrated Dashboard">통합대시보드 </p>
                 <p class="font_regular" onclick="showContent('diagnostics')" title="Diagnostics and Error Analysis">진단 및 오류 분석 </p>
-                <p class="font_regular" onclick="showContent('accident_prediction')" title="Accident Prediction Model and Data Analysis">사고 예측 모델 및 데이터분석</p>
-                <p class="font_regular" onclick="alertfun();" title="Springgo Test Mode">스프링고 테스트모드 </p>
-                <p class="font_regular" onclick="alertfun();" title="Data center">데이터센터</p>
+                <p class="font_regular" onclick="showContent('accident_prediction');" title="Accident Prediction Model and Data Analysis">사고 예측 모델 및 데이터분석</p>
+                <p class="font_regular" onclick="showContent('accident_prediction');" title="Springgo Test Mode">스프링고 테스트모드 </p>
+                <p class="font_regular" onclick="showContent('accident_prediction');" title="Data center">데이터센터</p>
             </div>
             <div id="screenToggleDiv">
                 <p>전체화면 모드</p>
@@ -31,7 +31,7 @@
                     <div class="message">
                         <img class="noticeImg" src="images/notice.svg" onclick="notice_modal();"></i>
                     </div>
-                    <img class="message msgImg" src="images/msg.svg" onclick="msg_modal();"/>
+                    <img class="message msgImg" src="images/msg.svg" onclick="alert('준비 중입니다.');/*msg_modal();*/"/>
                     <!--Display logged-in username-->
                     <div class='divStyle3'>
                         <img class="userImg" id="user_img" src="images/userIcon.svg"/>

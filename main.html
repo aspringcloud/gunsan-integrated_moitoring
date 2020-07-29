@@ -1,14 +1,15 @@
 <!DOCTYPE html>
+<html lang="ko=KR"></html>
 <head>
     <title>통합관제 </title>
     <meta charset="utf-8">
     <meta name="description" content="Integrated Monitoring System Spring Cloud AUTONOMOUS Shuttle, 통합관제">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!--jquery
+    <!--jquery-->
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
     <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-    <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script> -->
+    <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script> 
 <!--
     <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
     <script src="jquery-ui-1.12.1/jquery-ui.js"></script> -->
@@ -21,9 +22,9 @@
 
    <!-- <pre id="api-response"></pre>-->
     
-    <!--open weather map API-->
+    <!--open weather map API
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>-->
 
     <!--Leaflet files-->
     
@@ -126,7 +127,7 @@
                         <option value= "7">스프링고 테스트모드</option>
                         <option value= "8">데이터센터</option>
                     </select>
-                    <span onclick="hide_div('noticeModal');" style="font-size:40px;float: right;margin-right: 15px; cursor: pointer;
+                    <span onclick="hide_div('noticeModal');" style="font-size:40px;float: right;margin-right: 27px; cursor: pointer;
                     margin-top: 5px; ">&times;</span>
                    <!--<img class="noticeImg" style="display: inline-block;" src="images/closing_button.svg" onclick="hide_div('noticeModal');">--> 
                 </div>
@@ -147,13 +148,12 @@
             </div>
             <div class="message-body2">
                 <div class="msgDiv2" >
-                    <select id="select_site" onchange="selectSite(this,'0','0');" class="select2">
+                    <select id="select_site" onchange="selectSite2();" class="select2">
                         <option id="0" selected="selected">전체</option>
                         <option id="1">군산</option>
                         <option id="2">대구</option>
                         <option id="3">세종</option>
                         <option id="4">상암</option>
-                        <option id=" ">강릉</option>
                     </select>
                     <select id="select_siteManager" onchange="/*selectSite(this,'0','0')*/" class="select3">전체</select>
                 </div>
@@ -164,7 +164,30 @@
                 </p>
             </div>
             <div class="message-footer2">
-                <button class="send_button" onclick="sendMail();">보내기</button>
+                <button class="send_button" onclick="sendMail(); ;">보내기</button>
+            </div>
+        </div>
+    </div>
+
+     <!-- Event Message Modal -->
+     <div id="eventMessageModal" class="message_div2">
+        <div class="message-content3">
+            <div class="message-header2">
+                <div class="msgDiv1">
+                    <p class="msgSendP" id="vehicleEventMsg"></p>
+                    <span class="msg_close" onclick="confirmEventMsg('eventMessageModal');">
+                        <img src="images/closing_button.svg" style="margin-top: 15px;">
+                    </span>
+                </div>
+            </div>
+            <div class="message-body2">
+                <textarea id="eventMsgArea" class="textArea" rows="10" cols="30" name="contents" onkeyup="fnChkByte(this,'200')" disabled></textarea>
+                <p class="noto_regular msgP2">
+                    <span id="timeInfo"></span>
+                </p>
+            </div>
+            <div class="message-footer2">
+                <button class="event_send_button" onclick="confirmEventMsg('eventMessageModal');">확인</button>
             </div>
         </div>
     </div>
@@ -267,18 +290,18 @@
     <div class="map_zindex">
         <div id="hide_test" class="round_button navbar">
             <button class="buttonHover" onclick="switchMap(this);" id="main_site_button">전체운행노선</button>
-            <button class="buttonHover" onclick="switchMap(this);" id="degu_button">대구</button>        
+           <!-- <button class="buttonHover" onclick="switchMap(this);" id="degu_button">대구</button>        
             <button onmouseover="switchMap(this);"  id="sejong_button">세종 </button>
-            <!--Sejong Sub Menu Modal-->
+            
             <div id="subMenuModal" class="subMenuModal">
                 <div id="sejongSubmenu" class="subMenu">
                     <button class="sejongHover1" id="sejong_button1" onclick="switchMap(this);">세종호수공원</button>    
                     <button class="sejongHover2" onclick="switchMap(this);" id="sejong_button2">규제자유특구 실증구간(4-2)</button>    
                 </div>
             </div>
-            <button class="buttonHover" onclick="switchMap(this);" id="sangam_button">상암 </button>
+            <button class="buttonHover" onclick="switchMap(this);" id="sangam_button">상암 </button>-->
             <button onclick="switchMap(this);" id="gunsan_button">군산 </button>
-            <button onclick="switchMap(this);open_tab('offsite_window',0);" id="offsite_button"> 운행종료노선</button>
+            <!-- <button onclick="switchMap(this);open_tab('offsite_window',0);" id="offsite_button"> 운행종료노선</button>-->
         </div>
         <div class="button_window hide_div list_style_blue" id="offsite_window">
             <ul id="offsite_list" class="button_window_ul button_window_hr"></ul>
@@ -317,7 +340,7 @@
                     <div style="width:103px;  position: absolute; top: 50px;">
                         <select id="manager_selectlist" name="manager_selectlist" class="select1"></select>
                     </div>
-                    <button class="msgButton display_inline_block" onclick="siteMsgSend();">메시지 보내기</button>
+                    <button class="msgButton display_inline_block" onclick="siteMsgSend(); /*setDefaultUser();*/">메시지 보내기</button>
                 </div>
                 <div style=" width: 350px; height: 28px;"> 
                     <span class="titleSpan1">
@@ -331,7 +354,7 @@
                 <!--ETA of vehicle-->
                 <div class = "station_table" id = "station_table">
                     <p class = "window_p1">정류장</p>
-                    <div style = "margin-left: 15px; min-height : 20px; max-height:320px;"> <!--margin-left: 44px;-->
+                    <div style = "margin-left: 25px; min-height : 20px; max-height:320px;"> <!--margin-left: 44px;-->
                         <div class = "timeDiv1" id = "stationList" style = "display: inline-block;"></div>
                         <div id = "station_li" style = "margin-top: 3px;margin-left: 3px; width:4px; display: inline-block; position: absolute;background-color: #2E92B0;"></div> <!--width: 20px;-->
                         <div class = "timeDiv2" id = "eta_list"></div>
@@ -433,10 +456,10 @@
             </div> <!--Vehicle info div-->
             <hr style="margin-top: 25px; border: 0.5px solid #BDBDBD; margin: 25px 40px 21px 0px; opacity: 0.3;"/>
             <button class="emergency" onclick ="showEmergencyContact();" id="contact_button">Emergency Contact</button>
-            <br/>
+            <br>
 
-            <br/>
-            <br/>
+            <br>
+            <br>
             </div> <!--left margin Div-->
             </div><!--hide-div-->
       
@@ -613,14 +636,17 @@
         
     /* Sejong submenu */
     var subMenuModal = document.getElementById("subMenuModal");
-    subMenuModal.onmouseover=function(event)//onclick=function(event)
+    if(subMenuModal != null)
     {
-        // When the user clicks anywhere outside of the modal, close it
-        if(subMenuModal.style.display == "block")
-        {                   
-            if (event.target == subMenuModal) 
-                subMenuModal.style.display = "none";
-        } 
+        subMenuModal.onmouseover=function(event)//onclick=function(event)
+        {
+            // When the user clicks anywhere outside of the modal, close it
+            if(subMenuModal.style.display == "block")
+            {                   
+                if (event.target == subMenuModal) 
+                    subMenuModal.style.display = "none";
+            } 
+        }
     }
 
     // close notice modal
@@ -637,10 +663,13 @@
     
     window.onclick = function(event) {
         /* Close the sejong submenu modal */
-        if(subMenuModal.style.display == "block")
-        { 
-            if (event.target.id != "sejong_button") {
-                $("#subMenuModal").hide();
+        if(subMenuModal != null)
+        {
+            if(subMenuModal.style.display == "block")
+            { 
+                if (event.target.id != "sejong_button") {
+                    $("#subMenuModal").hide();
+                }
             }
         }
 
@@ -664,7 +693,6 @@
                     $("#settingDialog").hide();
                     clearFields();
                 } 
-                    
             }
         });
     }

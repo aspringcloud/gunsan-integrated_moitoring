@@ -17,26 +17,28 @@ cursor: pointer;
 
 .logo {
 position: absolute;
-
 background-size: contain;
 cursor: pointer;
 z-index: 1000;
 display: inline-block;
 }
+
 .spring_cloud{
-    background-image: url("../images/login/sc_logo.svg");
-    left:30px;
+background-image: url("../images/login/sc_logo.svg");
+left:94px;
 top: 34px;
 width: 41px;
 height: 23px;
 }
+
 .aimo{
-    background-image: url("../images/ai_mobility.jpg");
-    left:94px;
+background-image: url("../images/ai_mobility.jpg");
+left:94px;
 top: 29px;
 width: 42px;
 height: 32px;
 }
+
 .width-height-input {
 height: 60px;
 width: 265px;
@@ -625,11 +627,20 @@ top:0px; position:absolute; height: 1080px;width:1300px; display: inline-block;
 .titleSpan{
 left:60px;top:400px; position:absolute;color: #FFFFFF;text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);font-family: NanumSquareRound;font-size: 100px;font-weight: bold;
 }
+
 .logo_size1 {
 position: absolute;
-width: 45.88px;
-height: 25.88px;
-top: 25px;
+width: 50.88px;
+height: 30.88px;
+top: 28px;
+}
+
+.gunsan{
+background-image: url("../images/login/gunsan_logo.svg");
+left:30px;
+top: 29px;
+width: 37px;
+height: 35px;
 }
 
 .logo_size {
@@ -1277,6 +1288,25 @@ margin-top: 10px;
 
 cursor: pointer;
 }
+
+.event_send_button {
+    text-align: center;
+    font-weight: Noto_medium;
+    font-size: 14px;
+    color: #FFFFFF;
+    vertical-align: middle;
+    align-content: center;
+    outline: none;
+    border: none;
+    background: #2E92B0;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2), inset 2px 2px 2px rgba(255, 255, 255, 0.1);
+    border-radius:3px;
+    width: 114px;
+    height: 34px;
+    margin-top: 10px;
+    position: absolute;
+    cursor: pointer;
+    }
 
 .scale_img {
 top: 100px;
@@ -3260,6 +3290,15 @@ width: 435px;
 height: 311px;
 }
 
+.message-content3 {
+    background-color: #fefefe;
+    margin: auto;
+    margin-top: 200px;
+    border: 1px solid #888;
+    width: 435px;
+    height: 257px;
+    }
+
 .message-header2 {
 }
 
@@ -3502,6 +3541,10 @@ transform: rotate(90deg);
 .upArrow {
 transform: rotate(90deg);
 }
+/*
+.select3, option{
+    width: 90px;
+}*/
 
 /*the container must be positioned relative:*/
 .profile {
@@ -3904,6 +3947,19 @@ color: #DB5499;
 font-family: Noto_regular;
 display: block;
 margin-top: -5px;
+line-height: 2;
+width:130px;
+}
+
+.markerLable_top{
+text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15);
+font-weight: bold;
+font-size: 10px;
+color: #DB5499;
+font-family: Noto_regular;
+display: block;
+margin-top: -38px;
+margin-left: 0px;
 line-height: 2;
 width:130px;
 }

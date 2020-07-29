@@ -1,3 +1,5 @@
+
+var server_URL = "https://test.aspringcloud.com/api/"; //"https://api.aspringcloud.com/api/";
 /* Input validation of login page */
 function login_validation() {
     var email_error = document.getElementById("name_error");
@@ -24,7 +26,7 @@ function login_validation() {
         "password": input_pwd,
     });
 
-    var api_url = "https://test.aspringcloud.com/api/auth/login/";
+    var api_url = server_URL + "auth/login/";
     postMethod(data, api_url, function (request) {
         if(request.status == 200) { 
             localStorage.setItem('userId', input_email);
@@ -80,7 +82,7 @@ function findid_validation(button_id) {
         "email": input_email,
     });
 
-    var api_url = "https://test.aspringcloud.com/api/users/resetpassword/";
+    var api_url = server_URL +"users/resetpassword/";
     postMethod(postdata, api_url, function (status_code) {
         if (status_code == 200) {
             document.getElementById('id_email_p').innerHTML = input_email;
@@ -99,7 +101,7 @@ function findid_validation(button_id) {
 }
 
 function sendEmailAPI(postdata) {
-    var api_url = "https://test.aspringcloud.com/api/users/sendmessage/";
+    var api_url = server_URL +"users/sendmessage/";
     postMethod(postdata, api_url, function (status_code) {
         if (status_code == 200)
         {
@@ -139,7 +141,6 @@ function sendMail() {
                 "email": input_email,
                 "message" : message
             });
-
             sendEmailAPI(postdata);
         }
         else
@@ -157,10 +158,10 @@ function postMethod(data, api_url, callback) {
     //console.log("username:"+username+" password:"+password);
     var base64Credentials = "Basic " + btoa(username + ":" + password);
     var request = new XMLHttpRequest();
-    var baseUrl= "https://test.aspringcloud.com/api/";//"http://115.93.143.2:9103/api/"; //"https://api.aspringcloud.com/api/"
+    var baseUrl= server_URL;//"http://115.93.143.2:9103/api/"; //"https://api.aspringcloud.com/api/"
     request.open('POST', requestURL, true);
     request.onload = function (e) {
-        if(api_url == "https://test.aspringcloud.com/api/auth/password/change/" || api_url == "https://test.aspringcloud.com/api/auth/login/" || api_url == "https://test.aspringcloud.com/api/oplogs/by-date/" )
+        if(api_url == server_URL +"auth/password/change/" || api_url == server_URL+"auth/login/" || api_url == server_URL+"oplogs/by-date/" )
         {
             console.log("request status :"+request.status);
             callback(request);
@@ -171,7 +172,7 @@ function postMethod(data, api_url, callback) {
     request.onerror = function(status) {
         console.log("Error (POST).");
     };
-    if(api_url == "https://test.aspringcloud.com/api/auth/login/")
+    if(api_url == server_URL+"auth/login/")
     {
         request.setRequestHeader("Authorization", authenticateUser((JSON.parse(data)).email, (JSON.parse(data)).password));
         request.setRequestHeader("Content-Type", "application/json;charset=UTF-8;");
