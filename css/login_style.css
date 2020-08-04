@@ -1710,7 +1710,7 @@ color: #333333;font-size: 12px;font-family: Roboto_medium;
 }
 
 .v_p2{
-font-size: 36px; color: #4F4F4F;display: block; font-family: Roboto_bold;margin-top: 15px;
+font-size: 36px; color: #4F4F4F;display: block; /*font-family: Roboto_bold;*/margin-top: 15px;
 }
 
 .v_p3{

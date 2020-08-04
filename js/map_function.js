@@ -710,7 +710,8 @@ function setVehicleSpeed(speed)
     {
         // speed is less then 18 text color is black
         speedDom.style.color="#4F4F4F";
-        speedDom.style.fontWeight ="normal";
+        //speedDom.style.fontWeight ="normal";
+        speedDom.style.fontFamily = "Roboto_regular"
     }
     else if(speed > 18)
     {
@@ -718,14 +719,16 @@ function setVehicleSpeed(speed)
         {
             // speed is greater then 30 text color is red and bold
             speedDom.style.color="#CA4040";
-            speedDom.style.fontWeight ="bold";
+            //speedDom.style.fontWeight ="bold";
+            speedDom.style.fontFamily ="Roboto_bold";
         }
         else
         {
             // speed is greater then 18 and less then 30
             // text color is red and normal
             speedDom.style.color="#CA4040";
-            speedDom.style.fontWeight ="normal";
+            //speedDom.style.fontWeight ="normal";
+            speedDom.style.fontFamily = "Roboto_regular";
         }
     }
 }
@@ -1447,6 +1450,9 @@ function setPopupSpeed(speed)
 
 // REST api get method function
 function getMethod(api_name, callback) {
+    if(api_name == undefined || api_name == '' || api_name == null)
+        return false;
+    //console.log ("api_name :"+api_name);    
     var username = localStorage.getItem("userId");
     var password = localStorage.getItem("userPwd"); 
     var base64Credentials = "Basic " + btoa(username + ":" + password);
@@ -2634,7 +2640,9 @@ function setByte(str)
 */
 
 function siteMsgSend() {
-    // Send message to manager of the site. 
+    document.getElementById('messageModal').style.display = "block";
+ 
+    /*   // Send message to manager of the site. 
     // Get email from session variable.
     var optionCount = $('#manager_selectlist option').length;
     var e = document.getElementById("manager_selectlist");
@@ -2643,37 +2651,44 @@ function siteMsgSend() {
         return false;
 
     document.getElementById('messageModal').style.display = "block";
-
     // current selected site is
     var currentSiteId = document.getElementById('currentSiteId').innerHTML;
-    
     // get the site number and selected manager from the select box. 
     var t = document.getElementById("select_site");
     t.selectedIndex = currentSiteId; 
-
-    //console.log("test :"+ e.options[e.selectedIndex]);
-    //console.log("test 2 :"+ e.selectedIndex);
-    
     // currently selected manager's info.
     var selectedUserInfo = {
         name :e.options[e.selectedIndex].innerHTML,
         email : e.options[e.selectedIndex].value,
         option_index : e.selectedIndex
-        
     }
  
     var current_siteId = document.getElementById('currentSiteId').innerHTML;
-    selectSite('all',current_siteId,selectedUserInfo);
+    //selectSite('all',current_siteId,selectedUserInfo);
+    selectSite2(selectedUserInfo);*/
+
+    var e = document.getElementById("manager_selectlist");
+
+    var selectedUserInfo = {
+        name :e.options[e.selectedIndex].innerHTML,
+        email : e.options[e.selectedIndex].value,
+        option_index : e.selectedIndex
+    }
+
     selectSite2(selectedUserInfo);
 }
 
-
 function selectSite2(selectedUserInfo) {
+    //console.log("selectedUserInfo :"+JSON.stringify(selectedUserInfo));
     var e = document.getElementById("manager_selectlist");
     var managerSelect = document.getElementById('select_site');
+    if(managerSelect[managerSelect.selectedIndex] == null || managerSelect[managerSelect.selectedIndex] == undefined)
+        return false;   
+    //console.log("dha :"+managerSelect[managerSelect.selectedIndex]);
     var selectValue = managerSelect[managerSelect.selectedIndex].id;
     var userList = document.getElementById('select_siteManager'); 
-    userList.length = 0;
+    if(userList != null)
+        userList.length = 0;
     var api_url = "sites/";
     var allUserList = [];
     if(selectValue == 0)
@@ -2687,9 +2702,7 @@ function selectSite2(selectedUserInfo) {
                 //console.log("DATA 2 :"+JSON.stringify(userData[j].user));
                 var userData2 = userData[j].user;
                 for(var k =0 ;k< userData2.length; k++)
-                {
                     allUserList.push(userData2[k]);
-                }
             }
             
             if(allUserList.length == 0)
@@ -2704,7 +2717,6 @@ function selectSite2(selectedUserInfo) {
                 })
         
                 userList.disabled = false;
-          
                 for(var i=0;i < uniqueAddresses.length; i++)
                 {
                     var option = document.createElement("option");
@@ -2722,7 +2734,6 @@ function selectSite2(selectedUserInfo) {
         getMethod(api_url, function (data) {
             var userData = JSON.parse(data).user;
             var count = Object.keys(userData).length;
-         
             for (var j=0; j<count; j++)
             {
                 var option = document.createElement("option");
@@ -2731,7 +2742,6 @@ function selectSite2(selectedUserInfo) {
                 {
                     if( option.text == selectedUserInfo.name)
                         option.selected = true;
-
                 }
                 option.value = userData[j].email;
                 option.style.fontSize = "14px";
@@ -2741,7 +2751,6 @@ function selectSite2(selectedUserInfo) {
     }
 }
 
-
 function selectSite(select, site_no, selectedUserInfo) {
     var selectValue;
     var managerSelect = document.getElementById('select_siteManager');
@@ -2750,6 +2759,9 @@ function selectSite(select, site_no, selectedUserInfo) {
         selectValue = 0;
     else
         selectValue = select[select.selectedIndex].id;
+
+    if(managerSelect == null)
+        return false; 
 
     if(selectValue == null || selectValue == undefined) 
     {

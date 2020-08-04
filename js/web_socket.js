@@ -14,14 +14,6 @@ function onDisconnectClick() {
  * Open a new WebSocket connection using the given parameters
  */
 function openWSConnection() {
-   /* var data = {"door": {"vehicle_id": 1, "value": false}};
-    var dataAttribute = Object.keys(data);
-    if(dataAttribute == "door")
-    {
-        var id = data.door.vehicle_id;
-        var value = data.door.value;
-    }*/
-
     var webSocketURL = null;
     webSocketURL = "ws://222.114.39.8:11411/ws/vehicle";
     try {
@@ -39,16 +31,12 @@ function openWSConnection() {
         };
         webSocket.onmessage = function (messageEvent) {
             var wsMsg = messageEvent.data;
-            //console.log("***Who : "+JSON.stringify(messageEvent));
             if (wsMsg.indexOf("error") > 0) {
                 console.log("WebSocket Error MESSAGE: " +wsMsg.error);
-            } else {
-                //console.log("WebSocket MESSAGE: " +wsMsg);
-              
-                //console.log("***Who2 : "+JSON.parse(wsMsg).what);
+            } 
+            else {
                 if(JSON.parse(wsMsg).what == "EVENT")
-                    //openWSConnection();
-                createAlertDiv(wsMsg);
+                    createAlertDiv(wsMsg);
             }
         };
     } catch (exception) {

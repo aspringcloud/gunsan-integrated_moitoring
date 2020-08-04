@@ -148,14 +148,16 @@
             </div>
             <div class="message-body2">
                 <div class="msgDiv2" >
-                    <select id="select_site" onchange="selectSite2();" class="select2">
-                        <option id="0" selected="selected">전체</option>
+                    <select id="select_site" onchange="/*selectSite2();*/" class="select2">
+                        <option selected = "selected" id="1">군산</option>
+                        <!--<option selected="selected" id="1">군산</option>-->
+                        <!--<option id="0" selected="selected">전체</option>
                         <option id="1">군산</option>
                         <option id="2">대구</option>
                         <option id="3">세종</option>
-                        <option id="4">상암</option>
+                        <option id="4">상암</option>-->
                     </select>
-                    <select id="select_siteManager" onchange="/*selectSite(this,'0','0')*/" class="select3">전체</select>
+                    <select id="select_siteManager" onchange="/*selectSite(this,'0','0')*/ " class="select3">전체</select>
                 </div>
                 <textarea id="msgArea" class="textArea" rows="10" cols="30" name="contents" onkeyup="fnChkByte(this,'200')"></textarea>
                 <p id="messageSendStatus" class="msgStatus"></p>
@@ -169,12 +171,13 @@
         </div>
     </div>
 
-     <!-- Event Message Modal -->
-     <div id="eventMessageModal" class="message_div2">
+    <!-- Event Message Modal 
+    <div id="eventMsgModalDiv">-->
+    <div id="eventMessageModal" class="message_div2">
         <div class="message-content3">
             <div class="message-header2">
                 <div class="msgDiv1">
-                    <p class="msgSendP" id="vehicleEventMsg"></p>
+                    <p class="msgSendP" id="vehicleEventMsg"> <span id="event_vid"></span>에서 보낸 메세지</p>
                     <span class="msg_close" onclick="confirmEventMsg('eventMessageModal');">
                         <img src="images/closing_button.svg" style="margin-top: 15px;">
                     </span>
@@ -182,15 +185,15 @@
             </div>
             <div class="message-body2">
                 <textarea id="eventMsgArea" class="textArea" rows="10" cols="30" name="contents" onkeyup="fnChkByte(this,'200')" disabled></textarea>
-                <p class="noto_regular msgP2">
-                    <span id="timeInfo"></span>
-                </p>
+                <span class="noto_regular msgP2" id="timeInfo"></span>
             </div>
-            <div class="message-footer2">
+            <div class="message-footer2" style="margin-top: 15px;">
                 <button class="event_send_button" onclick="confirmEventMsg('eventMessageModal');">확인</button>
             </div>
         </div>
     </div>
+    <!--</div>-->
+
     <div class="mapPosition hideMap" id="offsiteMap"></div>
     <div class="mapPosition hideMap" id="deguMap"></div>
     <div class="mapPosition hideMap" id="sejongMap"></div>
