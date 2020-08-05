@@ -1854,7 +1854,7 @@ width: 674px;
 font-size: 24px;
 margin-bottom: 0px;
 letter-spacing: -0.02em;
-color: #000000;
+color: #333333;
 margin-top: 3px;
 }
 
@@ -3712,7 +3712,7 @@ margin-left:5px;
 float:right; 
 margin-top: 20px; 
 display:inline-block;*/
-font-family: Roboto_bold; 
+font-family: Noto_regular; 
 color: #828282; 
 font-size: 18px; 
 
