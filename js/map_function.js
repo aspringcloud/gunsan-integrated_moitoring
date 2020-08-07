@@ -750,6 +750,18 @@ function vehicleInfo(map, vId)
             var vehicle = JSON.parse(data);
             var shuttleLocation = L.LatLng(vehicle.lat, vehicle.lon);
             updateShuttleInfo(vehicle, request_count); 
+
+            if(count15 == 1)
+            {
+                console.log("vehicleInfo obj :"+JSON.stringify(vehicle.id));
+             //   playPause('webcam_div1','pausePlayButton1');
+
+                webcam('1', vehicle);
+              //  playPause('webcam_div2','pausePlayButton2');
+
+                webcam('2', vehicle);
+            }
+            
         });
     }, 1500);
     return interval;
@@ -902,6 +914,19 @@ function createSelectList(objArray)
 
 function changeVehicleInfo(obj)
 {
+
+     //reset webcams 
+           // update status of webcam  
+    document.getElementById("hidden_cam1").style.background= "";
+    document.getElementById("hidden_cam2").style.background= "";
+    document.getElementById("webcam_div1").style.background= "#828282";
+    document.getElementById("webcam_div2").style.background= "#828282";
+     //document.getElementById("webcam_div1").style.background = "rgb(130, 130, 130)";
+     document.getElementById("pausePlayButton1").src = "images/cctv/pause.svg"
+      //document.getElementById("webcam_div2").style.background = "rgb(130, 130, 130)";
+     document.getElementById("pausePlayButton2").src = "images/cctv/pause.svg"
+
+     
     // check if which sites map is open 
     // return the last element of array 
     var activeMap =  mapList[mapList.length - 1];
@@ -923,6 +948,10 @@ function changeVehicleInfo(obj)
         updateETA(active_site);
         //console.log("Updating eta after 30 seconds on select change");
     }, 30000);
+
+  
+  //  playPause('webcam_div1','pausePlayButton1');
+   // playPause('webcam_div1','pausePlayButton1');
 }
 
 function createHtmlMarker(vehicleObj, iconHtml)
@@ -2537,6 +2566,8 @@ function playPause(webcam_div, pausePlayButton)
     var pausePlayButtons = document.getElementById(pausePlayButton);
     var fifthChar = pausePlayButtons.src.substring((pausePlayButtons.src).length - 5);
 
+    //alert("5th char :"+fifthChar);
+
     if(fifthChar == "y.svg")
     {
         // Update the button text to 'Pause'
@@ -2557,16 +2588,27 @@ function playPause(webcam_div, pausePlayButton)
     }
 }
 
-function webcam(webcamId, vehicle) {
+function webcam(webcamId, vehicleObj) {
+
+   console.log("vehicle dfged:"+JSON.stringify(vehicleObj).id);
     show_div('webcam_div');
     document.getElementById("webcam_div1").style.display = "inline-block";
     document.getElementById("webcam_div2").style.display = "inline-block";
+
+    if(vehicleObj != undefined)
+        var vehicle = vehicleObj;
+    else
+        var vehicle = vehicleObj[0];        
+
     
-    if(vehicle[0] == undefined)
+    if(vehicle == undefined)  //vehicle[0]
         return false;
     // close div with off camer=a button
     // open div with play camera and fullscreen icon
-    if(vehicle[0].webcam1 != null)
+
+    console.log("webcam1 : "+JSON.stringify(vehicle.webcam1));
+    console.log("webcam2 : "+JSON.stringify(vehicle.webcam2));
+    if(vehicle.webcam1 != null)
     {
         document.getElementById("offCameraDiv1").style.display = "none";
         document.getElementById("playButtonDiv1").style.display = "block";
@@ -2577,7 +2619,7 @@ function webcam(webcamId, vehicle) {
         document.getElementById("playButtonDiv1").style.display = "none";
     }
        
-    if(vehicle[0].webcam2 != null)
+    if(vehicle.webcam2 != null)
     {
         document.getElementById("offCameraDiv2").style.display = "none";
         document.getElementById("playButtonDiv2").style.display = "block";
@@ -2592,7 +2634,7 @@ function webcam(webcamId, vehicle) {
     if (webcamId == '1') 
     {
         if(vehicle != null)
-            var vehicleObj = vehicle[0];
+            var vehicleObj = vehicle;
         if(vehicleObj != null)
             var webcam1 = vehicleObj.webcam1;
         if (webcam1 != null) 
@@ -2601,7 +2643,7 @@ function webcam(webcamId, vehicle) {
     if (webcamId == '2') 
     {
         if(vehicle != null)
-            var vehicleObj = vehicle[0];
+            var vehicleObj = vehicle;
         document.getElementById("cameraButton2").src = "images/cctv/video2Active.svg";
        
         if(vehicleObj != null)
