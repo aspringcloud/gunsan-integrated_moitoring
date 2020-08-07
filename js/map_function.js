@@ -1668,6 +1668,8 @@ function currentVehicleETA(stationData)
     var stationDetails; 
     //console.log("stationData.eta :"+(stationData.eta));
     //console.log("stationData.eta length :"+(stationData.eta).length);
+    console.log("777 stationData :"+JSON.stringify(stationData));
+    console.log("stationData.eta :"+JSON.stringify(stationData.eta));
     if((stationData.eta).length == 0) //|| stationData.eta == undefined )
     {
         stationDetails = {
@@ -1684,23 +1686,28 @@ function currentVehicleETA(stationData)
         var selectedId = dom.options[dom.selectedIndex].id;
         for(var k of stationData.eta)
         {                        
+
+          //  alert("k : "+k);
             var temp = JSON.parse(k);
             var key = Object.keys(temp);
             var value = Object.values(temp);
-            for(var k = 0; k < key.length; k++)
-            {                     
-                if(key[k] == selectedId)
+         //  alert("key length:"+key.length);
+            for(var x = 0; x < key.length; x++)
+            {           
+               // alert("key[x]:"+key[x]);
+               // alert("key[x]"+key[x]+ "selectedId"+selectedId);
+                if(key[x] == selectedId)
                 {       
                     var time_value;
-                    if(Math.round(value[k]) < 2)
+                    if(Math.round(value[x]) < 2)
                         time_value = "잠시 후 도착예정";
-                    else if(Math.round(value[k]) > 2)
-                        time_value = Math.round(value[k])+"분 후 도착​";
+                    else if(Math.round(value[x]) > 2)
+                        time_value = Math.round(value[x])+"분 후 도착​";
                     else
                         time_value = "N분 후 도착";
 
                     stationDetails = {
-                        vehicle_id : key[k],
+                        vehicle_id : key[x],
                         time : time_value,
                         id : stationData.id,
                         mid : stationData.mid,

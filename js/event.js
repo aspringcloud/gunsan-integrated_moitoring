@@ -11,7 +11,7 @@ function checkTime(i) {
 
 function createAlertDiv(eventData)
 {
-    console.log("eventDiv :"+eventData);
+   // console.log("eventDiv :"+eventData);
     var event_how = (JSON.parse(eventData).how);
     var dataAttribute = event_how.type;//Object.keys(JSON.parse(eventData))
     var id;
@@ -19,16 +19,16 @@ function createAlertDiv(eventData)
     var eventMessage;
     var selectList = document.getElementById("vehicleSelect");  // vehicle select list
     var selectedId;// = selectList.options[selectList.selectedIndex].id;  // selected Id 
-    var siteId;
+    var siteId = event_how.site_id;
 
     if(dataAttribute == "door")
     {
         selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
 
-        id = (JSON.parse(eventData)).door.vehicle_id;
-        vehicleID = (JSON.parse(eventData)).door.vehicle_mid;
+        id = event_how.vehicle_id;
+        vehicleID = event_how.vehicle_mid;
        
-        if((JSON.parse(eventData)).door.value == true )
+        if(event_how.value == "true" )
         {
             eventMessage = "문이 열립니다."; 
             if(id == selectedId)
@@ -43,10 +43,20 @@ function createAlertDiv(eventData)
     } 
     else if(dataAttribute == "drive")
     {
+
+        //alert("select index :"+selectList.options[selectList.selectedIndex]);
         selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
-        id = (JSON.parse(eventData)).drive.vehicle_id;
-        vehicleID = (JSON.parse(eventData)).drive.vehicle_mid;
-        if((JSON.parse(eventData)).drive.value == true)
+
+      //  alert("datat :"+JSON.stringify(JSON.parse(eventData)));
+        id = event_how.vehicle_id;
+
+        //console.log(" drive :"+JSON.parse(eventData));
+        vehicleID = event_how.vehicle_mid;
+
+       // alert("v id :"+id);
+       // alert("v mid :"+vehicleID);
+      //  alert("v selectedId :"+selectedId);
+        if(event_how.value == 'auto')
         {
             eventMessage = "자율주행 상태입니다."; 
             if(id == selectedId)
@@ -153,25 +163,34 @@ function createAlertDiv(eventData)
     }
     else if(dataAttribute == "parking")
     {
-        id = (JSON.parse(eventData)).parking.vehicle_id;
+        id = event_how.vehicle_id;
         selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
-        vehicleID = (JSON.parse(eventData)).parking.vehicle_mid;
+        vehicleID = event_how.vehicle_mid;
+
+      //  alert("ID :"+id+ "  selectedId :"+selectedId );
       
-        if((JSON.parse(eventData)).parking.value == true)
+        if(event_how.value == "true")
         {
+           // alert("if true ");
             eventMessage = "주차 상태입니다."; 
             if(id == selectedId)
                 vehicleStatus("PARKED", "rgb(128,128,128)");
         }
         else
+        {
+            //alert("else false ");
             eventMessage = "주차 상태가 아닙니다."; 
+            if(id == selectedId)
+                vehicleStatus( "DRIVING", "#57AE66");
+        }
+           
     }
     else if(dataAttribute == "passenger")
     {
         id = event_how.vehicle_id;
         selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
         vehicleID = event_how.vehicle_mid;
-        eventMessage = "현재 승객 수: "+event_how.current_passenger+ " 명"; 
+        eventMessage = "현재 승객 수: "+(event_how.current_passenger + 1)+ " 명"; 
         if(id == selectedId)
             passengerStatus(event_how.current_passenger);
 
@@ -182,19 +201,36 @@ function createAlertDiv(eventData)
     }
     else if(dataAttribute == "power")
     {
-        id = (JSON.parse(eventData)).power.vehicle_id;
+        id = event_how.vehicle_id;
         selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
-        vehicleID = (JSON.parse(eventData)).power.vehicle_mid;
-        if((JSON.parse(eventData)).power.value == true )
-            eventMessage = "전원이 켜졌습니다."; 
+        vehicleID = event_how.vehicle_mid;
+       
+        if(event_how.value == "on" )
+        {
+          //  document.getElementById("gnss_v1").style.backgroundColor = "#57AE66";
+            eventMessage = "전원이 켜집니다."; 
+        }
+            
         else
+        {
+           // document.getElementById("gnss_v1").style.backgroundColor = "#CA4040";
             eventMessage = "전원이 꺼졌습니다."; 
+        }
+           
+
+       // updateGnssBgcolor(event_how.value);
     }
 
-    //alert("active_site :"+active_site+ "  siteId:"+siteId);
+  //  alert("active_site :"+active_site+ "  siteId:"+siteId);
+ // alert("vehicleID :"+vehicleID);
+ //   alert("dataAttribute :"+dataAttribute);
     if(vehicleID == null || siteId != active_site || dataAttribute == "message" ) //|| siteId != active_site
         return false;
     
+
+
+      //  alert("eventMessage :"+eventMessage);
+       
     // Create div to show event information
     var dom = document.getElementById('eventsDiv');
     var newAlert = "<span>"+vehicleID+"</span>"+
