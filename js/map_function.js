@@ -1713,8 +1713,10 @@ function currentVehicleETA(stationData)
                         mid : stationData.mid,
                         name : stationData.name  
                     }
+                    return stationDetails;
+                    
                 }
-                else
+                /*else
                 {
                     stationDetails = {
                         vehicle_id : null,
@@ -1724,9 +1726,9 @@ function currentVehicleETA(stationData)
                         name : stationData.name  
                     }
                     //return stationDetails;
-                }
+                }*/
                 //console.log("VEhicle ID :"+stationDetails.vehicle_id);
-                return stationDetails;
+                
             }
         }
     }
