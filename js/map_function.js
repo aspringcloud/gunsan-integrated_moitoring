@@ -621,8 +621,8 @@ function showCluster(cluster_map)
             }
 
             // create openstreet tile layer
-            var clusterLayer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            var clusterLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
             });
 
             // add layer to map with zoom level
@@ -1933,7 +1933,7 @@ function updateETA(site_id)
 function createRoute(mapInstance, waypoints, stationTitle) {
     var control = L.Routing.control({
         waypoints: waypoints,
-        serviceUrl:'http://115.93.143.2:8104/route/v1',
+        serviceUrl:'https://osrm.aspringcloud.com/route/v1',
         dragging:false,
         routeWhileDragging:false,
         createMarker: function (i, wp) {
@@ -1973,7 +1973,7 @@ function createRoute(mapInstance, waypoints, stationTitle) {
 function createMap(mapInstance) {
     mapInstance.scrollWheelZoom.enable();
     mapInstance.dragging.enable();
-    var mapLayer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+    var mapLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
         attribution: false,
     });
     mapLayer.addTo(mapInstance);    
