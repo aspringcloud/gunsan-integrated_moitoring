@@ -92,7 +92,7 @@ function createAlertDiv(eventData)
 
         //document.getElementById("eventMsgArea").innerHTML = eventMessage;
         //document.getElementById("timeInfo").innerHTML = strDate+" "+strTime+ " 수신"; 
-        if( document.getElementById("eventContent"))
+      /*  if( document.getElementById("eventContent"))
         {
             var top = document.getElementById("eventContent").style.top;
             var left = document.getElementById("eventContent").style.left;
@@ -104,9 +104,12 @@ function createAlertDiv(eventData)
             var left = 40; 
             //alert("ELSE top: "+top+ " left: "+left);
         }
-     
+     */
+
+    var top = 8;
+    var left = 40; 
         
-       var eventHtml = '<div id="eventContent" class="message-content3" style="top: '+(top+2)+'%; left: '+(left+2)+'%">'+
+       var eventHtml = '<div id="eventContent" class="message-content3" style="top: '+(top+2)+'%; left: '+(left)+'%">'+
                          '<div id= "eventHeader" class="message-header2" >'+
                             '<div class="msgDiv1">'+
                                 '<p class="msgSendP" id="vehicleEventMsg"> <span id="event_vid">'+vehicleID+'</span>에서 보낸 메세지</p>'+
@@ -125,7 +128,7 @@ function createAlertDiv(eventData)
                     ' </div>';
 
                     ///onclick="confirmEventMsg('+this+');"
-        $('#eventMessageModal').append(eventHtml);//html(eventHtml);//append(eventHtml);
+        $('#eventMessageModal').html(eventHtml);//html(eventHtml);//append(eventHtml);
         document.getElementById("eventMessageModal").style.display = "block";
 
 
