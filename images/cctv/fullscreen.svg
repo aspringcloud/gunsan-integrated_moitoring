@@ -1,16 +1,3 @@
-<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g filter="url(#filter0_d)">
-<path d="M16.8859 4H24V11.1141H21.1812V6.81879H16.8859V4ZM21.1812 21.1812V16.8859H24V24H16.8859V21.1812H21.1812ZM4 11.1141V4H11.1141V6.81879H6.81879V11.1141H4ZM6.81879 16.8859V21.1812H11.1141V24H4V16.8859H6.81879Z" fill="white"/>
-</g>
-<defs>
-<filter id="filter0_d" x="0" y="0" width="28" height="28" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-<feFlood flood-opacity="0" result="BackgroundImageFix"/>
-<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
-<feOffset/>
-<feGaussianBlur stdDeviation="2"/>
-<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.35 0"/>
-<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
-<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
-</filter>
-</defs>
+<svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M9.66443 0H15V5.33557H12.8859V2.11409H9.66443V0ZM12.8859 12.8859V9.66443H15V15H9.66443V12.8859H12.8859ZM0 5.33557V0H5.33557V2.11409H2.11409V5.33557H0ZM2.11409 9.66443V12.8859H5.33557V15H0V9.66443H2.11409Z" fill="#4F4F4F"/>
 </svg>

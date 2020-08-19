@@ -136,7 +136,7 @@
         </div>
     </div>
     <!-- Message Modal -->
-    <div id="messageModal" class="message_div2">
+    <div id="messageModal" class="message_div2"     onload = "updateCCTV();">
         <div class="message-content2">
             <div class="message-header2">
                 <div class="msgDiv1">
@@ -148,15 +148,23 @@
             </div>
             <div class="message-body2">
                 <div class="msgDiv2" >
-                    <select id="select_site" onchange="/*selectSite2();*/" class="select2">
-                        <option selected = "selected" id="1">군산</option>
+
+                    <span style="width:90px; height:30px; color:black; background: #FFFFFF;
+                    border: 0.5px solid #BDBDBD; position: absolute;
+                    box-sizing: border-box; text-align: center; line-height: 1.9;
+
+                    border-radius: 2px; font-family:Noto_regular; font-size:14px; posimargin-right:20px">
+                        군산
+                    </span>
+                   <!-- <select id="select_site" onchange="/*selectSite2();*/" class="select2">
+                        <option selected = "selected" id="1">군산</option>-->
                         <!--<option selected="selected" id="1">군산</option>-->
                         <!--<option id="0" selected="selected">전체</option>
                         <option id="1">군산</option>
                         <option id="2">대구</option>
                         <option id="3">세종</option>
                         <option id="4">상암</option>-->
-                    </select>
+                  <!-- </select>-->
                     <select id="select_siteManager" onchange="/*selectSite(this,'0','0')*/ " class="select3">전체</select>
                 </div>
                 <textarea id="msgArea" class="textArea" rows="10" cols="30" name="contents" onkeyup="fnChkByte(this,'200')"></textarea>
@@ -174,8 +182,8 @@
     <!-- Event Message Modal 
     <div id="eventMsgModalDiv">-->
     <div id="eventMessageModal" class="message_div2">
-        <div class="message-content3">
-            <div class="message-header2">
+     
+            <!--<div class="message-header2">
                 <div class="msgDiv1">
                     <p class="msgSendP" id="vehicleEventMsg"> <span id="event_vid"></span>에서 보낸 메세지</p>
                     <span class="msg_close" onclick="confirmEventMsg('eventMessageModal');">
@@ -189,8 +197,8 @@
             </div>
             <div class="message-footer2" style="margin-top: 15px;">
                 <button class="event_send_button" onclick="confirmEventMsg('eventMessageModal');">확인</button>
-            </div>
-        </div>
+            </div>-->
+ 
     </div>
     <!--</div>-->
 
@@ -201,6 +209,48 @@
     <div class="mapPosition hideMap" id="gunsanMap"></div>
     <div class="mapPosition hideMap" id="gangrungMap"></div>
     <div class="mapPosition hideMap" id="sejongMap2"></div>
+
+    <div id="eta_div">
+        <span id="eta_span">정류장</span>
+
+
+        <div id="circle_div">
+            <img id="small_white_circle" style="position: absolute; top:160px; left:12px; z-index: 1111;" src="images/images_0.3/small_white_circle.svg"/>
+        </div>
+        <div style="display: inline-block;border-radius: 12px; height:864px;margin-left: 10px;  width: 14px; top:158px; position: absolute; z-index: 1011;background-color: #2E92B0; "> </div>;
+
+        <div class="eta1"  id = "stationList1" >
+
+               <!-- <div style="display:inline-block; ">
+                <div style="display: inline-block; min-height:27px;max-height: 844px;  width: 14px;  height: 850px; position: absolute; z-index: 1011;background-color: #2E92B0; border-radius: 12px;"> </div>
+                <div style="margin-left:20px; margin-top: 25px; min-height:27px;max-height: 844px;">
+                    <p style="font-size: 14px;">SW 융합 기술 지원센터</p>
+                    <span>
+                        <p style="display:inline-block ; color:black; font-size: 12px; margin-top: 10px; margin-right: 8px; "> STA001</p>
+                        <p style="display:inline-block ;color:black"> 곧 도착 또는 출발 </p>
+                    </span>
+                </div>
+            <div style="display: inline-block; min-height:27px;max-height: 844px;  width: 14px;  height: 850px; position: absolute; z-index: 1011;background-color: #2E92B0; border-radius: 12px;"> </div>
+                <div style="margin-left:10px; margin-top: 25px; min-height:27px;max-height: 844px;">
+                    <p style="font-size: 14px;">롯데몰 북편</p>
+                    <span>
+                        <p style="display:inline-block; color:black; font-size: 12px; margin-top: 10px; margin-right: 8px; "> STA002</p>
+                        <p style="display:inline-block; color:black"> 4 도착 또는 출발 </p>
+                    </span>
+                    
+                </div>
+                </div>-->
+
+
+        </div>
+
+        <!--   <div class = "timeDiv1" id = "stationList" ></div>
+     <div style = "margin-left: 25px; min-height : 20px; max-height:320px;"> 
+            <div class = "timeDiv1" id = "stationList" style = "display: inline-block;"></div>
+            <div id = "station_li" style = "margin-top: 3px;margin-left: 3px; width:4px; display: inline-block; position: absolute;background-color: #2E92B0;"></div>
+            <div class = "timeDiv2" id = "eta_list"></div>
+        </div>-->
+    </div>
 
     <!--Web socket event alert-->
     <div id="alertDiv">
@@ -216,27 +266,113 @@
 </div>
     <!--chart.js graphs-->
     <div id="infoChart">
+        <span id="infoChart_title"><p style="margin-left: 16px;;">차량</p><select class="vehicleList" id="vehicleSelect" onchange="changeVehicleInfo(this); oddButtonStatus(); playPause('cctv_webcam','pausePlayButton1');"></select>
+            <span class="oddButton" onclick="oddFileDownload()" id="oddFileSpan"><a id="oddFile" target="_blank" href="" download></a></span></span>
+
+        <div id="v_div1">
+     <span class="cameraAngle1" style="float:left "> Rear </span> 
+            <span id="v_status1" class="drivingButton"> STOPPED </span>
+            <span class="cameraAngle2" style="float:right" id="v_front"> Front </span>
+                <img id="doorStatus" src="images/door/door_open.svg">
+            <label id="gnss_v1" class="gnssLabel" style="background-color: rgb(87, 174, 102);">GNSS</label>
+            <label class="vehicleLabel" id="driveStatus">MANUAL</label>
+            <p id ="vehicleVersion" ></p>
+        </div>
+        <div id="v_div2">
+             <!--  speed of vehicle-->
+             <div class="speedDiv1">
+                <span class="v_p1">속도</span>
+                <span class="v_p2" id="speed_v1" style="color: rgb(79, 79, 79); font-family: Roboto_regular;">0</span>
+                <p class="v_p3">km/hr</p>
+            </div> 
+
+            <div class="batteryDiv2">
+                <div class="batteryDiv">
+                    <label>배터리</label>
+                    <div style="margin-top: 10px;">
+                        <div class="batteryBorder"> 
+                            <div id="battery" class="inverted-bar3" data-content="79%" style="--afterWidth3:79%; --afterbgColor3:#57AE66; --afterColor:#57AE66; --fontSize:12px;"></div>
+                        </div>
+                    </div>    
+                    <div class="parent3 display_inline_block"></div>
+                </div> 
+              <!--  <div class="passengerDiv1"> 
+                    <label>Passengers</label>
+                    <br>
+                    <div class="passengerDiv2">
+                        <p id="passengerCount" class="passengerDiv3">5</p>
+                        <p class="display_inline_block">/15</p>
+                    </div>
+                </div>-->
+            </div>
+
+
+
+        </div>
+        <div id="v_div3">
+            <div class="vehicleDiv2">
+                <p class="v_p4">방향</p> 
+                <div class="directionNorth">N</div>
+                <div class="eastDiv"><p>W</p></div> 
+                <div id="bigCircle" class="bigCircle" style="transform: rotate(84deg);">
+                    <div class="dot">
+                        <div class="smallCircle" id="angleDegree" style="transform: rotate(-84deg);"><span id="heading_v1">84°</span></div>
+                    </div>
+                </div>
+                <div class="directionWest"><p>E</p></div>
+                <div class="directionSouth">S</div>
+            </div>
+            <div class="passengerDiv1"> 
+                <label>승객 수</label>
+                <br>
+                <div class="passengerDiv2">
+                    <p id="passengerCount" class="passengerDiv3">5</p>
+                    <p class="display_inline_block">/15</p>
+                </div>
+            </div>
+        </div>
+        <div id="v_div4">
+            <p style="display:inline-block; position: absolute;right:130px; top:86px; font-size: 13px; font-family: Noto_medium; color: #4F4F4F;">카메라</p> <div id="playButtonDiv1"  style="display:inline-block" class="cam_btn1">
+                <img id="pausePlayButton1" onclick="playPause('cctv_webcam','pausePlayButton1');" src="images/cctv/pause.svg" />
+                <img class="fullscreen" onclick="scale_image('hidden_cam1');" src="images/cctv/fullscreen.svg" />
+            </div>
+            <p id="cameraText"> 영상이 여기에 표시됩니다. </p>
+            <div style="width: 150px;
+            height: 107px;
+            background: #F2F2F2;
+            position: absolute;
+            right: 15px;
+            border : 1px solid black;
+            border-radius: 3px;
+            bottom: 55px;" id="cctv_webcam" >
+
+           <!--<iframe style="width: 100%; border: 0px; height:100%; background: pink;" id="cctv_webcam"></iframe>
+           onchange="updateCCTV();-->
+            </div>
+            <select id="camera_select" onchange="playPause('cctv_webcam','pausePlayButton1');">
+
+                <option id = "1" selected="selected">전방 카메라 1 </option>
+                <option id = "2">분할 영상​</option>
+            
+            </select>
+            <!--<div id="webcam_div1" class="webcam_div2" style="margin-right: 15px;" >
+                <p class="cam_title">CAMERA-1</p>
+                <div id="offCameraDiv1" class="offcam_btn1"> 
+                    <img src="images/cctv/videocam_off.svg" onclick=""/> 
+                </div>
+                <div id="playButtonDiv1" class="cam_btn1">
+                    <img id="pausePlayButton1" onclick="playPause('webcam_div1','pausePlayButton1');" src="images/cctv/pause.svg" />
+                    <img class="fullscreen" onclick="scale_image('hidden_cam1');" src="images/cctv/fullscreen.svg" />
+                </div>
+            </div>-->
+        </div>
+
         <!--<p id="site_vehiceCount">3</p>
         <p id="site_vehiceCount">32</p>
         <p id="site_vehiceCount">3</p>
         <p id="site_vehiceCount">23</p> -->
 
-        <div class="distanceChart1" id="distanceChart1">
-            <p class="chartTitle1">금일 총 운행거리 </p>
-            <p class="chartTitle3" style="margin-right:30px;  margin-top: 18px;"> km</p>
-            <p class="chartTitle2" id="total_distance" style="margin-top:18px;  margin-right: 5px;"> 56</p>
-            <hr style="border: 1px solid #BDBDBD; width:313px;"/>
-            <p class="scaleUnit">km</p>
-            <canvas id="todayDistance" width="314px" height="160px" class="canvasMargin1"></canvas>
-        </div>
-        <div class="passangerChart2" id="passangerChart2"> 
-            <p class="chartTitle1">금일 총 탑승자 수</p>
-            <p class="chartTitle3" style="margin-right:30px; margin-top: 15px;"> 명</p>
-            <p class="chartTitle2" style="margin-top:15px; margin-right: 5px;" id="total_passengers"> 56</p>
-            <hr style="border: 1px solid #BDBDBD; width:313px;"/>
-            <p class="scaleUnit">명</p>
-            <canvas id="todayPassenger" width="314px" height="160px" class="canvasMargin1"></canvas>
-        </div>
+     
     </div>
     
     <!--navigation tab html-->
@@ -322,191 +458,8 @@
                 </div>
             </div>
         </div>
-        <!--Site Window div-->
-        <div class="button_window hide_div " id="degu_window">
-            
-            <div id="routeTitleDiv" class="routeTitle">
-                <div id="weatherDiv" style="margin-top: 16px;">
-                    <!--Show weather icon and temperature-->
-                    <img class="weatherIcon" id="weather_icon" />
-                    <lable class="tempLabel" id="temp_celsicus"></lable>
-                    
-               </div>
-                <lable id="site_name" class="window_p display_inline_block font-weight-bold">대구 수성 알파시티</lable>
-                <img id="site_status" class="activeGreen" src="" />
-            </div>
-            <!--Site title and summary-->
-            <div id="leftMarginDiv" class="siteDiv1 scrolly">
-                <p id="site_title" class="siteTitle"></p>
-                <div class="marginDiv2">
-                    <p class="font-weight-bold managerLabel">관리자 </p>
-                    <div style="width:103px;  position: absolute; top: 50px;">
-                        <select id="manager_selectlist" name="manager_selectlist" class="select1"></select>
-                    </div>
-                    <button class="msgButton display_inline_block" onclick="siteMsgSend(); /*setDefaultUser();*/">메시지 보내기</button>
-                </div>
-                <div style=" width: 350px; height: 28px;"> 
-                    <span class="titleSpan1">
-                        <p id="hideP">숨기기</p>
-                        <img id="arrowImg" onclick="siteSummary('info_content');" src="images/closeArrow.svg"/>
-                    </span>
-                </div>
-                <div class = "infoDetail" id = "info_content">
-                    <lable class ="siteSummary" id = "site_summary"></lable>
-                </div>
-                <!--ETA of vehicle-->
-                <div class = "station_table" id = "station_table">
-                    <p class = "window_p1">정류장</p>
-                    <div style = "margin-left: 25px; min-height : 20px; max-height:320px;"> <!--margin-left: 44px;-->
-                        <div class = "timeDiv1" id = "stationList" style = "display: inline-block;"></div>
-                        <div id = "station_li" style = "margin-top: 3px;margin-left: 3px; width:4px; display: inline-block; position: absolute;background-color: #2E92B0;"></div> <!--width: 20px;-->
-                        <div class = "timeDiv2" id = "eta_list"></div>
-                    </div>
-                </div>
-                <!-- Div for vehicle information-->
-                <hr style="clear: both; border: 0.5px solid #BDBDBD; margin: 0px 40px 21px 0px; opacity: 0.3;">
-                <!--list of available vehicles on route-->   
-                <!--odd file for route-->  
-                <div>
-                    <span class="window_p1">차량</span>
-                    <select class="vehicleList" id="vehicleSelect" onchange="changeVehicleInfo(this); oddButtonStatus(); "></select>
-                    <span class="oddButton" onclick="oddFileDownload()" id="oddFileSpan"><a id="oddFile" target="_blank" href="" download></a></span>
-                </div>
-                <!--Vehicle info div-->
-                <div class="vehicleDiv1">
-                    <!--title, firmware, gnsss, status of vehicle-->
-                    <div class="divStyle5" id="vehicleDiv">
-                        <div class="titleDiv1">
-                            <p id="vehicleID">SCN000</p>
-                            <span id="vehicleVersion">version: 0.00.0</span>
-                        </div>
 
-                       <!-- <div class="" style="display:inline-block; width:120px">
-                           
-                            <label id="gnss_v1" class="gnssLabel">GNSS</label>
-                           <label class="vehicleLabel" id="driveStatus">AUTONOMOUS</label>
-                        </div>-->
-                       <div class="infoDiv1">
-                           
-                            <label id="gnss_v1" class="gnssLabel">GNSS</label>
-                           <label class="vehicleLabel" id="driveStatus">AUTONOMOUS</label>
-                        </div>
-                    </div> 
-                    <!--status of vehicle-->
-                    <!--second div start-->
-                    <div style="width: 357px;  height:195px; ">
-                        <div style=" display: inline-block;  height:202px;position: absolute; width:152px;left: 18px; border-right: 0.5px solid #BDBDBD;">
-                            <div class="vehicleDiv3">
-                                <span class="cameraAngle" style="float:left "> Rear </span>
-                                <span class="cameraAngle" style="float:right" id="v_front"> Front </span>
-                                <img id="doorStatus"/>
-                            </div>
-                            <span id="v_status1" class="drivingButton"> STOPPED </span>
-                        </div>
-                   <!-- <div class="infoDiv2">
-                        <div class="vehicleDiv3">
-                            <span class="cameraAngle" style="float:left "> Rear </span>
-                            <span class="cameraAngle" style="float:right" id="v_front"> Front </span>
-                            <img id="doorStatus"/>
-                        </div>
-                        <span id="v_status1" class="drivingButton"> STOPPED </span>
-                    </div>-->
-                    <!--speed div start-->
-                    <div class="speedDiv">
-                       <!--  speed of vehicle-->
-                        <div class="speedDiv1">
-                            <span class="v_p1">Speed</span>
-                            <span class="v_p2" id="speed_v1">0</span>
-                            <p class="v_p3">km/hr</p>
-                        </div> 
-                        <!--heading of vehicle-->
-                        <div class="vehicleDiv2">
-                            <p class="v_p4">Heading</p> 
-                            <div class="directionNorth">N</div>
-                            <div class="eastDiv"><p>W</p></div> 
-                            <div id="bigCircle" class="bigCircle">
-                                <div class="dot">
-                                    <div class="smallCircle" id="angleDegree"><span id="heading_v1">100</span></div>
-                                </div>
-                            </div>
-                            <div class="directionWest"><p>E</p></div>
-                            <div class="directionSouth">S</div>
-                        </div>
-                        <!--battery status-->
-                        <div class="batteryDiv2">
-                            <div class="batteryDiv">
-                                <label>Battery</label>
-                                <div style="margin-top: 40px;">
-                                    <div class="batteryBorder"> 
-                                        <div id="battery" class="inverted-bar3" data-content=""></div>
-                                    </div>
-                                </div>    
-                                <div class="parent3 display_inline_block"></div>
-                            </div> 
-                            <div class="passengerDiv1"> <!--class="passengerDiv1" style="display: inline-block; background: cyan;-->
-                                <label>Passengers</label>
-                                <br>
-                                <div class="passengerDiv2">
-                                    <p id="passengerCount" class="passengerDiv3">8</p>
-                                    <p class="display_inline_block">/15</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!--passenger status-->
-                       
-                    </div>   <!--SpeedDiv end-->
-                </div> <!--second div start-->
-            </div> <!--Vehicle info div-->
-            <hr style="margin-top: 25px; border: 0.5px solid #BDBDBD; margin: 25px 40px 21px 0px; opacity: 0.3;"/>
-            <button class="emergency" onclick ="showEmergencyContact();" id="contact_button">Emergency Contact</button>
-            <br>
-
-            <br>
-            <br>
-            </div> <!--left margin Div-->
-            </div><!--hide-div-->
-      
-            <!--Emergency contacts(currently static)-->
-            <!--<div class="managerInfo1">
-                <p class="numberP1">보험사</p><p class="display_inline_block">1588-5656</p>
-            </div>
-            <div class="managerInfo2">
-                <p class="numberP2">사고접수</p><p class="display_inline_block">013-3366-5656</p>
-            </div>-->
-             <br>
-            <br>
-        </div>
-          <!--hidden elements for camera-->
-          <img id="cameraButton1" onclick="webcam('1');" src = "images/cctv/video1.svg" hidden/>
-          <img id="cameraButton2" onclick="webcam('2');" src = "images/cctv/video2.svg" hidden/>
-    </div>
-
-
-    <div class = "contactModal" id="contactDiv">
-        <div class="contactDiv1">
-            <div>
-                <p>Emergency Contact</p>
-                <img class="contactImg1" src = "images/closing_button.svg" onclick="hide_div('contactDiv')"/>
-            </div>
-            <img class="contactImg2" id="emergency_contactImg" alt="Emergency contact" src="">
-        </div>
-    </div>
-
-    <!--<div id="contactDiv" class="message_div">
-        <div class="message-content">
-            <div class="message-header">
-                <div class="noticeDiv2" style="display: inline-block;"><p class="noticeP1">공지사항 : </p></div>
-                    <span onclick="hide_div('noticeModal');" style="font-size:40px;float: right;margin-right: 15px; cursor: pointer;
-                    margin-top: 5px; ">&times;</span>
-                </div>
-            <div class="notice-body" id="noticeBody"> </div>
-        </div>
-    </div>
--->
-
-
-    <!--</div>-->
-    <!--offsite div count of Route, vehicle, station, kiosk and garage-->
+        <!--offsite div count of Route, vehicle, station, kiosk and garage-->
     <div class="div_box" id="countInfoDiv"> <!--class="div_box"-->
         <img src="images/table_background.svg"/>
         <p id="routeCount" class="p2" style="left: 65px;"></p>
@@ -517,7 +470,6 @@
     </div>
 
     <div id="graph_div" >
-
         <!--Total accumulated data graph-->
         <div id="graph3_div" class="graphDiv graph3">
             <div class="graphDivLeft">
@@ -564,9 +516,149 @@
         </div>
     </div>
    
+
+        <!--Site Window div-->
+        <div class="button_window hide_div " id="degu_window">
+            
+            <div id="routeTitleDiv" class="routeTitle">
+                <div id="weatherDiv" style="margin-top: 16px;">
+                    <!--Show weather icon and temperature-->
+                    <img class="weatherIcon" id="weather_icon" />
+                    <lable class="tempLabel" id="temp_celsicus"></lable>
+                    
+               </div>
+                <lable id="site_name" class="window_p display_inline_block font-weight-bold"></lable>
+                <!--<img id="site_status" class="activeGreen" src="" />-->
+            </div>
+            <!--Site title and summary-->
+            <div id="leftMarginDiv" class="siteDiv1 scrolly">
+                <div style="width:326px; position: absolute;">
+                
+                <div class="marginDiv2">
+                    <p class="font-weight-bold managerLabel">관리자 </p>
+                    <div> <!--style="width:103px;  position: absolute; top: 50px;"-->
+                        <select id="manager_selectlist" name="manager_selectlist" class="select1"></select>
+                        <button class="msgButton display_inline_block" onclick="siteMsgSend(); ">메시지 보내기</button>
+                        <button class="emergencyMsgButton display_inline_block" onclick ="showEmergencyContact();" id="contact_button">비상연락망</button>
+                    </div>
+                </div>
+
+                <p id="site_title" class="siteTitle"></p>
+
+                <div class = "infoDetail" id = "info_content">
+                    <lable class ="siteSummary" id = "site_summary"></lable>
+                </div>
+                
+                <!--- development history-->
+                <div id="devHistory">
+                   
+                    <img src="images/images_0.3/rnd_info.svg">
+                </div>
+
+                
+
+                <!-- site operation information-->
+               <div id="operationInfo">
+                <p id="operationInfoTitle" class="operationInfo_p">운영 정보 </p>
+                <p id="line_count" class="operationInfo_p">NA</p>
+                <p id="vehicle_count" class="operationInfo_p">NA</p>
+                <p id="station_count" class="operationInfo_p">NA</p>
+                <p id="kiosk_count" class="operationInfo_p">NA</p>
+                <p id="garage_count" class="operationInfo_p">NA</p>
+
+                <img src = "images/table_background.svg"/>
+               </div>
+               <div class="passangerChart2" id="passangerChart2"> 
+                    <p class="chartTitle1" id="passengerTitle"></p>
+                    <p class="chartTitle3" style="margin-right:20px; margin-top: 10px;"> 명</p>
+                    <p class="chartTitle2" style="margin-top:10px; margin-right: 5px;" id="total_passengers"> </p>
+                    <hr style="border: 1px solid #BDBDBD; width:298px; margin-left: 10px;"/>
+                    <p class="scaleUnit">명</p>
+                    <canvas id="todayPassenger" width="298px" height="127px" class="canvasMargin1"></canvas>
+                </div>
+
+               <div class="distanceChart1" id="distanceChart1">
+                    <p class="chartTitle1" id="distanceTitle"></p>
+                    <p class="chartTitle3" style="margin-right:20px;  margin-top: 10px;"> km</p>
+                    <p class="chartTitle2" id="total_distance" style="margin-top:10px;  margin-right: 5px;"></p>
+                    <hr style="border: 1px solid #BDBDBD; width:298px; margin-left: 10px; " />
+                    <p class="scaleUnit">km</p>
+                    <canvas id="todayDistance" width="298px" height="127px" class="canvasMargin1"></canvas>
+                </div>
+           
+                
+                <!--ETA of vehicle
+                <div class = "station_table" id = "station_table">
+                    <p class = "window_p1">정류장</p>
+                    <div style = "margin-left: 25px; min-height : 20px; max-height:320px;"> 
+                        <div class = "timeDiv1" id = "stationList" style = "display: inline-block;"></div>
+                        <div id = "station_li" style = "margin-top: 3px;margin-left: 3px; width:4px; display: inline-block; position: absolute;background-color: #2E92B0;"></div>
+                        <div class = "timeDiv2" id = "eta_list"></div>
+                    </div>
+                </div>-->
+                <!-- Div for vehicle information-->
+               <!-- <hr style="clear: both; border: 0.5px solid #BDBDBD; margin: 0px 40px 21px 0px; opacity: 0.3;"> -->
+                <!--list of available vehicles on route-->   
+                <!--odd file for route
+                <div>
+                    <span class="window_p1">차량</span>
+                    <select class="vehicleList" id="vehicleSelect" onchange="changeVehicleInfo(this); oddButtonStatus(); "></select>
+                    <span class="oddButton" onclick="oddFileDownload()" id="oddFileSpan"><a id="oddFile" target="_blank" href="" download></a></span>
+                </div>-->  
+                
+          <!--  <hr style="margin-top: 25px; border: 0.5px solid #BDBDBD; margin: 25px 40px 21px 0px; opacity: 0.3;"/>
+            <button class="emergency" onclick ="showEmergencyContact();" id="contact_button">Emergency Contact</button>
+            <br>
+
+            <br>
+            <br>
+        </div>
+            </div>  /*left margin Div-- >
+            </div> /*hide-div-->
+      
+            <!--Emergency contacts(currently static)-->
+            <!--<div class="managerInfo1">
+                <p class="numberP1">보험사</p><p class="display_inline_block">1588-5656</p>
+            </div>
+            <div class="managerInfo2">
+                <p class="numberP2">사고접수</p><p class="display_inline_block">013-3366-5656</p>
+            </div>-->
+             <br>
+            <br>
+        </div>
+          <!--hidden elements for camera-->
+          <img id="cameraButton1" onclick="webcam('1');" src = "images/cctv/video1.svg" hidden/>
+          <img id="cameraButton2" onclick="webcam('2');" src = "images/cctv/video2.svg" hidden/>
+    </div>
+
+
+    <div class = "contactModal" id="contactDiv">
+        <div class="contactDiv1">
+            <div>
+                <p>Emergency Contact</p>
+                <img class="contactImg1" src = "images/closing_button.svg" onclick="hide_div('contactDiv')"/>
+            </div>
+            <img class="contactImg2" id="emergency_contactImg" alt="Emergency contact" src="">
+        </div>
+    </div>
+
+    <div id="contactDiv" class="message_div">
+        <div class="message-content">
+            <div class="message-header">
+                <div class="noticeDiv2" style="display: inline-block;"><p class="noticeP1">공지사항 : </p></div>
+                    <span onclick="hide_div('noticeModal');" style="font-size:40px;float: right;margin-right: 15px; cursor: pointer;
+                    margin-top: 5px; ">&times;</span>
+                </div>
+            <div class="notice-body" id="noticeBody"> </div>
+        </div>
+    </div>
+
+
+    <!--</div>-->
+    
     <!-- Webcam div--><!--</div>-->
     <div id="webcam_div" class="webcam_div" >
-        <div id="webcam_div1" class="webcam_div2" style="margin-right: 15px;" >
+       <!-- <div id="webcam_div1" class="webcam_div2" style="margin-right: 15px;" >
             <p class="cam_title">CAMERA-1</p>
             <div id="offCameraDiv1" class="offcam_btn1"> 
                 <img src="images/cctv/videocam_off.svg" onclick=""/> 
@@ -575,14 +667,14 @@
                 <img id="pausePlayButton1" onclick="playPause('webcam_div1','pausePlayButton1');" src="images/cctv/pause.svg" />
                 <img class="fullscreen" onclick="scale_image('hidden_cam1');" src="images/cctv/fullscreen.svg" />
             </div>
-        </div>
+        </div>-->
         <div id="webcam_div2" class="webcam_div2">
             <p class="cam_title">CAMERA-2</p>
             <div id="offCameraDiv2" class="offcam_btn1"> 
                 <img src="images/cctv/videocam_off.svg"  onclick="" /> 
             </div>
             <div id="playButtonDiv2" class="cam_btn1">
-                <img id="pausePlayButton2" onclick="playPause('webcam_div2','pausePlayButton2');" src="images/cctv/pause.svg" />
+                <img id="pausePlayButton2" onclick=" playPause('webcam_div2','pausePlayButton2');" src="images/cctv/pause.svg" />
                 <img class="fullscreen" onclick="scale_image('hidden_cam2');" src="images/cctv/fullscreen.svg" />
             </div>
         </div>
@@ -597,6 +689,7 @@
         </div>
     </div>
 
+    <div id="hidden_cam" hidden></div>
     <div id="hidden_cam1" hidden></div> <!--style="height:500px;width:500px; z-index: 1010;position: absolute; left:600px;top:600px;border:1px solid black"-->
     <div id="hidden_cam2" hidden></div>
            <p id="loggedin_userid" hidden></p>
@@ -635,7 +728,6 @@
             } 
         }
 
-        
         
     /* Sejong submenu */
     var subMenuModal = document.getElementById("subMenuModal");
@@ -682,12 +774,12 @@
                 document.getElementById("contactDiv").style.display = "block" */
             
             //if you click on anything except the modal itself or the "open modal" link, close the modal
-            if(document.getElementById("contactDiv").style.display == "block")
+        /*    if(document.getElementById("contactDiv").style.display == "block")
             {
                 if(event.target.id == "contactDiv") 
                     $("#contactDiv").hide();
             }
-
+*/
             //password reset setting dialog
             if(document.getElementById("settingDialog").style.display == "block")
             {
@@ -699,6 +791,8 @@
             }
         });
     }
+
+    $('.leaflet-top, .leaflet-bottom ').css("left" , "1810px");
     </script>
 </body>
 </html>

@@ -7,11 +7,12 @@
             <div class="mainTop">
             <div class="inline_element tab_elements">
                 <p class="font_regular" onclick="showContent('integrated_control');" id="integrated_control" title="Integrated control">통합관제 </p>
-                <p class="font_regular" onclick="showContent('integrated_Dashboard')" id="integrated_Dashboard" title="Integrated Dashboard">통합대시보드 </p>
+                <!-- <p class="font_regular" onclick="showContent('integrated_Dashboard')" id="integrated_Dashboard" title="Integrated Dashboard">통합대시보드 </p>
                 <p class="font_regular" onclick="showContent('diagnostics')" title="Diagnostics and Error Analysis">진단 및 오류 분석 </p>
                 <p class="font_regular" onclick="showContent('accident_prediction');" title="Accident Prediction Model and Data Analysis">사고 예측 모델 및 데이터분석</p>
                 <p class="font_regular" onclick="showContent('accident_prediction');" title="Springgo Test Mode">스프링고 테스트모드 </p>
                 <p class="font_regular" onclick="showContent('accident_prediction');" title="Data center">데이터센터</p>
+                -->
             </div>
             <div id="screenToggleDiv">
                 <p>전체화면 모드</p>
@@ -31,12 +32,12 @@
                     <div class="message">
                         <img class="noticeImg" src="images/notice.svg" onclick="notice_modal();"></i>
                     </div>
-                    <img class="message msgImg" src="images/msg.svg" onclick="alert('준비 중입니다.');/*msg_modal();*/"/>
+                    <!--<img class="message msgImg" src="images/msg.svg" onclick="alert('준비 중입니다.');/*msg_modal();*/"/>-->
                     <!--Display logged-in username-->
                     <div class='divStyle3'>
-                        <img class="userImg" id="user_img" src="images/userIcon.svg"/>
-                        <span class='greetSpan'>안녕하세요</span>
-                        <span id="active_username" class="userName">Test</span>
+                        <!--<img class="userImg" id="user_img" src="images/userIcon.svg"/>-->
+                        <span id="active_username" class='greetSpan'>안녕하세요</span>
+                       <!-- <span id="active_username" class="userName">Test</span>-->
                         <!--opens user settings window-->
                         <img class="dropDownStyle" src="images/dropDownArrow.svg" onclick="toggle_div('logoutSetting')"/>
                         <div id="logoutSetting" class="logoutSettings">
@@ -58,38 +59,36 @@
                 <img src="images/closing_button.svg" onclick="clearFields();hide_div('settingDialog');"/>
             </div>
             <div class="settingDiv1">
-                <button onclick="settings();" id="settingOptions" >로그인 정보</button>
-                <button onclick="passwordChange2();" id="user_pwd_change">비밀번호 변경</button>
-            </div>
-            <div class="settingDiv2" id="settingDiv2">
-                <label class="settingDiv_label">이메일 ID</label>
-                <span class="settingDiv_span" id="activeEmail"></span>
-                <label class="settingDiv_label">이름</label>
-                <span class="settingDiv_span" id="activeName"></span>
-                <label class="settingDiv_label">팀</label>
-                <span class="settingDiv_span" id="activeTeam"></span>
-                <label class="settingDiv_label">휴대폰</label>
-                <span class="settingDiv_span" id="activePhone"></span>
-                <label class="settingDiv_label">권한</label>
-                <span class="settingDiv_span" id="activeLevel"></span>
-            </div>
-            <div class="settingDiv3" id="settingDiv3">
-                <span><img src="images/userIcon.svg" id="activeUserImg"></span>
-                <button>사진 변경하기</button>
+                <button id="setting_button1" onclick="settings();"></button>
+                <button onclick="passwordChange2();" id="user_pwd_change"></button>
+                <div class="settingDiv2" id="settingDiv2">
+                    <label class="settingDiv_label">이메일 ID</label>
+                    <span class="settingDiv_span" id="activeEmail"></span>
+                    <label class="settingDiv_label">이름</label>
+                    <span class="settingDiv_span" id="activeName"></span>
+                    <label class="settingDiv_label">팀</label>
+                    <span class="settingDiv_span" id="activeTeam"></span>
+                    <label class="settingDiv_label">휴대폰</label>
+                    <span class="settingDiv_span" id="activePhone"></span>
+                    <label class="settingDiv_label">권한</label>
+                    <span class="settingDiv_span" id="activeLevel"></span>
+                </div>
             </div>
             <!--Update password window-->
             <div class="settingDiv21" id="settingDiv21">
-                <label class="settingDiv_label">현재 비밀번호</label>
-                <input class="settingDiv_span" id="currentPwd" type="password" disabled/>
-                <label class="settingDiv_label">새 비밀번호</label>
-                <input class="settingDiv_span" id="newPwd"  type="password"  placeholder="새로운 비밀번호를 입력하세요." class="imeModeDisabled" /> <!--onkeydown="myFunction(event); return true;" -->
-                <label class="settingDiv_label">새 비밀번호 확인</label>
-                <input class="settingDiv_span" id="confirmPwd" type="password" placeholder="새로운 비밀번호를 다시 입력하세요."  class="imeModeDisabled" />
-                <span class="error" id="pwdResetError"></span>
+                <div style="position: absolute; left:20px;top:0px">
+                    <label class="settingDiv_label2">현재 비밀번호</label>
+                    <input class="settingDiv_span" id="currentPwd" type="password" placeholder="현재 비밀번호를 입력하세요." disabled/>
+                    <label class="settingDiv_label2">새 비밀번호</label>
+                    <input class="settingDiv_span" id="newPwd"  type="password" placeholder="새로운 비밀번호를 입력하세요." class="imeModeDisabled" /> 
+                    <label class="settingDiv_label2">새 비밀번호 확인</label>
+                    <input class="settingDiv_span" id="confirmPwd" type="password" placeholder="새로운 비밀번호를 다시 입력하세요."  class="imeModeDisabled" />
+                </div>
+                <span class="error" id="pwdResetError">sdsfdfsdfdsfdfsd</span>
                 <div>
-                    <span class="settingNotice">※ 비밀번호에 이메일ID, 이름을 포함할 수 없습니다.</span>
-                    <span class="settingNotice">※ 비밀번호는 8글자 이상이어야 합니다.</span>
-                    <span class="settingNotice">※ 비밀번호는 숫자로만 입력은 불가능합니다. </span>
+                    <span class="settingNotice">※ 이메일ID, 이름을 포함할 수 없습니다.</span>
+                    <span class="settingNotice">※ 8글자 이상이어야 합니다.</span>
+                    <span class="settingNotice">※ 숫자로만 입력은 불가능합니다. </span>
                 </div>
             </div>
             <div class="settingDiv31" id="settingDiv31">

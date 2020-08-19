@@ -76,7 +76,7 @@ margin: 5px 0px 0px 0px;
 
 .canvasMargin1{
 margin-right :5px;
-margin-left :22px;
+margin-left :12px;
 }
 
 .setting_P img{
@@ -102,7 +102,7 @@ background-color: rgba(0, 0, 0, 0.5);
 }
 
 .buttonDiv{
-position :fixed; bottom:50px; right:240px; cursor: pointer;
+position :fixed; bottom:66px; right:17.7%; cursor: pointer;
 }
 
 .buttonDiv img{
@@ -116,13 +116,13 @@ box-shadow: 0px 0.5px 0px rgba(0, 0, 0, 0.3); height: 57px;
 
 .siteTitle{
 font-size: 14px; color: #555555; font-family: Noto_regular;letter-spacing: -0.016em;
-margin-top: 3px;
+margin-top: 60px;
 }
 
 .settingDiv{
-width: 633px;
-height: 417px;
-box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
+  width: 537px;
+  height: 329px;
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
 z-index: 1011;
 position: absolute;
 right: 25px;
@@ -132,7 +132,7 @@ border-radius: 3px;
 }
 
 .settingTitle{
-box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
+/*box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);*/
 border-radius: 3px 3px 0px 0px;
 width: 633px;
 height: 56px;
@@ -143,7 +143,7 @@ font-size: 18px;
 font-family: Noto_regular;
 color: #333333;
 position: absolute;
-left: 29px;/*
+left: 20px;/*
 top: 15px;*/
 display:inline-block;
 }
@@ -162,11 +162,13 @@ right: 20px;
 .settingDiv1{
 display:inline-block;
 width: 136px;
-box-shadow: 2px 0px 4px rgba(0, 0, 0, 0.05);
-border-radius: 0px 0px 0px 2px;
-height: 360px;
+height: 275px;
+position: absolute;
+top: 72px;
+left:20px
 }
 
+/*
 .settingDiv1 button{
 width: 136px;
 height: 52px;
@@ -180,13 +182,45 @@ text-align: left;
 display:inline-block;
 padding-left: 30px;
 cursor: pointer;
+}*/
+#setting_button1
+{
+  width: 130px;
+  height: 39px;
+  background: url("../images/password_reset/login_unselected.svg");
+  cursor: pointer;
+  border: 0px;
+  outline: none;
+}
+#setting_button1:hover{
+  background: url("../images/password_reset/login_mouseover.svg");
 }
 
+#setting_button1:active, #setting_button1:focus{
+  background: url("../images/password_reset/login_selected.svg");
+}
+
+#user_pwd_change
+{
+  width: 130px;
+  height: 39px;
+  background: url("../images/password_reset/pwd_unselected.svg");
+  cursor: pointer;
+  border: 0px;
+  outline: none;
+}
+#user_pwd_change:hover{
+  background: url("../images/password_reset/pwd_mouseover.svg");
+}
+
+#user_pwd_change:active, #user_pwd_change:focus{
+  background: url("../images/password_reset/pwd_selected.svg");
+}
 
 .activeSettingButton{
 color: #2E92B0 !important;
 }
-
+/*
 .settingDiv1 button:hover{
 background-color: #F8F8F8;
 border-left: 4px solid #62ABC1;
@@ -198,83 +232,51 @@ font-family: Noto_medium;
 color:#2E92B0;
 font-family: Noto_medium;
 }
-
+*/
 .settingDiv2{
 display:inline-block;
-width: 374px;
+width: 320px;
 position: absolute;
-margin: 5%;
+/*margin: 5%;*/
+top:0px;
+float:right;
+left: 160px;
 }
 
 .settingDiv_label{
 color: #333333;
 font-family:Noto_regular;
 font-size: 13px;
-display: block;
+display: inline-block;
+vertical-align: top;
+line-height: 2.5;
+width:65px;
 }
 
 .settingDiv_span{
-width: 274px;
+width: 222px;
 height: 30px;
-background: #F8F8F8;
+background: #F2F2F2;
 border: 0.2px solid #E0E0E0;
 box-sizing: border-box;
 border-radius: 2px;
 color: #666666;
 font-size: 13px;
 font-family:Noto_regular;
-display: block;
+display: inline-block;
 text-align: left;
 padding-left: 15px;
-margin-bottom: 4px;
+margin-bottom: 5px;
 line-height: 30px;
-}
-
-.settingDiv3{
-display:inline-block;
-position: absolute;
-width: 259px;
-left:490px;
-top:87px;
-}
-
-.settingDiv3 span{
-width: 97px;
-height: 97px;
-box-sizing: border-box;
-border: 2px solid rgba(24, 87, 134, 0.8);
-border-radius: 7px;
-display: block;
-vertical-align: middle;
-}
-
-.settingDiv3 img{
-width: 86.61px;
-height: 86.61px;
-top:5px;
-left:5px;
-position: absolute;
-}
-
-.settingDiv3 button{
-color: #FFFFFF;
-width: 97px;
-height: 30px;
-font-family:Noto_regular;
-font-size: 13px;
-position: absolute;
-background: #2E92B0;
-border-radius: 2px;
-margin-top: 20px;
-border:0px;
 }
 
 .settingNotice{
 color: #828282;
 font-family: Noto_regular;
-font-size: 13px;
+font-size: 12px;
 display:block;
 margin-bottom: 5px;
+letter-spacing: -0.05em;
 }
 
 .settingDiv21{
@@ -286,33 +288,34 @@ left: 200px;*/
 display:none;
 width: 374px;
 position: absolute;
-margin: 5%;
+top:82px;
+left:152px;
 }
 
 .settingDiv21 div{
 position: absolute;
-top: 225px;
-
+top: 125px;
+left:120px;
 }
 
 .settingDiv31{
 display:none;
 position: absolute;
 width: 259px;
-left:170px;
+left:270px;
 top:220px;
 }
 
 .settingDiv31 button{
 color: #FFFFFF;
-width: 97px;
+width: 222px;
 height: 30px;
 font-family:Noto_regular;
 font-size: 13px;
 position: absolute;
 background: #2E92B0;
 border-radius: 2px;
-top: 50px;
+top: 60px;
 border:0px;
 cursor: pointer;
 }
@@ -323,8 +326,33 @@ background-color: aquamarine;
 }
 
 .managerLabel{
-display: inline-block;
 line-height: 0;
+}
+
+#devHistory{
+width: 326px;
+height: 45px;
+position: absolute;
+top:100px;
+}
+
+.emergencyMsgButton{
+color: #CA4040;
+font-family: Noto_medium;
+width: 83px;
+height: 30px;
+border:1px solid #CA4040;
+background: transparent;
+line-height: 0.2;
+vertical-align: top;
+left: 243px;
+position: absolute;
+cursor: pointer;
+}
+
+.emergencyMsgButton :hover{
+  background: #CA4040;
+  color: #FFFFFF;
 }
 
 #screenToggleDiv {
@@ -446,7 +474,7 @@ display:none;
 position: absolute;
 left: 41px;
 top:100px;
-width: 391px;
+width: 370px;
 height: 886px;
 }
 
@@ -456,19 +484,17 @@ margin-top: 15px;
 }
 
 .select1{
-margin-top: -10px;
 width:103px;
 height: 30px;
 position:absolute;
-left :100px;
 border:1px solid #BDBDBD;
 }
 
-.select1:focus, #vehicleSelect:focus, #select_site:focus, #select_siteManager:focus{
+.select1:focus, #select_site:focus, #select_siteManager:focus{
 background-color: #E6E6E6;
 }
 
-.select1 option, #vehicleSelect option, #select_site option, #select_siteManager option{
+.select1 option, #select_site option, #select_siteManager option{
 background-color: #FFFFFF;
 }
 
@@ -542,14 +568,15 @@ display: inline-block;margin-left: 135px; margin-top:15px;
 }
 
 .speedDiv1{
-display: inline-block;width: 100px;
-margin-left: -40px;
+display: inline-block;width: 50px;text-align: center;
+/*margin-left: -40px;*/
 }
 
 .vehicleDiv3 img{
 margin-top:23px;
 margin-bottom:23px
 }
+
 .alertButton{
 background: #CA4040;
 box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3);
@@ -566,7 +593,7 @@ outline: none;
 margin-bottom: 10px;*/
 position: absolute;
 top: 120px;
-right:79px;
+right:239px;
 z-index:1001;
 }
 
@@ -577,27 +604,38 @@ border-radius: 2px;
 height: 94px;
 width: 176px;
 align-content: center;
+margin-top: 10px;
 }
 
 .batteryAlert span{
 background: #0082C8;
 box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3);
 border-radius: 2px 2px 0px 0px;
-width : 176px;
+width : 166px;
 height: 24px;
 color: #FFFFFF;
 font-size: 14px;
-text-align: center;
+text-align: left;
 position: absolute;
-line-height: 1.6;
+line-height: 1.8;
+padding-left: 5%;
+font-family: Noto_medium;
 }
 
 .batteryAlert p{
-font-weight: bold;
+font-family: Noto_regular;
 color: #4F4F4F;
 font-size: 14px;
-padding-top: 20%;
-text-align: center;
+position: absolute;
+text-align: left;
+padding-left: 5%;
+}
+
+.batteryAlert img{
+float:right;
+padding-top: 3.5%;
+padding-right: 5%;
+cursor: pointer;
 }
 
 .select2{
@@ -616,6 +654,7 @@ width: 103px;
 height:30px;
 font-family: Noto_regular;
 font-size: 14px;
+margin-left: 110px;
 color: #333333;
 }
 
@@ -636,11 +675,12 @@ border: 0px;
 }
 
 .batteryDiv2{
-width: 185px; height: 70px; margin-left: 38px;
+width: 185px; height: 70px; position: absolute;top:110px;left:0px;
 }
 
 .batteryBorder{
-display: inline-block;float:left; border: 1px solid #E0E0E0; width: 48px; margin-top:-10px;
+display: inline-block; border: 1px solid #E0E0E0; width: 48px; /*margin-top:-10px;float:left;*/
+height:26px;
 }
 
 .managerInfo1{
@@ -661,12 +701,12 @@ font-family:Noto_medium; font-size: 14px; color: #000000; display: inline-block;
 
 .alertDiv{
 z-index: 1001;
-right: 4.11%;
+right: 12.5%;
 top:145px;
 position: absolute;
 background-color: transparent;
 display: block;
-height: 550px;
+height: 750px;
 overflow-y: hidden;
 }
 
@@ -686,7 +726,7 @@ width:10px;
 display: inline-block; 
 font-size: 9px;
 vertical-align: inherit; 
-margin-left: 20px;
+margin-left: 10px;
 }
 
 .eastDiv p{
@@ -726,14 +766,23 @@ line-height: 2.7;
 
 .vehicleList{
 display: inline-block;
-left: 138px;
+right: 102px;
+top:10px;
 position: absolute;
 width: 112px;
 height: 30px;
 text-indent: 15px;
 font-family: Roboto_regular;
 font-size: 15px;
-color: #333333;
+color: #FFFFFF;
+background: #2E92B0;
+border-radius: 1px;
+}
+
+.vehicleList option,
+#vehicleSelect:focus,
+#vehicleSelect option {
+  color:black;
 }
 
 .fullscreen{
@@ -758,7 +807,8 @@ background: url("../images/route/oddButton.svg");
 .oddDisabled{
 display: inline-block;
 position: absolute;
-left: 260px;
+right: 15px;
+top:8px;
 width: 77px;
 height: 30px;
 pointer-events: none;
@@ -778,7 +828,7 @@ background: url("../images/route/odd_mouseover.svg") !important;
 }
 
 .routeTitle{
-width: 350px;
+width: 326px;
 height: 92px;
 backdrop-filter: blur(27.1828px);
 box-shadow: 0px 1px 0px #2E92B0;
@@ -800,9 +850,10 @@ display:none;
 }
 
 .chartTitle1{
-font-family : Noto_medium; color: #185786;
-font-size: 16px; margin-left: 22px;  margin-top: 15px;
+font-family : Noto_medium; color: #333333;
+font-size: 14px; margin-left: 15px;  margin-top: 12px;
 margin-bottom: 5px; display: inline-block;
+letter-spacing: -0.02em;
 
 }
 
@@ -816,7 +867,7 @@ margin: 0px;
 
 .chartTitle3{
 display: inline-block;
-color: #185786;
+color: #333333;
 float:right;
 font-size: 14px;
 margin: 0px;
@@ -826,46 +877,59 @@ line-height: 2.4;
 #infoChart{
 display: none; 
 position: absolute;
-width: 1260px;
-height: 272px;    
+width: 538px;
+height: 283px;    
+border: 0.5px solid #BDBDBD;
+border-radius: 2px;
 z-index: 1000;
-left: 581px;
+left: 576px;
 top: 778px;
-background-image: url("../images/information.svg");
+background: #FFFFFF;
+}
+
+
+#infoChart_title {
+  background: #FAFAFA;
+  border-radius: 2px 2px 0px 0px;
+  height: 48px;
+  width: 100%;
+  position: absolute;
+  text-align: left;
+  vertical-align: middle;
+}
+
+#infoChart_title p {
+
+  font-family: Noto_medium;
+  font-size: 16px;
+  color: #333333;
 }
 
 .distanceChart1{
-display: none; 
-position: absolute;
-width: 357px;
-height: 244px;    
-z-index: 1001;
-left: 21px;/*
-top: 840px;*/
+display: block; 
+width: 329px;
+height: 200px;    
+border: 0.5px solid #BDBDBD;
+box-sizing: border-box;
+border-radius: 2px;
 background: #FFFFFF;
-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12), 0px 0px 2px rgba(0, 0, 0, 0.14);
-border-radius: 5px;
-top:14px;
+margin: 0px 0px 10px 0px;
 }    
 
 .passangerChart2{
-display: none; position: absolute;
-width: 357px;
-height: 244px; z-index: 1001;
-left: 400px;
-top:14px;
-/*top: 840px;*/
+display: block;
+width: 329px;
+height: 200px;
+border:0.5px solid #BDBDBD;
 background: #FFFFFF;
-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12), 0px 0px 2px rgba(0, 0, 0, 0.14);
-border-radius: 5px;
+margin: 20px 0px 10px 0px;
 }
 
 .scaleUnit{
 color: grey;
-font-size: 12px;
+font-size: 10px;
 font-family: Roboto_regular;
-margin-bottom: 5px;
-margin-left: 22px;/*830px;*/
+margin: 3px 0px 3px 10px;
 }
 
 .scrolly{
@@ -987,7 +1051,7 @@ box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
 .garageDiv1{
 width: 170px;
 height: 37px;
-background: #BDBDBD;
+background: #4f4f4f;
 border-radius: 2px 2px 0px 0px;
 }
 
@@ -1032,7 +1096,7 @@ padding-left: 5px;
 
 .garageDoor_black{
 text-align: center; 
-color: #333333; 
+color: #F2F2F2; 
 font-size: 13px; 
 font-family: noto_medium;
 float:right;
@@ -1041,7 +1105,7 @@ padding: 3px 8px 0px 0px;
 
 .garageDoor_red{
 text-align: center; 
-color: #CA4040;
+color: #FF7B7B;
 font-size: 13px; 
 font-family: noto_medium;
 float:right;
@@ -1087,7 +1151,6 @@ background-color: #CA4040 !important;
 display: none;
 position: absolute;
 z-index: 1011;
-top:90px;
 left:0px;
 align-self: center;
 width: 1920px;
@@ -1098,7 +1161,7 @@ background-color: rgba(0, 0, 0, 0.9);
 }
 .contactDiv1
 {
-  position:absolute; left: 200px; top:60px
+  position:absolute; left: 30px; top:60px
 }
 
 .contactDiv1 div{
@@ -1208,4 +1271,171 @@ animation: ripple 1s linear 0.5s infinite;
 0% { transform: scale(1);  opacity:0.1;}
 50% { transform: scale(1.3); opacity:1; }
 100% { transform: scale(1.6); opacity:0; }
+}
+
+
+/* version 3 css*/
+
+#operationInfo{
+  margin-top: 20px;
+}
+
+#operationInfo_p {
+  font-size: 16px;
+  font-family: Noto_regular;
+  letter-spacing: -0.02em;
+  color: #333333;
+}
+
+#operationInfo img {
+  width: 326px;
+height: 69px;
+border:0.5px solid #BDBDBD;
+}
+
+#infoChart div{
+  display:inline-block;
+}
+
+#vehicleVersion{
+font-size: 13px;
+color: #828282;
+float:left;
+line-height: 2;
+position :absolute;
+width:150px;
+color: #828282;
+font-family: Noto_regular;
+font-size: 13px;
+position: absolute;
+top:230px;
+left : 40px;
+}
+
+#v_div1{
+  position: absolute;
+  top:5px;
+}
+
+#v_div1 span
+{
+  display:inline-block
+}
+
+#v_div1 img{
+  position: absolute;
+  top: 98px;
+  left: 38px;
+}
+
+#v_div2{
+  position: absolute;
+  left: 190px;
+  top: 99px;
+}
+
+#camera_select{
+width: 116px;
+height: 30px;
+position: absolute;
+top:240px;
+right:32px;
+color: #333333;
+}
+
+#camera_select option{
+  font-family: Noto_medium;
+  font-size: 13px;
+  color: #333333;
+  letter-spacing: -0.016em;
+}
+
+#cameraText{
+  position: absolute;
+  top:155px;
+  right:25px;
+  font-size:12px;
+  font-family: Noto_regular;
+  letter-spacing: -0.016em;
+  color: #BDBDBD;
+  z-index: 1000;
+}
+
+#line_count{
+  position: absolute;
+  top:335px;
+  left:25px;
+}
+
+#vehicle_count{
+position: absolute;
+top: 335px;
+left: 90px;
+}
+
+#station_count{
+position: absolute;
+top: 335px;
+left: 160px;
+}
+
+#kiosk_count{
+position: absolute;
+top: 335px;
+left: 220px;  
+}
+
+#garage_count{
+position: absolute;
+top: 335px;
+left: 290px;
+}
+
+#eta_div{
+width: 226px;
+height: 989px;
+z-index: 1001;
+background-color: #FFFFFF;
+position: absolute;
+right: 0px;
+height: 100%;
+display: none;
+overflow-y: hidden;
+overflow-x: hidden;
+}
+
+.eta1{
+  width: 226px;
+  color: #333333;
+  letter-spacing: -0.016em;
+  font-family: Noto_medium;
+  font-size: 16px;
+  position: absolute;
+  top: 140px;
+  line-height: 0;
+  padding-left: 6px;
+  margin-top: 10px;
+}
+
+#eta_span{
+  width: 226px;
+  height: 48px;
+  background: #FAFAFA;
+  color: #333333;
+  letter-spacing: -0.016em;
+  font-family: Noto_medium;
+  font-size: 16px;
+  position:absolute;
+  top:92px;
+  line-height: 3;
+  padding-left: 16px;
+}
+
+#operationInfoTitle{
+  color: #333333;
+  letter-spacing: -0.02em;
+  font-family: Noto_medium;
+  font-size: 16px;
+
+  
 }

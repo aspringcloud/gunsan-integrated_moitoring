@@ -97,7 +97,11 @@ function switchMap(obj)
             var elementsToHide = ["offsite_window", "webcam_div", "webcam_div1", "webcam_div2", "infoChart", "distanceChart1", "passangerChart2"];
             hideElements(elementsToHide);
             hideMaps('offsiteMap');
-            var show_elements2 = ["graph_div", "countInfoDiv"];
+            hide_div('eta_div');
+
+            $('.leaflet-top, .leaflet-bottom ').css("left" , "1810px");
+            
+            var show_elements2 = ["graph_div", "countInfoDiv"];         
             showElements(show_elements2);
             
             // create offsite map
@@ -116,6 +120,8 @@ function switchMap(obj)
                 });
                 zoomHome_main = L.Control.zoomHome();
                 zoomHome_main.addTo(cluster_map);   
+
+                L.control.scale().addTo(cluster_map);
             }
             else
             {
@@ -226,9 +232,14 @@ function switchMap(obj)
             }
 
             hide_div('countInfoDiv');
+
+            show_div("eta_div");
+            show_div('infoChart');
             showSite(gunsan_map, 1, gunsanClickCount); 
             open_tab('degu_window',1);
             show_div("alertDiv");
+            //$('.leaflet-control-container').removeAttr("left");
+
             document.getElementById('currentSiteId').innerHTML="1";
         }
         else if(obj.id == "offsite_button")
@@ -315,6 +326,9 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
         getweather(currentSiteId);
     }, 10 * 60000);
 
+    L.control.scale().addTo(mapInstance);
+   // alert("scale :"+o);
+
     mapInstance.invalidateSize();
      
     // Show All the shuttles on degu route
@@ -369,26 +383,26 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
         }
 
         // update ETA
-        /*
+        
         updateETA(currentSiteId);
         eta_interval = setInterval(function() {
             updateETA(currentSiteId);
             console.log("Updating eta after 30 seconds")
-        }, 30000);*/
+        }, 30000);
         
         // update status of webcam  
         document.getElementById("hidden_cam1").style.background= "";
         document.getElementById("hidden_cam2").style.background= "";
-        document.getElementById("webcam_div1").style.background= "#828282";
-        document.getElementById("webcam_div2").style.background= "#828282";
+        //document.getElementById("webcam_div1").style.background= "#828282";
+       // document.getElementById("webcam_div2").style.background= "#828282";
 
         if(document.getElementById("pausePlayButton1").src= "images/cctv/play.svg")
             document.getElementById("pausePlayButton1").src= "images/cctv/pause.svg";
         if(document.getElementById("pausePlayButton2").src= "images/cctv/play.svg")
             document.getElementById("pausePlayButton2").src= "images/cctv/pause.svg";
 
-        webcam('1', vehicleObj);
-        webcam('2', vehicleObj);
+        //webcam('1', vehicleObj);
+      //  webcam('2', vehicleObj);
 
         // get all vehicle Id's.
         getMethod("sites/"+currentSiteId+"/", function (data) {
@@ -408,6 +422,16 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
                 document.getElementById('contact_button').style.color = "#CA4040";
                 document.getElementById('contact_button').style.pointerEvents ="auto";
             }
+            // count of operationsl vehicles, kiosk  
+            if(JSON.parse(data).vehicle_count != undefined)
+            {
+                console.log("summary d:"+JSON.stringify(JSON.parse(data)));
+                document.getElementById('line_count').innerHTML = JSON.parse(data).route_count;
+                document.getElementById('vehicle_count').innerHTML = JSON.parse(data).vehicle_count;
+                document.getElementById('station_count').innerHTML = JSON.parse(data).station_count;
+                document.getElementById('kiosk_count').innerHTML = JSON.parse(data).kiosk_count;
+                document.getElementById('garage_count').innerHTML = JSON.parse(data).garege_count;
+            }
         });
     });
 
@@ -415,6 +439,7 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
 
     // development history data (underdevelopment)
     showSummary('site');
+
 
 }
 
@@ -750,18 +775,6 @@ function vehicleInfo(map, vId)
             var vehicle = JSON.parse(data);
             var shuttleLocation = L.LatLng(vehicle.lat, vehicle.lon);
             updateShuttleInfo(vehicle, request_count); 
-
-            if(count15 == 1)
-            {
-                console.log("vehicleInfo obj :"+JSON.stringify(vehicle.id));
-             //   playPause('webcam_div1','pausePlayButton1');
-
-                webcam('1', vehicle);
-              //  playPause('webcam_div2','pausePlayButton2');
-
-                webcam('2', vehicle);
-            }
-            
         });
     }, 1500);
     return interval;
@@ -777,7 +790,7 @@ function updateShuttleInfo(vehicle, request_count)
         // Vehicle name and version     
         document.getElementById("vehicleID").innerHTML = "NA";
         document.getElementById("vehicleID").style.color = "#666666";
-        document.getElementById("vehicleVersion").innerHTML = "version : NA";
+        document.getElementById("vehicleVersion").innerHTML = "SW 버전: NA";
         updateFrontStaus(null, 0)
         showVehicleHeading(null);
         updateDrive(null);
@@ -799,7 +812,7 @@ function updateShuttleInfo(vehicle, request_count)
         vehicleStatus( "STOPPED", "#CA4040");
    
     // Vehicle name and version     
-    document.getElementById("vehicleID").innerHTML = vehicle.name;
+  //  document.getElementById("vehicleID").innerHTML = vehicle.name;
     var nameColor = vehicleMakeColor(vehicle.name);
 
     // changes bgcolor of popup background
@@ -813,12 +826,13 @@ function updateShuttleInfo(vehicle, request_count)
     else
         color ="#666666"; 
         
-    document.getElementById("vehicleID").style.color = color;
-    document.getElementById("vehicleVersion").innerHTML = "version : "+vehicle.model.firmware;
+    //document.getElementById("vehicleID").style.color = color;
+    document.getElementById("vehicleVersion").innerHTML = "SW 버전: "+vehicle.model.firmware;
                         
     // show speed of vehicle
     setVehicleSpeed(vehicle.speed);
-    showVehicleHeading(vehicle.heading);
+    if(vehicle.speed > 0)
+        showVehicleHeading(vehicle.heading);
     // updates background color of gnss
     updateGnssBgcolor(vehicle.gnss);
 
@@ -847,6 +861,19 @@ function updateFrontStaus(parkingBreak, speed)
         frontBG = "#BDBDBD";
     document.getElementById("v_front").style.background = frontBG;
 }
+
+
+// site / vehicle operating status 
+function updateGnssStatus(status_boolean)
+{
+    var operatingStatus;
+    if(status_boolean == true)
+        operatingStatus = 'images/status/active_green.svg';
+    else
+        operatingStatus = 'images/status/inactive_grey.svg'; 
+
+    return operatingStatus;
+} 
 
 function updateGnssBgcolor(gnss_status)
 {
@@ -914,19 +941,6 @@ function createSelectList(objArray)
 
 function changeVehicleInfo(obj)
 {
-
-     //reset webcams 
-           // update status of webcam  
-    document.getElementById("hidden_cam1").style.background= "";
-    document.getElementById("hidden_cam2").style.background= "";
-    document.getElementById("webcam_div1").style.background= "#828282";
-    document.getElementById("webcam_div2").style.background= "#828282";
-     //document.getElementById("webcam_div1").style.background = "rgb(130, 130, 130)";
-     document.getElementById("pausePlayButton1").src = "images/cctv/pause.svg"
-      //document.getElementById("webcam_div2").style.background = "rgb(130, 130, 130)";
-     document.getElementById("pausePlayButton2").src = "images/cctv/pause.svg"
-
-     
     // check if which sites map is open 
     // return the last element of array 
     var activeMap =  mapList[mapList.length - 1];
@@ -948,10 +962,6 @@ function changeVehicleInfo(obj)
         updateETA(active_site);
         //console.log("Updating eta after 30 seconds on select change");
     }, 30000);
-
-  
-  //  playPause('webcam_div1','pausePlayButton1');
-   // playPause('webcam_div1','pausePlayButton1');
 }
 
 function createHtmlMarker(vehicleObj, iconHtml)
@@ -1008,6 +1018,7 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
             if(request_count == 1) 
             {
                 // create Icon for ripple marker as per the speed value
+                console.log(" parkingbrake : "+ vehicleObj.parkingbrake+ "speed : "+vehicleObj.speed);
                 if(vehicleObj.parkingbrake == "1" || vehicleObj.parkingbrake == null) //vehicleObj.isparked == true |
                 {
                     var marker = createHtmlMarker(vehicleObj, greyRippleIcon);
@@ -1049,21 +1060,34 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                     
                 // create html and append to popup div
                 var customPopup = "";
-                const customOptions = {'className': 'custom-popup2'};
+                var customOptions = {'className': 'custom-popup4'};
+                //alert("vehicleObj.gnss :"+vehicleObj.gnss);
+              /*  if(vehicleObj.gnss == true)
+                    var customOptions = {'className': 'custom-popup2'};
+                else
+                {
+                    var customOptions_disable = {'className': 'custom-popup4'};
+                   /// $('.leaflet-popup-tip').css("background-color" , "blue");
+                   // alert("tip: "+$('.leaflet-popup-tip'));
+                }*/
+                    
                 vehicleMarker.bindPopup(customPopup, customOptions).openPopup();               // bind popup to vehicle marker                   
                 vehicleMarker.on('click', function(e) {           
                     // vehicle marker on click function ---> updates vehicle popup data every second 
                     setPopupContent(e, mapInstance, currentSiteId);
             });
    
-            vehicleMarker.addTo(mapInstance);                                                 // show vehicle icon on route
+            vehicleMarker.addTo(mapInstance);         
+            
+           // alert("gns s:"+vehicleObj.gnss);// show vehicle icon on route
             var shuttleMarkerObj = {                                                          // store marker in array 
                 marker : vehicleMarker,
                 markId : vehicleObj.id,
                 name: vehicleObj.name,
                 speed: vehicleObj.speed,
                 battery: vehicleObj.battery,
-                version: vehicleObj.model.firmware
+                version: vehicleObj.model.firmware,
+                version: vehicleObj.gnss
             }
             shuttleMarkerArray.push(shuttleMarkerObj);                                         // maintain array of shuttle markers
         }   
@@ -1138,11 +1162,14 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                                 speedWeight ="normal";
                         }
                             
-                        var vehicleOperation = operatingStatus(vehicleObj.drive);
+                        var vehicleOperation = updateGnssStatus(vehicleObj.gnss);
+                        if(vehicleObj.gnss == true)
+                        {
                         currentMarker._popup.setContent("<div class="+popupColor+" id='vPopup'>"+
                         "<p class='popupTitle'>" +vehicleObj.name+ "<img class='activeGreenPopup' src="+vehicleOperation+"></p>"+
                         "<span class='popupVersion'>VER : "+vehicleObj.model.firmware+"</span>"+
                         "</div><br>"+
+
                         "<div class='popupSpeedDiv'>"+
                             "<span>Speed</span><br>"+
                             "<span id='popup_speed' class='popupSpeed' style='color:"+speedColor+";font-weight:"+speedWeight+"'>"+vehicleObj.speed+"</span><br>"+
@@ -1153,6 +1180,30 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                             "<div id='popupBattery' class='popup-battery' data-content="+vehicleObj.battery+'%'+"></div>"+
                             "<div class='popupParent'></div>"+
                         "</div>");
+                        }
+                        else{
+                        
+                            currentMarker._popup.setContent("<div class="+popupColor+" id='vPopup'>"+
+                            "<p class='popupTitle'>" +vehicleObj.name+ "<img class='activeGreenPopup' src="+vehicleOperation+"></p>"+
+                            "<span class='popupVersion'>VER : "+vehicleObj.model.firmware+"</span>"+
+                            "</div><br>"+
+
+                            "<div class='popupSpeedDivDisable'></div>"+
+                            "<div class='popupSpeedDiv'>"+
+                                "<span>Speed</span><br>"+
+                                "<span id='popup_speed' class='popupSpeed' style='color:"+speedColor+";font-weight:"+speedWeight+"'>"+vehicleObj.speed+"</span><br>"+
+                                "<span class='popupSpeedUnit'>km/hr</span>"+
+                            "</div>"+
+                            "<div class='popupBatteryDiv'>"+
+                                "<span style='vertical-align:top'>Battery</span>"+
+                                "<div id='popupBattery' class='popup-battery' data-content="+vehicleObj.battery+'%'+"></div>"+
+                                "<div class='popupParent'></div>"+
+                            "</div>");
+
+                                
+                        }
+
+
                         setPopupBattery(vehicleObj.battery);                // update popup battery value 
                         setPopupSpeed(vehicleObj.speed);        
                     }
@@ -1177,10 +1228,10 @@ function vehicleMakeColor(vehicleName){
     var popupColor;                                                // Update the background color of popup according as per the make of vehicle 
     if(thirdCharacter == "E")
         popupColor ="greenPopup";
-    else if(thirdCharacter == "N") 
-        popupColor ="bluePopup";
     else if(thirdCharacter == "K")   
         popupColor ="blackPopup";
+    else //if(thirdCharacter == "N") 
+        popupColor ="bluePopup";
 
    return popupColor;     
 }
@@ -1235,7 +1286,11 @@ function setPopupContent(e, mapInstance, site_no)
                         else
                             speedWeight ="normal";
                     }
-                    var vehicleOperation = operatingStatus(shuttleMarkerArray[k].drive);
+
+
+                   // alert("gnss:"+JSON.stringify(shuttleMarkerArray[k]));
+                    var vehicleOperation = updateGnssStatus(shuttleMarkerArray[k].gnss);  
+                    //alert("vehicleOperation :"+vehicleOperation);
                     layer._popup.setContent("<div class="+popupColor+" id='vPopup'>"+
                                             "<p class='popupTitle'>" +shuttleMarkerArray[k].name+ "<img class='activeGreenPopup'></p>"+ // src="+vehicleOperation+"
                                             "<span class='popupVersion'>VER : "+shuttleMarkerArray[k].version+"</span>"+
@@ -1327,6 +1382,7 @@ function distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
 
 /* show chart with todays distance passenger count */
 function showChartData(siteId){
+
     document.getElementById("infoChart").style.display = "block";
     document.getElementById("distanceChart1").style.display = "inline-block";
     document.getElementById("passangerChart2").style.display = "inline-block";
@@ -1338,15 +1394,23 @@ function showChartData(siteId){
     var api_url = server_URL+"oplogs/by-date/";
 
     // get todays date 
+    
+    var stringWeekDay = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
+  
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
-    today = yyyy+'-'+mm+'-'+dd;
+    var today2 = yyyy+'-'+mm+'-'+dd;
+    var dayOfWeek = stringWeekDay[today.getDay()];
+
+
+    var passengerTitleDate = mm+"/"+dd+ " ("+dayOfWeek+")" + " 총 탑승자 수"
+    var distanceTitleDate = mm+"/"+dd + " ("+dayOfWeek+")" +" 총 운행거리"
       
     // send today's date via post method
     var data = JSON.stringify({
-        "date": today   //"2020-04-06"   
+        "date": today2   //"2020-04-06"   
     });
 
     postMethod(data, api_url, function (req) {
@@ -1375,6 +1439,9 @@ function showChartData(siteId){
             //  todayChart('todayDistance', '총 운행거리', colorList, 'Distance(km)', nameList, nameList);
             var total_distance = distanceList.reduce((a, b) => a + b, 0);
             var total_passengers = passengerList.reduce((a, b) => a + b, 0);
+
+            document.getElementById('distanceTitle').innerHTML = distanceTitleDate;
+            document.getElementById('passengerTitle').innerHTML = passengerTitleDate;
             
             document.getElementById('total_distance').innerHTML = total_distance;
             document.getElementById('total_passengers').innerHTML = total_passengers;
@@ -1514,6 +1581,7 @@ function showSummary(site) {
     {
         getMethod("sites/summary/", function (getSummary) {
             var summary = JSON.parse(getSummary);
+          
             document.getElementById("routeCount").innerHTML = summary.route_count;
             document.getElementById("vehicleCount").innerHTML = summary.vehicle_count;
             document.getElementById("StationCount").innerHTML = summary.station_count;
@@ -1619,7 +1687,8 @@ function showRouteInfo(mapInstance, api_name, icon_path, site_no) {
                 // Gunsan route part 1 
                 stationWp_array = [
                     L.latLng(35.8137410000000000, 126.4131030000000000),//12
-                    L.latLng(35.8114720000000000, 126.4164430000000000),//13
+                   // L.latLng(35.8114720000000000, 126.4164430000000000),//13
+                    L.latLng(35.810844, 126.416400),//18
                
                 ];
                 stationTitleArray = ["선착장행 주차장", "유람선 선착장"];
@@ -1627,14 +1696,32 @@ function showRouteInfo(mapInstance, api_name, icon_path, site_no) {
                 createRoute(mapInstance, stationWp_array, stationTitleArray);
 
                 // Gunsan route part 2 
+                   stationWp_array =[   
+                    L.latLng(35.8138710000000000, 126.4130100000000000),//11
+                    L.latLng(35.8142630000000000, 126.4098250000000000),//18
+                    //L.latLng(35.810844, 126.416400),//18
+                   // L.latLng(35.8117490000000000, 126.4050750000000000),//9
+                ];
+                stationTitleArray = ["테마파크행 주차장", "선유도 해변"];
+                stationMidArray = ["STA011", "STA018", "STA009"];
+                createRoute(mapInstance, stationWp_array, stationTitleArray);
+
+                //GUNSAN EXTRA PART 
+                stationWp_array =[  L.latLng(35.8142630000000000, 126.4098250000000000),//18
+                            L.latLng(35.8117490000000000, 126.4050750000000000),//9
+                ];
+                stationTitleArray = ["선유도 해변", "자율주행 테마파크(입)"];
+                createRoute(mapInstance, stationWp_array, stationTitleArray);
+                /*
                 stationWp_array =[   
                     L.latLng(35.8138710000000000, 126.4130100000000000),//11
                     L.latLng(35.8142630000000000, 126.4098250000000000),//18
+                    //L.latLng(35.810844, 126.416400),//18
                     L.latLng(35.8117490000000000, 126.4050750000000000),//9
                 ];
                 stationTitleArray = ["테마파크행 주차장", "선유도 해변", "자율주행 테마파크(입)"];
                 stationMidArray = ["STA011", "STA018", "STA009"];
-                createRoute(mapInstance, stationWp_array, stationTitleArray);
+                createRoute(mapInstance, stationWp_array, stationTitleArray);*/
 
                 // Gunsan route part 3
                 stationWp_array = [
@@ -1643,7 +1730,7 @@ function showRouteInfo(mapInstance, api_name, icon_path, site_no) {
                 ];
                 stationTitleArray = ["자율주행 테마파크(출)" , "고군산 탐방센터" ];
                 stationMidArray = ["STA019", "STA010"];
-                createRoute(mapInstance, stationWp_array, stationTitleArray);
+                //createRoute(mapInstance, stationWp_array, stationTitleArray);
             }
             if(site_no != 1)
                 createRoute(mapInstance, stationWp_array, stationTitleArray);
@@ -1668,8 +1755,6 @@ function currentVehicleETA(stationData)
     var stationDetails; 
     //console.log("stationData.eta :"+(stationData.eta));
     //console.log("stationData.eta length :"+(stationData.eta).length);
-    console.log("777 stationData :"+JSON.stringify(stationData));
-    console.log("stationData.eta :"+JSON.stringify(stationData.eta));
     if((stationData.eta).length == 0) //|| stationData.eta == undefined )
     {
         stationDetails = {
@@ -1686,37 +1771,30 @@ function currentVehicleETA(stationData)
         var selectedId = dom.options[dom.selectedIndex].id;
         for(var k of stationData.eta)
         {                        
-
-          //  alert("k : "+k);
             var temp = JSON.parse(k);
             var key = Object.keys(temp);
             var value = Object.values(temp);
-         //  alert("key length:"+key.length);
-            for(var x = 0; x < key.length; x++)
-            {           
-               // alert("key[x]:"+key[x]);
-               // alert("key[x]"+key[x]+ "selectedId"+selectedId);
-                if(key[x] == selectedId)
+            for(var k = 0; k < key.length; k++)
+            {                     
+                if(key[k] == selectedId)
                 {       
                     var time_value;
-                    if(Math.round(value[x]) < 2)
+                    if(Math.round(value[k]) < 2)
                         time_value = "잠시 후 도착예정";
-                    else if(Math.round(value[x]) > 2)
-                        time_value = Math.round(value[x])+"분 후 도착​";
+                    else if(Math.round(value[k]) > 2)
+                        time_value = Math.round(value[k])+"분 후 도착​";
                     else
                         time_value = "N분 후 도착";
 
                     stationDetails = {
-                        vehicle_id : key[x],
+                        vehicle_id : key[k],
                         time : time_value,
                         id : stationData.id,
                         mid : stationData.mid,
                         name : stationData.name  
                     }
-                    return stationDetails;
-                    
                 }
-                /*else
+                else
                 {
                     stationDetails = {
                         vehicle_id : null,
@@ -1726,9 +1804,9 @@ function currentVehicleETA(stationData)
                         name : stationData.name  
                     }
                     //return stationDetails;
-                }*/
+                }
                 //console.log("VEhicle ID :"+stationDetails.vehicle_id);
-                
+                return stationDetails;
             }
         }
     }
@@ -1742,6 +1820,9 @@ function updateETA(site_id)
         var count = Object.keys(stationData).length;
         var stationETA = [];
         var passedStation;
+
+        stationData =  stationData.sort((a, b) => (a.sta_Order > b.sta_Order) ? 1 : -1)
+
         // station list
         for (var i = 0; i < count; i++) {
             
@@ -1752,15 +1833,29 @@ function updateETA(site_id)
             }
         }
         // station list
-        var divElement = document.getElementById('stationList');
-        divElement.innerHTML = "";
+        var divElement = document.getElementById('stationList1');
+        divElement.innerHTML = ""; 
+
+        var circleDivElement = document.getElementById('circle_div');
+        if(circleDivElement)
+            circleDivElement.innerHTML = ""; 
+
+        //circleDivElement.style.display = "none";
 
         // list element - blue line
         $("#station_li").empty();
         // eta list 
         $("#eta_list").empty();
+
+        //alert("stationETA.length :"+stationETA.length);
+        var divHeight = Math.round(844/(stationETA.length));
+     
+        
+        var top= 160;
+        var minusHeight = 0;
         for(var j = 0; j < stationETA.length; j++)
         { 
+            minusHeight = j*2;
             // blue line which indicate ETA
             if(j < (stationETA.length - 1))
                 $("#station_li").append(' <p class="eta_circle"></p>');
@@ -1768,10 +1863,59 @@ function updateETA(site_id)
               $("#station_li").append(' <p class="eta_circle2"></p>');
 
             // station name 
-            var stationHtml = "<p style ='margin-bottom:15px'>"+
+            /*var stationHtml = "<p style ='margin-bottom:15px'>"+
                             "<span class ='timeSpan1'>"+stationETA[j].name+"</span>"+
                             "<span class ='timeSpan2'>"+stationETA[j].mid+"</span>"+
-                            "</p>";
+                            "</p>";*/
+
+            var border_radius = '';
+            if( j==0)
+            {
+              //  var marginTop = 'margin-bottom:60px';
+                var border_radius =  'border-top-left-radius:12px;  border-top-right-radius:12px';
+            }
+                
+            else if(j==(stationETA.length-1))
+            {
+                var border_radius = 'border-bottom-left-radius:12px;  border-bottom-right-radius:12px';
+                divHeight = 40;
+                //var marginTop = '';
+                //var marginTop = 'margin-top:'+divHeight/ (stationETA.length-5);
+            }
+
+            else
+            {
+               // var marginTop = 'margin-bottom:60px';
+              //  var marginTop = 'margin-top:'+divHeight/ (stationETA.length);
+            }
+                
+     
+            //var marginTop = 'margin-bottom:60px';
+            var marginTop = '';
+            //if( j==0)
+           //document.getElementById("small_white_circle").style.top;
+           
+            if(j==0)
+                var circleImg = '<div style="position: absolute; top:'+(top)+'px; "><img id="small_white_circle" style="position: absolute;  left:12px; z-index: 1111;" src="images/images_0.3/small_white_circle.svg"/></div>'
+            else
+            var circleImg = '<div style="position: absolute; top:'+((top*j)-((13*j-(j*2))))+'px;"><img id="small_white_circle" style="position: absolute;  left:12px; z-index: 1111;" src="images/images_0.3/small_white_circle.svg"/></div>'
+          //top:'+(top)+'px;
+                //var circleImg = '<img id="small_white_circle" style="position: absolute; top:'+(top+130)+'px; left:12px; z-index: 1111;" src="images/images_0.3/small_white_circle.svg"/>'
+                //var circleImg = '<img id="small_white_circle" style="position: absolute; top:'+((top*(j))-(20+(j*2)))+'px; left:12px; z-index: 1111;" src="images/images_0.3/small_white_circle.svg"/>'
+            circleDivElement.insertAdjacentHTML('beforeend', circleImg);
+
+            var endCircle = '<img id="small_white_circle" style="position: absolute;  left:12px; z-index: 1111; top:1010px" src="images/images_0.3/small_white_circle.svg"/>';
+            circleDivElement.insertAdjacentHTML('beforeend', endCircle);
+            
+            var stationHtml = 
+            '<div style="margin-left:20px; '+marginTop+' height:'+(divHeight+20)+'px; width:206px; overflow-y:hidden">'+
+               '<p style="font-size: 14px;">'+stationETA[j].name+'</p>'+
+                '<span>'+
+                    '<p style="display:inline-block ; color: #828282; font-size: 12px; margin-top: 10px; margin-right: 18px; "> '+stationETA[j].mid+'</p>'+
+                    '<p style="display:inline-block ;color: #2E92B0; font-size: 12px; width:93px;text-align:right"> '+stationETA[j].time+' </p>'+
+                '</span>'+
+            '</div>';
+
 
             divElement.insertAdjacentHTML('beforeend', stationHtml);
              
@@ -1780,7 +1924,7 @@ function updateETA(site_id)
                 var p = "<p style='margin-bottom:30px;'>곧 도착 또는 출발</p>";
             else
                 var p = "<p style='margin-bottom:30px;'>"+stationETA[j].time+"</p>";
-            $("#eta_list ").append(p);
+            //$("#eta_list ").append(p);
         }
     });
 }
@@ -1833,6 +1977,20 @@ function createMap(mapInstance) {
         attribution: false,
     });
     mapLayer.addTo(mapInstance);    
+   /* L.Control.Scale.include({
+        _updateMetric: function(maxMeters) {
+          var maxMilliMeters = maxMeters * 1000,
+            milliMeters = this._getRoundNum(maxMilliMeters),
+            label = milliMeters < 1000 ? milliMeters + " mm" : milliMeters / 1000 + " m";
+      
+          console.log(this._mScale, label, milliMeters / maxMilliMeters);
+      
+          this._updateScale(this._mScale, label, milliMeters / maxMilliMeters);
+        }
+      });*/
+
+    //var o =   L.control.scale().addTo(mapInstance);
+
     var zoomHome = L.Control.zoomHome();
     zoomHome.addTo(mapInstance);  
     return mapInstance;
@@ -1986,7 +2144,7 @@ function setSiteInfo(site_id){
         document.getElementById("site_summary").innerHTML = remaining_summary;
         manager_list(site_data.user);
         var siteOperation = operatingStatus(site_data.operation);
-        document.getElementById("site_status").src = siteOperation;
+        //document.getElementById("site_status").src = siteOperation;
     });
 }
 
@@ -2262,7 +2420,11 @@ function showElements(div_array) {
     {
         var div_dom = document.getElementById(div_array[i]);
         if (div_dom != null)
+        {
             div_dom.style.display = "block";
+            //alert("block :"+div_array[i]);
+        }
+            
     }
 }
 
@@ -2450,7 +2612,7 @@ function setDateTime() {
     var userName = localStorage.getItem("activeUserID");
     // trim email id to username
     var trimName = userName.substring(0, userName.indexOf('@'));
-    document.getElementById("active_username").innerHTML = trimName;
+    document.getElementById("active_username").innerHTML = "안녕하세요, " +trimName;
     // update date and time after every 20 seconds
     setTimeout(setDateTime, 20000);  
 }
@@ -2569,24 +2731,78 @@ function showChart(graph1, title, color, yAxisLable, vehicleList, yAxisList, y_u
     });
 }
 
+//window.onload = function(){updateCCTV()};
+function updateCCTV()
+{
+    // get CCTV URL 
+    
+    var dom = document.getElementById("vehicleSelect");
+    // alert("dom :"+dom);
+    //alert("dom options :"+dom.options[dom.selectedIndex]);
+   
+    var selectedId = dom.options[dom.selectedIndex].id;
+    getMethod("vehicles/"+selectedId+"/", function (data)
+    {
+        var vehicle = JSON.parse(data);
+        console.log("vehicle fewfesfwe :"+JSON.stringify(vehicle));
+        //var webcam1 = vehicle.webcam1; 
+        //var webcam2 = vehicle.webcam2; 
+        var webcam ;
+        var cameraSelectDom = document.getElementById("camera_select");
+        var cameraSelectValue = cameraSelectDom.options[cameraSelectDom.selectedIndex].id;
+       // console.log("cameraSelectValue :"+cameraSelectValue);
+        if( cameraSelectValue == 2)
+            webcam = vehicle.webcam2;
+        else
+            webcam = vehicle.webcam1;    
+
+   
+
+        document.getElementById("hidden_cam1").style.background = 'url('+webcam+')'; 
+       //alert("hiden 1 :"+document.getElementById("hidden_cam1").style.background);
+        document.getElementById('cctv_webcam').style.background = document.getElementById("hidden_cam1").style.background;
+        document.getElementById('cctv_webcam').style.backgroundSize="contain";
+        console.log("webcam :"+ document.getElementById('cctv_webcam').style.background);
+        
+        
+
+        /*if(filePath == null)
+        {
+           
+            var oddDom = document.getElementById("oddFile");
+            oddDom.href = "";
+            return false;
+        }
+        else
+        {
+            document.getElementById('oddFileSpan').className = "oddButton"; 
+            var oddDom = document.getElementById("oddFile");
+            oddDom.href = filePath;
+        }*/
+    });
+
+}
+
 function playPause(webcam_div, pausePlayButton)
 {    
+
+    
     // Event listener for the play/pause button
     var pausePlayButtons = document.getElementById(pausePlayButton);
     var fifthChar = pausePlayButtons.src.substring((pausePlayButtons.src).length - 5);
-
-    //alert("5th char :"+fifthChar);
 
     if(fifthChar == "y.svg")
     {
         // Update the button text to 'Pause'
         pausePlayButtons.src = "images/cctv/pause.svg"; 
         document.getElementById(webcam_div).style.background = "";
-        document.getElementById(webcam_div).style.backgroundColor = "#828282";
+        document.getElementById(webcam_div).style.backgroundColor = "#F2F2F2";
         document.getElementById(webcam_div).style.backgroundSize="contain";
+        document.getElementById('cameraText').style.display = "block";
     } 
     else 
     {  
+        updateCCTV();
         // Update the button text to 'Play'
         pausePlayButtons.src = "images/cctv/play.svg"; 
         if(webcam_div == "webcam_div1")
@@ -2594,30 +2810,23 @@ function playPause(webcam_div, pausePlayButton)
         else if(webcam_div == "webcam_div2")
             document.getElementById(webcam_div).style.background = document.getElementById("hidden_cam2").style.background ;
         document.getElementById(webcam_div).style.backgroundSize="contain";
+
+
+        document.getElementById('cameraText').style.display = "none";
+
     }
 }
 
-function webcam(webcamId, vehicleObj) {
-
-   console.log("vehicle dfged:"+JSON.stringify(vehicleObj).id);
+function webcam(webcamId, vehicle) {
     show_div('webcam_div');
     document.getElementById("webcam_div1").style.display = "inline-block";
     document.getElementById("webcam_div2").style.display = "inline-block";
-
-    if(vehicleObj != undefined)
-        var vehicle = vehicleObj;
-    else
-        var vehicle = vehicleObj[0];        
-
     
-    if(vehicle == undefined)  //vehicle[0]
+    if(vehicle[0] == undefined)
         return false;
     // close div with off camer=a button
     // open div with play camera and fullscreen icon
-
-    console.log("webcam1 : "+JSON.stringify(vehicle.webcam1));
-    console.log("webcam2 : "+JSON.stringify(vehicle.webcam2));
-    if(vehicle.webcam1 != null)
+    if(vehicle[0].webcam1 != null)
     {
         document.getElementById("offCameraDiv1").style.display = "none";
         document.getElementById("playButtonDiv1").style.display = "block";
@@ -2628,7 +2837,7 @@ function webcam(webcamId, vehicleObj) {
         document.getElementById("playButtonDiv1").style.display = "none";
     }
        
-    if(vehicle.webcam2 != null)
+    if(vehicle[0].webcam2 != null)
     {
         document.getElementById("offCameraDiv2").style.display = "none";
         document.getElementById("playButtonDiv2").style.display = "block";
@@ -2643,7 +2852,7 @@ function webcam(webcamId, vehicleObj) {
     if (webcamId == '1') 
     {
         if(vehicle != null)
-            var vehicleObj = vehicle;
+            var vehicleObj = vehicle[0];
         if(vehicleObj != null)
             var webcam1 = vehicleObj.webcam1;
         if (webcam1 != null) 
@@ -2652,7 +2861,7 @@ function webcam(webcamId, vehicleObj) {
     if (webcamId == '2') 
     {
         if(vehicle != null)
-            var vehicleObj = vehicle;
+            var vehicleObj = vehicle[0];
         document.getElementById("cameraButton2").src = "images/cctv/video2Active.svg";
        
         if(vehicleObj != null)
@@ -2924,6 +3133,9 @@ function fnChkByte(obj, maxByte)
 // updates user account setting
 function settings()
 {
+    document.getElementById('setting_button1').src = "images/password_reset/login_selected.svg";
+    document.getElementById("user_pwd_change").src = "images/password_reset/pwd_unselected.svg";
+
     hide_div('logoutSetting');
     hide_div('settingDiv21');
     hide_div('settingDiv31');
@@ -2931,7 +3143,7 @@ function settings()
     show_div('settingDiv');
    
     document.getElementById('settingDiv2').style.display = "inline-block";
-    document.getElementById('settingDiv3').style.display = "inline-block";
+  //  document.getElementById('settingDiv3').style.display = "inline-block";
     getMethod("auth/user/", function(data) {
         var userId = JSON.parse(data).pk;
         getMethod("users/"+userId+"/", function (data) {
@@ -2951,23 +3163,27 @@ function settings()
                 levelName = "Supervisor";
 
             document.getElementById("activeLevel").innerHTML = levelName;
-            document.getElementById("activeUserImg").src = userData.profile.photo;
+            //document.getElementById("activeUserImg").src = userData.profile.photo;
         });
     });
 
-    document.getElementById("settingOptions").style.color = "#2E92B0";
+    //document.getElementById("settingOptions").style.color = "#2E92B0";
     document.getElementById("user_pwd_change").style.color = "#333333";
 }
 
 function passwordChange2()
 {
+     
+   // document.getElementById("user_pwd_change").background = url("images/password_reset/pwd_selected.svg");
+   // document.getElementById("setting_button1").background = url("images/password_reset/login_unselected.svg");
+
     hide_div('settingDiv2');
     hide_div('settingDiv3');
     document.getElementById("settingDiv21").style.display = "inline-block";
     document.getElementById("settingDiv31").style.display = "inline-block";
 
     // change button text color blue to show button is active
-    document.getElementById("settingOptions").style.color = "#333333";
+    //document.getElementById("settingOptions").style.color = "#333333";
     document.getElementById("user_pwd_change").style.color = "#2E92B0";
 }
  
@@ -2977,6 +3193,17 @@ function clearFields()
     document.getElementById("confirmPwd").value= '';
     document.getElementById("pwdResetError").innerHTML = "";
 }
+/*
+$("#settingOptions").hover(function() {
+    alert("login hover");
+    $("#settingOptions").src= "images/password_reset/login_mouseover.svg";
+  });*/
+/*
+  $(".settingOptions").mouseover(function () {
+    $(this).attr('src', $(this).data("hover"));
+  }).mouseout(function () {
+    $(this).attr('src', $(this).data("src"));
+  });*/
 
 function resetPassword()
 {

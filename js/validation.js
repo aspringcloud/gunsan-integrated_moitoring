@@ -93,7 +93,7 @@ function findid_validation(button_id) {
         } 
         else 
         {
-            input_email_error.innerHTML = " 일치하는 사용자가 없습니다. <br> 이메일 또는 비밀번호를 확인해 주세요.";
+            input_email_error.innerHTML = " 일치하는 사용자가 없습니다. <br> 이름 또는 이메일 아이디를 확인해 주세요.​";
         }
         console.log("Login status: " + status_code);
     });
