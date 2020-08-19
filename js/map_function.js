@@ -2942,15 +2942,16 @@ function selectSite2(selectedUserInfo) {
     //console.log("selectedUserInfo :"+JSON.stringify(selectedUserInfo));
     var e = document.getElementById("manager_selectlist");
     var managerSelect = document.getElementById('select_site');
-    if(managerSelect[managerSelect.selectedIndex] == null || managerSelect[managerSelect.selectedIndex] == undefined)
-        return false;   
+    //if(managerSelect[managerSelect.selectedIndex] == null || managerSelect[managerSelect.selectedIndex] == undefined)
+        //return false;   
     //console.log("dha :"+managerSelect[managerSelect.selectedIndex]);
-    var selectValue = managerSelect[managerSelect.selectedIndex].id;
+    //var selectValue = managerSelect[managerSelect.selectedIndex].id;
     var userList = document.getElementById('select_siteManager'); 
     if(userList != null)
         userList.length = 0;
     var api_url = "sites/";
     var allUserList = [];
+    var selectValue = 1;
     if(selectValue == 0)
     {
         api_url = "sites/";
