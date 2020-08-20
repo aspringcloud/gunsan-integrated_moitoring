@@ -122,13 +122,14 @@ function sendMail() {
     //var x = document.getElementById("manager_selectlist").selectedIndex;
     var input_email = $("#manager_selectlist :selected").val();
     var message = $("#msgArea").val();
-
+/*
     if(!$('#select_site').val() )
     {
         document.getElementById('messageSendStatus').innerHTML = "메시지를 보낼 SITE를 선택하세요.";
         document.getElementById('messageSendStatus').style.color = "#EB5757";
     }
-    else if(!$('#select_siteManager').val())
+    else*/
+    if(!$('#select_siteManager').val())
     {
         document.getElementById('messageSendStatus').innerHTML = "메시지를 보낼 관리자를 선택하세요.";
         document.getElementById('messageSendStatus').style.color = "#EB5757";

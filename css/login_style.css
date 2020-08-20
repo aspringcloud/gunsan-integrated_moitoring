@@ -3237,8 +3237,7 @@ max-width: 80%;
 border-radius: 5px;
 height: 80%;
 margin-top: 5%;
-margin-left: 10%;
-
+margin-left: 12%;
 background-repeat: round;
 background-size: contain;
 background-color: #828282;
@@ -3304,8 +3303,8 @@ cursor: pointer;
 /* The Close fullscreenButton */
 .close2 {
     position: fixed;
-    top: 15px;
-    right: 35px;
+    top: 14%;
+    right: 15.7%;
     color: #f1f1f1;
     font-size: 40px;
     font-weight: bold;
@@ -3423,7 +3422,8 @@ border: 1px solid #888;
 width: 435px;
 height: 257px;
 position: absolute;
-top:5%
+top:30%;
+left:40%;
 }
 
 .message-header2 {

@@ -349,7 +349,7 @@
            <!--<iframe style="width: 100%; border: 0px; height:100%; background: pink;" id="cctv_webcam"></iframe>
            onchange="updateCCTV();-->
             </div>
-            <select id="camera_select" onchange="playPause('cctv_webcam','pausePlayButton1');">
+            <select id="camera_select" onchange="updateCCTV(); /* playPause('cctv_webcam','pausePlayButton1');*/">
 
                 <option id = "1" selected="selected">전방 카메라 1 </option>
                 <option id = "2">분할 영상​</option>
@@ -560,13 +560,13 @@
                 <!-- site operation information-->
                <div id="operationInfo">
                 <p id="operationInfoTitle" class="operationInfo_p">운영 정보 </p>
-                <p id="line_count" class="operationInfo_p">NA</p>
-                <p id="vehicle_count" class="operationInfo_p">NA</p>
-                <p id="station_count" class="operationInfo_p">NA</p>
-                <p id="kiosk_count" class="operationInfo_p">NA</p>
-                <p id="garage_count" class="operationInfo_p">NA</p>
+                <!--<p id="line_count" class="operationInfo_p">NA</p>-->
+                <p id="vehicle_count" class=" font1">NA</p>
+                <p id="station_count" class=" font1">NA</p>
+                <p id="kiosk_count" class=" font1">NA</p>
+                <p id="garage_count" class=" font1">NA</p>
 
-                <img src = "images/table_background.svg"/>
+                <img src = "images/table_bg2.svg"/>
                </div>
                <div class="passangerChart2" id="passangerChart2"> 
                     <p class="chartTitle1" id="passengerTitle"></p>
@@ -754,6 +754,13 @@
             if (event.target == noticeModal) 
                 noticeModal.style.display = "none";
         } 
+    }
+
+    window.onload = function(event)
+    {
+        var dom = document.getElementById('vehicleSelect');
+        if(dom)
+            updateCCTV();
     }
     
     window.onclick = function(event) {

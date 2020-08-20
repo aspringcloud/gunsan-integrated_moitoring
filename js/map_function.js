@@ -426,7 +426,7 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
             if(JSON.parse(data).vehicle_count != undefined)
             {
                 console.log("summary d:"+JSON.stringify(JSON.parse(data)));
-                document.getElementById('line_count').innerHTML = JSON.parse(data).route_count;
+                //document.getElementById('line_count').innerHTML = JSON.parse(data).route_count;
                 document.getElementById('vehicle_count').innerHTML = JSON.parse(data).vehicle_count;
                 document.getElementById('station_count').innerHTML = JSON.parse(data).station_count;
                 document.getElementById('kiosk_count').innerHTML = JSON.parse(data).kiosk_count;
@@ -439,9 +439,10 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
 
     // development history data (underdevelopment)
     showSummary('site');
-
-
+   
 }
+
+
 
 var switchStatus = false;
 function toggledSwitch()
@@ -2735,12 +2736,12 @@ function showChart(graph1, title, color, yAxisLable, vehicleList, yAxisList, y_u
 function updateCCTV()
 {
     // get CCTV URL 
-    
     var dom = document.getElementById("vehicleSelect");
-    // alert("dom :"+dom);
-    //alert("dom options :"+dom.options[dom.selectedIndex]);
-   
-    var selectedId = dom.options[dom.selectedIndex].id;
+
+    //alert("half :"+$("#vehicleSelect").children(":selected").attr("id"));
+
+    var selectedId = dom.options[(dom.selectedIndex + 1)].id;
+    //selectedId = selectedId +1 ;
     getMethod("vehicles/"+selectedId+"/", function (data)
     {
         var vehicle = JSON.parse(data);
@@ -2756,16 +2757,14 @@ function updateCCTV()
         else
             webcam = vehicle.webcam1;    
 
-   
-
         document.getElementById("hidden_cam1").style.background = 'url('+webcam+')'; 
        //alert("hiden 1 :"+document.getElementById("hidden_cam1").style.background);
         document.getElementById('cctv_webcam').style.background = document.getElementById("hidden_cam1").style.background;
         document.getElementById('cctv_webcam').style.backgroundSize="contain";
         console.log("webcam :"+ document.getElementById('cctv_webcam').style.background);
+        document.getElementById('pausePlayButton1').src = "images/cctv/play.svg";
+        document.getElementById('cameraText').style.display = "none";
         
-        
-
         /*if(filePath == null)
         {
            
@@ -2785,8 +2784,6 @@ function updateCCTV()
 
 function playPause(webcam_div, pausePlayButton)
 {    
-
-    
     // Event listener for the play/pause button
     var pausePlayButtons = document.getElementById(pausePlayButton);
     var fifthChar = pausePlayButtons.src.substring((pausePlayButtons.src).length - 5);
@@ -3248,7 +3245,6 @@ function resetPassword()
             else
             {
                 pwdErrorDom.style.color="red";
-
                 if ((res.new_password2).includes("This password is entirely numeric.") )
                     pwdErrorDom.innerHTML = "비밀번호에 숫자 외의 문자를 포함하세요.";
                 else if (res.new_password2.includes("The password is too similar to the email address."))
@@ -3273,9 +3269,11 @@ function stopVideoStreaming() //webcam_div, playPauseButton
 {
     // close full screen 
     // stop video - make screen grey and show pause button
-    document.getElementById(active_webcam).style.background = "none";
-    document.getElementById(active_webcam).style.backgroundColor = "grey";
-    document.getElementById(activeVideoButton).src = "images/cctv/pause.svg";
+    document.getElementById('cctv_webcam').style.background = "none";
+    document.getElementById('cctv_webcam').style.backgroundColor = "#F2F2F2";
+    document.getElementById('pausePlayButton1').src = "images/cctv/pause.svg";
+    document.getElementById('cameraText').style.display = "block";
+    
 } 
 
 // Odd file status

@@ -102,7 +102,7 @@ background-color: rgba(0, 0, 0, 0.5);
 }
 
 .buttonDiv{
-position :fixed; bottom:66px; right:17.7%; cursor: pointer;
+position :fixed; bottom:66px; right:15.7%; cursor: pointer;
 }
 
 .buttonDiv img{
@@ -778,11 +778,12 @@ color: #FFFFFF;
 background: #2E92B0;
 border-radius: 1px;
 }
-
+/*
 .vehicleList option,
-#vehicleSelect:focus,
+#vehicleSelect:focus,*/
 #vehicleSelect option {
   color:black;
+  background: #FFFFFF;
 }
 
 .fullscreen{
@@ -1363,32 +1364,38 @@ color: #333333;
 
 #line_count{
   position: absolute;
-  top:335px;
+  top:345px;
   left:25px;
 }
 
 #vehicle_count{
 position: absolute;
-top: 335px;
-left: 90px;
+top: 345px;
+left: 30px;
 }
 
 #station_count{
 position: absolute;
-top: 335px;
-left: 160px;
+top: 345px;
+left: 110px;
 }
 
 #kiosk_count{
 position: absolute;
-top: 335px;
-left: 220px;  
+top: 345px;
+left: 190px;  
+}
+
+.font1{
+  color: #0893BF;
+  font-family: Noto_regular;
+  font-size: 14px;
 }
 
 #garage_count{
 position: absolute;
-top: 335px;
-left: 290px;
+top: 345px;
+left: 270px;
 }
 
 #eta_div{
