@@ -89,12 +89,37 @@ function createAlertDiv(eventData)
         var m = currentdate.getMinutes();
         m = checkTime(m);
         var strTime = h+ ":"+m; 
-
+        var sec = currentdate.getSeconds();
         //document.getElementById("eventMsgArea").innerHTML = eventMessage;
         //document.getElementById("timeInfo").innerHTML = strDate+" "+strTime+ " 수신"; 
-        //onclick="confirmEventMsg('+this+');"
+        //onclick="confirmEventMsg('+this+');" style="'+test+'" 
 
-        var eventHtml = '<div id="eventContent" class="message-content3" >'+
+        if( document.getElementById("eventContent"))
+        {
+            //var top = (document.getElementById("eventContent").style.top);
+            //var left = (document.getElementById("eventContent").style.left) ;
+            /*var nodes = document.getElementById("eventContent").getElementsByClassName("message-content3");// querySelectorAll('.message-content3');
+            alert("nodes length :"+nodes.length);
+            for(let i = 0; i < nodes.length; i++){
+                var currentNode = nodes[i];
+                alert("currentNode left:"+currentNode.position.left);
+            }*/
+
+            //alert("jquery before left :"+$("#eventContent").offset().left);
+            var left = (($("#eventContent").position().left)+60);// addition(left);
+            var top = (($("#eventContent").position().top)+60);
+            //var test =  "left:"+(left)+"%; top:"+top+"%";
+        }
+        /*else
+        {
+            var top = 100;
+            var left =200; 
+        }*/
+ 
+        //document.getElementById("eventContent").style.top = (top+2)+'%';
+       // document.getElementById("eventContent").style.left = left+'px';
+        var style = 'left:'+left+'px; top:'+top+'px; display:block;';
+        var eventHtml = '<div id="eventContent'+'" class="message-content3" style = "'+style+'">'+ 
                          '<div id="eventHeader" class="message-header2" >'+
                             '<div class="msgDiv1">'+
                                 '<p class="msgSendP" id="vehicleEventMsg"> <span id="event_vid">'+vehicleID+'</span>에서 보낸 메세지</p>'+
@@ -109,15 +134,17 @@ function createAlertDiv(eventData)
                         ' </div>'+
                         '<div class="message-footer2" style="margin-top: 15px;">'+
                             '<button class="event_send_button" id="testEvent" >확인</button>'+
-                        ' </div>'
+                        ' </div>'+
                     '</div>';
-                    document.getElementById("eventMessageModal").style.display = "block";
-                
+                    
                     ///onclick="confirmEventMsg('+this+');"
-        $('#eventMessageModal').html(eventHtml);//html(eventHtml);//append(eventHtml);
- 
-        //document.getElementById("eventContent").style.top = (top+2)+'%';
-       // document.getElementById("eventContent").style.left = (left+2)+'%';
+        $('#eventMsgModalDiv').append(eventHtml);//html(eventHtml);//append(eventHtml);
+        document.getElementById("eventMsgModalDiv").style.display = "block";
+       // document.getElementById("eventContent").style.display = "block";
+
+        //document.getElementById("eventContent").style.left = left+'px';
+     
+        
     }
     else if(dataAttribute == "parking")
     {
@@ -207,7 +234,7 @@ function createAlertDiv(eventData)
 
 function confirmEventMsg()
 {
-    document.getElementById('eventMessageModal').style.display = "none";
+    document.getElementById('eventContent').style.display = "none";
    //$(obj).parent('div').fadeOut();
 }
 
@@ -229,7 +256,7 @@ $(document).on('click','.message-content3 button', function(){
    /* var top = document.getElementById('eventContent').style.left;
     console.log("top :"+top);
     if(top == "45%")*/
-        document.getElementById('eventMessageModal').style.display = "none";
+      //  document.getElementById('eventContent').style.display = "none";
 
     //$('#eventContent').fadeOut();
 });

@@ -110,13 +110,17 @@ display:inline-block;
 }
 
 .msgDiv1{
-width:100%; border-radius: 3px 3px 0px 0px;background: #F4F4F4;
+width:435px; border-radius: 3px 3px 0px 0px;background: #F4F4F4;
 box-shadow: 0px 0.5px 0px rgba(0, 0, 0, 0.3); height: 57px;
 }
 
 .siteTitle{
 font-size: 14px; color: #555555; font-family: Noto_regular;letter-spacing: -0.016em;
 margin-top: 60px;
+}
+
+#eventMsgModalDiv{
+  position: absolute; height:700px; width : 50%; top:15%;left:30%;z-index: 1011;
 }
 
 .settingDiv{
@@ -1403,7 +1407,7 @@ width: 226px;
 height: 989px;
 z-index: 1001;
 background-color: #FFFFFF;
-position: absolute;
+position: fixed;
 right: 0px;
 height: 100%;
 display: none;

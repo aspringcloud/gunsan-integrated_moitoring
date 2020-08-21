@@ -136,7 +136,7 @@
         </div>
     </div>
     <!-- Message Modal -->
-    <div id="messageModal" class="message_div2"     onload = "updateCCTV();">
+    <div id="messageModal" class="message_div2" >
         <div class="message-content2">
             <div class="message-header2">
                 <div class="msgDiv1">
@@ -179,9 +179,11 @@
         </div>
     </div>
 
-    <!-- Event Message Modal 
-    <div id="eventMsgModalDiv">-->
-    <div id="eventMessageModal" class="message_div2">
+    <!-- Event Message Modal -->
+    <div id="eventMsgModalDiv" style="">
+        
+    </div>
+   <!-- <div id="eventMessageModal" class="message_div2">-->
      
             <!--<div class="message-header2">
                 <div class="msgDiv1">
@@ -199,7 +201,7 @@
                 <button class="event_send_button" onclick="confirmEventMsg('eventMessageModal');">확인</button>
             </div>-->
  
-    </div>
+   <!-- </div>-->
     <!--</div>-->
 
     <div class="mapPosition hideMap" id="offsiteMap"></div>
@@ -349,7 +351,7 @@
            <!--<iframe style="width: 100%; border: 0px; height:100%; background: pink;" id="cctv_webcam"></iframe>
            onchange="updateCCTV();-->
             </div>
-            <select id="camera_select" onchange="updateCCTV(); /* playPause('cctv_webcam','pausePlayButton1');*/">
+            <select id="camera_select" onchange="stopVideoStreaming(); /*updateCCTV();  playPause('cctv_webcam','pausePlayButton1');*/">
 
                 <option id = "1" selected="selected">전방 카메라 1 </option>
                 <option id = "2">분할 영상​</option>
@@ -428,7 +430,7 @@
 </div>-->
     <div class="map_zindex">
         <div id="hide_test" class="round_button navbar">
-            <button class="buttonHover" onclick="switchMap(this);" id="main_site_button">전체운행노선</button>
+            <button class="buttonHover" onclick="switchMap(this);" id="main_site_button"> 운영현황</button>
            <!-- <button class="buttonHover" onclick="switchMap(this);" id="degu_button">대구</button>        
             <button onmouseover="switchMap(this);"  id="sejong_button">세종 </button>
             
@@ -756,13 +758,13 @@
         } 
     }
 
-    window.onload = function(event)
+  /*  window.onload = function(event)
     {
         var dom = document.getElementById('vehicleSelect');
         if(dom)
             updateCCTV();
     }
-    
+    */
     window.onclick = function(event) {
         /* Close the sejong submenu modal */
         if(subMenuModal != null)

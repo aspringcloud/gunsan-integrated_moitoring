@@ -3420,10 +3420,14 @@ height: 311px;
 background-color: #fefefe;
 border: 1px solid #888;
 width: 435px;
-height: 257px;
+height: 257px;/*
+top:20%;
+left:30%;*/
+top:100px;
+left:200px;
 position: absolute;
-top:30%;
-left:40%;
+z-index:1011;
+display:none;
 }
 
 .message-header2 {

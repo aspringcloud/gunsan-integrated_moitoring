@@ -232,7 +232,6 @@ function switchMap(obj)
             }
 
             hide_div('countInfoDiv');
-
             show_div("eta_div");
             show_div('infoChart');
             showSite(gunsan_map, 1, gunsanClickCount); 
@@ -974,6 +973,17 @@ function createHtmlMarker(vehicleObj, iconHtml)
     return marker;
 }
 
+
+/*
+var managerNameArray  = [ "현유진", "김용원", "김진수", "이지은" ]; 
+function ascending ( a , b ) {  
+        if ( a < b ) return -1; 
+        else if ( a == b ) return 0; 
+        else return 1; 
+} 
+document.getElementById("demo").innerHTML = managerNameArray.sort ( ascending );
+*/
+
 // This is vehicle ripple effect function. 
 // This is vehicle ripple effect function. 
 var rippleMarkerArray = [];
@@ -1019,7 +1029,7 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
             if(request_count == 1) 
             {
                 // create Icon for ripple marker as per the speed value
-                console.log(" parkingbrake : "+ vehicleObj.parkingbrake+ "speed : "+vehicleObj.speed);
+                console.log(" parkingbrake : "+ vehicleObj.parkingbrake+ "speed : "+vehicleObj.speed+ "heading:"+vehicleObj.heading);
                 if(vehicleObj.parkingbrake == "1" || vehicleObj.parkingbrake == null) //vehicleObj.isparked == true |
                 {
                     var marker = createHtmlMarker(vehicleObj, greyRippleIcon);
@@ -1899,7 +1909,7 @@ function updateETA(site_id)
             if(j==0)
                 var circleImg = '<div style="position: absolute; top:'+(top)+'px; "><img id="small_white_circle" style="position: absolute;  left:12px; z-index: 1111;" src="images/images_0.3/small_white_circle.svg"/></div>'
             else
-            var circleImg = '<div style="position: absolute; top:'+((top*j)-((13*j-(j*2))))+'px;"><img id="small_white_circle" style="position: absolute;  left:12px; z-index: 1111;" src="images/images_0.3/small_white_circle.svg"/></div>'
+                var circleImg = '<div style="position: absolute; top:'+((top*j)-((13*j-(j*2))))+'px;"><img id="small_white_circle" style="position: absolute;  left:12px; z-index: 1111;" src="images/images_0.3/small_white_circle.svg"/></div>'
           //top:'+(top)+'px;
                 //var circleImg = '<img id="small_white_circle" style="position: absolute; top:'+(top+130)+'px; left:12px; z-index: 1111;" src="images/images_0.3/small_white_circle.svg"/>'
                 //var circleImg = '<img id="small_white_circle" style="position: absolute; top:'+((top*(j))-(20+(j*2)))+'px; left:12px; z-index: 1111;" src="images/images_0.3/small_white_circle.svg"/>'
@@ -2136,6 +2146,7 @@ function setSiteInfo(site_id){
     getMethod(api_url, function (sites_data) {
         //console.log("sites_data :"+sites_data);
         var site_data = JSON.parse(sites_data);
+       // console.log("**site_data :"+JSON.stringify(site_data));
         var site_title = site_data.summary.indexOf('\r');
         var site_title_slice = site_data.summary;//.substring(0, site_title);
         var summary_start = site_data.summary.indexOf('<b>');
@@ -2259,15 +2270,21 @@ function manager_list(site_manager_array)
         select.disabled = false;    
     
     //var site_manager_data = JSON.parse(site_manager_data);
-
-    for(var i=0 ; i<site_manager_array.length; i++)
-    {
+    var sortedManagers = (site_manager_array.sort (ascending));
+    for(var i = 0; i < sortedManagers.length; i++)
+    {        
         var option = document.createElement('option');
-        option.text = site_manager_array[i].username;
-        option.value = site_manager_array[i].email;
+        option.text = sortedManagers[i].username;
+        option.value = sortedManagers[i].email;
         select.add(option, i + 1);
     }
 }
+
+function ascending ( a , b ) {  
+    if ( a.username < b.username ) return -1; 
+    else if ( a.username == b.username ) return 0; 
+    else return 1; 
+} 
 
 function msg_modal() {
     show_div('messageModal');
@@ -2991,6 +3008,7 @@ function selectSite2(selectedUserInfo) {
         api_url = "sites/"+selectValue+"/";
         getMethod(api_url, function (data) {
             var userData = JSON.parse(data).user;
+            userData = (userData.sort (ascending));
             var count = Object.keys(userData).length;
             for (var j=0; j<count; j++)
             {
