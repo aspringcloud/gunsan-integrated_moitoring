@@ -9,6 +9,11 @@ function checkTime(i) {
     return i;
 }
 
+function getPosition( element ) {
+    var rect = element.getBoundingClientRect();
+    return {x:rect.left,y:rect.top};
+}
+
 function createAlertDiv(eventData)
 {
     console.log("eventDiv :"+eventData);
@@ -93,37 +98,53 @@ function createAlertDiv(eventData)
         //document.getElementById("eventMsgArea").innerHTML = eventMessage;
         //document.getElementById("timeInfo").innerHTML = strDate+" "+strTime+ " 수신"; 
         //onclick="confirmEventMsg('+this+');" style="'+test+'" 
+        var top;
+        var left;
 
-        if( document.getElementById("eventContent"))
+        var divArray = [];
+
+        if(!document.getElementById("eventContent200"))
         {
-            //var top = (document.getElementById("eventContent").style.top);
-            //var left = (document.getElementById("eventContent").style.left) ;
-            /*var nodes = document.getElementById("eventContent").getElementsByClassName("message-content3");// querySelectorAll('.message-content3');
-            alert("nodes length :"+nodes.length);
-            for(let i = 0; i < nodes.length; i++){
-                var currentNode = nodes[i];
-                alert("currentNode left:"+currentNode.position.left);
-            }*/
-
-            //alert("jquery before left :"+$("#eventContent").offset().left);
-            var left = (($("#eventContent").position().left)+60);// addition(left);
-            var top = (($("#eventContent").position().top)+60);
-            //var test =  "left:"+(left)+"%; top:"+top+"%";
+            if(left == undefined )
+                left = 200;
+    
+            if(top == undefined )
+                top = 100;
         }
-        /*else
+        else //if(document.getElementById("eventContent"+left))
         {
-            var top = 100;
-            var left =200; 
-        }*/
- 
-        //document.getElementById("eventContent").style.top = (top+2)+'%';
-       // document.getElementById("eventContent").style.left = left+'px';
+            
+            $('div','#eventMsgModalDiv').each(function(){
+                divArray.push($(this).attr('id')); 
+            });
+            
+            var leftValueArray = [];   
+            for(var j=0; j<divArray.length;j++)
+            {
+                if(divArray[j] != undefined)
+                {
+                    var subStr = (divArray[j]).substr(0,12);
+                    if(subStr == "eventContent")
+                    {
+                        var topString = (divArray[j]).substr(12);   
+                        leftValueArray.push(topString);   
+                    }
+                }
+            }
+
+            console.log("topValueArray :"+leftValueArray);
+            left = leftValueArray [leftValueArray.length -1];
+            top = (leftValueArray [leftValueArray.length -1])-100;
+            top = parseInt(top) + 60;
+            left = parseInt(left) + 60;
+        }
+
         var style = 'left:'+left+'px; top:'+top+'px; display:block;';
-        var eventHtml = '<div id="eventContent'+'" class="message-content3" style = "'+style+'">'+ 
+        var eventHtml = '<div id="eventContent'+left+'" class="message-content3" style = "'+style+'">'+ 
                          '<div id="eventHeader" class="message-header2" >'+
                             '<div class="msgDiv1">'+
                                 '<p class="msgSendP" id="vehicleEventMsg"> <span id="event_vid">'+vehicleID+'</span>에서 보낸 메세지</p>'+
-                                '<span class="msg_close" onclick="confirmEventMsg();">'+
+                                '<span class="msg_close">'+
                                     '<img id= "eventMsgClose" src="images/closing_button.svg"  style="margin-top: 15px;">'+
                                 '</span>'+
                             '</div>'+
@@ -136,15 +157,10 @@ function createAlertDiv(eventData)
                             '<button class="event_send_button" id="testEvent" >확인</button>'+
                         ' </div>'+
                     '</div>';
-                    
-                    ///onclick="confirmEventMsg('+this+');"
         $('#eventMsgModalDiv').append(eventHtml);//html(eventHtml);//append(eventHtml);
         document.getElementById("eventMsgModalDiv").style.display = "block";
        // document.getElementById("eventContent").style.display = "block";
-
-        //document.getElementById("eventContent").style.left = left+'px';
-     
-        
+       //document.getElementById("eventContent").style.left = left+'px';
     }
     else if(dataAttribute == "parking")
     {
@@ -251,15 +267,17 @@ function addition(left)
    //alert("left :"+left+ " add :"+add);
    return add;
 }
-$(document).on('click','.message-content3 button', function(){
-    $(this).parent().parent('div').fadeOut();
-   /* var top = document.getElementById('eventContent').style.left;
-    console.log("top :"+top);
-    if(top == "45%")*/
-      //  document.getElementById('eventContent').style.display = "none";
 
-    //$('#eventContent').fadeOut();
+//closes div on confirm button
+$(document).on('click','.message-content3 button', function(){
+    $(this).parent().parent('div').remove();
 });
+
+//closes div on close button
+$(document).on('click','.message-content3 img', function(){
+    $(this).parent().parent().parent().parent('div').remove();
+});
+
 
 /*
 function confirmEventMsg(obj)

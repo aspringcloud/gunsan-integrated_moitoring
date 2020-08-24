@@ -260,7 +260,7 @@ width:65px;
 .settingDiv_span{
 width: 222px;
 height: 30px;
-background: #F2F2F2;
+background: #F8F8F8;
 border: 0.2px solid #E0E0E0;
 box-sizing: border-box;
 border-radius: 2px;
@@ -273,6 +273,23 @@ padding-left: 15px;
 margin-bottom: 5px;
 line-height: 30px;
 }
+
+.settingDiv_span_disabled{
+  width: 222px;
+  height: 30px;
+  background: #BDBDBD;
+  border: 0.2px solid #E0E0E0;
+  box-sizing: border-box;
+  border-radius: 2px;
+  color: #666666;
+  font-size: 13px;
+  font-family:Noto_regular;
+  display: inline-block;
+  text-align: left;
+  padding-left: 15px;
+  margin-bottom: 5px;
+  line-height: 30px;
+  }
 
 .settingNotice{
 color: #828282;
@@ -1158,7 +1175,7 @@ position: absolute;
 z-index: 1011;
 left:0px;
 align-self: center;
-width: 1920px;
+width: 1772px;
 height: 990px;
 overflow: auto;
 background-color: rgb(0, 0, 0);

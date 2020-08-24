@@ -401,7 +401,7 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
             document.getElementById("pausePlayButton2").src= "images/cctv/pause.svg";
 
         //webcam('1', vehicleObj);
-      //  webcam('2', vehicleObj);
+        // webcam('2', vehicleObj);
 
         // get all vehicle Id's.
         getMethod("sites/"+currentSiteId+"/", function (data) {
@@ -438,10 +438,7 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
 
     // development history data (underdevelopment)
     showSummary('site');
-   
 }
-
-
 
 var switchStatus = false;
 function toggledSwitch()
@@ -477,6 +474,7 @@ function toggledSwitch()
     } 
 }
 
+/* toggled switch disabled
 window.onresize = function (event) {
     const windowWidth = window.innerWidth * window.devicePixelRatio;
     const windowHeight = window.innerHeight * window.devicePixelRatio;
@@ -492,6 +490,7 @@ window.onresize = function (event) {
         $("#switchButton").prop('checked', switchStatus);
     }
 }
+*/
 
 function offsite() {
     // hide all div's from site route
@@ -880,7 +879,7 @@ function updateGnssBgcolor(gnss_status)
     if (gnss_status == true)
         document.getElementById("gnss_v1").style.backgroundColor = "#57AE66";
     else
-        document.getElementById("gnss_v1").style.backgroundColor = "#CA4040";
+        document.getElementById("gnss_v1").style.backgroundColor = "#BDBDBD";//"#CA4040";
 }
 
 function updateDrive(drive_mode)

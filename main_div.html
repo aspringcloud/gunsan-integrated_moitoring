@@ -14,12 +14,13 @@
                 <p class="font_regular" onclick="showContent('accident_prediction');" title="Data center">데이터센터</p>
                 -->
             </div>
-            <div id="screenToggleDiv">
+            <div id="screenToggleDiv" title="전체화면 모드를 사용/해제하시려면 키보드에서 F11을 눌러주세요." >
                 <p>전체화면 모드</p>
+               <!-- switch disabled 
                 <label class="switch">
                     <input type="checkbox" id="switchButton" onchange="toggledSwitch()" >
                     <span class="slider round"></span>
-                </label>
+                </label>-->
             </div>
             <div class="tab_elements date_time_div">
                 <!--Current date time-->
@@ -78,7 +79,7 @@
             <div class="settingDiv21" id="settingDiv21">
                 <div style="position: absolute; left:20px;top:0px">
                     <label class="settingDiv_label2">현재 비밀번호</label>
-                    <input class="settingDiv_span" id="currentPwd" type="password" placeholder="현재 비밀번호를 입력하세요." disabled/>
+                    <input class="settingDiv_span_disabled" id="currentPwd" type="password" placeholder="현재 비밀번호를 입력하세요." disabled/>
                     <label class="settingDiv_label2">새 비밀번호</label>
                     <input class="settingDiv_span" id="newPwd"  type="password" placeholder="새로운 비밀번호를 입력하세요." class="imeModeDisabled" /> 
                     <label class="settingDiv_label2">새 비밀번호 확인</label>
