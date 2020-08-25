@@ -15,7 +15,7 @@ function onDisconnectClick() {
  */
 function openWSConnection() {
     var webSocketURL = null;
-    webSocketURL = "ws://222.114.39.8:11411/ws/vehicle";
+    webSocketURL = "wss://222.114.39.8:11511/ws/vehicle"; //"ws://222.114.39.8:11411/ws/vehicle"
     try {
         webSocket = new WebSocket(webSocketURL);
         webSocket.onopen = function(openEvent) {
