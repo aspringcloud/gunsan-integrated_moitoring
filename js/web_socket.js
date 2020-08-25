@@ -15,11 +15,11 @@ function onDisconnectClick() {
  */
 function openWSConnection() {
     var webSocketURL = null;
-    webSocketURL = "wss://222.114.39.8:11511"; //"ws://222.114.39.8:11411/ws/vehicle"
+    webSocketURL = "https://222.114.39.8:11511/"; //"ws://222.114.39.8:11411/ws/vehicle"
     try {
         webSocket = new WebSocket(webSocketURL,[], {
-            rejectUnauthorized: true
-         });
+            rejectUnauthorized: false
+        });
         webSocket.onopen = function(openEvent) {
             console.log("WebSocket OPEN: " + JSON.stringify(openEvent, null, 4));
         };
