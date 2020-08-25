@@ -2755,8 +2755,9 @@ function updateCCTV()
     var dom = document.getElementById("vehicleSelect");
 
     //alert("half :"+$("#vehicleSelect").children(":selected").attr("id"));
-
-    var selectedId = dom.options[(dom.selectedIndex + 1)].id;
+    alert("select idex : "+dom.selectedIndex );
+    alert("select idex 2 : "+dom.options[(dom.selectedIndex )]);
+    var selectedId = dom.options[(dom.selectedIndex )].id;
     //selectedId = selectedId +1 ;
     getMethod("vehicles/"+selectedId+"/", function (data)
     {

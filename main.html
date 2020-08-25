@@ -271,8 +271,11 @@
 </div>
     <!--chart.js graphs-->
     <div id="infoChart">
-        <span id="infoChart_title"><p style="margin-left: 16px;;">차량</p><select class="vehicleList" id="vehicleSelect" onchange="changeVehicleInfo(this); oddButtonStatus(); playPause('cctv_webcam','pausePlayButton1');"></select>
-            <span class="oddButton" onclick="oddFileDownload()" id="oddFileSpan"><a id="oddFile" target="_blank" href="" download></a></span></span>
+        <span id="infoChart_title">
+            <p style="margin-left: 16px;;">차량</p>
+            <select class="vehicleList" id="vehicleSelect" onchange="changeVehicleInfo(this); oddButtonStatus(); /*playPause('cctv_webcam','pausePlayButton1');*/ stopVideoStreaming(); "></select>
+            <span class="oddButton" onclick="oddFileDownload()" id="oddFileSpan"><a id="oddFile" target="_blank" href="" download></a></span>
+        </span>
 
         <div id="v_div1">
      <span class="cameraAngle1" style="float:left "> Rear </span> 
