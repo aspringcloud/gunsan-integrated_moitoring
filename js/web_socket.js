@@ -17,7 +17,9 @@ function openWSConnection() {
     var webSocketURL = null;
     webSocketURL = "wss://222.114.39.8:11511/ws/vehicle"; //"ws://222.114.39.8:11411/ws/vehicle"
     try {
-        webSocket = new WebSocket(webSocketURL);
+        webSocket = new WebSocket(webSocketURL, [],{
+            rejectUnauthorized:false
+        });
         webSocket.onopen = function(openEvent) {
             console.log("WebSocket OPEN: " + JSON.stringify(openEvent, null, 4));
         };
