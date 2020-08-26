@@ -187,7 +187,7 @@ function createAlertDiv(eventData)
         id = event_how.vehicle_id;
         selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
 
-        alert("power id :"+selectedId);
+      //  alert("power id :"+selectedId);
         vehicleID = event_how.vehicle_mid;
 
         if(event_how.value == "true"  || event_how.value  == null)
