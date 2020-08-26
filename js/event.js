@@ -29,10 +29,8 @@ function createAlertDiv(eventData)
     if(dataAttribute == "door")
     {
         selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
-
         id = event_how.vehicle_id;
         vehicleID = event_how.vehicle_mid;
-       
         if(event_how.value == true )
         {
             eventMessage = "문이 열립니다."; 
@@ -51,7 +49,7 @@ function createAlertDiv(eventData)
         selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
         id = event_how.vehicle_id;
         vehicleID = event_how.vehicle_mid;
-        if(event_how.value == true)
+        if(event_how.value == "auto")
         {
             eventMessage = "자율주행 상태입니다."; 
             if(id == selectedId)
@@ -76,7 +74,7 @@ function createAlertDiv(eventData)
         // get current date time 
         var currentdate = new Date();
      
-       // attact zero at start for month 
+        // attact zero at start for month 
         var month = 0;
         if((currentdate.getMonth() + 1) < 10)
             month = "0"+(currentdate.getMonth() + 1);
@@ -100,20 +98,16 @@ function createAlertDiv(eventData)
         //onclick="confirmEventMsg('+this+');" style="'+test+'" 
         var top;
         var left;
-
         var divArray = [];
-
         if(!document.getElementById("eventContent200"))
         {
             if(left == undefined )
                 left = 200;
-    
             if(top == undefined )
                 top = 100;
         }
         else //if(document.getElementById("eventContent"+left))
         {
-            
             $('div','#eventMsgModalDiv').each(function(){
                 divArray.push($(this).attr('id')); 
             });
@@ -167,15 +161,17 @@ function createAlertDiv(eventData)
         id =event_how.vehicle_id;
         selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
         vehicleID = event_how.vehicle_mid;
-      
-        if(event_how.value == true)
+        if(event_how.value == "true")
         {
             eventMessage = "주차 상태입니다."; 
             if(id == selectedId)
                 vehicleStatus("PARKED", "rgb(128,128,128)");
         }
         else
+        {
             eventMessage = "주차 상태가 아닙니다."; 
+        }
+          
     }
     else if(dataAttribute == "passenger")
     {
@@ -191,7 +187,8 @@ function createAlertDiv(eventData)
         id = event_how.vehicle_id;
         selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
         vehicleID = event_how.vehicle_mid;
-        if(event_how.value == true )
+
+        if(event_how.value == true  || event_how.value  == null)
             eventMessage = "전원이 켜졌습니다."; 
         else
             eventMessage = "전원이 꺼졌습니다."; 
