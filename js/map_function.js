@@ -615,8 +615,12 @@ function showCluster(cluster_map)
             var cluster_data = JSON.parse(routes_data).results;
             var count = Object.keys(cluster_data).length;
             for (i = 0; i < count; i++) {
-                if(cluster_data[i].start != '' && cluster_data[i].operation == true)
+                if(cluster_data[i].start != '' && cluster_data[i].operation == true && cluster_data[i].site == 1)
+                {
+                    console.log("cluster data :"+cluster_data[i]);
                     addressPoints.push(cluster_data[i].start);
+                }
+                    
             }
 
             // create openstreet tile layer
@@ -1191,8 +1195,8 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                             "<div class='popupParent'></div>"+
                         "</div>");
                         }
-                        else{
-                        
+                        else
+                        {
                             currentMarker._popup.setContent("<div class="+popupColor+" id='vPopup'>"+
                             "<p class='popupTitle'>" +vehicleObj.name+ "<img class='activeGreenPopup' src="+vehicleOperation+"></p>"+
                             "<span class='popupVersion'>VER : "+vehicleObj.model.firmware+"</span>"+
@@ -1209,11 +1213,7 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                                 "<div id='popupBattery' class='popup-battery' data-content="+vehicleObj.battery+'%'+"></div>"+
                                 "<div class='popupParent'></div>"+
                             "</div>");
-
-                                
                         }
-
-
                         setPopupBattery(vehicleObj.battery);                // update popup battery value 
                         setPopupSpeed(vehicleObj.speed);        
                     }
@@ -1830,12 +1830,10 @@ function updateETA(site_id)
         var count = Object.keys(stationData).length;
         var stationETA = [];
         var passedStation;
-
         stationData =  stationData.sort((a, b) => (a.sta_Order > b.sta_Order) ? 1 : -1)
 
         // station list
         for (var i = 0; i < count; i++) {
-            
             if (stationData[i].site == site_id)
             {                
                 var eta = currentVehicleETA(stationData[i]);
@@ -1850,17 +1848,12 @@ function updateETA(site_id)
         if(circleDivElement)
             circleDivElement.innerHTML = ""; 
 
-        //circleDivElement.style.display = "none";
-
         // list element - blue line
         $("#station_li").empty();
         // eta list 
         $("#eta_list").empty();
 
-        //alert("stationETA.length :"+stationETA.length);
         var divHeight = Math.round(844/(stationETA.length));
-     
-        
         var top= 160;
         var minusHeight = 0;
         for(var j = 0; j < stationETA.length; j++)
@@ -1872,50 +1865,52 @@ function updateETA(site_id)
             else
               $("#station_li").append(' <p class="eta_circle2"></p>');
 
-            // station name 
-            /*var stationHtml = "<p style ='margin-bottom:15px'>"+
-                            "<span class ='timeSpan1'>"+stationETA[j].name+"</span>"+
-                            "<span class ='timeSpan2'>"+stationETA[j].mid+"</span>"+
-                            "</p>";*/
-
             var border_radius = '';
             if( j==0)
             {
-              //  var marginTop = 'margin-bottom:60px';
                 var border_radius =  'border-top-left-radius:12px;  border-top-right-radius:12px';
             }
-                
             else if(j==(stationETA.length-1))
             {
                 var border_radius = 'border-bottom-left-radius:12px;  border-bottom-right-radius:12px';
                 divHeight = 40;
-                //var marginTop = '';
-                //var marginTop = 'margin-top:'+divHeight/ (stationETA.length-5);
             }
-
             else
             {
                // var marginTop = 'margin-bottom:60px';
               //  var marginTop = 'margin-top:'+divHeight/ (stationETA.length);
             }
-                
-     
-            //var marginTop = 'margin-bottom:60px';
-            var marginTop = '';
-            //if( j==0)
-           //document.getElementById("small_white_circle").style.top;
-           
+                               
+            /*//top:'+(top)+'px;'+marginTop+'
+            //top:'+((top*j)-((13*j-(j*2))))+'px;'+marginTop+'
+            
             if(j==0)
-                var circleImg = '<div style="position: absolute; top:'+(top)+'px; "><img id="small_white_circle" style="position: absolute;  left:12px; z-index: 1111;" src="images/images_0.3/small_white_circle.svg"/></div>'
+                var circleImg = '<div style="position: absolute; height:'+(divHeight+20)+'px;"><img id="small_white_circle" style="position: absolute;  left:12px; z-index: 1111;" src="images/images_0.3/small_white_circle.svg"/></div>'
             else
-                var circleImg = '<div style="position: absolute; top:'+((top*j)-((13*j-(j*2))))+'px;"><img id="small_white_circle" style="position: absolute;  left:12px; z-index: 1111;" src="images/images_0.3/small_white_circle.svg"/></div>'
-          //top:'+(top)+'px;
+                var circleImg = '<div style="position: absolute; height:'+(divHeight+20)+'px;"><img id="small_white_circle" style="position: absolute;  left:12px; z-index: 1111;" src="images/images_0.3/small_white_circle.svg"/></div>'
+            */
+          
+            var marginTop = '';
+            if(j==0)
+            {
+                var circleImg ='<img id="small_white_circle" style="position: absolute; top:'+(divHeight+40)+'px; left:12px; z-index: 1111;" src="images/images_0.3/small_white_circle.svg"/>';
+            }
+            else if(j < (stationETA.length -1 ))
+            {                
+                var circleImg ='<img id="small_white_circle" style="position: absolute;margin-top:11px;top:'+(((divHeight+22)*(j+1)))+'px; left:12px; z-index: 1111;" src="images/images_0.3/small_white_circle.svg"/>';
+                //var circleImg = '<div style="position: absolute; height:'+(divHeight+20)+'px; background-image: url(images/images_0.3/small_white_circle.svg); "></div>'
+            }
+            else if(j >= (stationETA.length -1 ))
+            {
+                var circleImg ='<img id="small_white_circle" style="position: absolute; top:1009px; left:12px; z-index: 1111;" src="images/images_0.3/small_white_circle.svg"/>';
+            }
+                //top:'+(top)+'px;
                 //var circleImg = '<img id="small_white_circle" style="position: absolute; top:'+(top+130)+'px; left:12px; z-index: 1111;" src="images/images_0.3/small_white_circle.svg"/>'
                 //var circleImg = '<img id="small_white_circle" style="position: absolute; top:'+((top*(j))-(20+(j*2)))+'px; left:12px; z-index: 1111;" src="images/images_0.3/small_white_circle.svg"/>'
             circleDivElement.insertAdjacentHTML('beforeend', circleImg);
 
-            var endCircle = '<img id="small_white_circle" style="position: absolute;  left:12px; z-index: 1111; top:1010px" src="images/images_0.3/small_white_circle.svg"/>';
-            circleDivElement.insertAdjacentHTML('beforeend', endCircle);
+            //var endCircle = '<img id="small_white_circle" style="position: absolute;  left:12px; z-index: 1111; top:1010px" src="images/images_0.3/small_white_circle.svg"/>';
+            //circleDivElement.insertAdjacentHTML('beforeend', endCircle);
             
             var stationHtml = 
             '<div style="margin-left:20px; '+marginTop+' height:'+(divHeight+20)+'px; width:206px; overflow-y:hidden">'+
@@ -1926,9 +1921,7 @@ function updateETA(site_id)
                 '</span>'+
             '</div>';
 
-
             divElement.insertAdjacentHTML('beforeend', stationHtml);
-             
             // ETA in minutes
             if(stationETA[j].time < 1)
                 var p = "<p style='margin-bottom:30px;'>곧 도착 또는 출발</p>";
@@ -2755,9 +2748,8 @@ function updateCCTV()
     var dom = document.getElementById("vehicleSelect");
 
     //alert("half :"+$("#vehicleSelect").children(":selected").attr("id"));
-    alert("select idex : "+dom.selectedIndex );
-    alert("select idex 2 : "+dom.options[(dom.selectedIndex )]);
-    var selectedId = dom.options[(dom.selectedIndex )].id;
+    
+    var selectedId = dom.options[(dom.selectedIndex + 1)].id;
     //selectedId = selectedId +1 ;
     getMethod("vehicles/"+selectedId+"/", function (data)
     {
