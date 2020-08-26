@@ -189,7 +189,7 @@ function createAlertDiv(eventData)
 
       //  alert("power id :"+selectedId);
         vehicleID = event_how.vehicle_mid;
-
+        console.log("power value :"+event_how.value);
         if(event_how.value == "true"  || event_how.value  == null)
             eventMessage = "전원이 켜졌습니다."; 
         else
