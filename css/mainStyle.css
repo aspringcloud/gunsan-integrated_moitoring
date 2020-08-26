@@ -124,6 +124,11 @@ margin-top: 60px;
   display  :none;
 }
 
+/* tooltip css */
+#screenToggleDiv:hover:after { 
+  color:palevioletred;
+}
+
 .settingDiv{
   width: 537px;
   height: 329px;
