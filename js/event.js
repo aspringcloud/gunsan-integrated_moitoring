@@ -31,7 +31,7 @@ function createAlertDiv(eventData)
         selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
         id = event_how.vehicle_id;
         vehicleID = event_how.vehicle_mid;
-        if(event_how.value == true )
+        if(event_how.value == "true" )
         {
             eventMessage = "문이 열립니다."; 
             if(id == selectedId)
@@ -188,7 +188,7 @@ function createAlertDiv(eventData)
         selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
         vehicleID = event_how.vehicle_mid;
 
-        if(event_how.value == true  || event_how.value  == null)
+        if(event_how.value == "true"  || event_how.value  == null)
             eventMessage = "전원이 켜졌습니다."; 
         else
             eventMessage = "전원이 꺼졌습니다."; 
