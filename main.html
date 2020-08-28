@@ -7,27 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!--jquery-->
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-    <script src="https://code.jquery.com/ui/1.11.0/jquery-ui.js"></script> 
-<!--
-    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
-    <script src="jquery-ui-1.12.1/jquery-ui.js"></script> -->
-    <link rel="stylesheet" href="jquery-ui-1.12.1/jquery-ui.css">
-    <!--<script src="jquery-ui-1.12.1/jquery-1.10.2.js"></script>
-    <script src="jquery-ui-1.12.1/jquery.min.js"></script>-->
-   
-
-<!--jquery-ui-1.12.1-->
-
-   <!-- <pre id="api-response"></pre>-->
+    <link rel="stylesheet" href="jquery/jquery-ui.css">
+    <script src="jquery/jquery-1.10.2.js"></script>
+    <script src="jquery/jquery-ui.js"></script>
     
-    <!--open weather map API
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>-->
-
     <!--Leaflet files-->
-    
     <link rel="stylesheet" href="leaflet/leaflet.css">
     <link rel="stylesheet" href="leaflet-routing-machine-3.2.12/dist/leaflet-routing-machine.css">
 
@@ -51,7 +35,7 @@
     <script src="Leaflet.markercluster-1.4.1/dist/leaflet.markercluster.js"></script>
 
     <!-- Leaflet zoom home(default zoom)-->
-    <link rel="stylesheet" href="leaflet.zoomhome/dist/leaflet.zoomhome.css" />
+    <link rel="stylesheet" href="leaflet.zoomhome/dist/leaflet.zoomhome.css"/>
     <!--<script src="leaflet.zoomhome/dist/leaflet.zoomhome.js"></script>-->
     <script src="leaflet.zoomhome/dist/leaflet.zoomhome.min.js"></script>
 
@@ -66,52 +50,18 @@
     <script src="Chart.js/Chart.bundle.js"></script>
     <link rel="stylesheet" href="Chart.js/Chart.css">
     <link rel="stylesheet" href="Chart.js/Chart.min.css">
-
-    <!--<link rel="shortcut icon" href="~/favicon.ico">-->
-
-      <!--Bootstrap-->
-    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>-->
-
-    <!--image cropper-->
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js"></script>-->
-
-    <!--Sumo select-->
-    <!--<script src="sumoSelect/jquery.sumoselect.min.js"></script>
-    <link href="sumoSelect/sumoselect.css" rel="stylesheet" />-->
-
-    <!-- if local disk chart.js file diesn't work uncomment this
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
-    <link rel="stylesheet" href="Chart.js/Chart.css">
-    <link rel="stylesheet" href="Chart.js/Chart.min.css">-->
-    
-    <!--<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.1.0/dist/MarkerCluster.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.1.0/dist/MarkerCluster.Default.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>-->
-
-    <!--chart.js datalabel plugin 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.7.3/dist/Chart.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>-->
-
-    <!-- Web socket
-    <script src="http://yourwebsite.com:12345/socket.io/socket.io.js"></script>-->
-    
+  
     <!--font awesome icon--> <!--currently cpmments but id css is broken : uncomment this-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <!--javascript function files-->
-  <script src="js/map_function.js"></script>
-  <script src="js/validation.js"></script>
-  <script src="js/web_socket.js"></script>
-  <script src="js/event.js"></script>
+   
+    <!--javascript function files-->
+    <script src="js/map_function.js"></script>
+    <script src="js/validation.js"></script>
+    <script src="js/web_socket.js"></script>
+    <script src="js/event.js"></script>
 </head>
 
 <body class="standardRatio bodyMargin">
-
     <!-- Notice Modal -->
     <div id="noticeModal" class="message_div">
         <div class="message-content">
@@ -127,11 +77,8 @@
                         <option value= "7">스프링고 테스트모드</option>
                         <option value= "8">데이터센터</option>
                     </select>
-                    <span onclick="hide_div('noticeModal');" style="font-size:40px;float: right;margin-right: 27px; cursor: pointer;
-                    margin-top: 5px; ">&times;</span>
-                   <!--<img class="noticeImg" style="display: inline-block;" src="images/closing_button.svg" onclick="hide_div('noticeModal');">--> 
+                    <span onclick="hide_div('noticeModal');" id="noticeModalClose">&times;</span>
                 </div>
-                <!--<hr style="border: 0.5px solid #BDBDBD;">-->
             <div class="notice-body" id="noticeBody"> </div>
         </div>
     </div>
@@ -148,24 +95,8 @@
             </div>
             <div class="message-body2">
                 <div class="msgDiv2" >
-
-                    <span style="width:90px; height:30px; color:black; background: #FFFFFF;
-                    border: 0.5px solid #BDBDBD; position: absolute;
-                    box-sizing: border-box; text-align: center; line-height: 1.9;
-
-                    border-radius: 2px; font-family:Noto_regular; font-size:14px; posimargin-right:20px">
-                        군산
-                    </span>
-                   <!-- <select id="select_site" onchange="/*selectSite2();*/" class="select2">
-                        <option selected = "selected" id="1">군산</option>-->
-                        <!--<option selected="selected" id="1">군산</option>-->
-                        <!--<option id="0" selected="selected">전체</option>
-                        <option id="1">군산</option>
-                        <option id="2">대구</option>
-                        <option id="3">세종</option>
-                        <option id="4">상암</option>-->
-                  <!-- </select>-->
-                    <select id="select_siteManager" onchange="/*selectSite(this,'0','0')*/ " class="select3">전체</select>
+                    <span id="msgGunsan"> 군산 </span>
+                    <select id="select_siteManager" class="select3">전체</select>
                 </div>
                 <textarea id="msgArea" class="textArea" rows="10" cols="30" name="contents" onkeyup="fnChkByte(this,'200')"></textarea>
                 <p id="messageSendStatus" class="msgStatus"></p>
@@ -180,30 +111,9 @@
     </div>
 
     <!-- Event Message Modal -->
-    <div id="eventMsgModalDiv" style="">
-        
-    </div>
-   <!-- <div id="eventMessageModal" class="message_div2">-->
-     
-            <!--<div class="message-header2">
-                <div class="msgDiv1">
-                    <p class="msgSendP" id="vehicleEventMsg"> <span id="event_vid"></span>에서 보낸 메세지</p>
-                    <span class="msg_close" onclick="confirmEventMsg('eventMessageModal');">
-                        <img src="images/closing_button.svg" style="margin-top: 15px;">
-                    </span>
-                </div>
-            </div>
-            <div class="message-body2">
-                <textarea id="eventMsgArea" class="textArea" rows="10" cols="30" name="contents" onkeyup="fnChkByte(this,'200')" disabled></textarea>
-                <span class="noto_regular msgP2" id="timeInfo"></span>
-            </div>
-            <div class="message-footer2" style="margin-top: 15px;">
-                <button class="event_send_button" onclick="confirmEventMsg('eventMessageModal');">확인</button>
-            </div>-->
+    <div id="eventMsgModalDiv"></div>
  
-   <!-- </div>-->
-    <!--</div>-->
-
+    <!--GIS map div-->
     <div class="mapPosition hideMap" id="offsiteMap"></div>
     <div class="mapPosition hideMap" id="deguMap"></div>
     <div class="mapPosition hideMap" id="sejongMap"></div>
@@ -214,61 +124,19 @@
 
     <div id="eta_div">
         <span id="eta_span">정류장</span>
-
-
         <div id="circle_div">
-            <img id="small_white_circle" style="position: absolute; top:160px; left:12px; z-index: 1111;" src="images/images_0.3/small_white_circle.svg"/>
-            <!--<img id="small_white_circle" style="position: absolute; top:1010px; left:12px; z-index: 1111;" src="images/images_0.3/small_white_circle.svg"/>-->
+            <img id="small_white_circle" src="images/images_0.3/small_white_circle.svg"/>
         </div>
-
-
-        <div style="display: inline-block;border-radius: 12px; height:864px;margin-left: 10px;  width: 14px; top:158px; position: absolute; z-index: 1011;background-color: #2E92B0; "> </div>;
-
-        <div class="eta1"  id = "stationList1" >
-
-               <!-- <div style="display:inline-block; ">
-                <div style="display: inline-block; min-height:27px;max-height: 844px;  width: 14px;  height: 850px; position: absolute; z-index: 1011;background-color: #2E92B0; border-radius: 12px;"> </div>
-                <div style="margin-left:20px; margin-top: 25px; min-height:27px;max-height: 844px;">
-                    <p style="font-size: 14px;">SW 융합 기술 지원센터</p>
-                    <span>
-                        <p style="display:inline-block ; color:black; font-size: 12px; margin-top: 10px; margin-right: 8px; "> STA001</p>
-                        <p style="display:inline-block ;color:black"> 곧 도착 또는 출발 </p>
-                    </span>
-                </div>
-            <div style="display: inline-block; min-height:27px;max-height: 844px;  width: 14px;  height: 850px; position: absolute; z-index: 1011;background-color: #2E92B0; border-radius: 12px;"> </div>
-                <div style="margin-left:10px; margin-top: 25px; min-height:27px;max-height: 844px;">
-                    <p style="font-size: 14px;">롯데몰 북편</p>
-                    <span>
-                        <p style="display:inline-block; color:black; font-size: 12px; margin-top: 10px; margin-right: 8px; "> STA002</p>
-                        <p style="display:inline-block; color:black"> 4 도착 또는 출발 </p>
-                    </span>
-                    
-                </div>
-                </div>-->
-
-
-        </div>
-
-        <!--   <div class = "timeDiv1" id = "stationList" ></div>
-     <div style = "margin-left: 25px; min-height : 20px; max-height:320px;"> 
-            <div class = "timeDiv1" id = "stationList" style = "display: inline-block;"></div>
-            <div id = "station_li" style = "margin-top: 3px;margin-left: 3px; width:4px; display: inline-block; position: absolute;background-color: #2E92B0;"></div>
-            <div class = "timeDiv2" id = "eta_list"></div>
-        </div>-->
+        <div id="etaInfo"></div>
+        <div class="eta1" id = "stationList1"></div>
     </div>
 
     <!--Web socket event alert-->
     <div id="alertDiv">
-    <button class="alertButton"><img src="images/event.svg" style="margin-right: 10px;vertical-align: baseline;"/>Event 발생 알림</button>
-    <div class="alertDiv" id="eventsDiv"> 
-        
-      <!--<div class="batteryAlert">
-            <span>SCN001</span>
-            <p>배터리 충전이 필요합니다.</p>
-            <button id="closeEvent" >확인</button>
-        </div> -->         
+        <button class="alertButton"><img src="images/event.svg" style="margin-right: 10px;vertical-align: baseline;"/>Event 발생 알림</button>
+        <div class="alertDiv" id="eventsDiv"></div>
     </div>
-</div>
+
     <!--chart.js graphs-->
     <div id="infoChart">
         <span id="infoChart_title">
@@ -276,21 +144,20 @@
             <select class="vehicleList" id="vehicleSelect" onchange="changeVehicleInfo(this); oddButtonStatus(); /*playPause('cctv_webcam','pausePlayButton1');*/ stopVideoStreaming(); "></select>
             <span class="oddButton" onclick="oddFileDownload()" id="oddFileSpan"><a id="oddFile" target="_blank" href="" download></a></span>
         </span>
-
         <div id="v_div1">
-     <span class="cameraAngle1" style="float:left "> Rear </span> 
+            <span class="cameraAngle1"> Rear </span> 
             <span id="v_status1" class="drivingButton"> STOPPED </span>
-            <span class="cameraAngle2" style="float:right" id="v_front"> Front </span>
+            <span class="cameraAngle2" id="v_front"> Front </span>
                 <img id="doorStatus" src="images/door/door_open.svg">
             <label id="gnss_v1" class="gnssLabel" style="background-color: rgb(87, 174, 102);">GNSS</label>
             <label class="vehicleLabel" id="driveStatus">MANUAL</label>
-            <p id ="vehicleVersion" ></p>
+            <p id ="vehicleVersion"></p>
         </div>
         <div id="v_div2">
-             <!--  speed of vehicle-->
+             <!--speed of vehicle-->
              <div class="speedDiv1">
                 <span class="v_p1">속도</span>
-                <span class="v_p2" id="speed_v1" style="color: rgb(79, 79, 79); font-family: Roboto_regular;">0</span>
+                <span class="v_p2" id="speed_v1">0</span>
                 <p class="v_p3">km/hr</p>
             </div> 
 
@@ -299,23 +166,12 @@
                     <label>배터리</label>
                     <div style="margin-top: 10px;">
                         <div class="batteryBorder"> 
-                            <div id="battery" class="inverted-bar3" data-content="79%" style="--afterWidth3:79%; --afterbgColor3:#57AE66; --afterColor:#57AE66; --fontSize:12px;"></div>
+                            <div id="battery" class="inverted-bar3" data-content="79%"></div>
                         </div>
                     </div>    
                     <div class="parent3 display_inline_block"></div>
                 </div> 
-              <!--  <div class="passengerDiv1"> 
-                    <label>Passengers</label>
-                    <br>
-                    <div class="passengerDiv2">
-                        <p id="passengerCount" class="passengerDiv3">5</p>
-                        <p class="display_inline_block">/15</p>
-                    </div>
-                </div>-->
             </div>
-
-
-
         </div>
         <div id="v_div3">
             <div class="vehicleDiv2">
@@ -340,115 +196,26 @@
             </div>
         </div>
         <div id="v_div4">
-            <p style="display:inline-block; position: absolute;right:130px; top:86px; font-size: 13px; font-family: Noto_medium; color: #4F4F4F;">카메라</p> <div id="playButtonDiv1"  style="display:inline-block" class="cam_btn1">
+            <p id="p2">카메라</p><div id="playButtonDiv1" style="display:inline-block" class="cam_btn1">
                 <img id="pausePlayButton1" onclick="playPause('cctv_webcam','pausePlayButton1');" src="images/cctv/pause.svg" />
                 <img class="fullscreen" onclick="scale_image('hidden_cam1');" src="images/cctv/fullscreen.svg" />
             </div>
             <p id="cameraText"> 영상이 여기에 표시됩니다. </p>
-            <div style="width: 150px;
-            height: 107px;
-            background: #F2F2F2;
-            position: absolute;
-            right: 15px;
-            border : 1px solid black;
-            border-radius: 3px;
-            bottom: 55px;" id="cctv_webcam" >
-
-           <!--<iframe style="width: 100%; border: 0px; height:100%; background: pink;" id="cctv_webcam"></iframe>
-           onchange="updateCCTV();-->
-            </div>
+            <div id="cctv_webcam"></div>
+            <!--<iframe style="width: 100%; border: 0px; height:100%; background: pink;" id="cctv_webcam"></iframe>onchange="updateCCTV();-->
             <select id="camera_select" onchange="stopVideoStreaming(); /*updateCCTV();  playPause('cctv_webcam','pausePlayButton1');*/">
-
                 <option id = "1" selected="selected">전방 카메라 1 </option>
                 <option id = "2">분할 영상​</option>
-            
             </select>
-            <!--<div id="webcam_div1" class="webcam_div2" style="margin-right: 15px;" >
-                <p class="cam_title">CAMERA-1</p>
-                <div id="offCameraDiv1" class="offcam_btn1"> 
-                    <img src="images/cctv/videocam_off.svg" onclick=""/> 
-                </div>
-                <div id="playButtonDiv1" class="cam_btn1">
-                    <img id="pausePlayButton1" onclick="playPause('webcam_div1','pausePlayButton1');" src="images/cctv/pause.svg" />
-                    <img class="fullscreen" onclick="scale_image('hidden_cam1');" src="images/cctv/fullscreen.svg" />
-                </div>
-            </div>-->
         </div>
-
-        <!--<p id="site_vehiceCount">3</p>
-        <p id="site_vehiceCount">32</p>
-        <p id="site_vehiceCount">3</p>
-        <p id="site_vehiceCount">23</p> -->
-
-     
     </div>
     
     <!--navigation tab html-->
     <div id="includedContent"></div>
-    <!--main div here-->
-
-    <!--Setings button (Active user information)settingModal
-    <div id="settingDialog">
-    <div class="settingDiv" id="settingDiv">
-        <div class="settingTitle">
-            <p>환경설정</p>
-            <img src="images/closing_button.svg" onclick="clearFields(); hide_div('settingDialog');"/>
-        </div>
-        <div class="settingDiv1">
-            <button onclick="settings();" id="settingOptions" class="blueButton activeSettingButton">로그인 정보</button>
-            <button onclick="passwordChange2();" id="user_pwd_change">비밀번호 변경</button>
-        </div>
-        <div class="settingDiv2" id="settingDiv2">
-            <label class="settingDiv_label">이메일 ID</label>
-            <span class="settingDiv_span" id="activeEmail"></span>
-            <label class="settingDiv_label">이름</label>
-            <span class="settingDiv_span" id="activeName"></span>
-            <label class="settingDiv_label">팀</label>
-            <span class="settingDiv_span" id="activeTeam"></span>
-            <label class="settingDiv_label">휴대폰</label>
-            <span class="settingDiv_span" id="activePhone"></span>
-            <label class="settingDiv_label">권한</label>
-            <span class="settingDiv_span" id="activeLevel"></span>
-        </div>
-        <div class="settingDiv3" id="settingDiv3">
-            <span><img src="images/userIcon.svg" id="activeUserImg"></span>
-            <button style="cursor:pointer">사진 변경하기</button>
-        </div>
-        Update password window
-        <div class="settingDiv21" id="settingDiv21">
-            <label class="settingDiv_label">현재 비밀번호</label>
-            <input class="settingDiv_span" id="currentPwd" type="password" disabled/>
-            <label class="settingDiv_label">새 비밀번호</label>
-            <input class="settingDiv_span" id="newPwd" type="password" onchange="t(ch);" placeholder="새로운 비밀번호를 입력하세요."/>
-            <label class="settingDiv_label">새 비밀번호 확인</label>
-            <input class="settingDiv_span" id="confirmPwd" type="password" placeholder="새로운 비밀번호를 다시 입력하세요." />
-            <span class="error" id="pwdResetError"></span>
-            <div>
-                <span class="settingNotice">※ 비밀번호에 이메일ID, 이름을 포함할 수 없습니다.</span>
-                <span class="settingNotice">※ 비밀번호는 8글자 이상이어야 합니다.</span>
-                <span class="settingNotice">※ 비밀번호는 숫자로만 입력은 불가능합니다. </span>
-            </div>
-        </div>
-        <div class="settingDiv31" id="settingDiv31">
-            <button onclick="resetPassword()" style="cursor: pointer;">변경하기</button>
-        </div>
-    </div>
-</div>-->
     <div class="map_zindex">
         <div id="hide_test" class="round_button navbar">
             <button class="buttonHover" onclick="switchMap(this);" id="main_site_button"> 운영현황</button>
-           <!-- <button class="buttonHover" onclick="switchMap(this);" id="degu_button">대구</button>        
-            <button onmouseover="switchMap(this);"  id="sejong_button">세종 </button>
-            
-            <div id="subMenuModal" class="subMenuModal">
-                <div id="sejongSubmenu" class="subMenu">
-                    <button class="sejongHover1" id="sejong_button1" onclick="switchMap(this);">세종호수공원</button>    
-                    <button class="sejongHover2" onclick="switchMap(this);" id="sejong_button2">규제자유특구 실증구간(4-2)</button>    
-                </div>
-            </div>
-            <button class="buttonHover" onclick="switchMap(this);" id="sangam_button">상암 </button>-->
             <button onclick="switchMap(this);" id="gunsan_button">군산 </button>
-            <!-- <button onclick="switchMap(this);open_tab('offsite_window',0);" id="offsite_button"> 운행종료노선</button>-->
         </div>
         <div class="button_window hide_div list_style_blue" id="offsite_window">
             <ul id="offsite_list" class="button_window_ul button_window_hr"></ul>
@@ -468,214 +235,146 @@
         </div>
 
         <!--offsite div count of Route, vehicle, station, kiosk and garage-->
-    <div class="div_box" id="countInfoDiv"> <!--class="div_box"-->
-        <img src="images/table_background.svg"/>
-        <p id="routeCount" class="p2" style="left: 65px;"></p>
-        <p id="vehicleCount" class="p2" style="left: 315px;"></p>
-        <p id="StationCount" class="p2" style="left: 540px;"></p>
-        <p id="kioskCount" class="p2" style="left: 780px;"></p>
-        <p id="garageCount" class="p2" style="left: 1030px;"></p>
-    </div>
-
-    <div id="graph_div" >
-        <!--Total accumulated data graph-->
-        <div id="graph3_div" class="graphDiv graph3">
-            <div class="graphDivLeft">
-                <p id="graphTitle3" class="graphTitle">총 데이터 용량</p>
-                <p class="p6">Total Accumulated Data</p>
-            </div>
-            <div class="graphDivRight">
-                <p class="p7" id="totalData"></p>
-                <p class="p8" id="dataSize"></p>
-            </div>
-            <hr class="hr3">
-            <p class="scaleUnit" id="dataUnit"></p>
-            <canvas id="graph3"></canvas>
+        <div class="div_box" id="countInfoDiv"> <!--class="div_box"-->
+            <img src="images/table_background.svg"/>
+            <p id="routeCount" class="p2" style="left: 65px;"></p>
+            <p id="vehicleCount" class="p2" style="left: 315px;"></p>
+            <p id="StationCount" class="p2" style="left: 540px;"></p>
+            <p id="kioskCount" class="p2" style="left: 780px;"></p>
+            <p id="garageCount" class="p2" style="left: 1030px;"></p>
         </div>
 
-        <!--Total travel distance graph-->
-        <div id="graph2_div" class="graphDiv graph1">
-            <div class="graphDivLeft">
-                <p id="graphTitle1" class="graphTitle"></p>
-                <p class="p6">Total Operation Distance</p>
+        <div id="graph_div" >
+            <!--Total accumulated data graph-->
+            <div id="graph3_div" class="graphDiv graph3">
+                <div class="graphDivLeft">
+                    <p id="graphTitle3" class="graphTitle">총 데이터 용량</p>
+                    <p class="p6">Total Accumulated Data</p>
+                </div>
+                <div class="graphDivRight">
+                    <p class="p7" id="totalData"></p>
+                    <p class="p8" id="dataSize"></p>
+                </div>
+                <hr class="hr3">
+                <p class="scaleUnit" id="dataUnit"></p>
+                <canvas id="graph3"></canvas>
             </div>
-            <div class="graphDivRight">
-                <p class="p7" id="totalDistance">1,234</p>
-                <p class="p8">km</p>
-            </div>
-            <hr class="hr3">
-            <p class="scaleUnit">km</p>
-            <canvas id="graph2"></canvas>
-        </div>
 
-        <!--Total passengers graph-->
-        <div id="graph1_div" class="graphDiv graph2">
-            <div class="graphDivLeft">
-                <p id="graphTitle2" class="graphTitle" ></p>
-                <p class="p6">Total Passenger</p>
+            <!--Total travel distance graph-->
+            <div id="graph2_div" class="graphDiv graph1">
+                <div class="graphDivLeft">
+                    <p id="graphTitle1" class="graphTitle"></p>
+                    <p class="p6">Total Operation Distance</p>
+                </div>
+                <div class="graphDivRight">
+                    <p class="p7" id="totalDistance">1,234</p>
+                    <p class="p8">km</p>
+                </div>
+                <hr class="hr3">
+                <p class="scaleUnit">km</p>
+                <canvas id="graph2"></canvas>
             </div>
-            <div class="graphDivRight">
-                <p class="p7" id="totalPassenger">456</p>
-                <p class="p8">명</p>
-            </div>
-            <hr class="hr3">
-            <p class="scaleUnit">명</p>
-            <canvas id="graph1"></canvas>
-        </div>
-    </div>
-   
 
+            <!--Total passengers graph-->
+            <div id="graph1_div" class="graphDiv graph2">
+                <div class="graphDivLeft">
+                    <p id="graphTitle2" class="graphTitle" ></p>
+                    <p class="p6">Total Passenger</p>
+                </div>
+                <div class="graphDivRight">
+                    <p class="p7" id="totalPassenger">456</p>
+                    <p class="p8">명</p>
+                </div>
+                <hr class="hr3">
+                <p class="scaleUnit">명</p>
+                <canvas id="graph1"></canvas>
+            </div>
+        </div>
         <!--Site Window div-->
-        <div class="button_window hide_div " id="degu_window">
-            
+        <div class="button_window hide_div" id="degu_window">
             <div id="routeTitleDiv" class="routeTitle">
                 <div id="weatherDiv" style="margin-top: 16px;">
                     <!--Show weather icon and temperature-->
                     <img class="weatherIcon" id="weather_icon" />
                     <lable class="tempLabel" id="temp_celsicus"></lable>
-                    
-               </div>
+                </div>
                 <lable id="site_name" class="window_p display_inline_block font-weight-bold"></lable>
-                <!--<img id="site_status" class="activeGreen" src="" />-->
             </div>
             <!--Site title and summary-->
             <div id="leftMarginDiv" class="siteDiv1 scrolly">
                 <div style="width:326px; position: absolute;">
-                
-                <div class="marginDiv2">
-                    <p class="font-weight-bold managerLabel">관리자 </p>
-                    <div> <!--style="width:103px;  position: absolute; top: 50px;"-->
-                        <select id="manager_selectlist" name="manager_selectlist" class="select1"></select>
-                        <button class="msgButton display_inline_block" onclick="siteMsgSend(); ">메시지 보내기</button>
-                        <button class="emergencyMsgButton display_inline_block" onclick ="showEmergencyContact();" id="contact_button">비상연락망</button>
+                    <div class="marginDiv2">
+                        <p class="font-weight-bold managerLabel">관리자 </p>
+                        <div>
+                            <select id="manager_selectlist" name="manager_selectlist" class="select1"></select>
+                            <button class="msgButton display_inline_block" onclick="siteMsgSend(); ">메시지 보내기</button>
+                            <button class="emergencyMsgButton display_inline_block" onclick ="showEmergencyContact();" id="contact_button">비상연락망</button>
+                        </div>
                     </div>
-                </div>
-
-                <p id="site_title" class="siteTitle"></p>
-
-                <div class = "infoDetail" id = "info_content">
-                    <lable class ="siteSummary" id = "site_summary"></lable>
-                </div>
-                
-                <!--- development history-->
-                <div id="devHistory">
-                   
-                    <img src="images/images_0.3/rnd_info.svg">
-                </div>
-
-                
-
-                <!-- site operation information-->
-               <div id="operationInfo">
-                <p id="operationInfoTitle" class="operationInfo_p">운영 정보 </p>
-                <!--<p id="line_count" class="operationInfo_p">NA</p>-->
-                <p id="vehicle_count" class=" font1">NA</p>
-                <p id="station_count" class=" font1">NA</p>
-                <p id="kiosk_count" class=" font1">NA</p>
-                <p id="garage_count" class=" font1">NA</p>
-
-                <img src = "images/table_bg2.svg"/>
-               </div>
-               <div class="passangerChart2" id="passangerChart2"> 
-                    <p class="chartTitle1" id="passengerTitle"></p>
-                    <p class="chartTitle3" style="margin-right:20px; margin-top: 10px;"> 명</p>
-                    <p class="chartTitle2" style="margin-top:10px; margin-right: 5px;" id="total_passengers"> </p>
-                    <hr style="border: 1px solid #BDBDBD; width:298px; margin-left: 10px;"/>
-                    <p class="scaleUnit">명</p>
-                    <canvas id="todayPassenger" width="298px" height="127px" class="canvasMargin1"></canvas>
-                </div>
-
-               <div class="distanceChart1" id="distanceChart1">
-                    <p class="chartTitle1" id="distanceTitle"></p>
-                    <p class="chartTitle3" style="margin-right:20px;  margin-top: 10px;"> km</p>
-                    <p class="chartTitle2" id="total_distance" style="margin-top:10px;  margin-right: 5px;"></p>
-                    <hr style="border: 1px solid #BDBDBD; width:298px; margin-left: 10px; " />
-                    <p class="scaleUnit">km</p>
-                    <canvas id="todayDistance" width="298px" height="127px" class="canvasMargin1"></canvas>
-                </div>
-           
-                
-                <!--ETA of vehicle
-                <div class = "station_table" id = "station_table">
-                    <p class = "window_p1">정류장</p>
-                    <div style = "margin-left: 25px; min-height : 20px; max-height:320px;"> 
-                        <div class = "timeDiv1" id = "stationList" style = "display: inline-block;"></div>
-                        <div id = "station_li" style = "margin-top: 3px;margin-left: 3px; width:4px; display: inline-block; position: absolute;background-color: #2E92B0;"></div>
-                        <div class = "timeDiv2" id = "eta_list"></div>
+                    <p id="site_title" class="siteTitle"></p>
+                    <div class = "infoDetail" id = "info_content">
+                        <lable class ="siteSummary" id = "site_summary"></lable>
                     </div>
-                </div>-->
-                <!-- Div for vehicle information-->
-               <!-- <hr style="clear: both; border: 0.5px solid #BDBDBD; margin: 0px 40px 21px 0px; opacity: 0.3;"> -->
-                <!--list of available vehicles on route-->   
-                <!--odd file for route
-                <div>
-                    <span class="window_p1">차량</span>
-                    <select class="vehicleList" id="vehicleSelect" onchange="changeVehicleInfo(this); oddButtonStatus(); "></select>
-                    <span class="oddButton" onclick="oddFileDownload()" id="oddFileSpan"><a id="oddFile" target="_blank" href="" download></a></span>
-                </div>-->  
-                
-          <!--  <hr style="margin-top: 25px; border: 0.5px solid #BDBDBD; margin: 25px 40px 21px 0px; opacity: 0.3;"/>
-            <button class="emergency" onclick ="showEmergencyContact();" id="contact_button">Emergency Contact</button>
-            <br>
+                    <!--- development history-->
+                    <div id="devHistory">
+                        <img src="images/images_0.3/rnd_info.svg">
+                    </div>
 
-            <br>
-            <br>
-        </div>
-            </div>  /*left margin Div-- >
-            </div> /*hide-div-->
-      
-            <!--Emergency contacts(currently static)-->
-            <!--<div class="managerInfo1">
-                <p class="numberP1">보험사</p><p class="display_inline_block">1588-5656</p>
-            </div>
-            <div class="managerInfo2">
-                <p class="numberP2">사고접수</p><p class="display_inline_block">013-3366-5656</p>
-            </div>-->
-             <br>
-            <br>
-        </div>
-          <!--hidden elements for camera-->
-          <img id="cameraButton1" onclick="webcam('1');" src = "images/cctv/video1.svg" hidden/>
-          <img id="cameraButton2" onclick="webcam('2');" src = "images/cctv/video2.svg" hidden/>
-    </div>
-
-
-    <div class = "contactModal" id="contactDiv">
-        <div class="contactDiv1">
-            <div>
-                <p>Emergency Contact</p>
-                <img class="contactImg1" src = "images/closing_button.svg" onclick="hide_div('contactDiv')"/>
-            </div>
-            <img class="contactImg2" id="emergency_contactImg" alt="Emergency contact" src="">
-        </div>
-    </div>
-
-    <div id="contactDiv" class="message_div">
-        <div class="message-content">
-            <div class="message-header">
-                <div class="noticeDiv2" style="display: inline-block;"><p class="noticeP1">공지사항 : </p></div>
-                    <span onclick="hide_div('noticeModal');" style="font-size:40px;float: right;margin-right: 15px; cursor: pointer;
-                    margin-top: 5px; ">&times;</span>
+                    <!-- site operation information-->
+                    <div id="operationInfo">
+                        <p id="operationInfoTitle" class="operationInfo_p">운영 정보 </p>
+                        <!--<p id="line_count" class="operationInfo_p">NA</p>-->
+                        <p id="vehicle_count" class=" font1">NA</p>
+                        <p id="station_count" class=" font1">NA</p>
+                        <p id="kiosk_count" class=" font1">NA</p>
+                        <p id="garage_count" class=" font1">NA</p>
+                        <img src = "images/table_bg2.svg"/>
+                    </div>
+                    <div class="passangerChart2" id="passangerChart2"> 
+                        <p class="chartTitle1" id="passengerTitle"></p>
+                        <p class="chartTitle3" style="margin-right:20px; margin-top: 10px;"> 명</p>
+                        <p class="chartTitle2" style="margin-top:10px; margin-right: 5px;" id="total_passengers"> </p>
+                        <hr style="border: 1px solid #BDBDBD; width:298px; margin-left: 10px;"/>
+                        <p class="scaleUnit">명</p>
+                        <canvas id="todayPassenger" width="298px" height="127px" class="canvasMargin1"></canvas>
+                    </div>
+                    <div class="distanceChart1" id="distanceChart1">
+                        <p class="chartTitle1" id="distanceTitle"></p>
+                        <p class="chartTitle3" style="margin-right:20px;  margin-top: 10px;"> km</p>
+                        <p class="chartTitle2" id="total_distance" style="margin-top:10px;  margin-right: 5px;"></p>
+                        <hr style="border: 1px solid #BDBDBD; width:298px; margin-left: 10px; " />
+                        <p class="scaleUnit">km</p>
+                        <canvas id="todayDistance" width="298px" height="127px" class="canvasMargin1"></canvas>
+                    </div>
+                    <br>
+                    <br>
                 </div>
-            <div class="notice-body" id="noticeBody"> </div>
-        </div>
-    </div>
-
-
+                <!--hidden elements for camera-->
+                <img id="cameraButton1" onclick="webcam('1');" src = "images/cctv/video1.svg" hidden/>
+                <img id="cameraButton2" onclick="webcam('2');" src = "images/cctv/video2.svg" hidden/>
+            </div>
+            <div class = "contactModal" id="contactDiv">
+                <div class="contactDiv1">
+                    <div>
+                        <p>Emergency Contact</p>
+                        <img class="contactImg1" src = "images/closing_button.svg" onclick="hide_div('contactDiv')"/>
+                    </div>
+                    <img class="contactImg2" id="emergency_contactImg" alt="Emergency contact" src="">
+                </div>
+            </div>
+            <div id="contactDiv" class="message_div">
+                <div class="message-content">
+                    <div class="message-header">
+                        <div class="noticeDiv2" style="display: inline-block;"><p class="noticeP1">공지사항 : </p></div>
+                            <span onclick="hide_div('noticeModal');" style="font-size:40px;float: right;margin-right: 15px; cursor: pointer;
+                            margin-top: 5px; ">&times;</span>
+                        </div>
+                    <div class="notice-body" id="noticeBody"> </div>
+                </div>
+            </div>
     <!--</div>-->
-    
-    <!-- Webcam div--><!--</div>-->
+    <!-- Webcam div-->
     <div id="webcam_div" class="webcam_div" >
-       <!-- <div id="webcam_div1" class="webcam_div2" style="margin-right: 15px;" >
-            <p class="cam_title">CAMERA-1</p>
-            <div id="offCameraDiv1" class="offcam_btn1"> 
-                <img src="images/cctv/videocam_off.svg" onclick=""/> 
-            </div>
-            <div id="playButtonDiv1" class="cam_btn1">
-                <img id="pausePlayButton1" onclick="playPause('webcam_div1','pausePlayButton1');" src="images/cctv/pause.svg" />
-                <img class="fullscreen" onclick="scale_image('hidden_cam1');" src="images/cctv/fullscreen.svg" />
-            </div>
-        </div>-->
         <div id="webcam_div2" class="webcam_div2">
             <p class="cam_title">CAMERA-2</p>
             <div id="offCameraDiv2" class="offcam_btn1"> 
@@ -698,45 +397,43 @@
     </div>
 
     <div id="hidden_cam" hidden></div>
-    <div id="hidden_cam1" hidden></div> <!--style="height:500px;width:500px; z-index: 1010;position: absolute; left:600px;top:600px;border:1px solid black"-->
+    <div id="hidden_cam1" hidden></div> 
     <div id="hidden_cam2" hidden></div>
-           <p id="loggedin_userid" hidden></p>
+        <p id="loggedin_userid" hidden></p>
         <p id="currentMap" hidden></p>
     </div>
     <p id="currentSiteId" hidden></p>
 
     <script>
+    $(document).ready(function(){
+        $("#includedContent").load("main_div.html");
+    });
 
-        $(document).ready(function(){
-            $("#includedContent").load("main_div.html");
-        });
-   
-        // Get the <span> element that closes the modal
-        // When the user clicks on <span> (x), close the modal
-        var span = document.getElementsByClassName("close2")[0];
-        span.onclick = function () {
-            document.getElementById("myModal").style.display = "none";
-            stopVideoStreaming();
-        }
+    // Get the <span> element that closes the modal
+    // When the user clicks on <span> (x), close the modal
+    var span = document.getElementsByClassName("close2")[0];
+    span.onclick = function () {
+        document.getElementById("myModal").style.display = "none";
+        stopVideoStreaming();
+    }
 
-        $("#main_site_button").click();
-        // showCluster(cluster_map); // show cluster data on map
-        showSummary('offsite'); // show count of site summary
-        //setDateTime(); // Update dateTime
-      
-        // Get the modal 
-        var modal = document.getElementById('siteListModal');
-        modal.onclick=function(event)
-        {
-            // When the user clicks anywhere outside of the modal, close it
-            if(modal.style.display == "block")
-            {                   
-                if (event.target == modal) 
-                    modal.style.display = "none";
-            } 
-        }
-
-        
+    $("#main_site_button").click();
+    // showCluster(cluster_map); // show cluster data on map
+    showSummary('offsite'); // show count of site summary
+    //setDateTime(); // Update dateTime
+    
+    // Get the modal 
+    var modal = document.getElementById('siteListModal');
+    modal.onclick=function(event)
+    {
+        // When the user clicks anywhere outside of the modal, close it
+        if(modal.style.display == "block")
+        {                   
+            if (event.target == modal) 
+                modal.style.display = "none";
+        } 
+    }
+    
     /* Sejong submenu */
     var subMenuModal = document.getElementById("subMenuModal");
     if(subMenuModal != null)
@@ -763,14 +460,6 @@
                 noticeModal.style.display = "none";
         } 
     }
-
-  /*  window.onload = function(event)
-    {
-        var dom = document.getElementById('vehicleSelect');
-        if(dom)
-            updateCCTV();
-    }
-    */
     window.onclick = function(event) {
         /* Close the sejong submenu modal */
         if(subMenuModal != null)
@@ -782,19 +471,7 @@
                 }
             }
         }
-
         $(document).click(function(event) {
-
-         /*   if(event.target.id != "contact_button")
-                document.getElementById("contactDiv").style.display = "block" */
-            
-            //if you click on anything except the modal itself or the "open modal" link, close the modal
-        /*    if(document.getElementById("contactDiv").style.display == "block")
-            {
-                if(event.target.id == "contactDiv") 
-                    $("#contactDiv").hide();
-            }
-*/
             //password reset setting dialog
             if(document.getElementById("settingDialog").style.display == "block")
             {

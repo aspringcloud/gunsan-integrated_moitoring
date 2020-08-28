@@ -178,7 +178,16 @@ top: 72px;
 left:20px
 }
 
-/*
+#p2{
+  display:inline-block; 
+  position: absolute;
+  right:130px; 
+  top:86px; 
+  font-size: 13px; 
+  font-family: Noto_medium; 
+  color: #4F4F4F;
+}
+
 .settingDiv1 button{
 width: 136px;
 height: 52px;
@@ -756,8 +765,14 @@ vertical-align: inherit;
 margin-left: 10px;
 }
 
+#heading_v1{
+  left: 10px;
+  right: 6px;
+  position: absolute;
+}
+
 .eastDiv p{
-color: #BDBDBD;vertical-align: middle; margin-top: 22px;font-family: Roboto_regular;
+color: #BDBDBD;vertical-align: middle; margin-top: 24px;font-family: Roboto_regular;
 }
 
 .rightSlider{
@@ -1004,8 +1019,7 @@ width: 434px;
 height: 120px;
 background: #0893BF;
 border-radius: 0px 5px 5px 0px;
-display: none;/*
-left: 122px;*/
+display: none;
 top: 120px;
 position: absolute;
 z-index: 1011;
@@ -1148,6 +1162,14 @@ background-color: rgb(0, 0, 0);
 background-color: rgba(0, 0, 0, 0.7);
 }
 
+#noticeModalClose{
+  font-size:40px;
+  float: right;
+  margin-right: 27px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
 /* Emergency contact button */
 .emergency{
 width: 153px;
@@ -1201,7 +1223,6 @@ background-color: rgba(0, 0, 0, 0.9);
 }
 
 /* Sejong sub menu */
-
 .dropdown-container {
 display: none;
 background-color: #262626;
@@ -1452,6 +1473,34 @@ overflow-x: hidden;
   letter-spacing: -0.02em;
   font-family: Noto_medium;
   font-size: 16px;
+}
 
-  
+#small_white_circle{
+  position: absolute; 
+  top:160px; 
+  left:12px; 
+  z-index: 1111;
+}
+
+#etaInfo{
+  display: inline-block;
+  border-radius: 12px; 
+  height:864px;
+  margin-left: 10px;  
+  width: 14px; 
+  top:158px; 
+  position: absolute; 
+  z-index: 1011;
+  background-color: #2E92B0; 
+}
+
+#cctv_webcam{
+  width: 150px;
+  height: 107px;
+  background: #F2F2F2;
+  position: absolute;
+  right: 15px;
+  border : 1px solid black;
+  border-radius: 3px;
+  bottom: 55px;
 }

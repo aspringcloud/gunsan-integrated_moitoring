@@ -1,18 +1,14 @@
 var webSocket   = null;
-//
 
 // websocket connection
 openWSConnection();
 
-/**
- * Event handler for clicking on button "Disconnect"
- */
+/* Event handler for clicking on button "Disconnect"*/
 function onDisconnectClick() {
     webSocket.close();
 }
-/**
- * Open a new WebSocket connection using the given parameters
- */
+
+/* Open a new WebSocket connection using the given parameters */
 function openWSConnection() {
     var webSocketURL = null;
     webSocketURL = "wss://ws.tasio.io:11511";//"ws://222.114.39.8:11411";//"wss://ws.tasio.io:11511"; //"ws://222.114.39.8:11411/ws/vehicle"
@@ -45,12 +41,10 @@ function openWSConnection() {
         console.error(exception);
     }
 }
-/**
- * Send a message to the WebSocket server
- */
+
+/* Send a message to the WebSocket server */
 function onSendClick() {
     if (webSocket.readyState != WebSocket.OPEN) {
-        //console.error("webSocket is not open: " + webSocket.readyState);
         return;
     }  
     webSocket.send(msg);

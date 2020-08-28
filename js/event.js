@@ -64,16 +64,12 @@ function createAlertDiv(eventData)
     }
     else if(dataAttribute == "message")
     {
-        id = event_how.vehicle_id;//(JSON.parse(eventData)).message.vehicle_id;
+        id = event_how.vehicle_id;
         vehicleID = event_how.vehicle_mid;
-        //document.getElementById("eventMessageModal").style.display = "block";
-       // document.getElementById("event_vid").innerHTML = vehicleID;
-        //selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
-        eventMessage = event_how.value;//(JSON.parse(eventData)).message.value; 
+        eventMessage = event_how.value;
         siteId = event_how.site_id;
         // get current date time 
         var currentdate = new Date();
-     
         // attact zero at start for month 
         var month = 0;
         if((currentdate.getMonth() + 1) < 10)
@@ -92,10 +88,6 @@ function createAlertDiv(eventData)
         var m = currentdate.getMinutes();
         m = checkTime(m);
         var strTime = h+ ":"+m; 
-        var sec = currentdate.getSeconds();
-        //document.getElementById("eventMsgArea").innerHTML = eventMessage;
-        //document.getElementById("timeInfo").innerHTML = strDate+" "+strTime+ " 수신"; 
-        //onclick="confirmEventMsg('+this+');" style="'+test+'" 
         var top;
         var left;
         var divArray = [];
@@ -186,11 +178,9 @@ function createAlertDiv(eventData)
     {
         id = event_how.vehicle_id;
         selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
-
-      //  alert("power id :"+selectedId);
         vehicleID = event_how.vehicle_mid;
         console.log("power value :"+event_how.value);
-        if(event_how.value == "true"  || event_how.value  == null)
+        if(event_how.value == "on"  || event_how.value == null)
             eventMessage = "전원이 켜졌습니다."; 
         else
             eventMessage = "전원이 꺼졌습니다."; 
@@ -253,13 +243,6 @@ function confirmEventMsg()
    //$(obj).parent('div').fadeOut();
 }
 
-/*
-$("#testEvent").click( function (e) {
-    //e.stopPropagation();
-    alert("parent :"+$(this).parent());
-    //$(this).parent().parent().hide();
-});
-*/
 function addition(left)
 {
    var add = parseInt(left) + Number(3);
@@ -276,60 +259,3 @@ $(document).on('click','.message-content3 button', function(){
 $(document).on('click','.message-content3 img', function(){
     $(this).parent().parent().parent().parent('div').remove();
 });
-
-
-/*
-function confirmEventMsg(obj)
-{
-    alert("obj");
-    document.getElementById('eventMessageModal').style.display = "none";
-}*/
-/*
-$("#eventMsgClose").click( function (e) {
-    alert("close");
-    //$(this).parent('div').fadeOut();
-    document.getElementById('eventMessageModal').style.display = "none";
-});*/
-
-/*
-  if( document.getElementById("eventContent"))
-        {
-            var top = (document.getElementById("eventContent").style.top)  ;
-            var left = (document.getElementById("eventContent").style.left) ;
-      
-            left = addition(left);
-            var test =  "left:"+(left)+"%";
-           
-        }
-        else
-        {
-            var top = 5;
-            var left = 40; 
-          //  alert("ELSE top: "+top+ " left: "+left);
-        }
-       var eventHtml = '<div id="eventContent" class="message-content3" style="'+test+'">'+
-                         '<div id="eventHeader" class="message-header2" >'+
-                            '<div class="msgDiv1">'+
-                                '<p class="msgSendP" id="vehicleEventMsg"> <span id="event_vid">'+vehicleID+'</span>에서 보낸 메세지</p>'+
-                                '<span class="msg_close" onclick="confirmEventMsg('+this+');">'+
-                                    '<img src="images/closing_button.svg" style="margin-top: 15px;">'+
-                                '</span>'+
-                            '</div>'+
-                        '</div>'+
-                        ' <div class="message-body2">'+
-                            '<textarea id="eventMsgArea" class="textArea" rows="10" cols="30" name="contents" onkeyup="fnChkByte(this,200)" disabled>'+eventMessage+'</textarea>'+
-                            '<span class="noto_regular msgP2" id="timeInfo">'+strDate+" "+strTime+ ' 수신</span>'+
-                        ' </div>'+
-                        '<div class="message-footer2" style="margin-top: 15px;">'+
-                            '<button class="event_send_button" id="testEvent" >확인</button>'+
-                        ' </div>'
-                    '</div>';
-                    document.getElementById("eventMessageModal").style.display = "block";
-                
-                    ///onclick="confirmEventMsg('+this+');"
-        $('#eventMessageModal').append(eventHtml);//html(eventHtml);//append(eventHtml);
- 
-        document.getElementById("eventContent").style.top = (top+2)+'%';
-        document.getElementById("eventContent").style.left = (left+2)+'%';
-    }
-*/

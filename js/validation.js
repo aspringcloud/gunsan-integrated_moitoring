@@ -1,4 +1,3 @@
-
 var server_URL = "https://test.aspringcloud.com/api/"; //"https://api.aspringcloud.com/api/";
 /* Input validation of login page */
 function login_validation() {
@@ -14,21 +13,18 @@ function login_validation() {
 
     if (!inputLengthCheck(input_email, email_error, "이메일 아이디를 입력해 주세요") && !inputLengthCheck(input_pwd, pwd_error, "비밀번호를 다시 확인 해주세요"))
         return false;
-
     if (!inputLengthCheck(input_pwd, pwd_error, "비밀번호를 입력해 주세요"))
         return false;
-
     if (!inputEmailCheck(input_email, email_error, "이메일 아이디가 이메일 형식이 아닙니다"))
         return false;
-
     var data = JSON.stringify({
         "email": input_email,
         "password": input_pwd,
     });
-
     var api_url = server_URL + "auth/login/";
     postMethod(data, api_url, function (request) {
-        if(request.status == 200) { 
+        if(request.status == 200) 
+        { 
             localStorage.setItem('userId', input_email);
             localStorage.setItem('userPwd', input_pwd);
             saveID_localstorage();
@@ -47,28 +43,29 @@ function openLoginPage() {
     window.location.href = "index.html";
 }
 
-function backArrow(id) {
-    if (id == "page2") {
+function backArrow(id) 
+{
+    if (id == "page2") 
+    {
         window.location.href = "index.html";
     }
-    else if (id == "page3") {
+    else if (id == "page3") 
+    {
         document.getElementById('FindId_div2').style.display = 'none';
         document.getElementById('FindId_div1').style.display = 'block';
         document.getElementById('page3').id = "page2";
     }
 }
+
 // Validation for Find_id page 
 // For explanation of regex - https://blog.jaeyoon.io/2017/10/js-regex.html 
 function findid_validation(button_id) {
     var input_name_error = document.getElementById('input_name_error');
     var input_email_error = document.getElementById('input_email_error');
-
     input_name_error.innerHTML = "";
     input_email_error.innerHTML = "";
-
     var input_name = $("#input_name").val();
     var input_email = $("#input_email").val();
-
     if (!inputLengthCheck(input_name, input_name_error, "이름을 입력해 주세요.") && !inputLengthCheck(input_email, input_email_error, "이메일 아이디를 입력해 주세요."))
         return false;
     if (!inputLengthCheck(input_name, input_name_error, "이름을 입력해 주세요."))
@@ -81,10 +78,11 @@ function findid_validation(button_id) {
     var postdata = JSON.stringify({
         "email": input_email,
     });
-
     var api_url = server_URL +"users/resetpassword/";
-    postMethod(postdata, api_url, function (status_code) {
-        if (status_code == 200) {
+    postMethod(postdata, api_url, function (status_code) 
+    {
+        if (status_code == 200) 
+        {
             document.getElementById('id_email_p').innerHTML = input_email;
             document.getElementById('id_pwd_p').innerHTML = "임시 비밀번호가 발송되었습니다.";
             document.getElementById('FindId_div1').style.display = 'none';
@@ -102,7 +100,8 @@ function findid_validation(button_id) {
 
 function sendEmailAPI(postdata) {
     var api_url = server_URL +"users/sendmessage/";
-    postMethod(postdata, api_url, function (status_code) {
+    postMethod(postdata, api_url, function (status_code) 
+    {
         if (status_code == 200)
         {
             document.getElementById('messageSendStatus').innerHTML = "메시지를 보냈습니다.";
@@ -119,16 +118,8 @@ function sendEmailAPI(postdata) {
 
 // send email on given email id
 function sendMail() {
-    //var x = document.getElementById("manager_selectlist").selectedIndex;
     var input_email = $("#manager_selectlist :selected").val();
     var message = $("#msgArea").val();
-/*
-    if(!$('#select_site').val() )
-    {
-        document.getElementById('messageSendStatus').innerHTML = "메시지를 보낼 SITE를 선택하세요.";
-        document.getElementById('messageSendStatus').style.color = "#EB5757";
-    }
-    else*/
     if(!$('#select_siteManager').val())
     {
         document.getElementById('messageSendStatus').innerHTML = "메시지를 보낼 관리자를 선택하세요.";
@@ -156,17 +147,12 @@ function postMethod(data, api_url, callback) {
     const requestURL = api_url;
     var username = localStorage.getItem("userId"); //"admin@aspringcloud.com";
     var password = localStorage.getItem("userPwd"); //"spring#007";
-    //console.log("username:"+username+" password:"+password);
     var base64Credentials = "Basic " + btoa(username + ":" + password);
     var request = new XMLHttpRequest();
-    var baseUrl= server_URL;//"http://115.93.143.2:9103/api/"; //"https://api.aspringcloud.com/api/"
     request.open('POST', requestURL, true);
     request.onload = function (e) {
         if(api_url == server_URL +"auth/password/change/" || api_url == server_URL+"auth/login/" || api_url == server_URL+"oplogs/by-date/" )
-        {
-            console.log("request status :"+request.status);
             callback(request);
-        }
         else
             callback(request.status);
      };
@@ -188,7 +174,6 @@ function postMethod(data, api_url, callback) {
 
 function authenticateUser(username, password)
 {
-    // Should i be encoding this value????? does it matter???
     // Base64 Encoding -> btoa
     var base64Credentials = "Basic " + btoa(username + ":" + password);
     return base64Credentials;
@@ -322,7 +307,6 @@ function updateUserData() {
             notChecked.push(this.id);
         }
     });
-
     document.getElementById('imageUpload').src = "";
     document.getElementById('select_level').value = "";
     document.getElementById('signup_id').value = "";
@@ -335,8 +319,10 @@ function updateUserData() {
 }
 
 /* When checkbox is checked, store user_id in local storage - user_id can be reset by clearing browser cache */
-function saveID_localstorage() {
-    if ($('#saveId_checkbox').is(':checked')) {
+function saveID_localstorage() 
+{
+    if ($('#saveId_checkbox').is(':checked')) 
+    {
         localStorage.setItem('localStorage_inputId', document.getElementById("input_id").value);
         localStorage.setItem('localStorage_checked', 'true');
         return false;
@@ -359,21 +345,3 @@ window.onload = function () {
            document.getElementById("saveId_checkbox").checked = false;
      }
 }
-/*
-window.onload = function () {
-    var input_id = document.getElementById("input_id");
-    var localStorage_inputId = localStorage.getItem("localStorage_inputId");
-    if (localStorage_inputId != null) {
-        input_id.value = localStorage_inputId;
-
-        alert("localStorage_inputId :"+localStorage_inputId);
-        if(input_id.value != localStorage_inputId )
-            document.getElementById('saveId_checkbox').checked = false;
-        else
-            document.getElementById('saveId_checkbox').checked = true;
-    }
-    else{
-        document.getElementById('saveId_checkbox').checked = false;
-    }
-}
-*/
