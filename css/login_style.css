@@ -2937,16 +2937,19 @@ margin-bottom: 0px;
 height:29px;
 width: 100%;
 border: 0px;
+font-family: Noto_regular;
 background-color: transparent;
 cursor: pointer;
 }
 
 .setting_P:hover {
 background: #0893BF;
+color: #FFFFFF;
 }
 
 .setting_P:focus {
 background: #0893BF;
+color: #FFFFFF;
 }
 
 /* For Vehicle ripple*/

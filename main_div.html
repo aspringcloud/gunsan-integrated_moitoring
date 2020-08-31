@@ -6,9 +6,6 @@
         <div class="inline_element tab_elements">
             <p class="font_regular" onclick="showContent('integrated_control');" id="integrated_control" title="Integrated control">통합관제 </p>
         </div>
-        <div id="screenToggleDiv" title="전체화면 모드를 사용/해제하시려면 키보드에서 F11을 눌러주세요.">
-            <p>전체화면 모드</p>
-        </div>
         <div class="tab_elements date_time_div">
             <!--Current date time-->
             <div class="divStyle1">
@@ -26,8 +23,8 @@
                     <!--opens user settings window-->
                     <img class="dropDownStyle" src="images/dropDownArrow.svg" onclick="toggle_div('logoutSetting')"/>
                     <div id="logoutSetting" class="logoutSettings">
-                        <button class="setting_P" onclick="settings();"><img src="images/setting.svg"/>Setting</button>
-                        <button class="setting_P" onclick="logout();"><img src="images/logout.svg" />Logout </button>
+                        <button class="setting_P" onclick="settings();" onmouseover="updateSettingsIcon();" onmouseout ="updateSettingIcon();"><img id="settingIcon" src="images/setting.svg"/>환경설정</button>
+                        <button class="setting_P" onclick="logout();" onmouseover="updateLogoutIcon();" onmouseout ="updateSettingIcon();"><img id="logoutIcon" src="images/logout.svg"/>로그아웃 </button>
                     </div>
                 </div>
             </div>

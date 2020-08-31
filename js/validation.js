@@ -28,6 +28,8 @@ function login_validation() {
             localStorage.setItem('userId', input_email);
             localStorage.setItem('userPwd', input_pwd);
             saveID_localstorage();
+            //save login status in session storage 
+            sessionStorage.setItem("login", "true");
             // store map id for toggle
             window.location.href = "main.html";
         }

@@ -124,15 +124,10 @@ margin-top: 60px;
   display  :none;
 }
 
-/* tooltip css */
-#screenToggleDiv:hover:after { 
-  color:palevioletred;
-}
-
 .settingDiv{
-  width: 537px;
-  height: 329px;
-  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
+width: 537px;
+height: 329px;
+box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
 z-index: 1011;
 position: absolute;
 right: 25px;
@@ -384,6 +379,7 @@ vertical-align: top;
 left: 243px;
 position: absolute;
 cursor: pointer;
+font-size: 14px;
 }
 
 .emergencyMsgButton :hover{
@@ -393,18 +389,33 @@ cursor: pointer;
 
 #screenToggleDiv {
 display: inline-block;
-left: 1229px;
 position: absolute;
-line-height: 0.2;
-margin-top: 7px;
+top: 102px;
+left: 160px;
+z-index: 1011;
+letter-spacing: -0.016em;
+font-family: Noto_medium;
+font-size: 13px;
 }
 
-#screenToggleDiv p{
-display: inline-block;
-color: #2E92B0;
-font-size: 16px;
-font-family: Noto_medium;
-margin-right: 10px;
+#fullscreen_title {
+position: absolute;
+top: 130px;
+left: 160px;
+width: 378px;
+height: 33px;
+z-index: 1011;
+font-family: Noto_Regular;
+font-size: 12px;
+line-height: 0.5;
+color: #FFFFFF;
+background: #4F4F4F;
+border: 0.5px solid #FFFFF9;
+box-sizing: border-box;
+text-align: center;
+outline: none;
+border: 0px;
+display: none;
 }
 
 .switch{
@@ -429,7 +440,6 @@ height: 0;
   left: 0;
   right: 0;
   bottom: 0;
- /* background-color: #828282;*/
   background-color: rgba(151, 140, 140, 0.38);
   -webkit-transition: .4s;
   transition: .4s;
@@ -450,10 +460,6 @@ height: 0;
   border-radius: 10px;
 }
 
-/*.slider:after {
-  opacity: 0.38;
-}*/
-
 input:checked + .slider {
   background-color: rgba(29, 138, 219, 0.38);
 }
@@ -466,7 +472,6 @@ input:focus + .slider {
   font-size: large;
 }
 
-
 input:checked + .slider:before {
   -webkit-transform: translateX(15px);
   -ms-transform: translateX(15px);
@@ -475,10 +480,7 @@ input:checked + .slider:before {
   
 }
 
-
-
 /* Rounded sliders */
-
 .slider.round {
  border-radius: 34px;
 }
@@ -593,8 +595,6 @@ align-items: flex-end;
 
 .infoDiv2{
 display: inline-block; 
-/*float:left; 
-border-right: 0.5px solid #BDBDBD;*/
 height:205px;
 width:152px;
 }
@@ -604,8 +604,9 @@ display: inline-block;margin-left: 135px; margin-top:15px;
 }
 
 .speedDiv1{
-display: inline-block;width: 50px;text-align: center;
-/*margin-left: -40px;*/
+display: inline-block;
+width: 50px;
+text-align: center;
 }
 
 .vehicleDiv3 img{
@@ -625,8 +626,6 @@ height:28px;
 text-align: center;
 border: 0px;
 outline: none;
-/*
-margin-bottom: 10px;*/
 position: absolute;
 top: 120px;
 right:239px;
@@ -715,7 +714,7 @@ width: 185px; height: 70px; position: absolute;top:110px;left:0px;
 }
 
 .batteryBorder{
-display: inline-block; border: 1px solid #E0E0E0; width: 48px; /*margin-top:-10px;float:left;*/
+display: inline-block; border: 1px solid #E0E0E0; width: 48px;
 height:26px;
 }
 
@@ -973,7 +972,7 @@ margin: 3px 0px 3px 10px;
 }
 
 .scrolly{
-overflow-y: scroll;
+overflow-y: auto;
 }
 
 /* width */
@@ -1163,11 +1162,11 @@ background-color: rgba(0, 0, 0, 0.7);
 }
 
 #noticeModalClose{
-  font-size:40px;
-  float: right;
-  margin-right: 27px;
-  cursor: pointer;
-  margin-top: 5px;
+font-size:40px;
+float: right;
+margin-right: 27px;
+cursor: pointer;
+margin-top: 5px;
 }
 
 /* Emergency contact button */
@@ -1188,6 +1187,9 @@ cursor: pointer;
 color: white !important;
 background-color: #CA4040 !important;
 }
+
+
+
 
 .contactModal{
 display: none;
@@ -1273,7 +1275,7 @@ height: 40px;
 width: 40px;
 border-radius: 50%;
 background-color:#999999;
- position: fixed;
+position: fixed;
 top: 0%;
 left: 0%;
 transform: translate(-70%, -100%);
@@ -1503,4 +1505,11 @@ overflow-x: hidden;
   border : 1px solid black;
   border-radius: 3px;
   bottom: 55px;
+}
+
+#fullscreenInfo{
+  z-index: 1111;
+  position: fixed;
+  top:100px;
+  left :300px;
 }

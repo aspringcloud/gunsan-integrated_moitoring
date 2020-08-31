@@ -93,6 +93,9 @@ function switchMap(obj)
         }
         else if(obj.id == "main_site_button")
         {   
+            document.getElementById('screenToggleDiv').style.left = "160px";
+            document.getElementById('fullscreen_title').style.left = "160px";
+
             clusterMapCount++;
             var elementsToHide = ["offsite_window", "webcam_div", "webcam_div1", "webcam_div2", "infoChart", "distanceChart1", "passangerChart2"];
             hideElements(elementsToHide);
@@ -103,7 +106,7 @@ function switchMap(obj)
             showElements(show_elements2);
             
             // create offsite map
-            var leftCenter = [35.951,133.066];
+            var leftCenter =[35.8094,126.4320];// [35.8118970000000000,126.4048860000000000];//[35.951,133.066];
             if(cluster_map == undefined)
             {            
                 cluster_map = L.map('offsiteMap', {
@@ -113,7 +116,7 @@ function switchMap(obj)
                     scrollWheelZoom: true,
                     color: "rgba(8, 148, 19)",
                     zoomControl: false,
-                    zoom:7,
+                    zoom:15,
                     center:leftCenter
                 });
                 zoomHome_main = L.Control.zoomHome();
@@ -124,7 +127,7 @@ function switchMap(obj)
             {
                 cluster_map.panTo(leftCenter);
                 cluster_map.setView(leftCenter);
-                zoomHome_main.setHomeCoordinates([35.951,133.066], 7);
+                zoomHome_main.setHomeCoordinates([35.8094,126.4320], 15);
             }
             showCluster(cluster_map);
             cluster_map.invalidateSize();
@@ -209,6 +212,8 @@ function switchMap(obj)
         }
         else if(obj.id == "gunsan_button")
         {
+            document.getElementById('screenToggleDiv').style.left = "570px";
+            document.getElementById('fullscreen_title').style.left = "570px";
             gunsanClickCount++;
             if(daegu_interval != null)
                 clearInterval(daegu_interval);
@@ -249,12 +254,12 @@ function switchMap(obj)
                     scrollWheelZoom: true, //false
                     color:"rgba(8, 148, 19)",
                     zoomControl: false,
-                    zoom:7,
+                    zoom:18,
                     center:rightCenter
                 });
             }
         
-            cluster_map.setView([35.902, 128.013], 7);
+            cluster_map.setView([35.902, 128.013], 17);
             zoomHome_main.setHomeCoordinates([35.902, 128.013]);
             cluster_map.invalidateSize();
             var elementsToHide = ["graph_div", "countInfoDiv", "webcam_div", "webcam_div1", "webcam_div2", "infoChart", "distanceChart1", "passangerChart2"];     
@@ -580,28 +585,29 @@ function showCluster(cluster_map)
     var addressPoints = []; 
     if(clusterMapCount <= 1)
     {
+
+          // create openstreet tile layer
+          var clusterLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+        });
+
+        // add layer to map with zoom level
+        clusterLayer.addTo(cluster_map);
         // get location of clusters using REST api
-        getMethod("routes/", function (routes_data) {
+      /*   getMethod("routes/", function (routes_data) {
             var cluster_data = JSON.parse(routes_data).results;
             var count = Object.keys(cluster_data).length;
-            for (i = 0; i < count; i++) {
+            for (var i = 0; i < count; i++) {
                 if(cluster_data[i].start != '' && cluster_data[i].operation == true && cluster_data[i].site == 1)
                 {
                     addressPoints.push(cluster_data[i].start);
                 }
-                    
             }
 
-            // create openstreet tile layer
-            var clusterLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
-            });
+            console.log("cluster addressPoints :"+addressPoints);
 
-            // add layer to map with zoom level
-            clusterLayer.addTo(cluster_map);
-  
             // create markers and add it to layer
-            var markers = L.markerClusterGroup();
+           var markers = L.markerClusterGroup();
             for (var i = 0; i < addressPoints.length; i++) {
                 var location = addressPoints[i];
                 var clusterIcon = L.icon({
@@ -614,7 +620,7 @@ function showCluster(cluster_map)
             }
             // add layer to the map instance.
             cluster_map.addLayer(markers);  
-        });
+        });*/
     }
     // refresh map 
     cluster_map.invalidateSize();
@@ -1900,7 +1906,9 @@ function logout() {
     postMethod(JSON.stringify(email), api_url, function (status_code) {
         if (status_code == 200)
             window.location.href = "index.html";
-    });
+            //save login  status in session storage 
+            sessionStorage.setItem("login", "false");
+        });
 }
 
 // update vehicle status by updating the color of bullet
@@ -2138,10 +2146,28 @@ function notice_modal() {
     changeNotice();
 }
 
-function changeNotice(){
-    var noticeSelect = document.getElementById('select_notice');
-    var category = noticeSelect.options[noticeSelect.selectedIndex].value;
+function updateSettingsIcon()
+{
+    document.getElementById('settingIcon').src= "images/images_0.3/setting_white.svg";
+    document.getElementById('logoutIcon').src= "images/logout.svg";
+}
 
+function updateLogoutIcon()
+{
+    document.getElementById('logoutIcon').src= "images/images_0.3/logout_white.svg";
+    document.getElementById('settingIcon').src= "images/setting.svg";
+}
+
+function updateSettingIcon()
+{
+    document.getElementById('logoutIcon').src= "images/logout.svg";
+    document.getElementById('settingIcon').src= "images/setting.svg";
+}
+
+function changeNotice(){
+    //var noticeSelect = document.getElementById('select_notice');
+    //var category = noticeSelect.options[noticeSelect.selectedIndex].value;
+    var category = "2";
     getMethod("notice/", function (site_data) {
         var noticeData = JSON.parse(site_data).results;
         var count = Object.keys(noticeData).length;

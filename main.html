@@ -60,14 +60,21 @@
     <script src="js/web_socket.js"></script>
     <script src="js/event.js"></script>
 </head>
-
+<script>
+    $(document).ready(function(){
+        if(sessionStorage.getItem("login") != "true") {
+            window.location.href = "index.html";
+        }
+        $("#includedContent").load("main_div.html");
+    });
+</script>
 <body class="standardRatio bodyMargin">
     <!-- Notice Modal -->
     <div id="noticeModal" class="message_div">
         <div class="message-content">
             <div class="message-header">
                 <div class="noticeDiv2"  style="display: inline-block;"> <p class="noticeP1">공지사항  </p></div>
-                    <select id="select_notice" class="noticeSelect" onchange="changeNotice()">
+                    <!--<select id="select_notice" class="noticeSelect" onchange="changeNotice()">
                         <option value= "1" selected="selected">전체</option>
                         <option value= "2" >통합관제</option>
                         <option value= "3">통합대시보드</option>
@@ -76,7 +83,7 @@
                         <option value= "6">STEP</option>
                         <option value= "7">스프링고 테스트모드</option>
                         <option value= "8">데이터센터</option>
-                    </select>
+                    </select>-->
                     <span onclick="hide_div('noticeModal');" id="noticeModalClose">&times;</span>
                 </div>
             <div class="notice-body" id="noticeBody"> </div>
@@ -113,6 +120,14 @@
     <!-- Event Message Modal -->
     <div id="eventMsgModalDiv"></div>
  
+    <!--fullscreen mode info-->
+    <div id="screenToggleDiv" onmouseover="show_div('fullscreen_title')" onmouseout="hide_div('fullscreen_title')">
+        <img src="images/images_0.3/fullscreen_info.svg"/><label style="margin-top: 0px;position:fixed;">전체화면 모드 설정 방법</label>
+    </div>
+    <div id="fullscreen_title">
+        <p>전체화면 모드를 사용/해제하시려면 키보드에서 F11을 눌러주세요.</p>
+    </div>
+    
     <!--GIS map div-->
     <div class="mapPosition hideMap" id="offsiteMap"></div>
     <div class="mapPosition hideMap" id="deguMap"></div>
@@ -405,10 +420,7 @@
     <p id="currentSiteId" hidden></p>
 
     <script>
-    $(document).ready(function(){
-        $("#includedContent").load("main_div.html");
-    });
-
+    
     // Get the <span> element that closes the modal
     // When the user clicks on <span> (x), close the modal
     var span = document.getElementsByClassName("close2")[0];
@@ -433,7 +445,7 @@
                 modal.style.display = "none";
         } 
     }
-    
+
     /* Sejong submenu */
     var subMenuModal = document.getElementById("subMenuModal");
     if(subMenuModal != null)
