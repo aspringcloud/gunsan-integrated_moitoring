@@ -976,7 +976,7 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
             const greenRippleIcon = L.divIcon({html: greenIconHtml, iconAnchor: [0, -20],});
             const greyRippleIcon = L.divIcon({html: greyIconHtml, iconAnchor: [0, -20],});
 
-            console.log("isParked : "+ vehicleObj.isparked+ "speed : "+vehicleObj.speed+ "heading:"+vehicleObj.heading);
+            //console.log("isParked : "+ vehicleObj.isparked+ "speed : "+vehicleObj.speed+ "heading:"+vehicleObj.heading);
             if(request_count == 1) 
             {
                 // create Icon for ripple marker as per the speed value
@@ -1659,15 +1659,17 @@ function currentVehicleETA(stationData)
     else
     {
         var selectedId = dom.options[dom.selectedIndex].id;
-        for(var k of stationData.eta)
+        for(var p of stationData.eta)
         {                        
-            var temp = JSON.parse(k);
+            var temp = JSON.parse(p);
             var key = Object.keys(temp);
             var value = Object.values(temp);
             for(var k = 0; k < key.length; k++)
-            {                     
+            {            
+               // alert("selectedId :"+selectedId);         
                 if(key[k] == selectedId)
-                {       
+                {     
+                 //   alert("if");  
                     var time_value;
                     if(Math.round(value[k]) < 2)
                         time_value = "잠시 후 도착예정";
@@ -1683,9 +1685,11 @@ function currentVehicleETA(stationData)
                         mid : stationData.mid,
                         name : stationData.name  
                     }
+                    return stationDetails;
                 }
-                else
+               /* else
                 {
+                    alert("else");
                     stationDetails = {
                         vehicle_id : null,
                         time : "N분 후 도착",
@@ -1695,7 +1699,7 @@ function currentVehicleETA(stationData)
                     }
                     //return stationDetails;
                 }
-                return stationDetails;
+                return stationDetails;*/
             }
         }
     }
@@ -1738,12 +1742,12 @@ function updateETA(site_id)
             minusHeight = j*2;
             // blue line which indicate ETA
             if(j < (stationETA.length - 1))
-                $("#station_li").append(' <p class="eta_circle"></p>');
+               $("#station_li").append(' <p class="eta_circle"></p>');
             else
               $("#station_li").append(' <p class="eta_circle2"></p>');
 
             var border_radius = '';
-            if( j==0)
+            if(j==0)
             {
                 var border_radius =  'border-top-left-radius:12px;  border-top-right-radius:12px';
             }
