@@ -83,7 +83,6 @@ function createAlertDiv(eventData)
         else
             var date = currentdate.getDate();
         var strDate = currentdate.getFullYear()+ "-"+month+ "-"+date;  
-
         var h = currentdate.getHours();
         var m = currentdate.getMinutes();
         m = checkTime(m);
@@ -126,8 +125,8 @@ function createAlertDiv(eventData)
         }
 
         var style = 'left:'+left+'px; top:'+top+'px; display:block;';
-        var eventHtml = '<div id="eventContent'+left+'" class="message-content3" style = "'+style+'">'+ 
-                         '<div id="eventHeader" class="message-header2" >'+
+        var eventHtml = '<div id="eventContent'+left+'" class="message-content3" style="'+style+'" onclick="showDivOnTop(this);">'+ 
+                         '<div id="eventHeader" class="message-header2">'+
                             '<div class="msgDiv1">'+
                                 '<p class="msgSendP" id="vehicleEventMsg"> <span id="event_vid">'+vehicleID+'</span>에서 보낸 메세지</p>'+
                                 '<span class="msg_close">'+
@@ -145,8 +144,8 @@ function createAlertDiv(eventData)
                     '</div>';
         $('#eventMsgModalDiv').append(eventHtml);//html(eventHtml);//append(eventHtml);
         document.getElementById("eventMsgModalDiv").style.display = "block";
-       // document.getElementById("eventContent").style.display = "block";
-       //document.getElementById("eventContent").style.left = left+'px';
+        // document.getElementById("eventContent"+left).onclick = "showDivOnTop()";
+        //document.getElementById("eventContent").style.left = left+'px';
     }
     else if(dataAttribute == "parking")
     {
@@ -163,7 +162,6 @@ function createAlertDiv(eventData)
         {
             eventMessage = "주차 상태가 아닙니다."; 
         }
-          
     }
     else if(dataAttribute == "passenger")
     {
@@ -237,6 +235,12 @@ function createAlertDiv(eventData)
     }, 3000);
 }
 
+function showDivOnTop(obj)
+{
+    //alert("obj :"+ $(obj));
+    $(obj).zIndex("1111");
+}
+
 function confirmEventMsg()
 {
     document.getElementById('eventContent').style.display = "none";
@@ -246,7 +250,6 @@ function confirmEventMsg()
 function addition(left)
 {
    var add = parseInt(left) + Number(3);
-   //alert("left :"+left+ " add :"+add);
    return add;
 }
 

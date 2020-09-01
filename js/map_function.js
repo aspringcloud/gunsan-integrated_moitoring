@@ -106,7 +106,7 @@ function switchMap(obj)
             showElements(show_elements2);
             
             // create offsite map
-            var leftCenter =[35.8094,126.4320];// [35.8118970000000000,126.4048860000000000];//[35.951,133.066];
+            var leftCenter =[35.8191,126.4332];// [35.8118970000000000,126.4048860000000000];//[35.951,133.066];
             if(cluster_map == undefined)
             {            
                 cluster_map = L.map('offsiteMap', {
@@ -127,7 +127,7 @@ function switchMap(obj)
             {
                 cluster_map.panTo(leftCenter);
                 cluster_map.setView(leftCenter);
-                zoomHome_main.setHomeCoordinates([35.8094,126.4320], 15);
+                zoomHome_main.setHomeCoordinates([35.8191,126.4332], 15);
             }
             showCluster(cluster_map);
             cluster_map.invalidateSize();
@@ -409,12 +409,11 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
             // count of operationsl vehicles, kiosk  
             if(JSON.parse(data).vehicle_count != undefined)
             {
-                console.log("summary d:"+JSON.stringify(JSON.parse(data)));
                 //document.getElementById('line_count').innerHTML = JSON.parse(data).route_count;
-                document.getElementById('vehicle_count').innerHTML = JSON.parse(data).vehicle_count;
-                document.getElementById('station_count').innerHTML = JSON.parse(data).station_count;
-                document.getElementById('kiosk_count').innerHTML = JSON.parse(data).kiosk_count;
-                document.getElementById('garage_count').innerHTML = JSON.parse(data).garege_count;
+                document.getElementById('vehicle_count').innerHTML = "2"; //JSON.parse(data).vehicle_count;
+                document.getElementById('station_count').innerHTML = "9";//JSON.parse(data).station_count;
+                document.getElementById('kiosk_count').innerHTML = "2";//JSON.parse(data).kiosk_count;
+                document.getElementById('garage_count').innerHTML = "1"; //JSON.parse(data).garege_count;
             }
         });
     });
@@ -1515,12 +1514,11 @@ function showSummary(site) {
     {
         getMethod("sites/summary/", function (getSummary) {
             var summary = JSON.parse(getSummary);
-          
-            document.getElementById("routeCount").innerHTML = summary.route_count;
-            document.getElementById("vehicleCount").innerHTML = summary.vehicle_count;
-            document.getElementById("StationCount").innerHTML = summary.station_count;
-            document.getElementById("kioskCount").innerHTML = summary.kiosk_count;
-            document.getElementById("garageCount").innerHTML = summary.garage_count;
+            document.getElementById("routeCount").innerHTML = "1"//summary.route_count;
+            document.getElementById("vehicleCount").innerHTML ="2"// summary.vehicle_count;
+            document.getElementById("StationCount").innerHTML = "7";//summary.station_count;
+            document.getElementById("kioskCount").innerHTML = "2";//summary.kiosk_count;
+            document.getElementById("garageCount").innerHTML = "1";// summary.garage_count;
         }); 
     }
 }
