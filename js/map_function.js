@@ -775,9 +775,9 @@ function updateShuttleInfo(vehicle, request_count)
         return false;
     }
 
-    updateFrontStaus(vehicle.parkingbrake, vehicle.speed );
+    updateFrontStaus(vehicle.isparked, vehicle.speed);
     // change driving color
-    if(vehicle.parkingbrake == '1' || vehicle.parkingbrake == null)
+    if(vehicle.isparked == true || vehicle.isparked == null)
         vehicleStatus("PARKED", "rgb(128,128,128)");
     else if(vehicle.speed > 0) 
         vehicleStatus( "DRIVING", "#57AE66");
@@ -822,10 +822,10 @@ function updateShuttleInfo(vehicle, request_count)
     checkWebcam(vehicle.webcam2, 'cameraButton2', 'video2', 'video2Active');
 }
 
-function updateFrontStaus(parkingBreak, speed)
+function updateFrontStaus(isParked, speed)
 {
     var frontBG;
-    if(parkingBreak == 0 || speed > 0)
+    if(isParked == false || speed > 0)
         frontBG = "#57AE66";
     else
         frontBG = "#BDBDBD";
@@ -976,11 +976,11 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
             const greenRippleIcon = L.divIcon({html: greenIconHtml, iconAnchor: [0, -20],});
             const greyRippleIcon = L.divIcon({html: greyIconHtml, iconAnchor: [0, -20],});
 
+            console.log("isParked : "+ vehicleObj.isparked+ "speed : "+vehicleObj.speed+ "heading:"+vehicleObj.heading);
             if(request_count == 1) 
             {
                 // create Icon for ripple marker as per the speed value
-                console.log(" parkingbrake : "+ vehicleObj.parkingbrake+ "speed : "+vehicleObj.speed+ "heading:"+vehicleObj.heading);
-                if(vehicleObj.parkingbrake == "1" || vehicleObj.parkingbrake == null) //vehicleObj.isparked == true |
+                if(vehicleObj.isparked == true || vehicleObj.isparked == null) //vehicleObj.isparked == true |
                 {
                     var marker = createHtmlMarker(vehicleObj, greyRippleIcon);
                 }
@@ -1013,9 +1013,9 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                 // Create vehicle marker 
                 vehicleMarker = createHtmlMarker(vehicleObj, vehicleIcon);            
                 vehicleMarker._leaflet_id = vehicleObj.name;
-                if(vehicleObj.parkingbrake == "0") 
+                if(vehicleObj.isparked == false) 
                 {
-                    if (vehicleObj.speed > 0) 
+                    if(vehicleObj.speed > 0) 
                         vehicleMarker.options.rotationAngle = vehicleObj.heading;               // rotate marker of speed is greater then 0 to avoid abnormal data
                 }
                     
@@ -1053,11 +1053,11 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                     currentRipple.setLatLng(newLatLng);                                         // update the location of ripple marker
 
                     // change speed status in left side window
-                    if ( vehicleObj.parkingbrake =='1' || vehicleObj.parkingbrake == null ) //vehicleObj.isparked == true ||
+                    if(vehicleObj.isparked == true || vehicleObj.isparked == null) //vehicleObj.isparked == true ||
                     {
                         currentRipple.setIcon(greyRippleIcon);
                     }
-                    else if (vehicleObj.speed > 0 ) //|| vehicleObj.drive == true //&& vehicleObj.isparked == false 
+                    else if(vehicleObj.speed > 0) //|| vehicleObj.drive == true //&& vehicleObj.isparked == false 
                     {                  
                         currentRipple.setIcon(greenRippleIcon);
                         currentRipple.options.rotationAngle = vehicleObj.heading;
@@ -1079,7 +1079,7 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                     currentVehicle.setLatLng(newLatLng);                                       // update the location of vehicle marker
                     currentVehicle._leaflet_id = vehicleObj.name;
 
-                    if(vehicleObj.parkingbrake == '0') //vehicleObj.isparked == true ||
+                    if(vehicleObj.parkingbrake == false) //vehicleObj.isparked == true ||
                     {
                         if(vehicleObj.speed > 0 )
                             currentVehicle.options.rotationAngle = vehicleObj.heading;
