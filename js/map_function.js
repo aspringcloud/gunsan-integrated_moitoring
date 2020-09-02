@@ -1675,18 +1675,25 @@ function currentVehicleETA(stationData)
                     var time_value;
 
                     // get drive value from vehicle api to check if vehicle is operational or not
-                    var driveStatus = getDriveStatusOfVehicle(selectedId);
-                       // console.log("test 1");
-                       //alert("driveStatus:"+driveStatus);
-                        //if(!driveStatus || driveStatus == null)
-                          //  time_value = "운행 준비중​";
+                   // var driveStatus = getDriveStatusOfVehicle(selectedId);
+
+                   var test; 
+                  //  getDriveStatusOfVehicle(selectedId, function (driveStatus) {
+                      
+                    
+                       
+                       // if(!driveStatus || driveStatus == null)
+                         //   time_value = "운행 준비중​";
                         if(Math.round(value[k]) < 2)
                             time_value = "잠시 후 도착예정";
                         else if(Math.round(value[k]) > 2)
                             time_value = Math.round(value[k])+"분 후 도착​";
                         else
                             time_value = "N분 후 도착";
+                    //    });
 
+
+                        //alert("time_value :"+)
                           //  console.log("*T7");
                         stationDetails = {
                             vehicle_id : key[k],
@@ -1698,7 +1705,7 @@ function currentVehicleETA(stationData)
                         //alert("T2 :"+JSON.stringify(stationDetails));
                         return stationDetails;
                       
-                    
+                 
                 }
 
                /* else
@@ -1718,7 +1725,7 @@ function currentVehicleETA(stationData)
         }
     }
 }
-function getDriveStatusOfVehicle(vehicleId)
+function getDriveStatusOfVehicle(vehicleId, callback)
 {
     var driveStatus;
     getMethod("vehicles/"+vehicleId+"/", function(data) {
@@ -1728,9 +1735,10 @@ function getDriveStatusOfVehicle(vehicleId)
        // alert("vehicleData.drive :"+vehicleData.drive);
         //alert(typeof(vehicleData.drive));
        
-        return driveStatus;
+        callback(driveStatus);
     });
 }
+
 
 function updateETA(site_id)
 {
@@ -2652,7 +2660,10 @@ function updateCCTV()
 {
     // get CCTV URL 
     var dom = document.getElementById("vehicleSelect");
-    var selectedId = dom.options[(dom.selectedIndex + 1)].id;
+    //alert("dom :"+dom);
+    //alert("dom.selectedIndex  :" +dom.options[(dom.selectedIndex)].id);
+    var selectedId = dom.options[(dom.selectedIndex)].id;
+   // alert("cctv :"+selectedId);
     getMethod("vehicles/"+selectedId+"/", function (data)
     {
         var vehicle = JSON.parse(data);

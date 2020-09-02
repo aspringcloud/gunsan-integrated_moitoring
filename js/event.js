@@ -193,8 +193,8 @@ function createAlertDiv(eventData)
 
     // calculate hours 
     var currentHour = today.getHours();
-    if(currentHour > 12)
-        currentHour = currentHour - 12;
+    //if(currentHour > 12)
+   //     currentHour = currentHour - 12;
       
     if (currentHour < 10)
         currentHour = "0"+currentHour;
@@ -214,6 +214,7 @@ function createAlertDiv(eventData)
         currentSeconds = today.getSeconds();
 
     var currentTime = currentHour+':'+currentMinutes+':'+currentSeconds;
+    console.log("currentTime :"+currentTime);
     var todayDate = currentDate+ ' '+currentTime;
     console.log("todayDate :"+todayDate);
     var dom = document.getElementById('eventsDiv');
