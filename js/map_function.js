@@ -1646,7 +1646,7 @@ function currentVehicleETA(stationData)
     var dom = document.getElementById("vehicleSelect");
     var stationDetails; 
     if((stationData.eta).length == 0) //|| stationData.eta == undefined )
-    {
+    { //console.log("*T3");
         stationDetails = {
             vehicle_id : null,
             time : "N분 후 도착",
@@ -1658,6 +1658,7 @@ function currentVehicleETA(stationData)
     }
     else
     {
+        //console.log("*T4");
         var selectedId = dom.options[dom.selectedIndex].id;
         for(var p of stationData.eta)
         {                        
@@ -1669,16 +1670,15 @@ function currentVehicleETA(stationData)
                // alert("selectedId :"+selectedId);         
                 if(key[k] == selectedId)
                 {     
+                    //console.log("*T5");
                  //   alert("if");  
                     var time_value;
 
                     // get drive value from vehicle api to check if vehicle is operational or not
-                    var driveStatus ;
-                    getMethod("vehicles/"+selectedId+"/", function(data) {
-                        var vehicleData = JSON.parse(data);
-                        driveStatus = vehicleData.drive;
-                        if(drive == "false" || drive == null)
-                            time_value = "Not operational";
+                    var driveStatus = getDriveStatusOfVehicle(selectedId);
+                       // console.log("test 1");
+                        if(driveStatus == false || driveStatus == null)
+                            time_value = "운행 준비중​";
                         else if(Math.round(value[k]) < 2)
                             time_value = "잠시 후 도착예정";
                         else if(Math.round(value[k]) > 2)
@@ -1686,6 +1686,7 @@ function currentVehicleETA(stationData)
                         else
                             time_value = "N분 후 도착";
 
+                          //  console.log("*T7");
                         stationDetails = {
                             vehicle_id : key[k],
                             time : time_value,
@@ -1693,9 +1694,10 @@ function currentVehicleETA(stationData)
                             mid : stationData.mid,
                             name : stationData.name  
                         }
+                        //alert("T2 :"+JSON.stringify(stationDetails));
                         return stationDetails;
                       
-                    });
+                    
                 }
 
                /* else
@@ -1715,25 +1717,41 @@ function currentVehicleETA(stationData)
         }
     }
 }
+function getDriveStatusOfVehicle(vehicleId)
+{
+    var driveStatus;
+    getMethod("vehicles/"+vehicleId+"/", function(data) {
+        //console.log("*T6:"+data);
+        var vehicleData = JSON.parse(data);
+        driveStatus = vehicleData.drive;
+       // alert("vehicleData.drive :"+vehicleData.drive);
+        //alert(typeof(vehicleData.drive));
+        return driveStatus;
+    });
+}
 
 function updateETA(site_id)
 {
     getMethod("stations/", function(data) {
         var stationData = JSON.parse(data);
+        //console.log("stationData :"+JSON.stringify(stationData));
         var count = Object.keys(stationData).length;
         var stationETA = [];
         var passedStation;
         stationData =  stationData.sort((a, b) => (a.sta_Order > b.sta_Order) ? 1 : -1)
-
+        //console.log("stationData[i] :"+stationData[i]);
         // station list
         for (var i = 0; i < count; i++) {
             if (stationData[i].site == site_id)
-            {        
+            {    
+                  
                 var eta = currentVehicleETA(stationData[i]);
+                //alert("if eta:"+eta); 
                 stationETA.push(eta);
             }
         }
 
+        //alert("stationETA :"+stationETA);
         // station list
         var divElement = document.getElementById('stationList1');
         divElement.innerHTML = ""; 
@@ -1749,6 +1767,7 @@ function updateETA(site_id)
 
         var divHeight = Math.round(844/(stationETA.length));
         var minusHeight = 0;
+        //console.log("stationETA :"+stationETA);
         for(var j = 0; j < stationETA.length; j++)
         { 
             minusHeight = j*2;
@@ -1797,7 +1816,7 @@ function updateETA(site_id)
                 var circleImg ='<img id="small_white_circle" style="position: absolute; top:1009px; left:12px; z-index: 1111;" src="images/images_0.3/small_white_circle.svg"/>';
             }
               
-            console.log("stationETA[j] :"+stationETA[j]);
+          //  console.log("stationETA[j] :"+stationETA[j]);
             circleDivElement.insertAdjacentHTML('beforeend', circleImg);
             var stationHtml = 
             '<div style="margin-left:20px; '+marginTop+' height:'+(divHeight+20)+'px; width:206px; overflow-y:hidden">'+
