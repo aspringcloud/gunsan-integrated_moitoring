@@ -1677,9 +1677,10 @@ function currentVehicleETA(stationData)
                     // get drive value from vehicle api to check if vehicle is operational or not
                     var driveStatus = getDriveStatusOfVehicle(selectedId);
                        // console.log("test 1");
-                        if(driveStatus == false || driveStatus == null)
-                            time_value = "운행 준비중​";
-                        else if(Math.round(value[k]) < 2)
+                       //alert("driveStatus:"+driveStatus);
+                        //if(!driveStatus || driveStatus == null)
+                          //  time_value = "운행 준비중​";
+                        if(Math.round(value[k]) < 2)
                             time_value = "잠시 후 도착예정";
                         else if(Math.round(value[k]) > 2)
                             time_value = Math.round(value[k])+"분 후 도착​";
@@ -1726,6 +1727,7 @@ function getDriveStatusOfVehicle(vehicleId)
         driveStatus = vehicleData.drive;
        // alert("vehicleData.drive :"+vehicleData.drive);
         //alert(typeof(vehicleData.drive));
+       
         return driveStatus;
     });
 }
