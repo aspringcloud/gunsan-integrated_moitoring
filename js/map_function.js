@@ -1671,22 +1671,33 @@ function currentVehicleETA(stationData)
                 {     
                  //   alert("if");  
                     var time_value;
-                    if(Math.round(value[k]) < 2)
-                        time_value = "잠시 후 도착예정";
-                    else if(Math.round(value[k]) > 2)
-                        time_value = Math.round(value[k])+"분 후 도착​";
-                    else
-                        time_value = "N분 후 도착";
 
-                    stationDetails = {
-                        vehicle_id : key[k],
-                        time : time_value,
-                        id : stationData.id,
-                        mid : stationData.mid,
-                        name : stationData.name  
-                    }
-                    return stationDetails;
+                    // get drive value from vehicle api to check if vehicle is operational or not
+                    var driveStatus ;
+                    getMethod("vehicles/"+selectedId+"/", function(data) {
+                        var vehicleData = JSON.parse(data);
+                        driveStatus = vehicleData.drive;
+                        if(drive == "false" || drive == null)
+                            time_value = "Not operational";
+                        else if(Math.round(value[k]) < 2)
+                            time_value = "잠시 후 도착예정";
+                        else if(Math.round(value[k]) > 2)
+                            time_value = Math.round(value[k])+"분 후 도착​";
+                        else
+                            time_value = "N분 후 도착";
+
+                        stationDetails = {
+                            vehicle_id : key[k],
+                            time : time_value,
+                            id : stationData.id,
+                            mid : stationData.mid,
+                            name : stationData.name  
+                        }
+                        return stationDetails;
+                      
+                    });
                 }
+
                /* else
                 {
                     alert("else");
@@ -1717,11 +1728,12 @@ function updateETA(site_id)
         // station list
         for (var i = 0; i < count; i++) {
             if (stationData[i].site == site_id)
-            {                
+            {        
                 var eta = currentVehicleETA(stationData[i]);
                 stationETA.push(eta);
             }
         }
+
         // station list
         var divElement = document.getElementById('stationList1');
         divElement.innerHTML = ""; 
@@ -1785,6 +1797,7 @@ function updateETA(site_id)
                 var circleImg ='<img id="small_white_circle" style="position: absolute; top:1009px; left:12px; z-index: 1111;" src="images/images_0.3/small_white_circle.svg"/>';
             }
               
+            console.log("stationETA[j] :"+stationETA[j]);
             circleDivElement.insertAdjacentHTML('beforeend', circleImg);
             var stationHtml = 
             '<div style="margin-left:20px; '+marginTop+' height:'+(divHeight+20)+'px; width:206px; overflow-y:hidden">'+
