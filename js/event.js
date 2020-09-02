@@ -168,9 +168,9 @@ function createAlertDiv(eventData)
         id = event_how.vehicle_id;
         selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
         vehicleID = event_how.vehicle_mid;
-        eventMessage = "현재 승객 수: "+event_how.current_passenger+ " 명"; 
+        eventMessage = "현재 승객 수: "+(event_how.current_passenger-1)+ " 명"; 
         if(id == selectedId)
-            passengerStatus(event_how.current_passenger);
+            passengerStatus((event_how.current_passenger)-1);
     }
     else if(dataAttribute == "power")
     {
