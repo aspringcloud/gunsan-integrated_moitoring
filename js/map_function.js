@@ -411,7 +411,7 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
             {
                 //document.getElementById('line_count').innerHTML = JSON.parse(data).route_count;
                 document.getElementById('vehicle_count').innerHTML = "2"; //JSON.parse(data).vehicle_count;
-                document.getElementById('station_count').innerHTML = "9";//JSON.parse(data).station_count;
+                document.getElementById('station_count').innerHTML = "7";//JSON.parse(data).station_count;
                 document.getElementById('kiosk_count').innerHTML = "2";//JSON.parse(data).kiosk_count;
                 document.getElementById('garage_count').innerHTML = "1"; //JSON.parse(data).garege_count;
             }
