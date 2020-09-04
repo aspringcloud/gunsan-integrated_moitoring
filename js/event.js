@@ -199,7 +199,7 @@ function createAlertDiv(eventData)
         id = event_how.vehicle_id;
         selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
         vehicleID = event_how.vehicle_mid;
-        if(event_how.value == "on"  || event_how.value == null)
+        if(event_how.value == "true" || event_how.value == null)
             eventMessage = "전원이 켜졌습니다."; 
         else
             eventMessage = "전원이 꺼졌습니다."; 

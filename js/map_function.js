@@ -436,13 +436,12 @@ function onVehiclePowerOff()
     //alert("selectedId :"+selectedId+" vid :"+id);
     var selectList = document.getElementById("vehicleSelect"); 
     var selectedId = selectList.options[selectList.selectedIndex].id; 
-    //getDriveStatusOfVehicle(selectedId);
     getMethod("vehicles/"+selectedId+"/", function(data) {
         //console.log("*T6:"+data);
         var vehicleData = JSON.parse(data);
         var driveStatus2 = vehicleData.drive;
-        console.log("driveStatus2 :"+driveStatus2);
-        if(driveStatus2)
+        //console.log("driveStatus2 :"+driveStatus2);
+        if(!driveStatus2)
         {
             document.getElementById("v_status1").style.backgroundColor = "#BDBDBD";
             document.getElementById("v_status1").innerHTML = "OFF";
@@ -452,7 +451,11 @@ function onVehiclePowerOff()
             var battery = document.querySelectorAll('.inverted-bar3')[0];
             battery.style.setProperty("--afterbgColor3", "#BDBDBD");
             document.getElementById("doorStatus").src = "images/door/doors_off.svg";
+            console.log("Returning true");
+            return true;
         }
+        console.log("Returning false");
+        return false;
     });
 }
 
@@ -787,71 +790,81 @@ function vehicleInfo(map, vId)
 
 function updateShuttleInfo(vehicle, request_count)
 {     
-    if(vehicle == null)
-    {
-        vehicleStatus( "NO DATA", "#CA4040");
-        // front
-        document.getElementById("v_front").style.background = "#BDBDBD";
+   /* var status = onVehiclePowerOff();
+    console.log("status drive status :"+status);
+    if(status != true )
+    {*/ 
+        console.log("If executed");
+        if(vehicle == null)
+        {
+            vehicleStatus( "NO DATA", "#CA4040");
+            // front
+            document.getElementById("v_front").style.background = "#BDBDBD";
+            // Vehicle name and version     
+            document.getElementById("vehicleID").innerHTML = "NA";
+            document.getElementById("vehicleID").style.color = "#666666";
+            document.getElementById("vehicleVersion").innerHTML = "SW 버전: NA";
+            updateFrontStaus(null, 0)
+            showVehicleHeading(null);
+            updateDrive(null);
+            updateGnssBgcolor(false);
+            setBatteryPercent(0);
+            passengerStatus(null);    
+            updateDoor(false);
+            setVehicleSpeed(0);
+            return false;
+        }
+        updateFrontStaus(vehicle.isparked, vehicle.speed);
+        // change driving color
+        if(vehicle.isparked == true || vehicle.isparked == null)
+            vehicleStatus("PARKED", "rgb(128,128,128)");
+        else if(vehicle.speed > 0) 
+            vehicleStatus( "DRIVING", "#57AE66");
+        else
+            vehicleStatus( "STOPPED", "#CA4040");
+    
         // Vehicle name and version     
-        document.getElementById("vehicleID").innerHTML = "NA";
-        document.getElementById("vehicleID").style.color = "#666666";
-        document.getElementById("vehicleVersion").innerHTML = "SW 버전: NA";
-        updateFrontStaus(null, 0)
-        showVehicleHeading(null);
-        updateDrive(null);
-        updateGnssBgcolor(false);
-        setBatteryPercent(0);
-        passengerStatus(null);    
-        updateDoor(false);
-        setVehicleSpeed(0);
-        return false;
-    }
+        var nameColor = vehicleMakeColor(vehicle.name);
 
-    updateFrontStaus(vehicle.isparked, vehicle.speed);
-    // change driving color
-    if(vehicle.isparked == true || vehicle.isparked == null)
-        vehicleStatus("PARKED", "rgb(128,128,128)");
-    else if(vehicle.speed > 0) 
-        vehicleStatus( "DRIVING", "#57AE66");
+        // changes bgcolor of popup background
+        var color; 
+        if(nameColor == "greenPopup")
+            color= "#67BBB1";
+        else if(nameColor == "bluePopup")
+            color= "#0082C8";
+        else if(nameColor == "blackPopup")
+            color = "#333333";
+        else
+            color ="#666666"; 
+        document.getElementById("vehicleVersion").innerHTML = "SW 버전: "+vehicle.model.firmware;
+                            
+        // show speed of vehicle
+        setVehicleSpeed(vehicle.speed);
+        if(vehicle.speed > 0)
+            showVehicleHeading(vehicle.heading);
+        // updates background color of gnss
+        updateGnssBgcolor(vehicle.gnss);
+
+        if(request_count == 1)
+        {
+            // show door status ---> this will be updated by web socket    
+            updateDoor(vehicle.door);
+            // Update drive mode of vehicle  
+            updateDrive(vehicle.drive_mode);
+            // show passenger status    
+            passengerStatus(vehicle.passenger);    
+        }
+        // show battery status
+        setBatteryPercent(vehicle.battery);
+        // show webcam
+        checkWebcam(vehicle.webcam1, 'cameraButton1', 'video1', 'video1Active');
+        checkWebcam(vehicle.webcam2, 'cameraButton2', 'video2', 'video2Active');
+   /* }
     else
-        vehicleStatus( "STOPPED", "#CA4040");
-   
-    // Vehicle name and version     
-    var nameColor = vehicleMakeColor(vehicle.name);
-
-    // changes bgcolor of popup background
-    var color; 
-    if(nameColor == "greenPopup")
-        color= "#67BBB1";
-    else if(nameColor == "bluePopup")
-        color= "#0082C8";
-    else if(nameColor == "blackPopup")
-        color = "#333333";
-    else
-        color ="#666666"; 
-    document.getElementById("vehicleVersion").innerHTML = "SW 버전: "+vehicle.model.firmware;
-                        
-    // show speed of vehicle
-    setVehicleSpeed(vehicle.speed);
-    if(vehicle.speed > 0)
-        showVehicleHeading(vehicle.heading);
-    // updates background color of gnss
-    updateGnssBgcolor(vehicle.gnss);
-
-    if(request_count == 1)
     {
-        // show door status ---> this will be updated by web socket    
-        updateDoor(vehicle.door);
-        // Update drive mode of vehicle  
-        updateDrive(vehicle.drive_mode);
-        // show passenger status    
-        passengerStatus(vehicle.passenger);    
+        console.log("If not executed");
     }
-    // show battery status
-    setBatteryPercent(vehicle.battery);
-    // show webcam
-    checkWebcam(vehicle.webcam1, 'cameraButton1', 'video1', 'video1Active');
-    checkWebcam(vehicle.webcam2, 'cameraButton2', 'video2', 'video2Active');
+    */
 }
 
 function updateFrontStaus(isParked, speed)
@@ -965,7 +978,7 @@ function changeVehicleInfo(obj)
         //console.log("Updating eta after 30 seconds on select change");
     }, 30000);
 
-    //onVehiclePowerOff();
+    onVehiclePowerOff();
 }
 
 function createHtmlMarker(vehicleObj, iconHtml)
@@ -1115,7 +1128,7 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                     currentVehicle.setLatLng(newLatLng);                                       // update the location of vehicle marker
                     currentVehicle._leaflet_id = vehicleObj.name;
 
-                    if(vehicleObj.parkingbrake == false) //vehicleObj.isparked == true ||
+                    if(vehicleObj.isparked == true) //vehicleObj.isparked == true ||
                     {
                         if(vehicleObj.speed > 0 )
                             currentVehicle.options.rotationAngle = vehicleObj.heading;
@@ -1304,7 +1317,7 @@ function setPopupContent(e, mapInstance, site_no)
     }
 }
 
-function vehicleStatus( status, statusBg)
+function vehicleStatus(status, statusBg)
 {
     // Driving button 
     document.getElementById("v_status1").innerHTML = status;
@@ -1726,8 +1739,7 @@ function currentVehicleETA(stationData)
                     return stationDetails;
                 }
                 else
-                {   
-                   
+                {                      
                     if(k == (key.length-1))
                     {
                         stationDetails = {
