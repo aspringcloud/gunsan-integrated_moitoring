@@ -1041,6 +1041,7 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                 else
                 {
                     var marker = createHtmlMarker(vehicleObj, redRippleIcon);
+                    marker.options.rotationAngle = vehicleObj.heading;         
                 }
                 marker._leaflet_id = vehicleObj.id;                                   // set id of vehicle as id of marker.
                 marker.addTo(mapInstance);                                            // add marker to map  
@@ -1724,7 +1725,7 @@ function currentVehicleETA(stationData)
                     //console.log("*if :"+selectedId);
                     var time_value;
                     if(Math.round(value[k]) < 2)
-                        time_value = "잠시 후 도착예정";
+                        time_value = "곧 도착 또는 출발​";
                     else if(Math.round(value[k]) > 2)
                         time_value = Math.round(value[k])+"분 후 도착​";
                     else
@@ -1755,12 +1756,9 @@ function currentVehicleETA(stationData)
                     else{
                         continue;
                     }
-                  //  console.log("*else :"+selectedId);                
-                    
+      
                 }
-                
             }
-            
         }
     }
 }
@@ -1854,7 +1852,6 @@ function updateETA(site_id)
                 var border_radius = 'border-bottom-left-radius:12px;  border-bottom-right-radius:12px';
                 divHeight = 40;
             }
-                 
         
             var marginTop = '';
             if(j==0)
