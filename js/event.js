@@ -82,6 +82,7 @@ function createAlertDiv(eventData)
             var date = "0"+(currentdate.getDate());
         else
             var date = currentdate.getDate();
+            
         var strDate = currentdate.getFullYear()+ "-"+month+ "-"+date;  
         var h = currentdate.getHours();
         var m = currentdate.getMinutes();
@@ -172,12 +173,32 @@ function createAlertDiv(eventData)
         if(id == selectedId)
             passengerStatus((event_how.current_passenger)-1);
     }
+    else if(dataAttribute == "reason_stop")
+    {
+        id = event_how.vehicle_id;
+        selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
+        vehicleID = event_how.vehicle_mid;
+        var reason = event_how.reason_type;
+       // var koreanReason;
+        if(reason == "car")
+            eventMessage = "[차]로 인해 정지 발생";
+        else if(reason == "people")
+            eventMessage = "[사람]으로 인해 정지 발생"; 
+        else if(reason == "environmental factor")
+            eventMessage = "[환경요소]로 인해 정지 발생";
+        else if(reason == "error")
+            eventMessage = "["+event_how.reason+"]으로 인해 정지 발생 ";//"오류";    
+        else if(reason == "etc")
+            eventMessage = "["+event_how.reason+"]로 인해 정지 발생 ";
+        else if(reason == "Other")
+            eventMessage = "기타"; 
+      
+    }
     else if(dataAttribute == "power")
     {
         id = event_how.vehicle_id;
         selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
         vehicleID = event_how.vehicle_mid;
-        console.log("power value :"+event_how.value);
         if(event_how.value == "on"  || event_how.value == null)
             eventMessage = "전원이 켜졌습니다."; 
         else
@@ -189,8 +210,16 @@ function createAlertDiv(eventData)
     
     // Create div to show event information
     var today = new Date();
-    var currentDate = today.getFullYear()+'/'+(today.getMonth()+1)+'/'+ today.getDate();
+    var todayMonth = today.getMonth()+1;
+    if(todayMonth < 10)
+        todayMonth = "0"+todayMonth;
 
+    var todayDay = today.getDate();
+    if(todayDay < 10)
+        todayDay = "0"+todayDay;
+
+    //var eventMessage = today.getFullYear()+'/'+(todayMonth)+'/'+ todayDay;
+    console.log("eventMessage :"+eventMessage);
     // calculate hours 
     var currentHour = today.getHours();
     //if(currentHour > 12)
@@ -214,13 +243,14 @@ function createAlertDiv(eventData)
         currentSeconds = today.getSeconds();
 
     var currentTime = currentHour+':'+currentMinutes+':'+currentSeconds;
-    console.log("currentTime :"+currentTime);
-    var todayDate = currentDate+ ' '+currentTime;
+    //console.log("currentTime :"+currentTime);
+    var currentDate2= today.getFullYear()+'/'+(todayMonth)+'/'+ todayDay;
+    var todayDate = currentDate2+ '   ';//+currentTime;
     console.log("todayDate :"+todayDate);
     var dom = document.getElementById('eventsDiv');
     var newAlert = "<span style='display:inline-block'>"+vehicleID+"</span> <img style='display:inline-block; position:absolute; right:0%;' src = 'images/events/event_close_button.svg'/>"+
-                   "<label style='margin-top:20%; color:#929292;padding-left: 5%;display:inline-block; position:absolute'>"+currentDate+"</label><label style=';margin-top:20%; margin-left :45%;  position:absolute; display:inline-block; '>"+currentTime+"</label>"+
-                   "<p style='margin-top:35%'>"+eventMessage+"</p>";//+
+                   "<label style='margin-top:20%; color:#929292;padding-left: 5%;display:inline-block; position:absolute'>"+todayDate+"</label><label style=';margin-top:20%; margin-left :48%;  position:absolute; display:inline-block; '>"+currentTime+"</label>"+
+                   "<p style='width: 160px; word-wrap: break-word'>"+eventMessage+"</p>";//+
                    //"<button>확인</button>";
     var divs = document.createElement("div");
     divs.className = 'batteryAlert';

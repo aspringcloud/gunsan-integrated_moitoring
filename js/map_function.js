@@ -17,6 +17,8 @@ var sejong_map2;
 var gunsan_map;
 var cluster_map ;
 
+// global drive status
+var driveStatus;
 // stores the click count for each site
 var deguClickCount = 0;
 var sejong1ClickCount = 0;
@@ -373,12 +375,15 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
             noVehicleInfo();
         }
 
+        /*
         // update ETA
+        console.log("Show site()");
         updateETA(currentSiteId);
         eta_interval = setInterval(function() {
+            console.log("Show site interval()");
             updateETA(currentSiteId);
             console.log("Updating eta after 30 seconds")
-        }, 30000);
+        }, 30000);*/
         
         // update status of webcam  
         document.getElementById("hidden_cam1").style.background= "";
@@ -422,6 +427,33 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
 
     // development history data (underdevelopment)
     showSummary('site');
+}
+
+
+function onVehiclePowerOff()
+{
+    // update vehicle information pannel;    
+    //alert("selectedId :"+selectedId+" vid :"+id);
+    var selectList = document.getElementById("vehicleSelect"); 
+    var selectedId = selectList.options[selectList.selectedIndex].id; 
+    //getDriveStatusOfVehicle(selectedId);
+    getMethod("vehicles/"+selectedId+"/", function(data) {
+        //console.log("*T6:"+data);
+        var vehicleData = JSON.parse(data);
+        var driveStatus2 = vehicleData.drive;
+        console.log("driveStatus2 :"+driveStatus2);
+        if(driveStatus2)
+        {
+            document.getElementById("v_status1").style.backgroundColor = "#BDBDBD";
+            document.getElementById("v_status1").innerHTML = "OFF";
+            document.getElementById("v_front").style.background = "#BDBDBD";
+            document.getElementById("gnss_v1").style.background = "#BDBDBD";
+            document.getElementById("driveStatus").style.backgroundColor = "#BDBDBD";
+            var battery = document.querySelectorAll('.inverted-bar3')[0];
+            battery.style.setProperty("--afterbgColor3", "#BDBDBD");
+            document.getElementById("doorStatus").src = "images/door/doors_off.svg";
+        }
+    });
 }
 
 var switchStatus = false;
@@ -925,11 +957,15 @@ function changeVehicleInfo(obj)
     if(eta_interval != null)
         clearInterval(eta_interval);
     // update ETA
+    console.log("changeVehicleInfo()");
     updateETA(active_site);
     eta_interval = setInterval(function() {
+        console.log("changeVehicleInfo interval ()");
         updateETA(active_site);
         //console.log("Updating eta after 30 seconds on select change");
     }, 30000);
+
+    //onVehiclePowerOff();
 }
 
 function createHtmlMarker(vehicleObj, iconHtml)
@@ -1257,8 +1293,10 @@ function setPopupContent(e, mapInstance, site_no)
             document.getElementById('vehicleSelect').value = shuttleMarkerArray[k].name;  
             vehicleInfo(mapInstance, shuttleMarkerArray[k].markId);
             oddButtonStatus();
+            console.log("onpopup change()");
             updateETA(active_site);
             eta_interval = setInterval(function() {
+                console.log("onpopup change interval()");
                 updateETA(active_site);
             }, 30000);
             break;
@@ -1646,7 +1684,7 @@ function currentVehicleETA(stationData)
     var dom = document.getElementById("vehicleSelect");
     var stationDetails; 
     if((stationData.eta).length == 0) //|| stationData.eta == undefined )
-    { //console.log("*T3");
+    { 
         stationDetails = {
             vehicle_id : null,
             time : "N분 후 도착",
@@ -1658,73 +1696,63 @@ function currentVehicleETA(stationData)
     }
     else
     {
-        //console.log("*T4");
         var selectedId = dom.options[dom.selectedIndex].id;
         for(var p of stationData.eta)
-        {                        
+        {            
             var temp = JSON.parse(p);
             var key = Object.keys(temp);
             var value = Object.values(temp);
             for(var k = 0; k < key.length; k++)
-            {            
-               // alert("selectedId :"+selectedId);         
-                if(key[k] == selectedId)
+            {  
+                //alert("key[k] :"+key[k]+ " selectedId:"+selectedId);
+                if(key[k] == selectedId )
                 {     
-                    //console.log("*T5");
-                 //   alert("if");  
+                    //console.log("*if :"+selectedId);
                     var time_value;
-
-                    // get drive value from vehicle api to check if vehicle is operational or not
-                   // var driveStatus = getDriveStatusOfVehicle(selectedId);
-
-                   var test; 
-                  //  getDriveStatusOfVehicle(selectedId, function (driveStatus) {
-                      
+                    if(Math.round(value[k]) < 2)
+                        time_value = "잠시 후 도착예정";
+                    else if(Math.round(value[k]) > 2)
+                        time_value = Math.round(value[k])+"분 후 도착​";
+                    else
+                        time_value = "N분 후 도착";
                     
-                       
-                       // if(!driveStatus || driveStatus == null)
-                         //   time_value = "운행 준비중​";
-                        if(Math.round(value[k]) < 2)
-                            time_value = "잠시 후 도착예정";
-                        else if(Math.round(value[k]) > 2)
-                            time_value = Math.round(value[k])+"분 후 도착​";
-                        else
-                            time_value = "N분 후 도착";
-                    //    });
-
-
-                        //alert("time_value :"+)
-                          //  console.log("*T7");
-                        stationDetails = {
-                            vehicle_id : key[k],
-                            time : time_value,
-                            id : stationData.id,
-                            mid : stationData.mid,
-                            name : stationData.name  
-                        }
-                        //alert("T2 :"+JSON.stringify(stationDetails));
-                        return stationDetails;
-                      
-                 
-                }
-
-               /* else
-                {
-                    alert("else");
                     stationDetails = {
-                        vehicle_id : null,
-                        time : "N분 후 도착",
+                        vehicle_id : key[k],
+                        time : time_value,
                         id : stationData.id,
                         mid : stationData.mid,
                         name : stationData.name  
                     }
-                    //return stationDetails;
+                    return stationDetails;
                 }
-                return stationDetails;*/
+                else
+                {   
+                   
+                    if(k == (key.length-1))
+                    {
+                        stationDetails = {
+                            vehicle_id : null,
+                            time : "운행 준비중",//"운행 준비중", //"N분 후 도착",
+                            id : stationData.id,
+                            mid : stationData.mid,
+                            name : stationData.name  
+                        }
+                        return stationDetails;
+                    }
+                    else{
+                        continue;
+                    }
+                  //  console.log("*else :"+selectedId);                
+                    
+                }
+                
             }
+            
         }
     }
 }
+
+/*
 function getDriveStatusOfVehicle(vehicleId, callback)
 {
     var driveStatus;
@@ -1737,6 +1765,21 @@ function getDriveStatusOfVehicle(vehicleId, callback)
        
         callback(driveStatus);
     });
+}
+*/
+
+function getDriveStatusOfVehicle(vehicleId)
+{  
+    getMethod("vehicles/"+vehicleId+"/", function(data) {
+        //console.log("*T6:"+data);
+        var vehicleData = JSON.parse(data);
+        driveStatus = vehicleData.drive;
+       // alert("driveStatus :"+driveStatus);
+       // return vehicleData.drive;
+    });
+   // alert("driveStatus out :"+driveStatus);
+  //  alert("returndriveStatus :"+driveStatus);
+   // return driveStatus;
 }
 
 
@@ -1753,10 +1796,11 @@ function updateETA(site_id)
         // station list
         for (var i = 0; i < count; i++) {
             if (stationData[i].site == site_id)
-            {    
-                  
+            {            
+                
+                //console.log("stationData[i] :"+JSON.stringify(stationData[i]));
                 var eta = currentVehicleETA(stationData[i]);
-                //alert("if eta:"+eta); 
+                //console.log("if eta:"+eta); 
                 stationETA.push(eta);
             }
         }
@@ -1785,7 +1829,7 @@ function updateETA(site_id)
             if(j < (stationETA.length - 1))
                $("#station_li").append(' <p class="eta_circle"></p>');
             else
-              $("#station_li").append(' <p class="eta_circle2"></p>');
+                $("#station_li").append(' <p class="eta_circle2"></p>');
 
             var border_radius = '';
             if(j==0)
@@ -1797,21 +1841,8 @@ function updateETA(site_id)
                 var border_radius = 'border-bottom-left-radius:12px;  border-bottom-right-radius:12px';
                 divHeight = 40;
             }
-            else
-            {
-               // var marginTop = 'margin-bottom:60px';
-              //  var marginTop = 'margin-top:'+divHeight/ (stationETA.length);
-            }
-                               
-            /*//top:'+(top)+'px;'+marginTop+'
-            //top:'+((top*j)-((13*j-(j*2))))+'px;'+marginTop+'
-            
-            if(j==0)
-                var circleImg = '<div style="position: absolute; height:'+(divHeight+20)+'px;"><img id="small_white_circle" style="position: absolute;  left:12px; z-index: 1111;" src="images/images_0.3/small_white_circle.svg"/></div>'
-            else
-                var circleImg = '<div style="position: absolute; height:'+(divHeight+20)+'px;"><img id="small_white_circle" style="position: absolute;  left:12px; z-index: 1111;" src="images/images_0.3/small_white_circle.svg"/></div>'
-            */
-          
+                 
+        
             var marginTop = '';
             if(j==0)
             {
@@ -2479,7 +2510,6 @@ function updateGaragePopup(marker, garageTitle)
             door = "Door open";
             doorClass = "garageDoor_red";
         }
-
         if(garageData.charger == false)
             charger = "Not in use";
         else
@@ -2627,7 +2657,6 @@ function showChart(graph1, title, color, yAxisLable, vehicleList, yAxisList, y_u
                         fontStyle: "bold",
                         scaleStepWidth : 30,
                     },
-                    
                 }],
                 yAxes: [{
                     barPercentage: 0.3,
