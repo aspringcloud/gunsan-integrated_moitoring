@@ -1101,6 +1101,7 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                     var currentRipple = rippleMarkerArray[i].marker;
                     currentRipple.setLatLng(newLatLng);                                         // update the location of ripple marker
 
+                    
                     // change speed status in left side window
                     if(vehicleObj.isparked == true || vehicleObj.isparked == null) //vehicleObj.isparked == true ||
                     {
@@ -1128,7 +1129,7 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                     currentVehicle.setLatLng(newLatLng);                                       // update the location of vehicle marker
                     currentVehicle._leaflet_id = vehicleObj.name;
 
-                    if(vehicleObj.isparked == true) //vehicleObj.isparked == true ||
+                    if(vehicleObj.isparked == false) //vehicleObj.isparked == true ||
                     {
                         if(vehicleObj.speed > 0 )
                             currentVehicle.options.rotationAngle = vehicleObj.heading;
