@@ -450,6 +450,7 @@ function onVehiclePowerOff()
             document.getElementById("driveStatus").style.backgroundColor = "#BDBDBD";
             var battery = document.querySelectorAll('.inverted-bar3')[0];
             battery.style.setProperty("--afterbgColor3", "#BDBDBD");
+            battery.style.setProperty("--afterColor", "#BDBDBD");
             document.getElementById("doorStatus").src = "images/door/doors_off.svg";
             console.log("Returning true");
             return true;
@@ -782,7 +783,12 @@ function vehicleInfo(map, vId)
         getMethod(apiUrl, function (data) {
             var vehicle = JSON.parse(data);
             var shuttleLocation = L.LatLng(vehicle.lat, vehicle.lon);
-            updateShuttleInfo(vehicle, request_count); 
+            var status = onVehiclePowerOff();
+            console.log("status drive status :"+status);
+            if(status != true )
+            {
+                updateShuttleInfo(vehicle, request_count); 
+            }
         });
     }, 1500);
     return interval;
@@ -790,11 +796,7 @@ function vehicleInfo(map, vId)
 
 function updateShuttleInfo(vehicle, request_count)
 {     
-   /* var status = onVehiclePowerOff();
-    console.log("status drive status :"+status);
-    if(status != true )
-    {*/ 
-        console.log("If executed");
+    
         if(vehicle == null)
         {
             vehicleStatus( "NO DATA", "#CA4040");
@@ -859,13 +861,7 @@ function updateShuttleInfo(vehicle, request_count)
         // show webcam
         checkWebcam(vehicle.webcam1, 'cameraButton1', 'video1', 'video1Active');
         checkWebcam(vehicle.webcam2, 'cameraButton2', 'video2', 'video2Active');
-   /* }
-    else
-    {
-        console.log("If not executed");
-    }
-    */
-}
+ }
 
 function updateFrontStaus(isParked, speed)
 {
@@ -1065,7 +1061,7 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                 vehicleMarker._leaflet_id = vehicleObj.name;
                 if(vehicleObj.isparked == false) 
                 {
-                    if(vehicleObj.speed > 0) 
+                    //if(vehicleObj.speed > 0) 
                         vehicleMarker.options.rotationAngle = vehicleObj.heading;               // rotate marker of speed is greater then 0 to avoid abnormal data
                 }
                     
@@ -1076,21 +1072,21 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                 vehicleMarker.on('click', function(e) {           
                     // vehicle marker on click function ---> updates vehicle popup data every second 
                     setPopupContent(e, mapInstance, currentSiteId);
-            });
-   
-            vehicleMarker.addTo(mapInstance);         
-            
-           // alert("gns s:"+vehicleObj.gnss);// show vehicle icon on route
-            var shuttleMarkerObj = {                                                          // store marker in array 
-                marker : vehicleMarker,
-                markId : vehicleObj.id,
-                name: vehicleObj.name,
-                speed: vehicleObj.speed,
-                battery: vehicleObj.battery,
-                version: vehicleObj.model.firmware,
-                version: vehicleObj.gnss
-            }
-            shuttleMarkerArray.push(shuttleMarkerObj);                                         // maintain array of shuttle markers
+                });
+    
+                vehicleMarker.addTo(mapInstance);         
+                
+            // alert("gns s:"+vehicleObj.gnss);// show vehicle icon on route
+                var shuttleMarkerObj = {                                                          // store marker in array 
+                    marker : vehicleMarker,
+                    markId : vehicleObj.id,
+                    name: vehicleObj.name,
+                    speed: vehicleObj.speed,
+                    battery: vehicleObj.battery,
+                    version: vehicleObj.model.firmware,
+                    version: vehicleObj.gnss
+                }
+                shuttleMarkerArray.push(shuttleMarkerObj);                                         // maintain array of shuttle markers
         }   
         else  //update markers
         {           
@@ -1101,8 +1097,6 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                     var newLatLng = new L.LatLng(vehicleObj.lat, vehicleObj.lon);
                     var currentRipple = rippleMarkerArray[i].marker;
                     currentRipple.setLatLng(newLatLng);                                         // update the location of ripple marker
-
-                    
                     // change speed status in left side window
                     if(vehicleObj.isparked == true || vehicleObj.isparked == null) //vehicleObj.isparked == true ||
                     {
@@ -1130,7 +1124,7 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                     currentVehicle.setLatLng(newLatLng);                                       // update the location of vehicle marker
                     currentVehicle._leaflet_id = vehicleObj.name;
 
-                    if(vehicleObj.isparked == false) //vehicleObj.isparked == true ||
+                    if(vehicleObj.isparked == false || vehicleObj.isparked == null) //vehicleObj.isparked == true ||
                     {
                         if(vehicleObj.speed > 0 )
                             currentVehicle.options.rotationAngle = vehicleObj.heading;
@@ -1214,7 +1208,19 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                     selectedId = dom.options[dom.selectedIndex].id;  // selected Id 
                 
                 if(vehicleObj.id == selectedId)
-                    updateShuttleInfo(vehicleObj);
+                {
+                    var status = onVehiclePowerOff();
+                    console.log("status drive status :"+status);
+                    if(status != true )
+                    {
+                        console.log("If executed");
+                        updateShuttleInfo(vehicleObj);
+                    }
+                    else{
+                        console.log("else executed");
+                    }
+                }
+                    
             }
         }                                                     
     }
@@ -1758,7 +1764,9 @@ function currentVehicleETA(stationData)
                     }
       
                 }
+                
             }
+            
         }
     }
 }
@@ -3043,7 +3051,7 @@ function fnChkByte(obj, maxByte)
 // updates user account setting
 function settings()
 {
-    document.getElementById('setting_button1').src = "images/password_reset/login_selected.svg";
+    document.getElementById('setting_button1').background = "images/password_reset/login_selected.svg";
     document.getElementById("user_pwd_change").src = "images/password_reset/pwd_unselected.svg";
 
     hide_div('logoutSetting');

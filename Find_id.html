@@ -17,7 +17,6 @@
         <script src="js/common_function.js"></script>
         <script src="js/validation.js"></script> 
     </head>
-
     <body style="background-color: #83c3e0;">
         <div >
             <img class="animation" src="images\gif\background.gif"> 
@@ -29,25 +28,27 @@
                 <span class="title2">SpringGO Datahub System </span>
             </div>
             <p class="p4">비밀번호 재설정</p>
-        <div id="FindId_div1">
-            <div class="findDiv">
-            <span class="span1">이메일로 임시 비밀번호를 발송합니다.</span> 
-            <p class="span1">본인 확인을 위해 이름과 이메일 아이디를 입력해주세요.</p>
-        </div>
-            <form id="findid-form" action="" method="post" role="form" onsubmit="">
-                <p class="name_P">이름</p>
-                <input id="input_name" type="text" class=" form-control form_input placeholder" placeholder="이름을 입력해주세요" autofocus>
-                               
-                <p class="name_P">이메일 아이디</p>
-                <input id="input_email" type="text" class="form-control form_input placeholder" placeholder="이메일 아이디를 입력해 주세요">
-               
-                <button type="submit" style="margin-top: 15px;" class="login_button" id = "forgot_pwd_button" onclick="return findid_validation(this.id);" >임시 비밀번호 받기</button>
-                <p class="error" id="input_name_error"></p>
-                <p class="error" id="input_email_error"></p>  
-                <div class="info2">Copyright ⓒ GUNSANCITY. All right reserved </div>
-            </form>
-        
-            </div>
+            <p id="hideTempPassword">
+                임시비밀번호 발급을 원하시면 <br>bcchoi@aspringcloud.com으로 <br> 이메일 아이디, 이름을 보내주시기 바랍니다.
+            </p>
+
+       <!-- <div id="FindId_div1">
+                <div class="findDiv">
+                    <span class="span1">이메일로 임시 비밀번호를 발송합니다.</span> 
+                    <p class="span1">본인 확인을 위해 이름과 이메일 아이디를 입력해주세요.</p>
+                </div>
+                <form id="findid-form" action="" method="post" role="form" onsubmit="">
+                    <p class="name_P">이름</p>
+                    <input id="input_name" type="text" class=" form-control form_input placeholder" placeholder="이름을 입력해주세요" autofocus>
+                    <p class="name_P">이메일 아이디</p>
+                    <input id="input_email" type="text" class="form-control form_input placeholder" placeholder="이메일 아이디를 입력해 주세요">
+                    <button type="submit" style="margin-top: 15px;" class="login_button" id = "forgot_pwd_button" onclick="return findid_validation(this.id);" >임시 비밀번호 받기</button>
+                    <p class="error" id="input_name_error"></p>
+                    <p class="error" id="input_email_error"></p>  
+                    <div class="info2">Copyright ⓒ GUNSANCITY. All right reserved </div>
+                </form>
+            </div> -->
+            <div class="info2">Copyright ⓒ GUNSANCITY. All right reserved </div>
             <div class="findDiv2" id="FindId_div2">
                 <span class="span2"><p id = "id_email_p" class="spanP"></p>으로</span>
                 <p id = "id_pwd_p" class="p5"></p>
