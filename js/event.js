@@ -118,15 +118,16 @@ function createAlertDiv(eventData)
                 }
             }
 
-            console.log("topValueArray :"+leftValueArray);
+            //console.log("topValueArray :"+leftValueArray);
             left = leftValueArray [leftValueArray.length -1];
             top = (leftValueArray [leftValueArray.length -1])-100;
             top = parseInt(top) + 60;
             left = parseInt(left) + 60;
         }
 
+        var divId = "eventContent"+left;
         var style = 'left:'+left+'px; top:'+top+'px; display:block;';
-        var eventHtml = '<div id="eventContent'+left+'" class="message-content3" style="'+style+'" onclick="showDivOnTop(this);">'+ 
+        var eventHtml = '<div id="eventContent'+left+'" class="message-content3" style="'+style+'" onclick="showDivOnTop('+divId+');">'+ 
                          '<div id="eventHeader" class="message-header2">'+
                             '<div class="msgDiv1">'+
                                 '<p class="msgSendP" id="vehicleEventMsg"> <span id="event_vid">'+vehicleID+'</span>에서 보낸 메세지</p>'+
@@ -268,8 +269,27 @@ function createAlertDiv(eventData)
 
 function showDivOnTop(obj)
 {
-    //alert("obj :"+ $(obj));
-    $(obj).zIndex("1111");
+    //alert("$(obj).id :"+obj);
+      //  get all child divs
+      var childDivarray = [];
+      $('div','#eventMsgModalDiv').each(function(){
+          childDivarray.push($(this).attr('id')); 
+      });
+  
+      for(var j = 0; j < childDivarray.length; j++)
+      {
+          if(childDivarray[j] != undefined)
+          {
+              var subStr = (childDivarray[j]).substr(0,12);
+              if(subStr == "eventContent")
+              {
+                  alert("$(obj).id :"+$(obj).id);
+                  if(childDivarray[j] != $(obj).id)
+                      $(childDivarray[j]).zIndex('1010');
+              }
+          }
+      }
+      $(obj).zIndex("1111");
 }
 
 function confirmEventMsg()

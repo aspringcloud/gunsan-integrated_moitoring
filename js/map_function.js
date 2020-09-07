@@ -19,6 +19,8 @@ var cluster_map ;
 
 // global drive status
 var driveStatus;
+var showDriveStatus = false;
+
 // stores the click count for each site
 var deguClickCount = 0;
 var sejong1ClickCount = 0;
@@ -440,7 +442,7 @@ function onVehiclePowerOff()
         //console.log("*T6:"+data);
         var vehicleData = JSON.parse(data);
         var driveStatus2 = vehicleData.drive;
-        //console.log("driveStatus2 :"+driveStatus2);
+        //console.log("driveStatus2 **:"+driveStatus2);
         if(!driveStatus2)
         {
             document.getElementById("v_status1").style.backgroundColor = "#BDBDBD";
@@ -451,11 +453,14 @@ function onVehiclePowerOff()
             var battery = document.querySelectorAll('.inverted-bar3')[0];
             battery.style.setProperty("--afterbgColor3", "#BDBDBD");
             battery.style.setProperty("--afterColor", "#BDBDBD");
-            document.getElementById("doorStatus").src = "images/door/doors_off.svg";
-            console.log("Returning true");
+            document.getElementById("doorStatus").src = "images/door/close_off.svg";
+            //console.log("Returning true***");
+            showDriveStatus = true;
             return true;
         }
-        console.log("Returning false");
+        //console.log("Returning false***");
+        document.getElementById("driveStatus").style.backgroundColor = "#0893BF"
+        showDriveStatus = false;
         return false;
     });
 }
@@ -571,10 +576,14 @@ function showGraphs() {
         var distanceList = [];
         var dataList = [];
         for (var i = 0; i < count; i++) {
-            vehicleList.push(graph_data[i].vehicle);
-            passengerList.push(graph_data[i].accum_passenger);
-            distanceList.push(graph_data[i].accum_distance);
-            //dataList.push(graph_data[i].accum_distance);
+          //  alert(graph_data[i].vehicle);
+            if(graph_data[i].vehicle == "1146" || graph_data[i].vehicle == "1147")
+            {
+                vehicleList.push(graph_data[i].vehicle);
+                passengerList.push(graph_data[i].accum_passenger);
+                distanceList.push(graph_data[i].accum_distance);
+                //dataList.push(graph_data[i].accum_distance);
+            } 
         }
         // vehicleList = vehicleList.sort();
         //var total_data = distanceList.reduce(function(pv, cv) { return pv + cv; }, 0);
@@ -592,16 +601,23 @@ function showGraphs() {
         document.getElementById('totalData').innerHTML = 0;
         document.getElementById('dataSize').innerHTML = 'MB';
         document.getElementById('dataUnit').innerHTML = 'MB';
+        dataList.push(12.54);
+        dataList.push(9.14);
         
         //distanceList
-        document.getElementById('totalDistance').innerHTML = Number(distanceList.reduce(function(pv, cv) { return pv + cv; }, 0)).toLocaleString('en');
+      //  console.log("totalDistance :"+distanceList);
+       // console.log("passengerList :"+passengerList);
+        document.getElementById('totalDistance').innerHTML = Math.round(Number(distanceList.reduce(function(pv, cv) { return pv + cv; }, 0)).toLocaleString('en'));
         //passengerList
         document.getElementById('totalPassenger').innerHTML = Number(passengerList.reduce(function(pv, cv) { return pv + cv; }, 0)).toLocaleString('en');
-
+        // add datalist
+        document.getElementById('totalData').innerHTML = Math.round(Number(dataList.reduce(function(pv, cv) { return pv + cv; }, 0)).toLocaleString('en'));
         // show charts on main site(cluster map)
+       
+
         showChart('graph3', '총 데이터 용량', '#3bc7d1', 'Data', vehicleList, dataList, 'GB');
-        showChart('graph2', '총 운행거리', '#f1ca3f', 'Distance(km)', vehicleList, passengerList, 'km');
-        showChart('graph1', '총 탑승자 수', '#3bc7d1', 'Passenger', vehicleList, distanceList, '명');
+        showChart('graph2', '총 운행거리', '#f1ca3f', 'Distance(km)', vehicleList,distanceList , 'km');
+        showChart('graph1', '총 탑승자 수', '#3bc7d1', 'Passenger', vehicleList, passengerList, '명');
     });
 }
 
@@ -784,8 +800,8 @@ function vehicleInfo(map, vId)
             var vehicle = JSON.parse(data);
             var shuttleLocation = L.LatLng(vehicle.lat, vehicle.lon);
             var status = onVehiclePowerOff();
-            console.log("status drive status :"+status);
-            if(status != true )
+            //console.log("status drive status :"+status);
+            if(showDriveStatus != true )
             {
                 updateShuttleInfo(vehicle, request_count); 
             }
@@ -857,7 +873,7 @@ function updateShuttleInfo(vehicle, request_count)
             passengerStatus(vehicle.passenger);    
         }
         // show battery status
-        setBatteryPercent(vehicle.battery);
+        //setBatteryPercent(vehicle.battery);
         // show webcam
         checkWebcam(vehicle.webcam1, 'cameraButton1', 'video1', 'video1Active');
         checkWebcam(vehicle.webcam2, 'cameraButton2', 'video2', 'video2Active');
@@ -961,20 +977,22 @@ function changeVehicleInfo(obj)
     else
     {
         var selectedId = obj.options[obj.selectedIndex].id;
-        interval = vehicleInfo(activeMap , selectedId);
+        var status = onVehiclePowerOff();
+        if(status != true )
+           interval = vehicleInfo(activeMap , selectedId);
     }
     if(eta_interval != null)
         clearInterval(eta_interval);
     // update ETA
-    console.log("changeVehicleInfo()");
+    //console.log("changeVehicleInfo()");
     updateETA(active_site);
     eta_interval = setInterval(function() {
-        console.log("changeVehicleInfo interval ()");
+        //console.log("changeVehicleInfo interval ()");
         updateETA(active_site);
         //console.log("Updating eta after 30 seconds on select change");
     }, 30000);
-
-    onVehiclePowerOff();
+    //document.getElementById("driveStatus").style.backgroundColor = "#0893BF";
+    //onVehiclePowerOff();
 }
 
 function createHtmlMarker(vehicleObj, iconHtml)
@@ -1210,14 +1228,12 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                 if(vehicleObj.id == selectedId)
                 {
                     var status = onVehiclePowerOff();
-                    console.log("status drive status :"+status);
-                    if(status != true )
+                    //console.log("status drive status * :"+status);
+                    //console.log("status drive showDriveStatus ** :"+showDriveStatus);
+                    if(showDriveStatus != true )
                     {
-                        console.log("If executed");
+                        //console.log("If executed");
                         updateShuttleInfo(vehicleObj);
-                    }
-                    else{
-                        console.log("else executed");
                     }
                 }
                     
@@ -1314,10 +1330,10 @@ function setPopupContent(e, mapInstance, site_no)
             document.getElementById('vehicleSelect').value = shuttleMarkerArray[k].name;  
             vehicleInfo(mapInstance, shuttleMarkerArray[k].markId);
             oddButtonStatus();
-            console.log("onpopup change()");
+            //console.log("onpopup change()");
             updateETA(active_site);
             eta_interval = setInterval(function() {
-                console.log("onpopup change interval()");
+                //console.log("onpopup change interval()");
                 updateETA(active_site);
             }, 30000);
             break;
@@ -1457,6 +1473,7 @@ function checkWebcam(webcamData, imgID, ifImg, elseImg) {
 }
 
 function setBatteryPercent(percent) {
+    console.log("setBatteryPercent :"+percent);
     if (percent == null)
         percent = 0;
 
@@ -1708,7 +1725,7 @@ function currentVehicleETA(stationData)
     { 
         stationDetails = {
             vehicle_id : null,
-            time : "N분 후 도착",
+            time : "운행 준비중",
             id : stationData.id,
             mid : stationData.mid,
             name : stationData.name  
@@ -1735,7 +1752,7 @@ function currentVehicleETA(stationData)
                     else if(Math.round(value[k]) > 2)
                         time_value = Math.round(value[k])+"분 후 도착​";
                     else
-                        time_value = "N분 후 도착";
+                        time_value = "운행 준비중";
                     
                     stationDetails = {
                         vehicle_id : key[k],
