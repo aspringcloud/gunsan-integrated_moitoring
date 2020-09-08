@@ -306,7 +306,7 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
     hideElements(elementsToHide);
     showElements(elementsToShow);
     open_tab('degu_window',currentSiteId);
-    active_site= currentSiteId;
+    active_site = currentSiteId;
     if(clickCount <= 1)
     {        
         mapInstance = createMap(mapInstance);
@@ -363,7 +363,6 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
 
         // create select list of vehicle 
         createSelectList(vehicleObj);
-
         if(deguShuttleArray.length >0 )
         {
             deguShuttleArray = deguShuttleArray.sort();
@@ -818,9 +817,9 @@ function vehicleInfo(map, vId)
 
 function updateShuttleInfo(vehicle, request_count)
 {     
-    console.log("Battery 1 update shuttle info");
+   //console.log("Battery 1 update shuttle info");
     onVehiclePowerOff();
-    console.log("showDriveStatus :"+showDriveStatus+ " vehicle id :"+vehicle.id);
+  //  console.log("showDriveStatus :"+showDriveStatus+ " vehicle id :"+vehicle.id);
     if(showDriveStatus != true )
     {
         if(vehicle == null)
@@ -1243,7 +1242,7 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                     selectedId = dom.options[dom.selectedIndex].id;  // selected Id 
                 
                   //  updateShuttleInfo() is commented
-                if(vehicleObj.id == selectedId)
+                /*if(vehicleObj.id == selectedId)
                 {
                     //console.log("status drive showDriveStatus ** :"+showDriveStatus);
                     //if(showDriveStatus != true )
@@ -1252,7 +1251,7 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                         console.log("battery 2:"+vehicleObj.battery);
                         updateShuttleInfo(vehicleObj);
                     //}
-                }
+                }*/
                     
             }
         }                                                     
@@ -3187,11 +3186,11 @@ function resetPassword()
                     pwdErrorDom.style.color="red";
                 }
             }
-            else if(req.status == 401)
+            /*else if(req.status == 401)
             {
                 pwdErrorDom.innerHTML = "비밀번호 일치 실패.";
                 pwdErrorDom.style.color="red";
-            }
+            }*/
             else
             {
                 pwdErrorDom.style.color="red";
