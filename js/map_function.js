@@ -3157,7 +3157,10 @@ function resetPassword()
     else
     {
         //check_password
+        var t = localStorage.getItem("activeUserID");
+        alert("t:"+t);
         var data = JSON.stringify({
+           
             "e_mail_id": localStorage.getItem("activeUserID"),
             "old_password": old_pwd,
             "new_password": input_new_pwd,
@@ -3174,17 +3177,13 @@ function resetPassword()
             //console.log("pswd reset response :"+JSON.stringify(res));
             if(req.status == 200)
             {  
-                if(res.detail == "새로운 비밀번호로 변경됐습니다.")
-                {
-                    pwdErrorDom.innerHTML = "새로운 비밀번호로 변경됐습니다.";
+                //if(res.detail == "새로운 비밀번호로 변경됐습니다.")
+                //{
+                    pwdErrorDom.innerHTML = req.response;//"새로운 비밀번호로 변경됐습니다.";
                     pwdErrorDom.style.color = "#2E92B0";
                     localStorage.setItem('userPwd', input_new_pwd);
-                }
-                else
-                {
-                    pwdErrorDom.innerHTML = "다른 비밀번호를 입력해주세요.";
-                    pwdErrorDom.style.color="red";
-                }
+                //}
+            
             }
             /*else if(req.status == 401)
             {
@@ -3200,6 +3199,8 @@ function resetPassword()
                     pwdErrorDom.innerHTML = "비밀번호가 이메일ID와 너무 유사합니다.";    
                 else if(res.includes("비밀번호가 너무 흔합니다."))
                     pwdErrorDom.innerHTML = "평범하지 않은 비밀번호를 입력하세요.";
+                else if(res.includes("아이디/비밀번호가 유효하지 않습니다."))
+                    pwdErrorDom.innerHTML = "아이디/비밀번호가 유효하지 않습니다.";    
                 else
                     pwdErrorDom.innerHTML = "다른 비밀번호를 입력해주세요.";
             }
