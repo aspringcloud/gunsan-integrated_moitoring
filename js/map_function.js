@@ -454,8 +454,9 @@ function onVehiclePowerOff()
             battery.style.setProperty("--afterbgColor3", "#BDBDBD");
             battery.style.setProperty("--afterColor", "#BDBDBD");
             document.getElementById("doorStatus").src = "images/door/close_off.svg";
-            //console.log("Returning true***");
+         
             showDriveStatus = true;
+            console.log("Vehicle power off is applied :"+showDriveStatus);
             return true;
         }
         else
@@ -463,7 +464,9 @@ function onVehiclePowerOff()
            document.getElementById("driveStatus").style.backgroundColor = "#0893BF"
         }
      
+        
         showDriveStatus = false;
+        console.log("Vehicle power off is not applied :"+showDriveStatus);
         return false;
     });
 }
@@ -799,16 +802,15 @@ function vehicleInfo(map, vId)
         request_count++;
         count15++;
         var apiUrl = "vehicles/"+vId+"/";
-        console.log("apiUrl :"+apiUrl);
+      //  console.log("apiUrl :"+apiUrl);
         getMethod(apiUrl, function (data) {
             var vehicle = JSON.parse(data);
-            console.log("*vehicle battery :"+vehicle.battery);
-            var shuttleLocation = L.LatLng(vehicle.lat, vehicle.lon);
-            //console.log("status drive status :"+status);
-            if(showDriveStatus != true )
-            {
+           //console.log("status drive status :"+status);
+          // if(showDriveStatus != true )
+          // {
+                console.log("battery 1:"+vehicle.battery);
                 updateShuttleInfo(vehicle, request_count); 
-            }
+          //  }
         });
     }, 1500);
     return interval;
@@ -816,7 +818,11 @@ function vehicleInfo(map, vId)
 
 function updateShuttleInfo(vehicle, request_count)
 {     
-    
+    console.log("Battery 1 update shuttle info");
+    onVehiclePowerOff();
+    console.log("showDriveStatus :"+showDriveStatus+ " vehicle id :"+vehicle.id);
+    if(showDriveStatus != true )
+    {
         if(vehicle == null)
         {
             vehicleStatus( "NO DATA", "#CA4040");
@@ -879,11 +885,12 @@ function updateShuttleInfo(vehicle, request_count)
             passengerStatus(vehicle.passenger);    
         }
         // show battery status
-        console.log(" * setBatteryPercent:"+vehicle.battery);
+ 
         setBatteryPercent(vehicle.battery);
         // show webcam
         checkWebcam(vehicle.webcam1, 'cameraButton1', 'video1', 'video1Active');
         checkWebcam(vehicle.webcam2, 'cameraButton2', 'video2', 'video2Active');
+    }    
  }
 
 function updateFrontStaus(isParked, speed)
@@ -978,14 +985,15 @@ function changeVehicleInfo(obj)
     var activeMap =  mapList[mapList.length - 1];
     clearInterval(interval);
     if(typeof(obj) == 'number')
-    {    
+    {   
+        
         interval = vehicleInfo(activeMap, obj);
     }
     else
     {
         var selectedId = obj.options[obj.selectedIndex].id;
-        var status = onVehiclePowerOff();
-        if(status != true )
+       // var status = onVehiclePowerOff();
+        //if(showDriveStatus != true )
            interval = vehicleInfo(activeMap , selectedId);
     }
     if(eta_interval != null)
@@ -1046,7 +1054,8 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
             const greenRippleIcon = L.divIcon({html: greenIconHtml, iconAnchor: [0, -20],});
             const greyRippleIcon = L.divIcon({html: greyIconHtml, iconAnchor: [0, -20],});
 
-            //console.log("isParked : "+ vehicleObj.isparked+ "speed : "+vehicleObj.speed+ "heading:"+vehicleObj.heading);
+          //  console.log("Vehicle location :"+JSON.stringify(vehicleObj));
+           // console.log("isParked : "+ vehicleObj.isparked+ "speed : "+vehicleObj.speed+ "heading:"+vehicleObj.heading);
             if(request_count == 1) 
             {
                 // create Icon for ripple marker as per the speed value
@@ -1182,24 +1191,25 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                                 speedWeight ="normal";
                         }
                             
-                        var vehicleOperation = updateGnssStatus(vehicleObj.gnss);
-                        if(vehicleObj.gnss == true)
+                        var vehicleOperation = updateGnssStatus(vehicleObj.drive);
+                       // alert("vehicleOperation :"+vehicleOperation);
+                        if(vehicleObj.drive == true)
                         {
-                        currentMarker._popup.setContent("<div class="+popupColor+" id='vPopup'>"+
-                        "<p class='popupTitle'>" +vehicleObj.name+ "<img class='activeGreenPopup' src="+vehicleOperation+"></p>"+
-                        "<span class='popupVersion'>VER : "+vehicleObj.model.firmware+"</span>"+
-                        "</div><br>"+
+                            currentMarker._popup.setContent("<div class="+popupColor+" id='vPopup'>"+
+                            "<p class='popupTitle'>" +vehicleObj.name+ "<img class='activeGreenPopup' src="+vehicleOperation+"></p>"+
+                            "<span class='popupVersion'>VER : "+vehicleObj.model.firmware+"</span>"+
+                            "</div><br>"+
 
-                        "<div class='popupSpeedDiv'>"+
-                            "<span>Speed</span><br>"+
-                            "<span id='popup_speed' class='popupSpeed' style='color:"+speedColor+";font-weight:"+speedWeight+"'>"+vehicleObj.speed+"</span><br>"+
-                            "<span class='popupSpeedUnit'>km/hr</span>"+
-                        "</div>"+
-                        "<div class='popupBatteryDiv'>"+
-                            "<span style='vertical-align:top'>Battery</span>"+
-                            "<div id='popupBattery' class='popup-battery' data-content="+vehicleObj.battery+'%'+"></div>"+
-                            "<div class='popupParent'></div>"+
-                        "</div>");
+                            "<div class='popupSpeedDiv'>"+
+                                "<span>Speed</span><br>"+
+                                "<span id='popup_speed' class='popupSpeed' style='color:"+speedColor+";font-weight:"+speedWeight+"'>"+vehicleObj.speed+"</span><br>"+
+                                "<span class='popupSpeedUnit'>km/hr</span>"+
+                            "</div>"+
+                            "<div class='popupBatteryDiv'>"+
+                                "<span style='vertical-align:top'>Battery</span>"+
+                                "<div id='popupBattery' class='popup-battery' data-content="+vehicleObj.battery+'%'+"></div>"+
+                                "<div class='popupParent'></div>"+
+                            "</div>");
                         }
                         else
                         {
@@ -1232,16 +1242,16 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                 if(dom.options[dom.selectedIndex] != undefined)
                     selectedId = dom.options[dom.selectedIndex].id;  // selected Id 
                 
+                  //  updateShuttleInfo() is commented
                 if(vehicleObj.id == selectedId)
                 {
-                    var status = onVehiclePowerOff();
-                    //console.log("status drive status * :"+status);
                     //console.log("status drive showDriveStatus ** :"+showDriveStatus);
-                    if(showDriveStatus != true )
-                    {
+                    //if(showDriveStatus != true )
+                   // {
                         //console.log("If executed");
+                        console.log("battery 2:"+vehicleObj.battery);
                         updateShuttleInfo(vehicleObj);
-                    }
+                    //}
                 }
                     
             }
@@ -1480,7 +1490,7 @@ function checkWebcam(webcamData, imgID, ifImg, elseImg) {
 }
 
 function setBatteryPercent(percent) {
-    console.log("setBatteryPercent :"+percent);
+    //console.log("setBatteryPercent :"+percent);
     if (percent == null)
         percent = 0;
 
