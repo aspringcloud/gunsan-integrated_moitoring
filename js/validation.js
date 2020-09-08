@@ -153,7 +153,7 @@ function postMethod(data, api_url, callback) {
     var request = new XMLHttpRequest();
     request.open('POST', requestURL, true);
     request.onload = function (e) {
-        if(api_url == server_URL +"auth/password/change/" || api_url == server_URL+"auth/login/" || api_url == server_URL+"oplogs/by-date/" )
+        if(api_url == server_URL + "users/change_password/"|| api_url == server_URL+"auth/login/" || api_url == server_URL+"oplogs/by-date/" ) //"auth/password/change/"
             callback(request);
         else
             callback(request.status);

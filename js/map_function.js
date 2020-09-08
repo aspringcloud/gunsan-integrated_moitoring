@@ -458,8 +458,11 @@ function onVehiclePowerOff()
             showDriveStatus = true;
             return true;
         }
-        //console.log("Returning false***");
-        document.getElementById("driveStatus").style.backgroundColor = "#0893BF"
+        else
+        {
+           document.getElementById("driveStatus").style.backgroundColor = "#0893BF"
+        }
+     
         showDriveStatus = false;
         return false;
     });
@@ -796,10 +799,11 @@ function vehicleInfo(map, vId)
         request_count++;
         count15++;
         var apiUrl = "vehicles/"+vId+"/";
+        console.log("apiUrl :"+apiUrl);
         getMethod(apiUrl, function (data) {
             var vehicle = JSON.parse(data);
+            console.log("*vehicle battery :"+vehicle.battery);
             var shuttleLocation = L.LatLng(vehicle.lat, vehicle.lon);
-            var status = onVehiclePowerOff();
             //console.log("status drive status :"+status);
             if(showDriveStatus != true )
             {
@@ -854,6 +858,8 @@ function updateShuttleInfo(vehicle, request_count)
             color = "#333333";
         else
             color ="#666666"; 
+
+        //var fware =  "SW 버전: "+vehicle.model.firmware;
         document.getElementById("vehicleVersion").innerHTML = "SW 버전: "+vehicle.model.firmware;
                             
         // show speed of vehicle
@@ -873,7 +879,8 @@ function updateShuttleInfo(vehicle, request_count)
             passengerStatus(vehicle.passenger);    
         }
         // show battery status
-        //setBatteryPercent(vehicle.battery);
+        console.log(" * setBatteryPercent:"+vehicle.battery);
+        setBatteryPercent(vehicle.battery);
         // show webcam
         checkWebcam(vehicle.webcam1, 'cameraButton1', 'video1', 'video1Active');
         checkWebcam(vehicle.webcam2, 'cameraButton2', 'video2', 'video2Active');
@@ -3115,6 +3122,7 @@ function passwordChange2()
  
 function clearFields()
 {
+    document.getElementById("currentPwd").value = '';
     document.getElementById("newPwd").value = '';
     document.getElementById("confirmPwd").value= '';
     document.getElementById("pwdResetError").innerHTML = "";
@@ -3124,9 +3132,12 @@ function resetPassword()
 {
     var input_new_pwd = $("#newPwd").val();
     var input_repeat_pwd = $("#confirmPwd").val();
+    var old_pwd = $("#currentPwd").val();
     var pwdErrorDom = document.getElementById("pwdResetError");
 
-    if(input_new_pwd.length == 0)  //length of password
+    if(old_pwd.length == 0)  //length of password
+        pwdErrorDom.innerHTML = "현재 비밀번호를 입력하세요.";
+    else if(input_new_pwd.length == 0)  //length of password
         pwdErrorDom.innerHTML = "새로운 비밀번호를 입력해주세요.";
     else if(input_repeat_pwd.length == 0)
         pwdErrorDom.innerHTML = "새로운 비밀번호를 다시 입력해주세요.";
@@ -3138,37 +3149,47 @@ function resetPassword()
     {
         //check_password
         var data = JSON.stringify({
-            "new_password1": input_new_pwd,
-            "new_password2": input_repeat_pwd,
+            "e_mail_id": localStorage.getItem("activeUserID"),
+            "old_password": old_pwd,
+            "new_password": input_new_pwd,
+            "confirm_new_password": input_repeat_pwd
         });
-        var api_url = server_URL+"auth/password/change/";
+
+        var api_url = server_URL+"users/change_password/";//"auth/password/change/";
         postMethod(data, api_url, function (req) 
         {
-            var res = JSON.parse(req.response);
+            console.log("req:"+req);
+            console.log("req.response:"+req.response);
+            console.log("req.status:"+req.status);
+            var res = req.response;
             //console.log("pswd reset response :"+JSON.stringify(res));
             if(req.status == 200)
             {  
-                if(res.detail == "New password has been saved.")
+                if(res.detail == "새로운 비밀번호로 변경됐습니다.")
                 {
-                    pwdErrorDom.innerHTML = "새로운 비밀번호로 변경 됐습니다.";
+                    pwdErrorDom.innerHTML = "새로운 비밀번호로 변경됐습니다.";
                     pwdErrorDom.style.color = "#2E92B0";
                     localStorage.setItem('userPwd', input_new_pwd);
                 }
-                else{
+                else
+                {
                     pwdErrorDom.innerHTML = "다른 비밀번호를 입력해주세요.";
                     pwdErrorDom.style.color="red";
                 }
             }
+            else if(req.status == 401)
+            {
+                pwdErrorDom.innerHTML = "비밀번호 일치 실패.";
+                pwdErrorDom.style.color="red";
+            }
             else
             {
                 pwdErrorDom.style.color="red";
-                if ((res.new_password2).includes("This password is entirely numeric.") )
+                if(res.includes("비밀번호에 숫자 외의 문자를 포함하세요") )
                     pwdErrorDom.innerHTML = "비밀번호에 숫자 외의 문자를 포함하세요.";
-                else if (res.new_password2.includes("The password is too similar to the email address."))
-                    pwdErrorDom.innerHTML = "비밀번호가 이메일ID와 너무 유사합니다.";
-                else if (res.new_password2.includes("The password is too similar to the username."))
-                    pwdErrorDom.innerHTML = "비밀번호가 사용자 이름과 너무 유사합니다.";
-                else if(res.new_password2.includes("This password is too common."))
+                else if (res.includes("비밀번호가 이메일ID와 너무 유사합니다."))
+                    pwdErrorDom.innerHTML = "비밀번호가 이메일ID와 너무 유사합니다.";    
+                else if(res.includes("비밀번호가 너무 흔합니다."))
                     pwdErrorDom.innerHTML = "평범하지 않은 비밀번호를 입력하세요.";
                 else
                     pwdErrorDom.innerHTML = "다른 비밀번호를 입력해주세요.";

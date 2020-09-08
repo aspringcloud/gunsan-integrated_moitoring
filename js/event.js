@@ -249,7 +249,7 @@ function createAlertDiv(eventData)
     var todayDate = currentDate2+ '   ';//+currentTime;
     console.log("todayDate :"+todayDate);
     var dom = document.getElementById('eventsDiv');
-    var newAlert = "<span style='display:inline-block'>"+vehicleID+"</span> <img style='display:inline-block; position:absolute; z-index : 1010; right:0; cursor:pointer; top: 2%;' src = 'images/events/event_close_button.svg'/>"+
+    var newAlert = "<span style='display:inline-block'>"+vehicleID+"</span> <img style='display:inline-block; position:relative; z-index : 1010; right:0; cursor:pointer; top: 2%;' src = 'images/events/event_close_button.svg'/>"+
                    "<label style='margin-top:20%; color:#929292;padding-left: 5%;display:inline-block; position:absolute'>"+todayDate+"</label><label style=';margin-top:20%; margin-left :48%;  position:absolute; display:inline-block; '>"+currentTime+"</label>"+
                    "<p style='width: 160px; word-wrap: break-word'>"+eventMessage+"</p>";//+
                    //"<button>확인</button>";
