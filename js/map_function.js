@@ -455,7 +455,7 @@ function onVehiclePowerOff()
             document.getElementById("doorStatus").src = "images/door/close_off.svg";
          
             showDriveStatus = true;
-            console.log("Vehicle power off is applied :"+showDriveStatus);
+            //console.log("Vehicle power off is applied :"+showDriveStatus);
             return true;
         }
         else
@@ -807,7 +807,7 @@ function vehicleInfo(map, vId)
            //console.log("status drive status :"+status);
           // if(showDriveStatus != true )
           // {
-                console.log("battery 1:"+vehicle.battery);
+                //console.log("battery 1:"+vehicle.battery);
                 updateShuttleInfo(vehicle, request_count); 
           //  }
         });
