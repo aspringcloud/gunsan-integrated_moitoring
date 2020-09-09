@@ -883,8 +883,10 @@ function updateShuttleInfo(vehicle, request_count)
             // show passenger status    
             passengerStatus(vehicle.passenger);    
         }
-        // show battery status
  
+        // show door status ---> this will be updated by web socket    
+        updateDoor(vehicle.door);
+        // show battery status
         setBatteryPercent(vehicle.battery);
         // show webcam
         checkWebcam(vehicle.webcam1, 'cameraButton1', 'video1', 'video1Active');
