@@ -170,7 +170,7 @@ function createAlertDiv(eventData)
         }
         else if(dataAttribute == "passenger")
         {
-            alert((event_how.current_passenger)-1);
+         
             id = event_how.vehicle_id;
             vehicleID = event_how.vehicle_mid;
             eventMessage = "현재 승객 수: "+(event_how.current_passenger)+ " 명"; 

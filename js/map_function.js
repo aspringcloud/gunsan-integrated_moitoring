@@ -634,11 +634,11 @@ function showGraphs() {
         }
              
         //distanceList
-        document.getElementById('totalDistance').innerHTML = Math.round(Number(distanceList.reduce(function(pv, cv) { return pv + cv; }, 0)).toLocaleString('en'));
+        document.getElementById('totalDistance').innerHTML =(Number(distanceList.reduce(function(pv, cv) { return pv + cv; }, 0)).toFixed(2)).toLocaleString('en');
         //passengerList
         document.getElementById('totalPassenger').innerHTML = Number(passengerList.reduce(function(pv, cv) { return pv + cv; }, 0)).toLocaleString('en');
         // add datalist
-        document.getElementById('totalData').innerHTML = Math.round(Number(dataList.reduce(function(pv, cv) { return pv + cv; }, 0)).toLocaleString('en'));
+        document.getElementById('totalData').innerHTML = (Number(dataList.reduce(function(pv, cv) { return pv + cv; }, 0)).toFixed(2)).toLocaleString('en');
 
         showChart('graph3', '총 데이터 용량', '#3bc7d1', 'Data', vehicleList , dataList, 'GB');
         showChart('graph2', '총 운행거리', '#f1ca3f', 'Distance(km)', vehicleList, distanceList  , 'km');
@@ -1889,15 +1889,21 @@ function currentVehicleETA(stationData)
     // get current vehicle id from select list 
     var dom = document.getElementById("vehicleSelect");
     var stationDetails; 
-    if((stationData.eta).length == 0 || stationData.eta == undefined || stationData == undefined) //|| stationData.eta == undefined )
+
+    console.log("stationData :"+JSON.stringify(stationData));
+    console.log("stationData eta : "+JSON.stringify(stationData.eta));
+    console.log("stationData eta len:"+stationData.eta);
+  
+    if((stationData.eta).length == 0 || (stationData.eta) == "{}" || stationData.eta == undefined || stationData == undefined) //|| stationData.eta == undefined )
     { 
-        stationDetails = {
+            stationDetails = {
             vehicle_id : null,
             time : "운행 준비중",
             id : stationData.id,
             mid : stationData.mid,
             name : stationData.name  
         }
+        console.log("stationDetails if :"+stationDetails);
         return stationDetails;
     }
     else
@@ -1929,6 +1935,8 @@ function currentVehicleETA(stationData)
                         mid : stationData.mid,
                         name : stationData.name  
                     }
+
+                    console.log("stationDetails else if :"+stationDetails);
                     return stationDetails;
                 }
                 else
@@ -1942,6 +1950,7 @@ function currentVehicleETA(stationData)
                             mid : stationData.mid,
                             name : stationData.name  
                         }
+                        console.log("stationDetails else else :"+stationDetails);
                         return stationDetails;
                     }
                     else{
