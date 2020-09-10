@@ -1790,9 +1790,9 @@ function currentVehicleETA(stationData)
                 {     
                     //console.log("*if :"+selectedId);
                     var time_value;
-                    if(Math.round(value[k]) <= 2)
+                    if(Math.round(value[k]) < 2)
                         time_value = "곧 도착 또는 출발​";
-                    else if(Math.round(value[k]) > 2)
+                    else if(Math.round(value[k]) >= 2)
                         time_value = Math.round(value[k])+"분 후 도착​";
                     else
                         time_value = "운행 준비중";
@@ -2365,6 +2365,14 @@ function changeNotice(){
         showNotice(noticeArray)
        
     });
+}
+
+function splitToChunks(array, parts) {
+    let result = [];
+    for (let i = parts; i > 0; i--) {
+        result.push(array.splice(0, Math.ceil(array.length / i)));
+    }
+    return result;
 }
 
 function pagination(pagination_id)
