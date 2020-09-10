@@ -282,31 +282,27 @@ function createAlertDiv(eventData)
 
 function showDivOnTop(obj)
 {
-      //  get all child divs
-      var childDivarray = [];
-      $('div','#eventMsgModalDiv').each(function(){
-          childDivarray.push($(this).attr('id')); 
-      });
-      console.log("# childDivarray :"+childDivarray);
-      for(var j = 0; j < childDivarray.length; j++)
-      {
-          if(childDivarray[j] != undefined)
-          {
-              var subStr = (childDivarray[j]).substr(0,12);
-              if(subStr == "eventContent")
-              {
-                  //alert("$(obj).id :"+obj.id);
-                  console.log("#childDivarray[j]:"+childDivarray[j]+ " obj.id :"+obj.id);
-                  if(childDivarray[j] != obj.id)
-                  {
-                    $(childDivarray[j]).zIndex('1010');
-                  } 
-              }
-          }
-      }
-      console.log("2nd obj:"+ $(obj).id);
-     $(obj).zIndex("1111");
-    //(obj).zIndex("1111");
+    //  get all child divs
+    var childDivarray = [];
+    $('div','#eventMsgModalDiv').each(function(){
+        childDivarray.push($(this).attr('id')); 
+    });
+    console.log("# childDivarray :"+childDivarray);
+    for(var j = 0; j < childDivarray.length; j++)
+    {
+        if(childDivarray[j] != undefined)
+        {
+            var subStr = (childDivarray[j]).substr(0,12);
+            if(subStr == "eventContent")
+            {
+                if(childDivarray[j] != obj.id)
+                {
+                    document.getElementById(childDivarray[j]).style.zIndex = "1010";
+                } 
+            }
+        }
+    }
+    $(obj).zIndex("1111");
 }
 
 function confirmEventMsg()

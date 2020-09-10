@@ -1790,7 +1790,7 @@ function currentVehicleETA(stationData)
                 {     
                     //console.log("*if :"+selectedId);
                     var time_value;
-                    if(Math.round(value[k]) < 2)
+                    if(Math.round(value[k]) <= 2)
                         time_value = "곧 도착 또는 출발​";
                     else if(Math.round(value[k]) > 2)
                         time_value = Math.round(value[k])+"분 후 도착​";
@@ -2357,52 +2357,72 @@ function changeNotice(){
         $('#noticeBody').empty();
 
         //"noticeArray" is final array for notice used for pagination
- 
-        // show all notices
-        for (var j = 0; j < noticeArray.length; j++) {
-            var obj = noticeArray[j]; 
-            if(obj == undefined)
-                continue;
-            var index = (obj.created_on).indexOf('T');
-            var createDate = (obj.created_on).substring(0,index);
-           
-            if(obj.pin == true)
-            {
-                var html = '<div id="noticeDiv" style="width: 100%;">' +
-                                '<span id="noticeTitle' +j+ '" class = "noticeSpan1"> <img class="noticeBullet1" src = "images/red_bullet.svg">' +obj.title+ '</span>'+
-                                '<button class = "divButton" id="noticeButton' +j+ '" onclick=" toggle_div2(noticeDetails' +j+ ', ' +j+ ')" >'+
-                                    '<i id="closeAngleIcon" class = "fa fa-angle-down" style="vertical-align: top; margin-left: -1px;"></i>'+ 
-                                '</button><br/>'+
-                                '<lable class="noticeLabel1">' +createDate+'</lable><br/>'+
-                                '<br/>' +
-                                '<div id = "noticeDetails' +j+ '" class = "noticeDiv1">'+
-                                    '<p>' +obj.contents+ '</p>'+
-                                '</div>'+
-                            '</div>';
-            }
-            else
-            {
-                var html = '<div id="noticeDiv" style="width: 100%; margin-top:15px">'+
-                                '<span id="noticeTitle' +j+ '" class = "noticeSpan2">' +obj.title+'</span>'+
-                                '<button class = "divButton" id="noticeButton' +j+ '" onclick=" toggle_div2(noticeDetails' +j+ ', ' +j+ ')" >'+
-                                    '<i id="openAngleIcon" class = "fa fa-angle-down" data-src="images/openArrow.svg" style = "vertical-align: top; margin-left: -1px;"></i>'+ 
-                                '</button>' +
-                                '<br/>' +
-                                '<lable class="noticeLabel1">' +createDate+'</lable>' +
-                                '<br/>' +
-                                '<br/>' +
-                                '<div id = "noticeDetails' +j+ '" class = "noticeDiv1">' +
-                                    '<p>' +obj.contents+ '</p>' +
-                                '</div>' +
-                            '</div>';
-            }
-
-            $('#noticeBody').append(html);
-            var html2= '<hr style="border: 0.5px solid #BDBDBD; width:99.5%; float:left; margin:0px 0px 14px 0px; opacity: 0.3"  id="hideHr"/>';
-            $('#noticeBody').append(html2);
-        }
+        var numberOfPagesNeeded  = Math.ceil(noticeArray.length/8);
+      //  var numberOfNoticeOnOnePage = Math.ceil(noticeArray.length/numberOfPagesNeeded);
+     
+        console.log("noticeArray :"+JSON.stringify(noticeArray));
+        console.log(paginate(noticeArray, 8 ,2));
+        showNotice(noticeArray)
+       
     });
 }
+
+function pagination(pagination_id)
+{
+    //alert("pagination_id :"+pagination_id);
+} 
+
+function paginate(array, page_size, page_number) {
+    // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
+    return array.slice((page_number - 1) * page_size, page_number * page_size);
+  }
+  
+function showNotice(noticeArray)
+{
+ // show all notices
+ for (var j = 0; j < noticeArray.length; j++) {
+    var obj = noticeArray[j]; 
+    if(obj == undefined)
+        continue;
+    var index = (obj.created_on).indexOf('T');
+    var createDate = (obj.created_on).substring(0,index);
+   
+    if(obj.pin == true)
+    {
+        var html = '<div id="noticeDiv" style="width: 100%;">' +
+                        '<span id="noticeTitle' +j+ '" class = "noticeSpan1"> <img class="noticeBullet1" src = "images/red_bullet.svg">' +obj.title+ '</span>'+
+                        '<button class = "divButton" id="noticeButton' +j+ '" onclick=" toggle_div2(noticeDetails' +j+ ', ' +j+ ')" >'+
+                            '<i id="closeAngleIcon" class = "fa fa-angle-down" style="vertical-align: top; margin-left: -1px;"></i>'+ 
+                        '</button><br/>'+
+                        '<lable class="noticeLabel1">' +createDate+'</lable><br/>'+
+                        '<br/>'+
+                        '<div id = "noticeDetails' +j+ '" class = "noticeDiv1">'+
+                            '<p>' +obj.contents+ '</p>'+
+                        '</div>'+
+                    '</div>';
+    }
+    else
+    {
+        var html = '<div id="noticeDiv" style="width: 100%; margin-top:15px">'+
+                        '<span id="noticeTitle' +j+ '" class = "noticeSpan2">' +obj.title+'</span>'+
+                        '<button class = "divButton" id="noticeButton' +j+ '" onclick=" toggle_div2(noticeDetails' +j+ ', ' +j+ ')" >'+
+                            '<i id="openAngleIcon" class = "fa fa-angle-down" data-src="images/openArrow.svg" style = "vertical-align: top; margin-left: -1px;"></i>'+ 
+                        '</button>' +
+                        '<br/>' +
+                        '<lable class="noticeLabel1">' +createDate+'</lable>' +
+                        '<br/>' +
+                        '<br/>' +
+                        '<div id = "noticeDetails' +j+ '" class = "noticeDiv1">' +
+                            '<p>' +obj.contents+ '</p>' +
+                        '</div>' +
+                    '</div>';
+    }
+
+    $('#noticeBody').append(html);
+    var html2= '<hr style="border: 0.5px solid #BDBDBD; width:99.5%; float:left; margin:0px 0px 14px 0px; opacity: 0.3"  id="hideHr"/>';
+    $('#noticeBody').append(html2);
+}
+}  
 
 function toggle_div2(divID, i) 
 {
