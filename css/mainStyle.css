@@ -120,8 +120,8 @@ margin-top: 60px;
 }
 
 #eventMsgModalDiv{
-  position: absolute;height:auto; width :auto; /* height:700px; width : 50%; */top:15%;left:30%;z-index: 1011;
-  display  :none;
+  position: absolute;height:800px; width :900px; /* height:700px; width : 50%; */top:15%;left:30%;z-index: 1011;
+  display  :none; overflow: hidden;
 }
 
 .settingDiv{

@@ -25,44 +25,7 @@ function createAlertDiv(eventData)
     var selectList = document.getElementById("vehicleSelect");  // vehicle select list
     var selectedId;// = selectList.options[selectList.selectedIndex].id;  // selected Id 
     var siteId   = event_how.site_id;
-
-    if(dataAttribute == "door")
-    {
-        selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
-        id = event_how.vehicle_id;
-        vehicleID = event_how.vehicle_mid;
-        if(event_how.value == "true" )
-        {
-            eventMessage = "문이 열립니다."; 
-            if(id == selectedId)
-                document.getElementById("doorStatus").src = "images/door/door_open.svg";
-        }
-        else
-        {
-            eventMessage = "문이 닫힙니다."; 
-            if(id == selectedId)
-                document.getElementById("doorStatus").src = "images/door/door_closed.svg";
-        }
-    } 
-    else if(dataAttribute == "drive")
-    {
-        selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
-        id = event_how.vehicle_id;
-        vehicleID = event_how.vehicle_mid;
-        if(event_how.value == "auto")
-        {
-            eventMessage = "자율주행 상태입니다."; 
-            if(id == selectedId)
-                document.getElementById("driveStatus").innerHTML = "AUTONOMOUS";
-        }
-        else
-        {
-            eventMessage = "수동주행 상태입니다."; 
-            if(id == selectedId)
-                document.getElementById("driveStatus").innerHTML = "MANUAL";
-        }
-    }
-    else if(dataAttribute == "message")
+    if(dataAttribute == "message")
     {
         id = event_how.vehicle_id;
         vehicleID = event_how.vehicle_mid;
@@ -127,7 +90,7 @@ function createAlertDiv(eventData)
 
         var divId = "eventContent"+left;
         var style = 'left:'+left+'px; top:'+top+'px; display:block;';
-        var eventHtml = '<div id="eventContent'+left+'" class="message-content3" style="'+style+'" onclick="showDivOnTop('+divId+');">'+ 
+        var eventHtml = '<div id="eventContent'+left+'" class="message-content3" style="'+style+'" onclick="showDivOnTop(this);">'+ 
                          '<div id="eventHeader" class="message-header2">'+
                             '<div class="msgDiv1">'+
                                 '<p class="msgSendP" id="vehicleEventMsg"> <span id="event_vid">'+vehicleID+'</span>에서 보낸 메세지</p>'+
@@ -149,71 +112,106 @@ function createAlertDiv(eventData)
         // document.getElementById("eventContent"+left).onclick = "showDivOnTop()";
         //document.getElementById("eventContent").style.left = left+'px';
     }
-    else if(dataAttribute == "parking")
+    else if(selectList != undefined)
     {
-        id =event_how.vehicle_id;
-        selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
-        vehicleID = event_how.vehicle_mid;
-        if(event_how.value == "true")
+        selectedId = selectList.options[selectList.selectedIndex].id; 
+        if(dataAttribute == "door")
         {
-            eventMessage = "주차 상태입니다."; 
+            
+             // selected Id 
+            id = event_how.vehicle_id;
+            vehicleID = event_how.vehicle_mid;
+            if(event_how.value == "true" )
+            {
+                eventMessage = "문이 열립니다."; 
+                if(id == selectedId)
+                    document.getElementById("doorStatus").src = "images/door/door_open.svg";
+            }
+            else
+            {
+                eventMessage = "문이 닫힙니다."; 
+                if(id == selectedId)
+                    document.getElementById("doorStatus").src = "images/door/door_closed.svg";
+            }
+        } 
+        else if(dataAttribute == "drive")
+        {
+            id = event_how.vehicle_id;
+            vehicleID = event_how.vehicle_mid;
+            if(event_how.value == "auto")
+            {
+                eventMessage = "자율주행 상태입니다."; 
+                if(id == selectedId)
+                    document.getElementById("driveStatus").innerHTML = "AUTONOMOUS";
+            }
+            else
+            {
+                eventMessage = "수동주행 상태입니다."; 
+                if(id == selectedId)
+                    document.getElementById("driveStatus").innerHTML = "MANUAL";
+            }
+        }
+        else if(dataAttribute == "parking")
+        {
+            id =event_how.vehicle_id;
+            vehicleID = event_how.vehicle_mid;
+            if(event_how.value == "true")
+            {
+                eventMessage = "주차 상태입니다."; 
+                if(id == selectedId)
+                    vehicleStatus("PARKED", "rgb(128,128,128)");
+            }
+            else
+            {
+                eventMessage = "주차 상태가 아닙니다."; 
+            }
+        }
+        else if(dataAttribute == "passenger")
+        {
+            id = event_how.vehicle_id;
+            vehicleID = event_how.vehicle_mid;
+            eventMessage = "현재 승객 수: "+(event_how.current_passenger)+ " 명"; 
             if(id == selectedId)
-                vehicleStatus("PARKED", "rgb(128,128,128)");
+                passengerStatus((event_how.current_passenger)-1);
         }
-        else
+        else if(dataAttribute == "reason_stop")
         {
-            eventMessage = "주차 상태가 아닙니다."; 
+            id = event_how.vehicle_id;
+            vehicleID = event_how.vehicle_mid;
+            var reason = event_how.reason_type;
+        // var koreanReason;
+            if(reason == "car")
+                eventMessage = "[차]로 인해 정지 발생";
+            else if(reason == "people")
+                eventMessage = "[사람]으로 인해 정지 발생"; 
+            else if(reason == "environmental factor")
+                eventMessage = "[환경요소]로 인해 정지 발생";
+            else if(reason == "error")
+                eventMessage = "["+event_how.reason+"]으로 인해 정지 발생 ";//"오류";    
+            else if(reason == "etc")
+                eventMessage = "["+event_how.reason+"]로 인해 정지 발생 ";
+            else if(reason == "Other")
+                eventMessage = "기타"; 
+        
         }
-    }
-    else if(dataAttribute == "passenger")
-    {
-        id = event_how.vehicle_id;
-        selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
-        vehicleID = event_how.vehicle_mid;
-        eventMessage = "현재 승객 수: "+(event_how.current_passenger)+ " 명"; 
-        if(id == selectedId)
-            passengerStatus((event_how.current_passenger)-1);
-    }
-    else if(dataAttribute == "reason_stop")
-    {
-        id = event_how.vehicle_id;
-        selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
-        vehicleID = event_how.vehicle_mid;
-        var reason = event_how.reason_type;
-       // var koreanReason;
-        if(reason == "car")
-            eventMessage = "[차]로 인해 정지 발생";
-        else if(reason == "people")
-            eventMessage = "[사람]으로 인해 정지 발생"; 
-        else if(reason == "environmental factor")
-            eventMessage = "[환경요소]로 인해 정지 발생";
-        else if(reason == "error")
-            eventMessage = "["+event_how.reason+"]으로 인해 정지 발생 ";//"오류";    
-        else if(reason == "etc")
-            eventMessage = "["+event_how.reason+"]로 인해 정지 발생 ";
-        else if(reason == "Other")
-            eventMessage = "기타"; 
-      
-    }
-    else if(dataAttribute == "power")
-    {
-        id = event_how.vehicle_id;
-        selectedId = selectList.options[selectList.selectedIndex].id;  // selected Id 
-        vehicleID = event_how.vehicle_mid;
-        var powerStatus;
-        if(event_how.value == "true" || event_how.value == null)
+        else if(dataAttribute == "power")
         {
-            eventMessage = "전원이 켜졌습니다."; 
-            powerStatus = true;
-
+            id = event_how.vehicle_id;
+            vehicleID = event_how.vehicle_mid;
+            var powerStatus;
+            if(event_how.value == "true" || event_how.value == null)
+            {
+                eventMessage = "전원이 켜졌습니다."; 
+                powerStatus = true;
+            }
+            else
+            {
+                eventMessage = "전원이 꺼졌습니다."; 
+                powerStatus = false;
+            }
         }
-        else
-        {
-            eventMessage = "전원이 꺼졌습니다."; 
-            powerStatus = false;
-        }
-           
     }
+   
 
     if(vehicleID == null || siteId != active_site || dataAttribute == "message" ) //|| siteId != active_site
         return false;
@@ -278,7 +276,6 @@ function createAlertDiv(eventData)
 
 function showDivOnTop(obj)
 {
-    //alert("$(obj).id :"+obj);
       //  get all child divs
       var childDivarray = [];
       $('div','#eventMsgModalDiv').each(function(){
@@ -292,13 +289,14 @@ function showDivOnTop(obj)
               var subStr = (childDivarray[j]).substr(0,12);
               if(subStr == "eventContent")
               {
-                  alert("$(obj).id :"+$(obj).id);
-                  if(childDivarray[j] != $(obj).id)
+                  //alert("$(obj).id :"+obj.id);
+                  if(childDivarray[j] != obj.id)
                       $(childDivarray[j]).zIndex('1010');
               }
           }
       }
-      $(obj).zIndex("1111");
+     $(obj).zIndex("1111");
+    //(obj).zIndex("1111");
 }
 
 function confirmEventMsg()

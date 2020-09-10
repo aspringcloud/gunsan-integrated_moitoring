@@ -874,8 +874,11 @@ function updateShuttleInfo(vehicle, request_count)
             color ="#666666"; 
 
         //var fware =  "SW 버전: "+vehicle.model.firmware;
-        document.getElementById("vehicleVersion").innerHTML = "SW 버전: "+vehicle.model.firmware;
-                            
+      
+        if((vehicle.model) != null)
+        {   
+            document.getElementById("vehicleVersion").innerHTML = "SW 버전: "+vehicle.model.firmware;
+        }                   
         // show speed of vehicle
         setVehicleSpeed(vehicle.speed);
         if(vehicle.speed > 0)
@@ -1759,7 +1762,7 @@ function currentVehicleETA(stationData)
     // get current vehicle id from select list 
     var dom = document.getElementById("vehicleSelect");
     var stationDetails; 
-    if((stationData.eta).length == 0) //|| stationData.eta == undefined )
+    if((stationData.eta).length == 0 || stationData.eta == undefined || stationData == undefined) //|| stationData.eta == undefined )
     { 
         stationDetails = {
             vehicle_id : null,
@@ -1861,7 +1864,7 @@ function updateETA(site_id)
 {
     getMethod("stations/", function(data) {
         var stationData = JSON.parse(data);
-        console.log("stationData 1:"+JSON.stringify(stationData));
+        //console.log("stationData 1:"+JSON.stringify(stationData));
         var count = Object.keys(stationData).length;
         var stationETA = [];
         var passedStation;
