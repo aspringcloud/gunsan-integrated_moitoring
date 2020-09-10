@@ -625,14 +625,7 @@ function showGraphs() {
         dataList.push(12.54);
         dataList.push(9.14);
         
-        //distanceList
-        document.getElementById('totalDistance').innerHTML = Math.round(Number(distanceList.reduce(function(pv, cv) { return pv + cv; }, 0)).toLocaleString('en'));
-        //passengerList
-        document.getElementById('totalPassenger').innerHTML = Number(passengerList.reduce(function(pv, cv) { return pv + cv; }, 0)).toLocaleString('en');
-        // add datalist
-        document.getElementById('totalData').innerHTML = Math.round(Number(dataList.reduce(function(pv, cv) { return pv + cv; }, 0)).toLocaleString('en'));
         // show charts on main site(cluster map)
-       
         for(var k=0; k<vehicleData.length; k++)
         {
             vehicleList.push(vehicleData[k].vehicleList);
@@ -640,6 +633,13 @@ function showGraphs() {
             distanceList.push(vehicleData[k].distanceList);
         }
              
+        //distanceList
+        document.getElementById('totalDistance').innerHTML = Math.round(Number(distanceList.reduce(function(pv, cv) { return pv + cv; }, 0)).toLocaleString('en'));
+        //passengerList
+        document.getElementById('totalPassenger').innerHTML = Number(passengerList.reduce(function(pv, cv) { return pv + cv; }, 0)).toLocaleString('en');
+        // add datalist
+        document.getElementById('totalData').innerHTML = Math.round(Number(dataList.reduce(function(pv, cv) { return pv + cv; }, 0)).toLocaleString('en'));
+
         showChart('graph3', '총 데이터 용량', '#3bc7d1', 'Data', vehicleList , dataList, 'GB');
         showChart('graph2', '총 운행거리', '#f1ca3f', 'Distance(km)', vehicleList, distanceList  , 'km');
         showChart('graph1', '총 탑승자 수', '#3bc7d1', 'Passenger', vehicleList, passengerList , '명');
