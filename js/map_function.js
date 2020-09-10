@@ -589,16 +589,22 @@ function showGraphs() {
         var passengerList = [];
         var distanceList = [];
         var dataList = [];
+
+        var vehicleData = [];
         for (var i = 0; i < count; i++) {
           //  alert(graph_data[i].vehicle);
-            if(graph_data[i].vehicle == "1146" || graph_data[i].vehicle == "1147")
+            if(graph_data[i].vehicle == "1146" || graph_data[i].vehicle == "1147" || graph_data[i].vehicle == "6894" || graph_data[i].vehicle == "6895" )
             {
-                vehicleList.push(graph_data[i].vehicle);
-                passengerList.push(graph_data[i].accum_passenger);
-                distanceList.push(graph_data[i].accum_distance);
-                //dataList.push(graph_data[i].accum_distance);
-            } 
+                var vehicleObj = {
+                    vehicleList: graph_data[i].vehicle,
+                    passengerList : graph_data[i].accum_passenger,
+                    distanceList : graph_data[i].accum_distance
+                }
+                vehicleData.push(vehicleObj);
+              } 
         }
+        vehicleData = vehicleData.sort((a, b) => (a.vehicleList > b.vehicleList) ? 1 : -1)
+
         // vehicleList = vehicleList.sort();
         //var total_data = distanceList.reduce(function(pv, cv) { return pv + cv; }, 0);
         // byte conversion 
@@ -615,12 +621,11 @@ function showGraphs() {
         document.getElementById('totalData').innerHTML = 0;
         document.getElementById('dataSize').innerHTML = 'MB';
         document.getElementById('dataUnit').innerHTML = 'MB';
+    
         dataList.push(12.54);
         dataList.push(9.14);
         
         //distanceList
-      //  console.log("totalDistance :"+distanceList);
-       // console.log("passengerList :"+passengerList);
         document.getElementById('totalDistance').innerHTML = Math.round(Number(distanceList.reduce(function(pv, cv) { return pv + cv; }, 0)).toLocaleString('en'));
         //passengerList
         document.getElementById('totalPassenger').innerHTML = Number(passengerList.reduce(function(pv, cv) { return pv + cv; }, 0)).toLocaleString('en');
@@ -628,10 +633,132 @@ function showGraphs() {
         document.getElementById('totalData').innerHTML = Math.round(Number(dataList.reduce(function(pv, cv) { return pv + cv; }, 0)).toLocaleString('en'));
         // show charts on main site(cluster map)
        
+        for(var k=0; k<vehicleData.length; k++)
+        {
+            vehicleList.push(vehicleData[k].vehicleList);
+            passengerList.push(vehicleData[k].passengerList);
+            distanceList.push(vehicleData[k].distanceList);
+        }
+             
+        showChart('graph3', '총 데이터 용량', '#3bc7d1', 'Data', vehicleList , dataList, 'GB');
+        showChart('graph2', '총 운행거리', '#f1ca3f', 'Distance(km)', vehicleList, distanceList  , 'km');
+        showChart('graph1', '총 탑승자 수', '#3bc7d1', 'Passenger', vehicleList, passengerList , '명');
+    });
+}
 
-        showChart('graph3', '총 데이터 용량', '#3bc7d1', 'Data', vehicleList, dataList, 'GB');
-        showChart('graph2', '총 운행거리', '#f1ca3f', 'Distance(km)', vehicleList,distanceList , 'km');
-        showChart('graph1', '총 탑승자 수', '#3bc7d1', 'Passenger', vehicleList, passengerList, '명');
+function showOperatingChart(graph1, title, color, yAxisLable,  vehicleData,y_unit, total)
+{
+    var vehicleList  = vehicleData.x_axis;
+    var yAxisList = vehicleData.y_axis;
+
+    for(var i = vehicleList.length; i < 4; i++) 
+        vehicleList.push("");
+    
+    if(graph1 == 'graph2')
+        document.getElementById('graphTitle1').innerHTML = title;
+    else
+        document.getElementById('graphTitle2').innerHTML = title;
+
+    var ctx = document.getElementById(graph1).getContext('2d');
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: vehicleList,
+            datasets: [{
+                label: yAxisLable,
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: yAxisList, 
+                backgroundColor: color,
+                barPercentage: 0.3,
+                categoryPercentage: 1.0,
+            }]
+        },
+        title: {
+            text: title,
+            fontSize: '0px',
+            fontFamily: 'Noto Sans KR',
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Distance (km)',
+                position: "left",
+                rotation: 90
+            }
+        },
+        // Configuration options go here
+        options: {
+            plugins: {
+                datalabels: {
+                    anchor: 'end',
+                    align: 'top',
+                    formatter: Math.round,
+                    font: {
+                    weight: 'bold',
+                    size: '0'
+                    }
+                }
+            },
+            options: {
+                hover: {
+                    intersect: false,
+                }
+            },
+            title: {
+                display: false,
+                text: '총 운행거리',
+                ticks: {
+                    fontSize: 8,
+                    fontFamily: "Noto Sans KR"
+                },
+            },
+            legend: {
+                display: false,
+            },
+            responsive: false,
+            maintainAspectRatio: false,
+            scales: {
+                xAxes: [{
+                    //barThickness: 15,
+                    //categoryPercentage: 0,
+                    //barPercentage: 0,
+                    offsetGridLines : false,
+                    gridLines: {
+                        display: false,
+                        drawBorder : false,
+                        offsetGridLines : false
+                    },
+                    ticks: {
+                        fontSize: 8,
+                        fontFamily: "Roboto",
+                        fontStyle: "bold",
+                        scaleStepWidth : 30,
+                    },
+                }],
+                yAxes: [{
+                    barPercentage: 0.3,
+                    categoryPercentage: 1.0,
+                    offsetGridLines : false,
+                    scaleLabel: {
+                        display: false,
+                        labelString: y_unit,
+                    },
+                    gridLines: {
+                        display: true,
+                        drawBorder : false,
+                        offsetGridLines : false
+                    },
+                    ticks: {
+                        fontSize: 8,
+                        fontFamily: "Roboto",
+                        fontStyle: "bold",
+                        beginAtZero: true,
+                        // stepSize: 300,
+                    }
+                }]
+            }
+        }
     });
 }
 
@@ -650,9 +777,8 @@ function showCluster(cluster_map)
     var addressPoints = []; 
     if(clusterMapCount <= 1)
     {
-
-          // create openstreet tile layer
-          var clusterLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+        // create openstreet tile layer
+        var clusterLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
         });
 
@@ -998,8 +1124,7 @@ function changeVehicleInfo(obj)
     var activeMap =  mapList[mapList.length - 1];
     clearInterval(interval);
     if(typeof(obj) == 'number')
-    {   
-        
+    {          
         interval = vehicleInfo(activeMap, obj);
     }
     else
@@ -1822,11 +1947,8 @@ function currentVehicleETA(stationData)
                     else{
                         continue;
                     }
-      
                 }
-                
             }
-            
         }
     }
 }
@@ -1910,31 +2032,18 @@ function updateETA(site_id)
                 $("#station_li").append(' <p class="eta_circle2"></p>');
 
             var border_radius = '';
-            if(j==0)
-            {
-                var border_radius =  'border-top-left-radius:12px;  border-top-right-radius:12px';
-            }
-            else if(j==(stationETA.length-1))
-            {
-                var border_radius = 'border-bottom-left-radius:12px;  border-bottom-right-radius:12px';
+            if(j==(stationETA.length-1))
                 divHeight = 40;
-            }
-        
+                    
             var marginTop = '';
             if(j==0)
-            {
                 var circleImg ='<img id="small_white_circle" style="position: absolute; top:'+(divHeight+40)+'px; left:12px; z-index: 1111;" src="images/images_0.3/small_white_circle.svg"/>';
-            }
             else if(j < (stationETA.length -1 ))
-            {                
                 var circleImg ='<img id="small_white_circle" style="position: absolute;margin-top:11px;top:'+(((divHeight+22)*(j+1)))+'px; left:12px; z-index: 1111;" src="images/images_0.3/small_white_circle.svg"/>';
-            }
             else if(j >= (stationETA.length -1 ))
-            {
                 var circleImg ='<img id="small_white_circle" style="position: absolute; top:1009px; left:12px; z-index: 1111;" src="images/images_0.3/small_white_circle.svg"/>';
-            }
-              
-          //  console.log("stationETA[j] :"+stationETA[j]);
+        
+            //  console.log("stationETA[j] :"+stationETA[j]);
             circleDivElement.insertAdjacentHTML('beforeend', circleImg);
             var stationHtml = 
             '<div style="margin-left:20px; '+marginTop+' height:'+(divHeight+20)+'px; width:206px; overflow-y:hidden">'+
@@ -2358,12 +2467,10 @@ function changeNotice(){
 
         //"noticeArray" is final array for notice used for pagination
         var numberOfPagesNeeded  = Math.ceil(noticeArray.length/8);
-      //  var numberOfNoticeOnOnePage = Math.ceil(noticeArray.length/numberOfPagesNeeded);
-     
         console.log("noticeArray :"+JSON.stringify(noticeArray));
         console.log(paginate(noticeArray, 8 ,2));
         showNotice(noticeArray)
-       
+        console.log("array split :"+splitToChunks(noticeArray, numberOfPagesNeeded));
     });
 }
 
