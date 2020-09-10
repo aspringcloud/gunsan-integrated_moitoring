@@ -1360,7 +1360,9 @@ function setPopupContent(e, mapInstance, site_no)
             document.getElementById('vehicleSelect').value = shuttleMarkerArray[k].name;  
             vehicleInfo(mapInstance, shuttleMarkerArray[k].markId);
             oddButtonStatus();
-            //console.log("onpopup change()");
+            
+            if(eta_interval != null)
+                clearInterval(eta_interval);
             updateETA(active_site);
             eta_interval = setInterval(function() {
                 //console.log("onpopup change interval()");
@@ -1858,7 +1860,6 @@ function getDriveStatusOfVehicle(vehicleId)
   //  alert("returndriveStatus :"+driveStatus);
    // return driveStatus;
 }
-
 
 function updateETA(site_id)
 {

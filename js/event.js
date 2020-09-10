@@ -208,6 +208,13 @@ function createAlertDiv(eventData)
                 eventMessage = "전원이 꺼졌습니다."; 
                 powerStatus = false;
             }
+            
+            updateETA(active_site);
+            if(eta_interval != null)
+                clearInterval(eta_interval);
+            eta_interval = setInterval(function() {
+                updateETA(active_site);
+            }, 30000);
         }
     }
    
@@ -293,8 +300,7 @@ function showDivOnTop(obj)
                   if(childDivarray[j] != obj.id)
                   {
                     $(childDivarray[j]).zIndex('1010');
-                  }
-                   
+                  } 
               }
           }
       }
