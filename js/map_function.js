@@ -386,15 +386,23 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
             console.log("Updating eta after 30 seconds")
         }, 30000);*/
         
+     
         // update status of webcam  
         document.getElementById("hidden_cam1").style.background= "";
         document.getElementById("hidden_cam2").style.background= "";
-        if(document.getElementById("pausePlayButton1").src= "images/cctv/play.svg")
+        if(document.getElementById("pausePlayButton1"))
+        {
+            if(document.getElementById("pausePlayButton1").src= "images/cctv/play.svg")
             document.getElementById("pausePlayButton1").src= "images/cctv/pause.svg";
-        if(document.getElementById("pausePlayButton2").src= "images/cctv/play.svg")
-            document.getElementById("pausePlayButton2").src= "images/cctv/pause.svg";
+        }
+        if(document.getElementById("pausePlayButton2"))
+        {
+            if(document.getElementById("pausePlayButton2").src= "images/cctv/play.svg")
+                document.getElementById("pausePlayButton2").src= "images/cctv/pause.svg";
+        }
 
         // get all vehicle Id's.
+
         getMethod("sites/"+currentSiteId+"/", function (data) {
             if(JSON.parse(data).image == null)
             {
@@ -416,10 +424,10 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
             if(JSON.parse(data).vehicle_count != undefined)
             {
                 //document.getElementById('line_count').innerHTML = JSON.parse(data).route_count;
-                document.getElementById('vehicle_count').innerHTML = "2"; //JSON.parse(data).vehicle_count;
-                document.getElementById('station_count').innerHTML = "7";//JSON.parse(data).station_count;
-                document.getElementById('kiosk_count').innerHTML = "2";//JSON.parse(data).kiosk_count;
-                document.getElementById('garage_count').innerHTML = "1"; //JSON.parse(data).garege_count;
+                document.getElementById('vehicle_count').innerHTML = JSON.parse(data).vehicle_count;
+                document.getElementById('station_count').innerHTML = JSON.parse(data).station_count;
+                document.getElementById('kiosk_count').innerHTML = JSON.parse(data).kiosk_count;
+                document.getElementById('garage_count').innerHTML = JSON.parse(data).garege_count;
             }
         });
     });
@@ -427,7 +435,8 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
     show_div("alertDiv");
 
     // development history data (underdevelopment)
-    showSummary('site');
+    //showSummary('site');
+    showSummary(currentSiteId);
 }
 
 
@@ -1603,8 +1612,9 @@ function getMethod(api_name, callback) {
 
 
 // updates offsite count div - underDevelopment
-function showSummary(site) {
-    if(site == "offsite")
+function showSummary(currentSiteId) {
+  
+  /*  if(site == "offsite")
     {
         getMethod("sites/summary/", function (getSummary) {
             var summary = JSON.parse(getSummary);
@@ -1615,6 +1625,16 @@ function showSummary(site) {
             document.getElementById("garageCount").innerHTML = "1";// summary.garage_count;
         }); 
     }
+*/
+    getMethod("sites/1/", function (getSummary) {
+        var summary = JSON.parse(getSummary);
+        document.getElementById("routeCount").innerHTML = summary.route_count;
+        document.getElementById("vehicleCount").innerHTML = summary.vehicle_count;
+        document.getElementById("StationCount").innerHTML = summary.station_count;
+        document.getElementById("kioskCount").innerHTML = summary.kiosk_count;
+        document.getElementById("garageCount").innerHTML =  summary.garege_count;
+    }); 
+    
 }
 
 // show station, garage, datahub and kiosk on route
@@ -1735,7 +1755,7 @@ stationWp_array = [
                 ];
 */
 function currentVehicleETA(stationData)
-{
+{   
     // get current vehicle id from select list 
     var dom = document.getElementById("vehicleSelect");
     var stationDetails; 
@@ -1841,7 +1861,7 @@ function updateETA(site_id)
 {
     getMethod("stations/", function(data) {
         var stationData = JSON.parse(data);
-        //console.log("stationData :"+JSON.stringify(stationData));
+        console.log("stationData 1:"+JSON.stringify(stationData));
         var count = Object.keys(stationData).length;
         var stationETA = [];
         var passedStation;
@@ -1854,7 +1874,7 @@ function updateETA(site_id)
                 
                 //console.log("stationData[i] :"+JSON.stringify(stationData[i]));
                 var eta = currentVehicleETA(stationData[i]);
-                //console.log("if eta:"+eta); 
+               // alert("if eta:"+JSON.stringify(eta)); 
                 stationETA.push(eta);
             }
         }
@@ -2331,6 +2351,8 @@ function changeNotice(){
             noticeArray.push(normalNotice[n]);
        
         $('#noticeBody').empty();
+
+        //"noticeArray" is final array for notice used for pagination
  
         // show all notices
         for (var j = 0; j < noticeArray.length; j++) {
