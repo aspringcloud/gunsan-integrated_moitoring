@@ -116,9 +116,8 @@ function createAlertDiv(eventData)
     {
         selectedId = selectList.options[selectList.selectedIndex].id; 
         if(dataAttribute == "door")
-        {
-            
-             // selected Id 
+        {            
+            // selected Id 
             id = event_how.vehicle_id;
             vehicleID = event_how.vehicle_mid;
             if(event_how.value == "true" )
@@ -281,7 +280,7 @@ function showDivOnTop(obj)
       $('div','#eventMsgModalDiv').each(function(){
           childDivarray.push($(this).attr('id')); 
       });
-  
+      console.log("# childDivarray :"+childDivarray);
       for(var j = 0; j < childDivarray.length; j++)
       {
           if(childDivarray[j] != undefined)
@@ -290,11 +289,16 @@ function showDivOnTop(obj)
               if(subStr == "eventContent")
               {
                   //alert("$(obj).id :"+obj.id);
+                  console.log("#childDivarray[j]:"+childDivarray[j]+ " obj.id :"+obj.id);
                   if(childDivarray[j] != obj.id)
-                      $(childDivarray[j]).zIndex('1010');
+                  {
+                    $(childDivarray[j]).zIndex('1010');
+                  }
+                   
               }
           }
       }
+      console.log("2nd obj:"+ $(obj).id);
      $(obj).zIndex("1111");
     //(obj).zIndex("1111");
 }
