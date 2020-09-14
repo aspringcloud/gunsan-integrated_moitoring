@@ -872,18 +872,18 @@ function displayPassenger(img_src, divDom)
 
 // function to update passenger status in the shuttle. 
 function passengerStatus(activePassenger) {
-    if(document.getElementById('passengerStatus') != undefined)
+    /*if(document.getElementById('passengerStatus') != undefined)
     {
         var passengerDom = document.getElementById('passengerStatus').innerHTML;
         var prevCount = passengerDom.slice(0, passengerDom.indexOf('/'));  
         if((Number(prevCount))-1 == Number(activePassenger))
             return false;
-    }
+    }*/
     // var passivePassenger = 15 - activePassenger;
     if(activePassenger == null)
         document.getElementById("passengerCount").innerHTML = 0;
     else
-        document.getElementById("passengerCount").innerHTML = (activePassenger + 1);
+        document.getElementById("passengerCount").innerHTML = (activePassenger);
 }
 
 // Get distance between two location using leaflet function

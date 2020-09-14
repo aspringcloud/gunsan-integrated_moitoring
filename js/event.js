@@ -24,7 +24,7 @@ function createAlertDiv(eventData)
     var eventMessage;
     var selectList = document.getElementById("vehicleSelect");  // vehicle select list
     var selectedId;// = selectList.options[selectList.selectedIndex].id;  // selected Id 
-    var siteId   = event_how.site_id;
+    var siteId = event_how.site_id;
     if(dataAttribute == "message")
     {
         id = event_how.vehicle_id;
@@ -175,7 +175,7 @@ function createAlertDiv(eventData)
             vehicleID = event_how.vehicle_mid;
             eventMessage = "현재 승객 수: "+(event_how.current_passenger)+ " 명"; 
             if(id == selectedId)
-                passengerStatus((event_how.current_passenger)-1);
+                passengerStatus((event_how.current_passenger));
         }
         else if(dataAttribute == "reason_stop")
         {
