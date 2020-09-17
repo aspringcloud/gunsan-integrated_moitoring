@@ -279,7 +279,7 @@ function createAlertDiv(eventData)
     dom.insertBefore(divs, dom.firstChild);
 
     // For non-critical events close div in 3 seconds
-    if(dataAttribute =="door" || dataAttribute =="passenger")
+    if(dataAttribute == "door" || dataAttribute == "passenger")
     setTimeout(function() {
         $(divs).fadeOut();
     }, 3000);
