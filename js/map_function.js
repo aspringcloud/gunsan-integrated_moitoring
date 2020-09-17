@@ -228,7 +228,7 @@ function switchMap(obj)
             if(gunsan_map == undefined)
             {
                 gunsan_map = L.map('gunsanMap',{
-                    zoomSnap: 0.75,
+                    zoomSnap: 0.15,
                     zoom : 16,
                     center:[35.812484, 126.409100],
                     zoomControl: false,
@@ -402,18 +402,19 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
         }
 
         // get all vehicle Id's.
-
         getMethod("sites/"+currentSiteId+"/", function (data) {
             if(JSON.parse(data).image == null)
             {
-                document.getElementById('emergency_contactImg').src = '';
+                /*document.getElementById('emergency_contactImg').src = '';
                 document.getElementById('contact_button').style.backgroundColor = "#BDBDBD"; 
                 document.getElementById('contact_button').style.border  = "0.5px solid #BDBDBD";
                 document.getElementById('contact_button').style.pointerEvents ="none";
-                document.getElementById('contact_button').style.color = "#FFFFFF";
+                document.getElementById('contact_button').style.color = "#FFFFFF";*/
+                document.getElementById('contact_button').style.display= "none";
             }
             else
             {
+                document.getElementById('contact_button').style.display= "block";
                 document.getElementById('emergency_contactImg').src = JSON.parse(data).image;
                 document.getElementById('contact_button').style.backgroundColor = "#ffffff";
                 document.getElementById('contact_button').style.border  = "0.5px solid #CA4040";
@@ -3345,6 +3346,10 @@ function resetPassword()
             {       
                 pwdErrorDom.style.color = "#2E92B0";
                 localStorage.setItem('userPwd', input_new_pwd);
+                //clearFields
+                document.getElementById("currentPwd").value = '';
+                document.getElementById("newPwd").value = '';
+                document.getElementById("confirmPwd").value= '';
             }
             else
             {
