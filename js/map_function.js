@@ -5,7 +5,6 @@
 // Checks which route button is clicked and 
 // Calls the function associated for that route 
 'use strict';
-
 var mapList = [];               // stores the id of open map 
 mapList.push("offsiteMap");          //  push id of offsite map on login  
 
@@ -330,8 +329,7 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
     var reqCount = 0;
     var firstId; 
     var vehicleObj=[];
-    var start = Date.now();
-
+  
     // get all vehicle Id's.
     getMethod("vehicles/", function (data) {
         var vehicle_data = JSON.parse(data).results;
@@ -365,13 +363,9 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
         createSelectList(vehicleObj);
         if(deguShuttleArray.length >0 )
         {
-           // alert("deguShuttleArray before:"+JSON.stringify(deguShuttleArray));
             deguShuttleArray = deguShuttleArray.sort((a, b) => (a > b) ? 1 : -1);
-
-            //alert("deguShuttleArray after:"+JSON.stringify(deguShuttleArray));
             firstId = deguShuttleArray[0];
             vehicleInfo(mapInstance, firstId);
-           // alert("change vInfo :"+firstId);
             changeVehicleInfo(firstId);
             oddButtonStatus();
         }
@@ -389,8 +383,7 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
             updateETA(currentSiteId);
             console.log("Updating eta after 30 seconds")
         }, 30000);*/
-        
-     
+             
         // update status of webcam  
         document.getElementById("hidden_cam1").style.background= "";
         document.getElementById("hidden_cam2").style.background= "";
@@ -436,26 +429,19 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
             }
         });
     });
-
     show_div("alertDiv");
-
     // development history data (underdevelopment)
-    //showSummary('site');
     showSummary(currentSiteId);
 }
-
 
 function onVehiclePowerOff()
 {
     // update vehicle information pannel;    
-    //alert("selectedId :"+selectedId+" vid :"+id);
     var selectList = document.getElementById("vehicleSelect"); 
     var selectedId = selectList.options[selectList.selectedIndex].id; 
     getMethod("vehicles/"+selectedId+"/", function(data) {
-        //console.log("*T6:"+data);
         var vehicleData = JSON.parse(data);
         var driveStatus2 = vehicleData.drive;
-        //console.log("driveStatus2 **:"+driveStatus2);
         if(!driveStatus2)
         {
             document.getElementById("v_status1").style.backgroundColor = "#BDBDBD";
@@ -467,18 +453,14 @@ function onVehiclePowerOff()
             battery.style.setProperty("--afterbgColor3", "#BDBDBD");
             battery.style.setProperty("--afterColor", "#BDBDBD");
             document.getElementById("doorStatus").src = "images/door/close_off.svg";
-         
             showDriveStatus = true;
-            //console.log("Vehicle power off is applied :"+showDriveStatus);
             return true;
         }
         else
         {
-           document.getElementById("driveStatus").style.backgroundColor = "#0893BF"
+           document.getElementById("driveStatus").style.backgroundColor = "#0893BF";
         }
-     
         showDriveStatus = false;
-        //console.log("Vehicle power off is not applied :"+showDriveStatus);
         return false;
     });
 }
@@ -596,7 +578,6 @@ function showGraphs() {
 
         var vehicleData = [];
         for (var i = 0; i < count; i++) {
-          //  alert(graph_data[i].vehicle);
             if(graph_data[i].vehicle == "1146" || graph_data[i].vehicle == "1147" || graph_data[i].vehicle == "6894" || graph_data[i].vehicle == "6895" )
             {
                 var vehicleObj = {
@@ -625,7 +606,6 @@ function showGraphs() {
         document.getElementById('totalData').innerHTML = 0;
         document.getElementById('dataSize').innerHTML = 'MB';
         document.getElementById('dataUnit').innerHTML = 'MB';
-    
         dataList.push(12.54);
         dataList.push(9.14);
         
@@ -778,7 +758,7 @@ function showCluster(cluster_map)
 
     // current_mapinstance = cluster_map;
     // array to store lat-lon of cluster 
-    var addressPoints = []; 
+    //var addressPoints = []; 
     if(clusterMapCount <= 1)
     {
         // create openstreet tile layer
@@ -789,7 +769,7 @@ function showCluster(cluster_map)
         // add layer to map with zoom level
         clusterLayer.addTo(cluster_map);
         // get location of clusters using REST api
-      /*   getMethod("routes/", function (routes_data) {
+        /* getMethod("routes/", function (routes_data) {
             var cluster_data = JSON.parse(routes_data).results;
             var count = Object.keys(cluster_data).length;
             for (var i = 0; i < count; i++) {
@@ -829,9 +809,6 @@ function showContent(tabId) {
         window.location.href = "main.html";
     else
         alert("준비 중입니다.");
-
-   // else if(tabId == "integrated_Dashboard")
-       // window.location.href = "dashboard.html";
 }
 
 function setWeather(domElement, weatherStatus)
@@ -876,14 +853,6 @@ function displayPassenger(img_src, divDom)
 
 // function to update passenger status in the shuttle. 
 function passengerStatus(activePassenger) {
-    /*if(document.getElementById('passengerStatus') != undefined)
-    {
-        var passengerDom = document.getElementById('passengerStatus').innerHTML;
-        var prevCount = passengerDom.slice(0, passengerDom.indexOf('/'));  
-        if((Number(prevCount))-1 == Number(activePassenger))
-            return false;
-    }*/
-    // var passivePassenger = 15 - activePassenger;
     if(activePassenger == null)
         document.getElementById("passengerCount").innerHTML = 0;
     else
@@ -935,22 +904,13 @@ function vehicleInfo(map, vId)
     clearInterval(interval);
     var request_count = 0;
     var count15 = 0;
-    var speedArray=[];
     interval = setInterval(function(){
         request_count++;
         count15++;
-       // alert("vId :"+vId);
         var apiUrl = "vehicles/"+vId+"/";
-      //  console.log("apiUrl :"+apiUrl);
         getMethod(apiUrl, function (data) {
             var vehicle = JSON.parse(data);
-           //console.log("status drive status :"+status);
-          // if(showDriveStatus != true )
-          // {
-                //console.log("battery 1:"+vehicle.battery);
-                //alert("vehicleInfo");
-                updateShuttleInfo(vehicle, request_count); 
-          //  }
+            updateShuttleInfo(vehicle, request_count); 
         });
     }, 1500);
     return interval;
@@ -958,11 +918,7 @@ function vehicleInfo(map, vId)
 
 function updateShuttleInfo(vehicle, request_count)
 {     
-   //console.log("Battery 1 update shuttle info");
     onVehiclePowerOff();
-  //  console.log("showDriveStatus :"+showDriveStatus+ " vehicle id :"+vehicle.id);
-
-  console.log("updateShuttleInfo :"+JSON.stringify(vehicle));
     if(showDriveStatus != true )
     {
         if(vehicle == null)
@@ -1006,20 +962,17 @@ function updateShuttleInfo(vehicle, request_count)
             color = "#333333";
         else
             color ="#666666"; 
-
-        //var fware =  "SW 버전: "+vehicle.model.firmware;
-      
+    
         if((vehicle.model) != null)
-        {   
             document.getElementById("vehicleVersion").innerHTML = "SW 버전: "+vehicle.model.firmware;
-        }                   
+                       
         // show speed of vehicle
         setVehicleSpeed(vehicle.speed);
         if(vehicle.speed > 0)
             showVehicleHeading(vehicle.heading);
+
         // updates background color of gnss
         updateGnssBgcolor(vehicle.gnss);
-
         if(request_count == 1)
         {
             // show door status ---> this will be updated by web socket    
@@ -1038,7 +991,7 @@ function updateShuttleInfo(vehicle, request_count)
         checkWebcam(vehicle.webcam1, 'cameraButton1', 'video1', 'video1Active');
         checkWebcam(vehicle.webcam2, 'cameraButton2', 'video2', 'video2Active');
     }    
- }
+}
 
 function updateFrontStaus(isParked, speed)
 {
@@ -1058,7 +1011,6 @@ function updateGnssStatus(status_boolean)
         operatingStatus = 'images/status/active_green.svg';
     else
         operatingStatus = 'images/status/inactive_grey.svg'; 
-
     return operatingStatus;
 } 
 
@@ -1096,10 +1048,8 @@ function showVehicleHeading(headingAngle)
     else
         var heading = headingAngle;    
     document.getElementById("heading_v1").innerHTML = heading + "&deg";
-
     // rotate heading
     document.getElementById("bigCircle").style = 'transform:rotate('+heading+'deg)';
-
     // reverse rotate heading
     var reverseHeading = -(heading);
     document.getElementById("angleDegree").style = 'transform: rotate('+reverseHeading+'deg)';
@@ -1132,31 +1082,22 @@ function changeVehicleInfo(obj)
     var activeMap =  mapList[mapList.length - 1];
     clearInterval(interval);
     if(typeof(obj) == 'number')
-    {          
-
-       // alert("if changeVehicleInfo obj :"+obj);
+    {  
         interval = vehicleInfo(activeMap, obj);
     }
     else
     {
         var selectedId = obj.options[obj.selectedIndex].id;
-       // var status = onVehiclePowerOff();
-        //if(showDriveStatus != true )
-        //alert("else changeVehicleInfo :"+selectedId);
-           interval = vehicleInfo(activeMap , selectedId);
+        interval = vehicleInfo(activeMap , selectedId);
     }
+
+    // update ETA
     if(eta_interval != null)
         clearInterval(eta_interval);
-    // update ETA
-    //console.log("changeVehicleInfo()");
     updateETA(active_site);
     eta_interval = setInterval(function() {
-        //console.log("changeVehicleInfo interval ()");
         updateETA(active_site);
-        //console.log("Updating eta after 30 seconds on select change");
     }, 30000);
-    //document.getElementById("driveStatus").style.backgroundColor = "#0893BF";
-    //onVehiclePowerOff();
 }
 
 function createHtmlMarker(vehicleObj, iconHtml)
@@ -1203,8 +1144,6 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
             const greenRippleIcon = L.divIcon({html: greenIconHtml, iconAnchor: [0, -20],});
             const greyRippleIcon = L.divIcon({html: greyIconHtml, iconAnchor: [0, -20],});
 
-          //  console.log("Vehicle location :"+JSON.stringify(vehicleObj));
-           // console.log("isParked : "+ vehicleObj.isparked+ "speed : "+vehicleObj.speed+ "heading:"+vehicleObj.heading);
             if(request_count == 1) 
             {
                 // create Icon for ripple marker as per the speed value
@@ -1256,10 +1195,7 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                     // vehicle marker on click function ---> updates vehicle popup data every second 
                     setPopupContent(e, mapInstance, currentSiteId);
                 });
-    
                 vehicleMarker.addTo(mapInstance);         
-                
-            // alert("gns s:"+vehicleObj.gnss);// show vehicle icon on route
                 var shuttleMarkerObj = {                                                          // store marker in array 
                     marker : vehicleMarker,
                     markId : vehicleObj.id,
@@ -1321,7 +1257,6 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                     {
                         // set popup color
                         var popupColor = vehicleMakeColor(vehicleObj.name);
-
                         // update speed status 
                         var speedColor;
                         var speedWeight;
@@ -1341,14 +1276,12 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                         }
                             
                         var vehicleOperation = updateGnssStatus(vehicleObj.gnss);
-                       // alert("vehicleOperation :"+vehicleOperation);
                         if(vehicleObj.drive == true)
                         {
                             currentMarker._popup.setContent("<div class="+popupColor+" id='vPopup'>"+
-                            "<p class='popupTitle'>" +vehicleObj.name+ "<img class='activeGreenPopup' src="+vehicleOperation+"></p>"+
-                            "<span class='popupVersion'>VER : "+vehicleObj.model.firmware+"</span>"+
+                                "<p class='popupTitle'>" +vehicleObj.name+ "<img class='activeGreenPopup' src="+vehicleOperation+"></p>"+
+                                "<span class='popupVersion'>VER : "+vehicleObj.model.firmware+"</span>"+
                             "</div><br>"+
-
                             "<div class='popupSpeedDiv'>"+
                                 "<span>Speed</span><br>"+
                                 "<span id='popup_speed' class='popupSpeed' style='color:"+speedColor+";font-weight:"+speedWeight+"'>"+vehicleObj.speed+"</span><br>"+
@@ -1363,10 +1296,9 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                         else
                         {
                             currentMarker._popup.setContent("<div class="+popupColor+" id='vPopup'>"+
-                            "<p class='popupTitle'>" +vehicleObj.name+ "<img class='activeGreenPopup' src="+vehicleOperation+"></p>"+
-                            "<span class='popupVersion'>VER : "+vehicleObj.model.firmware+"</span>"+
+                                "<p class='popupTitle'>" +vehicleObj.name+ "<img class='activeGreenPopup' src="+vehicleOperation+"></p>"+
+                                "<span class='popupVersion'>VER : "+vehicleObj.model.firmware+"</span>"+
                             "</div><br>"+
-
                             "<div class='popupSpeedDivDisable'></div>"+
                             "<div class='popupSpeedDiv'>"+
                                 "<span>Speed</span><br>"+
@@ -1387,22 +1319,8 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                 // check if which vehicle is selected from select list and update the info of that vehicle 
                 var dom = document.getElementById("vehicleSelect");  // vehicle select list
                 var selectedId = null;
-
                 if(dom.options[dom.selectedIndex] != undefined)
                     selectedId = dom.options[dom.selectedIndex].id;  // selected Id 
-                
-                  //  updateShuttleInfo() is commented
-                /*if(vehicleObj.id == selectedId)
-                {
-                    //console.log("status drive showDriveStatus ** :"+showDriveStatus);
-                    //if(showDriveStatus != true )
-                   // {
-                        //console.log("If executed");
-                        console.log("battery 2:"+vehicleObj.battery);
-                        updateShuttleInfo(vehicleObj);
-                    //}
-                }*/
-                    
             }
         }                                                     
     }
@@ -1429,7 +1347,6 @@ function operatingStatus(status_boolean)
         operatingStatus = 'images/status/active_green.svg';
     else
         operatingStatus = 'images/status/inactive_red.svg'; 
-
     return operatingStatus;
 } 
 
@@ -1456,7 +1373,7 @@ function setPopupContent(e, mapInstance, site_no)
                     // update speed status 
                     var speedColor;
                     var speedWeight;
-                    var currentSpeed = shuttleMarkerArray[k].speed
+                    var currentSpeed = shuttleMarkerArray[k].speed;
                     if(currentSpeed < 18)                                              // if speed is less then 18, text should be black color with normal font weight
                     {
                         speedColor = '#4F4F4F';
@@ -1471,7 +1388,6 @@ function setPopupContent(e, mapInstance, site_no)
                             speedWeight ="normal";
                     }
                     var vehicleOperation = updateGnssStatus(shuttleMarkerArray[k].gnss);  
-               
                     layer._popup.setContent("<div class="+popupColor+" id='vPopup'>"+
                                             "<p class='popupTitle'>" +shuttleMarkerArray[k].name+ "<img class='activeGreenPopup' src="+vehicleOperation+"></p>"+ // src="+vehicleOperation+"
                                             "<span class='popupVersion'>VER : "+shuttleMarkerArray[k].version+"</span>"+
@@ -1502,7 +1418,6 @@ function setPopupContent(e, mapInstance, site_no)
                 clearInterval(eta_interval);
             updateETA(active_site);
             eta_interval = setInterval(function() {
-                //console.log("onpopup change interval()");
                 updateETA(active_site);
             }, 30000);
             break;
@@ -1547,24 +1462,9 @@ function noVehicleInfo()
 function degreesToRadians(degrees) {
     return degrees * Math.PI / 180;
 }
-  
-function distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
-    var earthRadiusKm = 6371;
-    var dLat = degreesToRadians(lat2-lat1);
-    var dLon = degreesToRadians(lon2-lon1);
-  
-    lat1 = degreesToRadians(lat1);
-    lat2 = degreesToRadians(lat2);
-  
-    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-            Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-    return earthRadiusKm * c;
-}
 
 /* show chart with todays distance passenger count */
 function showChartData(siteId){
-
     document.getElementById("infoChart").style.display = "block";
     document.getElementById("distanceChart1").style.display = "inline-block";
     document.getElementById("passangerChart2").style.display = "inline-block";
@@ -1583,8 +1483,6 @@ function showChartData(siteId){
     var yyyy = today.getFullYear();
     var today2 = yyyy+'-'+mm+'-'+dd;
     var dayOfWeek = stringWeekDay[today.getDay()];
-
-
     var passengerTitleDate = mm+"/"+dd+ " ("+dayOfWeek+")" + " 총 탑승자 수"
     var distanceTitleDate = mm+"/"+dd + " ("+dayOfWeek+")" +" 총 운행거리"
       
@@ -1596,7 +1494,6 @@ function showChartData(siteId){
     postMethod(data, api_url, function (req) {
         if(req.status == 200){  
             var summary = JSON.parse(req.response);
-            //var count = Object.keys(summary).length;
             for(var i=0; i<summary.length; i++)
             {                
                 if(summary[i].site.id == siteId)
@@ -1642,13 +1539,10 @@ function checkWebcam(webcamData, imgID, ifImg, elseImg) {
 }
 
 function setBatteryPercent(percent) {
-    //console.log("setBatteryPercent :"+percent);
     if (percent == null)
         percent = 0;
 
     $("#battery").attr('data-content', percent+'%');
-  
-    var after = (100 - percent) +"%";    
     var battery = document.querySelectorAll('.inverted-bar3')[0];
    
     // updates side window battery status
@@ -1672,7 +1566,7 @@ function setBatteryPercent(percent) {
 function setPopupBattery(percent)
 {
     if (percent == null)
-    percent = 0;
+        percent = 0;
     $("#popupBattery").attr('data-content', percent+'%');
     var popupBattery = document.querySelectorAll('.popup-battery')[0];
     //  updates popup battery status
@@ -1704,7 +1598,6 @@ function setPopupSpeed(speed)
     // change css to show changes in speed.
     if(speed < 18)
     {
-        //console.log("<18:"+popup_speed.style.color);
         popup_speed.style.color="#4F4F4F";
         popup_speed.style.fontWeight ="normal";
     }
@@ -1742,7 +1635,6 @@ function getMethod(api_name, callback) {
             console.log("Authentication credentials were not provided");
         else if (request.status == 403)
             console.log("Unauthorized access to accounts")
-       // console.log("GET data status: " + request.status);
     };
     request.onerror = function (status) {
         console.log("GET data error (GET).");
@@ -1752,22 +1644,8 @@ function getMethod(api_name, callback) {
     request.send();
 }
 
-
 // updates offsite count div - underDevelopment
 function showSummary(currentSiteId) {
-  
-  /*  if(site == "offsite")
-    {
-        getMethod("sites/summary/", function (getSummary) {
-            var summary = JSON.parse(getSummary);
-            document.getElementById("routeCount").innerHTML = "1"//summary.route_count;
-            document.getElementById("vehicleCount").innerHTML ="2"// summary.vehicle_count;
-            document.getElementById("StationCount").innerHTML = "7";//summary.station_count;
-            document.getElementById("kioskCount").innerHTML = "2";//summary.kiosk_count;
-            document.getElementById("garageCount").innerHTML = "1";// summary.garage_count;
-        }); 
-    }
-*/
     getMethod("sites/1/", function (getSummary) {
         var summary = JSON.parse(getSummary);
         document.getElementById("routeCount").innerHTML = summary.route_count;
@@ -1776,7 +1654,6 @@ function showSummary(currentSiteId) {
         document.getElementById("kioskCount").innerHTML = summary.kiosk_count;
         document.getElementById("garageCount").innerHTML =  summary.garege_count;
     }); 
-    
 }
 
 // show station, garage, datahub and kiosk on route
@@ -1848,7 +1725,6 @@ function showRouteInfo(mapInstance, api_name, icon_path, site_no) {
                 // Gunsan route part 1 
                 stationWp_array = [
                     L.latLng(35.8137410000000000, 126.4131030000000000),//12
-                   // L.latLng(35.8114720000000000, 126.4164430000000000),//13
                     L.latLng(35.810844, 126.416400),//18
                 ];
                 stationTitleArray = ["선착장행 주차장", "유람선 선착장"];
@@ -1856,7 +1732,7 @@ function showRouteInfo(mapInstance, api_name, icon_path, site_no) {
                 createRoute(mapInstance, stationWp_array, stationTitleArray);
 
                 // Gunsan route part 2 
-                   stationWp_array =[   
+                stationWp_array =[   
                     L.latLng(35.8138710000000000, 126.4130100000000000),//11
                     L.latLng(35.8142630000000000, 126.4098250000000000),//18
                 ];
@@ -1865,8 +1741,9 @@ function showRouteInfo(mapInstance, api_name, icon_path, site_no) {
                 createRoute(mapInstance, stationWp_array, stationTitleArray);
 
                 //GUNSAN EXTRA PART 
-                stationWp_array =[  L.latLng(35.8142630000000000, 126.4098250000000000),//18
-                            L.latLng(35.8117490000000000, 126.4050750000000000),//9
+                stationWp_array =[  
+                    L.latLng(35.8142630000000000, 126.4098250000000000),//18
+                    L.latLng(35.8117490000000000, 126.4050750000000000),//9
                 ];
                 stationTitleArray = ["선유도 해변", "자율주행 테마파크(입)"];
                 createRoute(mapInstance, stationWp_array, stationTitleArray);
@@ -1876,7 +1753,7 @@ function showRouteInfo(mapInstance, api_name, icon_path, site_no) {
                     L.latLng(35.8118700000000000, 126.4051900000000000),//19
                     L.latLng(35.8141840000000000, 126.4098450000000000), //10
                 ];
-                stationTitleArray = ["자율주행 테마파크(출)" , "고군산 탐방센터" ];
+                stationTitleArray = ["자율주행 테마파크(출)", "고군산 탐방센터" ];
                 stationMidArray = ["STA019", "STA010"];
                 //createRoute(mapInstance, stationWp_array, stationTitleArray);
             }
@@ -1901,7 +1778,6 @@ function currentVehicleETA(stationData)
     // get current vehicle id from select list 
     var dom = document.getElementById("vehicleSelect");
     var stationDetails; 
-  
     if((stationData.eta).length == 0 || (stationData.eta) == "{}" || stationData.eta == undefined || stationData == undefined) //|| stationData.eta == undefined )
     { 
             stationDetails = {
@@ -1922,11 +1798,9 @@ function currentVehicleETA(stationData)
             var key = Object.keys(temp);
             var value = Object.values(temp);
             for(var k = 0; k < key.length; k++)
-            {  
-                //alert("key[k] :"+key[k]+ " selectedId:"+selectedId);
+            {
                 if(key[k] == selectedId )
-                {     
-                    //console.log("*if :"+selectedId);
+                {   
                     var time_value;
                     if(Math.round(value[k]) < 2)
                         time_value = "곧 도착 또는 출발​";
@@ -1957,7 +1831,8 @@ function currentVehicleETA(stationData)
                         }
                         return stationDetails;
                     }
-                    else{
+                    else
+                    {
                         continue;
                     }
                 }
@@ -1966,63 +1841,35 @@ function currentVehicleETA(stationData)
     }
 }
 
-/*
-function getDriveStatusOfVehicle(vehicleId, callback)
-{
-    var driveStatus;
-    getMethod("vehicles/"+vehicleId+"/", function(data) {
-        //console.log("*T6:"+data);
-        var vehicleData = JSON.parse(data);
-        driveStatus = vehicleData.drive;
-       // alert("vehicleData.drive :"+vehicleData.drive);
-        //alert(typeof(vehicleData.drive));
-       
-        callback(driveStatus);
-    });
-}
-*/
 
 function getDriveStatusOfVehicle(vehicleId)
 {  
     getMethod("vehicles/"+vehicleId+"/", function(data) {
-        //console.log("*T6:"+data);
         var vehicleData = JSON.parse(data);
         driveStatus = vehicleData.drive;
-       // alert("driveStatus :"+driveStatus);
-       // return vehicleData.drive;
     });
-   // alert("driveStatus out :"+driveStatus);
-  //  alert("returndriveStatus :"+driveStatus);
-   // return driveStatus;
 }
 
 function updateETA(site_id)
 {
     getMethod("stations/", function(data) {
         var stationData = JSON.parse(data);
-        //console.log("stationData 1:"+JSON.stringify(stationData));
         var count = Object.keys(stationData).length;
         var stationETA = [];
-        var passedStation;
-        stationData =  stationData.sort((a, b) => (a.sta_Order > b.sta_Order) ? 1 : -1)
-        //console.log("stationData[i] :"+stationData[i]);
+        stationData = stationData.sort((a, b) => (a.sta_Order > b.sta_Order) ? 1 : -1)
+
         // station list
         for (var i = 0; i < count; i++) {
             if (stationData[i].site == site_id)
-            {            
-                
-                //console.log("stationData[i] :"+JSON.stringify(stationData[i]));
+            {  
                 var eta = currentVehicleETA(stationData[i]);
-               // alert("if eta:"+JSON.stringify(eta)); 
                 stationETA.push(eta);
             }
         }
 
-        //alert("stationETA :"+stationETA);
         // station list
         var divElement = document.getElementById('stationList1');
         divElement.innerHTML = ""; 
-
         var circleDivElement = document.getElementById('circle_div');
         if(circleDivElement)
             circleDivElement.innerHTML = ""; 
@@ -2034,7 +1881,6 @@ function updateETA(site_id)
 
         var divHeight = Math.round(844/(stationETA.length));
         var minusHeight = 0;
-        //console.log("stationETA :"+stationETA);
         for(var j = 0; j < stationETA.length; j++)
         { 
             minusHeight = j*2;
@@ -2044,7 +1890,6 @@ function updateETA(site_id)
             else
                 $("#station_li").append(' <p class="eta_circle2"></p>');
 
-            var border_radius = '';
             if(j==(stationETA.length-1))
                 divHeight = 40;
                     
@@ -2056,23 +1901,15 @@ function updateETA(site_id)
             else if(j >= (stationETA.length -1 ))
                 var circleImg ='<img id="small_white_circle" style="position: absolute; top:1009px; left:12px; z-index: 1111;" src="images/images_0.3/small_white_circle.svg"/>';
         
-            //  console.log("stationETA[j] :"+stationETA[j]);
             circleDivElement.insertAdjacentHTML('beforeend', circleImg);
-            var stationHtml = 
-            '<div style="margin-left:20px; '+marginTop+' height:'+(divHeight+20)+'px; width:206px; overflow-y:hidden">'+
-               '<p style="font-size: 14px;">'+stationETA[j].name+'</p>'+
-                '<span>'+
-                    '<p style="display:inline-block ; color: #828282; font-size: 12px; margin-top: 10px; margin-right: 18px; "> '+stationETA[j].mid+'</p>'+
-                    '<p style="display:inline-block ;color: #2E92B0; font-size: 12px; width:93px;text-align:right"> '+stationETA[j].time+' </p>'+
-                '</span>'+
-            '</div>';
-
+            var stationHtml =   '<div style="margin-left:20px; '+marginTop+' height:'+(divHeight+20)+'px; width:206px; overflow-y:hidden">'+
+                                    '<p style="font-size: 14px;">'+stationETA[j].name+'</p>'+
+                                    '<span>'+
+                                        '<p style="display:inline-block ; color: #828282; font-size: 12px; margin-top: 10px; margin-right: 18px; "> '+stationETA[j].mid+'</p>'+
+                                        '<p style="display:inline-block ;color: #2E92B0; font-size: 12px; width:93px;text-align:right"> '+stationETA[j].time+' </p>'+
+                                    '</span>'+
+                                '</div>';
             divElement.insertAdjacentHTML('beforeend', stationHtml);
-            // ETA in minutes
-            if(stationETA[j].time < 1)
-                var p = "<p style='margin-bottom:30px;'>곧 도착 또는 출발</p>";
-            else
-                var p = "<p style='margin-bottom:30px;'>"+stationETA[j].time+"</p>";
         }
     });
 }
@@ -2198,7 +2035,7 @@ function kiosk_info() {
     hide_div_list("div_kiosk");
     change_button_color('kiosk_info_button');
 
-    if ($('#kiosks_list li').length != 0)
+    if($('#kiosks_list li').length != 0)
         return true;
 
     getMethod("kiosks/", function (kiosk_data) {
@@ -2270,7 +2107,6 @@ function setSiteInfo(site_id){
     var api_url = "sites/" + site_id + "/";
     getMethod(api_url, function (sites_data) {
         var site_data = JSON.parse(sites_data);
-        //var site_title = site_data.summary.indexOf('\r');
         var site_title_slice = site_data.summary;//.substring(0, site_title);
         var summary_start = site_data.summary.indexOf('<b>');
         var remaining_summary = site_data.summary2.substring(summary_start);
@@ -2278,8 +2114,6 @@ function setSiteInfo(site_id){
         document.getElementById('site_title').innerHTML = site_title_slice;
         document.getElementById("site_summary").innerHTML = remaining_summary;
         manager_list(site_data.user);
-        //var siteOperation = operatingStatus(site_data.operation);
-        //document.getElementById("site_status").src = siteOperation;
     });
 }
 
@@ -2355,12 +2189,11 @@ function show_v2x(mapInstance, api_name, currentSiteId){
                     draggable: false,
                     icon: circleIcon
                 });
-        
                 marker._leaflet_id = ripple_data[i].mid;
                 marker.addTo(mapInstance);
                           
-                var popup;
                 // show loaction of v2x on mouseover 
+                var popup;
                 marker.on('mouseover', function(e) {
                     var loc = (e.latlng).toString();
                     var content = loc.substring(7, loc.length-1);
@@ -2376,7 +2209,6 @@ function show_v2x(mapInstance, api_name, currentSiteId){
 
 function manager_list(site_manager_array) 
 {
-    //console.log("siteUsers :"+site_manager_array);
     // add managers to select list, 
     var select = document.getElementById("manager_selectlist");
     select.options.length = 0;
@@ -2439,7 +2271,6 @@ function updateSettingIcon()
 }
 
 var globalNoticeArray;
-
 function changeNotice(){
     //var noticeSelect = document.getElementById('select_notice');
     //var category = noticeSelect.options[noticeSelect.selectedIndex].value;
@@ -2481,76 +2312,31 @@ function changeNotice(){
         $('#noticeBody').empty();
         globalNoticeArray = noticeArray;
 
+        // Number of pages needed
         var numberOfPagesNeeded  = Math.ceil(noticeArray.length/8);
-
-      
         document.getElementById('paginationDiv').innerHTML = "";
 
-       var html1 = "<a href='#'>&laquo;</a>";
-       $('#paginationDiv').append(html1);
-      /* var html2 =  "<a href='#' onclick='paginateTest(1)'>1</a>"+
-                    "<a class='active' href='#' onclick='pagination(2)'>2</a>"+
-                    "<a href='#' onclick='pagination(3)'>3</a>"+
-                    "<a href='#' onclick='pagination(4)'>4</a>"+
-                    "<a href='#' onclick='pagination(5)'>5</a>"+
-                    "<a href='#' onclick='pagination(6)'>6</a>"+
-                    "<a href='#' onclick='pagination(7)'>7</a>"+
-                    "<a href='#' onclick='pagination(8)'>8</a>"+
-                    "<a href='#' onclick='pagination(9)'>9</a>"+
-                    "<a href='#' onclick='pagination(10)'>10</a>";
-*/
+        var html1 = "<a href='#' class='pagination_img disable_a'><img src= 'images/arrow/leftArrowDisabled.svg'/></a>";
+        $('#paginationDiv').append(html1);
         for(var j=0; j<numberOfPagesNeeded; j++)
-        {/*
-            if(j==0)
-            {
-                var html2 =  "<a href='#' class='active' onclick='paginateTest("+(j+1)+")'>"+(j+1)+"</a>";
-            }
-            else{*/
-                var html2 =  "<a href='#' onclick='paginateTest("+(j+1)+")'>"+(j+1)+"</a>";
-           // }
-            
+        {
+            var html2 =  "<a href='#' onclick='paginateTest("+(j+1)+")'>"+(j+1)+"</a>";
             $('#paginationDiv').append(html2);
-            
         }
-
-        
-
-        var html3 = "<a href='#'>&raquo;</a>";
+        var html3 = "<a href='#' class='pagination_img disable_a'><img src= 'images/arrow/rightArrowDisabled.svg'/></a>";
         $('#paginationDiv').append(html3);
-
-        //document.getElementById('paginationDiv').innerHTML = html;
-
         paginateTest(1);
-
-        //"noticeArray" is final array for notice used for pagination
-
-
-
-      /*    var numberOfPagesNeeded  = Math.ceil(noticeArray.length/8);
-      console.log("noticeArray :"+JSON.stringify(noticeArray));
-        console.log(paginate(noticeArray, 8 ,2));
-        showNotice(noticeArray)
-        console.log("array split :"+splitToChunks(noticeArray, numberOfPagesNeeded));
-    */});
+    });
 }
 
-var activePaginationButton;
-
 function paginateTest(buttonId)
-{
-    
-    activePaginationButton
+{    
     // clear previous notices
     document.getElementById('noticeBody').innerHTML = "";
-
-    console.log("globalNoticeArray :"+JSON.stringify(globalNoticeArray));
     var i =(buttonId -1 ) * 8;
     var temparray,chunk = 8 * buttonId;
-
     if(i<globalNoticeArray.length)
         temparray = globalNoticeArray.slice(i,chunk);
-
-    console.log("temparray length :"+temparray.length +" temparray :"+JSON.stringify(temparray));
     showNotice(temparray);
 }
 
@@ -2562,11 +2348,6 @@ function splitToChunks(array, parts) {
     return result;
 }
 
-function pagination(pagination_id)
-{
-    //alert("pagination_id :"+pagination_id);
-} 
-
 function paginate(array, page_size, page_number) {
     // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
     return array.slice((page_number - 1) * page_size, page_number * page_size);
@@ -2574,49 +2355,49 @@ function paginate(array, page_size, page_number) {
   
 function showNotice(noticeArray)
 {
- // show all notices
- for (var j = 0; j < noticeArray.length; j++) {
-    var obj = noticeArray[j]; 
-    if(obj == undefined)
-        continue;
-    var index = (obj.created_on).indexOf('T');
-    var createDate = (obj.created_on).substring(0,index);
-   
-    if(obj.pin == true)
-    {
-        var html = '<div id="noticeDiv" style="width: 100%;">' +
-                        '<span id="noticeTitle' +j+ '" class = "noticeSpan1"> <img class="noticeBullet1" src = "images/red_bullet.svg">' +obj.title+ '</span>'+
-                        '<button class = "divButton" id="noticeButton' +j+ '" onclick=" toggle_div2(noticeDetails' +j+ ', ' +j+ ')" >'+
-                            '<i id="closeAngleIcon" class = "fa fa-angle-down" style="vertical-align: top; margin-left: -1px;"></i>'+ 
-                        '</button><br/>'+
-                        '<lable class="noticeLabel1">' +createDate+'</lable><br/>'+
-                        '<br/>'+
-                        '<div id = "noticeDetails' +j+ '" class = "noticeDiv1">'+
-                            '<p>' +obj.contents+ '</p>'+
-                        '</div>'+
-                    '</div>';
-    }
-    else
-    {
-        var html = '<div id="noticeDiv" style="width: 100%; margin-top:15px">'+
-                        '<span id="noticeTitle' +j+ '" class = "noticeSpan2">' +obj.title+'</span>'+
-                        '<button class = "divButton" id="noticeButton' +j+ '" onclick=" toggle_div2(noticeDetails' +j+ ', ' +j+ ')" >'+
-                            '<i id="openAngleIcon" class = "fa fa-angle-down" data-src="images/openArrow.svg" style = "vertical-align: top; margin-left: -1px;"></i>'+ 
-                        '</button>' +
-                        '<br/>' +
-                        '<lable class="noticeLabel1">' +createDate+'</lable>' +
-                        '<br/>' +
-                        '<br/>' +
-                        '<div id = "noticeDetails' +j+ '" class = "noticeDiv1">' +
-                            '<p>' +obj.contents+ '</p>' +
-                        '</div>' +
-                    '</div>';
-    }
+    // show all notices
+    for(var j = 0; j < noticeArray.length; j++) {
+        var obj = noticeArray[j]; 
+        if(obj == undefined)
+            continue;
+        var index = (obj.created_on).indexOf('T');
+        var createDate = (obj.created_on).substring(0,index);
+    
+        if(obj.pin == true)
+        {
+            var html = '<div id="noticeDiv" style="width: 100%;">' +
+                            '<span id="noticeTitle' +j+ '" class = "noticeSpan1"> <img class="noticeBullet1" src = "images/red_bullet.svg">' +obj.title+ '</span>'+
+                            '<button class = "divButton" id="noticeButton' +j+ '" onclick=" toggle_div2(noticeDetails' +j+ ', ' +j+ ')" >'+
+                                '<i id="closeAngleIcon" class = "fa fa-angle-down" style="vertical-align: top; margin-left: -1px;"></i>'+ 
+                            '</button><br/>'+
+                            '<lable class="noticeLabel1">' +createDate+'</lable><br/>'+
+                            '<br/>'+
+                            '<div id = "noticeDetails' +j+ '" class = "noticeDiv1">'+
+                                '<p>' +obj.contents+ '</p>'+
+                            '</div>'+
+                        '</div>';
+        }
+        else
+        {
+            var html = '<div id="noticeDiv" style="width: 100%; margin-top:15px">'+
+                            '<span id="noticeTitle' +j+ '" class = "noticeSpan2">' +obj.title+'</span>'+
+                            '<button class = "divButton" id="noticeButton' +j+ '" onclick=" toggle_div2(noticeDetails' +j+ ', ' +j+ ')" >'+
+                                '<i id="openAngleIcon" class = "fa fa-angle-down" data-src="images/openArrow.svg" style = "vertical-align: top; margin-left: -1px;"></i>'+ 
+                            '</button>' +
+                            '<br/>' +
+                            '<lable class="noticeLabel1">' +createDate+'</lable>' +
+                            '<br/>' +
+                            '<br/>' +
+                            '<div id = "noticeDetails' +j+ '" class = "noticeDiv1">' +
+                                '<p>' +obj.contents+ '</p>' +
+                            '</div>' +
+                        '</div>';
+        }
 
-    $('#noticeBody').append(html);
-    var html2= '<hr style="border: 0.5px solid #BDBDBD; width:99.5%; float:left; margin:0px 0px 14px 0px; opacity: 0.3"  id="hideHr"/>';
-    $('#noticeBody').append(html2);
-}
+        $('#noticeBody').append(html);
+        var html2= '<hr id="hideHr"/>';
+        $('#noticeBody').append(html2);
+    }
 }  
 
 function toggle_div2(divID, i) 
@@ -2733,10 +2514,9 @@ function showMarker(mapInstance, iconUrl, stationTitle, station_mid, lat, long) 
     else
         markerLabelClass = "markerLable";
 
-    var markerIcon;
     // get first 3 characters of string 
+    var markerIcon;
     var title = stationTitle.substring(0, 3);
-    
     if(title == "GAR")
     {
         markerIcon = new L.DivIcon({
@@ -2757,7 +2537,6 @@ function showMarker(mapInstance, iconUrl, stationTitle, station_mid, lat, long) 
         });
       
     marker.addTo(mapInstance);
-
     var popup;
     marker.on('mouseover', function(e) {
         var stringLat = ((Number(lat)).toFixed(6)).toString();
@@ -2978,15 +2757,11 @@ function showChart(graph1, title, color, yAxisLable, vehicleList, yAxisList, y_u
     });
 }
 
-//window.onload = function(){updateCCTV()};
 function updateCCTV()
 {
     // get CCTV URL 
     var dom = document.getElementById("vehicleSelect");
-    //alert("dom :"+dom);
-    //alert("dom.selectedIndex  :" +dom.options[(dom.selectedIndex)].id);
     var selectedId = dom.options[(dom.selectedIndex)].id;
-   // alert("cctv :"+selectedId);
     getMethod("vehicles/"+selectedId+"/", function (data)
     {
         var vehicle = JSON.parse(data);
@@ -3006,8 +2781,7 @@ function updateCCTV()
         document.getElementById('cameraText').style.display = "none";
         
         /*if(filePath == null)
-        {
-           
+        {           
             var oddDom = document.getElementById("oddFile");
             oddDom.href = "";
             return false;
@@ -3057,7 +2831,7 @@ function webcam(webcamId, vehicle) {
     
     if(vehicle[0] == undefined)
         return false;
-    // close div with off camer=a button
+    // close div with off camera button
     // open div with play camera and fullscreen icon
     if(vehicle[0].webcam1 != null)
     {
@@ -3080,9 +2854,8 @@ function webcam(webcamId, vehicle) {
         document.getElementById("offCameraDiv2").style.display = "block";
         document.getElementById("playButtonDiv2").style.display = "none";
     }
-    //var button_id = "cameraButton" + webcamId;
 
-    if (webcamId == '1') 
+    if(webcamId == '1') 
     {
         if(vehicle != null)
             var vehicleObj = vehicle[0];
@@ -3091,12 +2864,11 @@ function webcam(webcamId, vehicle) {
         if (webcam1 != null) 
             document.getElementById("hidden_cam1").style.background = 'url('+webcam1+')'; 
     }
-    if (webcamId == '2') 
+    if(webcamId == '2') 
     {
         if(vehicle != null)
             var vehicleObj = vehicle[0];
         document.getElementById("cameraButton2").src = "images/cctv/video2Active.svg";
-       
         if(vehicleObj != null)
             var webcam2 = vehicleObj.webcam2;
         if (webcam2 != null) 
@@ -3112,7 +2884,6 @@ function scale_image(hidden_cam)
     document.getElementById("myModal").style.display = "block";
     var div_url = document.getElementById(hidden_cam).style.background;
     document.getElementById("img01").style.backgroundImage = div_url;
-
     if(hidden_cam == "hidden_cam1")
     {
         active_webcam = "webcam_div1";
@@ -3168,7 +2939,6 @@ function selectSite2(selectedUserInfo) {
                 .map(username => {
                 return allUserList.find(a => a.username === username)
                 })
-        
                 userList.disabled = false;
                 for(var i=0;i < uniqueAddresses.length; i++)
                 {
@@ -3208,7 +2978,6 @@ function selectSite2(selectedUserInfo) {
 function selectSite(select, site_no, selectedUserInfo) {
     var selectValue;
     var managerSelect = document.getElementById('select_siteManager');
-   
     if(select == 'all')
         selectValue = 0;
     else
@@ -3283,7 +3052,7 @@ function clearMessage()
 {
     hide_div('messageModal'); 
     $('#msgArea').val('');
-    document.getElementById('messageSendStatus').innerHTML =  '';
+    document.getElementById('messageSendStatus').innerHTML = '';
     document.getElementById('byteInfo').innerHTML = 0;
 }
 
@@ -3402,7 +3171,6 @@ function resetPassword()
         //check_password
         var t = localStorage.getItem("activeUserID");
         var data = JSON.stringify({
-           
             "e_mail_id": localStorage.getItem("activeUserID"),
             "old_password": old_pwd,
             "new_password": input_new_pwd,

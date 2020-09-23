@@ -1516,26 +1516,41 @@ overflow-x: hidden;
   left :300px;
 }
 
+#notice-footer{
+  width:750px;height:20px;text-align: center;margin: auto;bottom: 40px;position: relative
+}
+
 /* Notice pagination */
 .pagination
 {
-  z-index: 1111;
+ /* z-index: 1111;
   position: fixed;
   top: 790px;
-  left: 800px;
+  left: 800px;*/
 }
 
 .pagination a {
   color: black;
-  float: left;
-  padding: 8px 16px;
+  /*float: left;*/
+  padding: 4px 8px;
   text-decoration: none;
   transition: background-color .3s;
+  font-size: 13px;
+    font-family: Roboto_medium;
+}
+
+.pagination_img{
+  margin-top: 10px;
 }
 
 .pagination a.active {
   background-color: dodgerblue;
   color: white;
+
+}
+
+.disable_a{
+  pointer-events: none;
 }
 
 .pagination a:hover:not(.active) {background-color: #ddd;}
@@ -1543,4 +1558,7 @@ overflow-x: hidden;
 #paginationDiv a:focus{
   background-color: dodgerblue;
   color: white;
+  width:15px;
+  height:15px;
+  border-radius: 50%;
 }
