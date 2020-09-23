@@ -365,9 +365,13 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
         createSelectList(vehicleObj);
         if(deguShuttleArray.length >0 )
         {
-            deguShuttleArray = deguShuttleArray.sort();
+           // alert("deguShuttleArray before:"+JSON.stringify(deguShuttleArray));
+            deguShuttleArray = deguShuttleArray.sort((a, b) => (a > b) ? 1 : -1);
+
+            //alert("deguShuttleArray after:"+JSON.stringify(deguShuttleArray));
             firstId = deguShuttleArray[0];
             vehicleInfo(mapInstance, firstId);
+           // alert("change vInfo :"+firstId);
             changeVehicleInfo(firstId);
             oddButtonStatus();
         }
@@ -473,9 +477,8 @@ function onVehiclePowerOff()
            document.getElementById("driveStatus").style.backgroundColor = "#0893BF"
         }
      
-        
         showDriveStatus = false;
-        console.log("Vehicle power off is not applied :"+showDriveStatus);
+        //console.log("Vehicle power off is not applied :"+showDriveStatus);
         return false;
     });
 }
@@ -936,6 +939,7 @@ function vehicleInfo(map, vId)
     interval = setInterval(function(){
         request_count++;
         count15++;
+       // alert("vId :"+vId);
         var apiUrl = "vehicles/"+vId+"/";
       //  console.log("apiUrl :"+apiUrl);
         getMethod(apiUrl, function (data) {
@@ -944,6 +948,7 @@ function vehicleInfo(map, vId)
           // if(showDriveStatus != true )
           // {
                 //console.log("battery 1:"+vehicle.battery);
+                //alert("vehicleInfo");
                 updateShuttleInfo(vehicle, request_count); 
           //  }
         });
@@ -956,6 +961,8 @@ function updateShuttleInfo(vehicle, request_count)
    //console.log("Battery 1 update shuttle info");
     onVehiclePowerOff();
   //  console.log("showDriveStatus :"+showDriveStatus+ " vehicle id :"+vehicle.id);
+
+  console.log("updateShuttleInfo :"+JSON.stringify(vehicle));
     if(showDriveStatus != true )
     {
         if(vehicle == null)
@@ -1126,6 +1133,8 @@ function changeVehicleInfo(obj)
     clearInterval(interval);
     if(typeof(obj) == 'number')
     {          
+
+       // alert("if changeVehicleInfo obj :"+obj);
         interval = vehicleInfo(activeMap, obj);
     }
     else
@@ -1133,6 +1142,7 @@ function changeVehicleInfo(obj)
         var selectedId = obj.options[obj.selectedIndex].id;
        // var status = onVehiclePowerOff();
         //if(showDriveStatus != true )
+        //alert("else changeVehicleInfo :"+selectedId);
            interval = vehicleInfo(activeMap , selectedId);
     }
     if(eta_interval != null)
@@ -1330,7 +1340,7 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                                 speedWeight ="normal";
                         }
                             
-                        var vehicleOperation = updateGnssStatus(vehicleObj.drive);
+                        var vehicleOperation = updateGnssStatus(vehicleObj.gnss);
                        // alert("vehicleOperation :"+vehicleOperation);
                         if(vehicleObj.drive == true)
                         {
@@ -1460,9 +1470,10 @@ function setPopupContent(e, mapInstance, site_no)
                         else
                             speedWeight ="normal";
                     }
-                    //var vehicleOperation = updateGnssStatus(shuttleMarkerArray[k].gnss);  
+                    var vehicleOperation = updateGnssStatus(shuttleMarkerArray[k].gnss);  
+               
                     layer._popup.setContent("<div class="+popupColor+" id='vPopup'>"+
-                                            "<p class='popupTitle'>" +shuttleMarkerArray[k].name+ "<img class='activeGreenPopup'></p>"+ // src="+vehicleOperation+"
+                                            "<p class='popupTitle'>" +shuttleMarkerArray[k].name+ "<img class='activeGreenPopup' src="+vehicleOperation+"></p>"+ // src="+vehicleOperation+"
                                             "<span class='popupVersion'>VER : "+shuttleMarkerArray[k].version+"</span>"+
                                             "</div><br>"+
                                             "<div class='popupSpeedDiv'>"+
@@ -1890,10 +1901,6 @@ function currentVehicleETA(stationData)
     // get current vehicle id from select list 
     var dom = document.getElementById("vehicleSelect");
     var stationDetails; 
-
-    console.log("stationData :"+JSON.stringify(stationData));
-    console.log("stationData eta : "+JSON.stringify(stationData.eta));
-    console.log("stationData eta len:"+stationData.eta);
   
     if((stationData.eta).length == 0 || (stationData.eta) == "{}" || stationData.eta == undefined || stationData == undefined) //|| stationData.eta == undefined )
     { 
@@ -1904,7 +1911,6 @@ function currentVehicleETA(stationData)
             mid : stationData.mid,
             name : stationData.name  
         }
-        console.log("stationDetails if :"+stationDetails);
         return stationDetails;
     }
     else
@@ -1936,8 +1942,6 @@ function currentVehicleETA(stationData)
                         mid : stationData.mid,
                         name : stationData.name  
                     }
-
-                    console.log("stationDetails else if :"+stationDetails);
                     return stationDetails;
                 }
                 else
@@ -1951,7 +1955,6 @@ function currentVehicleETA(stationData)
                             mid : stationData.mid,
                             name : stationData.name  
                         }
-                        console.log("stationDetails else else :"+stationDetails);
                         return stationDetails;
                     }
                     else{
@@ -2435,6 +2438,8 @@ function updateSettingIcon()
     document.getElementById('settingIcon').src= "images/setting.svg";
 }
 
+var globalNoticeArray;
+
 function changeNotice(){
     //var noticeSelect = document.getElementById('select_notice');
     //var category = noticeSelect.options[noticeSelect.selectedIndex].value;
@@ -2474,14 +2479,79 @@ function changeNotice(){
             noticeArray.push(normalNotice[n]);
        
         $('#noticeBody').empty();
+        globalNoticeArray = noticeArray;
+
+        var numberOfPagesNeeded  = Math.ceil(noticeArray.length/8);
+
+      
+        document.getElementById('paginationDiv').innerHTML = "";
+
+       var html1 = "<a href='#'>&laquo;</a>";
+       $('#paginationDiv').append(html1);
+      /* var html2 =  "<a href='#' onclick='paginateTest(1)'>1</a>"+
+                    "<a class='active' href='#' onclick='pagination(2)'>2</a>"+
+                    "<a href='#' onclick='pagination(3)'>3</a>"+
+                    "<a href='#' onclick='pagination(4)'>4</a>"+
+                    "<a href='#' onclick='pagination(5)'>5</a>"+
+                    "<a href='#' onclick='pagination(6)'>6</a>"+
+                    "<a href='#' onclick='pagination(7)'>7</a>"+
+                    "<a href='#' onclick='pagination(8)'>8</a>"+
+                    "<a href='#' onclick='pagination(9)'>9</a>"+
+                    "<a href='#' onclick='pagination(10)'>10</a>";
+*/
+        for(var j=0; j<numberOfPagesNeeded; j++)
+        {/*
+            if(j==0)
+            {
+                var html2 =  "<a href='#' class='active' onclick='paginateTest("+(j+1)+")'>"+(j+1)+"</a>";
+            }
+            else{*/
+                var html2 =  "<a href='#' onclick='paginateTest("+(j+1)+")'>"+(j+1)+"</a>";
+           // }
+            
+            $('#paginationDiv').append(html2);
+            
+        }
+
+        
+
+        var html3 = "<a href='#'>&raquo;</a>";
+        $('#paginationDiv').append(html3);
+
+        //document.getElementById('paginationDiv').innerHTML = html;
+
+        paginateTest(1);
 
         //"noticeArray" is final array for notice used for pagination
-        var numberOfPagesNeeded  = Math.ceil(noticeArray.length/8);
-        console.log("noticeArray :"+JSON.stringify(noticeArray));
+
+
+
+      /*    var numberOfPagesNeeded  = Math.ceil(noticeArray.length/8);
+      console.log("noticeArray :"+JSON.stringify(noticeArray));
         console.log(paginate(noticeArray, 8 ,2));
         showNotice(noticeArray)
         console.log("array split :"+splitToChunks(noticeArray, numberOfPagesNeeded));
-    });
+    */});
+}
+
+var activePaginationButton;
+
+function paginateTest(buttonId)
+{
+    
+    activePaginationButton
+    // clear previous notices
+    document.getElementById('noticeBody').innerHTML = "";
+
+    console.log("globalNoticeArray :"+JSON.stringify(globalNoticeArray));
+    var i =(buttonId -1 ) * 8;
+    var temparray,chunk = 8 * buttonId;
+
+    if(i<globalNoticeArray.length)
+        temparray = globalNoticeArray.slice(i,chunk);
+
+    console.log("temparray length :"+temparray.length +" temparray :"+JSON.stringify(temparray));
+    showNotice(temparray);
 }
 
 function splitToChunks(array, parts) {

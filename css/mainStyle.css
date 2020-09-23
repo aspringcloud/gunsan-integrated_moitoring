@@ -1539,3 +1539,8 @@ overflow-x: hidden;
 }
 
 .pagination a:hover:not(.active) {background-color: #ddd;}
+
+#paginationDiv a:focus{
+  background-color: dodgerblue;
+  color: white;
+}
