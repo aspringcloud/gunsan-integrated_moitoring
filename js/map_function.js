@@ -100,10 +100,11 @@ function switchMap(obj)
             document.getElementById('fullscreen_title').style.left = "160px";
 
             clusterMapCount++;
-            hide_div("infoChart");
-            var elementsToHide = ["offsite_window", "webcam_div", "webcam_div1", "webcam_div2", "distanceChart1", "passangerChart2"];
+          
+            var elementsToHide = ["offsite_window", "webcam_div", "webcam_div1", "webcam_div2", "infoChart", "distanceChart1", "passangerChart2"];
             hideElements(elementsToHide);
             hideMaps('offsiteMap');
+           
             hide_div('eta_div');
             $('.leaflet-top, .leaflet-bottom ').css("left" , "1810px");
             var show_elements2 = ["graph_div", "countInfoDiv"];         
@@ -800,6 +801,8 @@ function showCluster(cluster_map)
     }
     // refresh map 
     cluster_map.invalidateSize();
+    if(document.getElementById('infoChart').style.display != "none")
+        document.getElementById('infoChart').style.display = "none";
 }
 
 // function to switch between main tabs (different projects)
@@ -2443,9 +2446,7 @@ function hideElements(div_array) {
     {
         var div_dom = document.getElementById(div_array[i]);
         if (div_dom != null)
-        {
             div_dom.style.display = "none";
-        }
     }
 }
 
@@ -2454,9 +2455,7 @@ function showElements(div_array) {
     {
         var div_dom = document.getElementById(div_array[i]);
         if (div_dom != null)
-        {
             div_dom.style.display = "block";
-        }    
     }
 }
 
