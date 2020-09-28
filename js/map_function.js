@@ -100,7 +100,8 @@ function switchMap(obj)
             document.getElementById('fullscreen_title').style.left = "160px";
 
             clusterMapCount++;
-            var elementsToHide = ["offsite_window", "webcam_div", "webcam_div1", "webcam_div2", "infoChart", "distanceChart1", "passangerChart2"];
+            hide_div("infoChart");
+            var elementsToHide = ["offsite_window", "webcam_div", "webcam_div1", "webcam_div2", "distanceChart1", "passangerChart2"];
             hideElements(elementsToHide);
             hideMaps('offsiteMap');
             hide_div('eta_div');
@@ -1119,6 +1120,7 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
         for(var j = 0; j < vehicleInfo.length; j++)
         {        
             var vehicleObj = vehicleInfo[j];
+             console.log("vehicleObj :"+JSON.stringify(vehicleObj));
             if(vehicleObj.lat == null || vehicleObj.lon == null)
                 continue;
 

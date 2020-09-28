@@ -227,7 +227,8 @@
                 <img class="fullscreen" onclick="scale_image('hidden_cam1');" src="images/cctv/fullscreen.svg" />
             </div>
             <p id="cameraText"> 영상이 여기에 표시됩니다. </p>
-            <div id="cctv_webcam"></div>
+          <div id="cctv_webcam"></div>
+            <!-- <iframe id="cctv_webcam"></iframe>-->
             <!--<iframe style="width: 100%; border: 0px; height:100%; background: pink;" id="cctv_webcam"></iframe>onchange="updateCCTV();-->
             <select id="camera_select" onchange="stopVideoStreaming(); /*updateCCTV();  playPause('cctv_webcam','pausePlayButton1');*/">
                 <option id = "1" selected="selected">전방 카메라 1 </option>
@@ -263,11 +264,11 @@
         <!--offsite div count of Route, vehicle, station, kiosk and garage-->
         <div class="div_box" id="countInfoDiv"> <!--class="div_box"-->
             <img src="images/table_background.svg"/>
-            <p id="routeCount" class="p2" style="left: 65px;"></p>
-            <p id="vehicleCount" class="p2" style="left: 315px;"></p>
-            <p id="StationCount" class="p2" style="left: 540px;"></p>
-            <p id="kioskCount" class="p2" style="left: 780px;"></p>
-            <p id="garageCount" class="p2" style="left: 1030px;"></p>
+            <p id="routeCount" class="p2" style="left: 85px;"></p>
+            <p id="vehicleCount" class="p2" style="left: 325px;"></p>
+            <p id="StationCount" class="p2" style="left: 565px;"></p>
+            <p id="kioskCount" class="p2" style="left: 800px;"></p>
+            <p id="garageCount" class="p2" style="left: 1050px;"></p>
         </div>
 
         <div id="graph_div" >

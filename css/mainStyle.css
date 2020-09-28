@@ -1405,19 +1405,19 @@ color: #333333;
 #vehicle_count{
 position: absolute;
 top: 345px;
-left: 30px;
+left: 35px;
 }
 
 #station_count{
 position: absolute;
 top: 345px;
-left: 110px;
+left: 118px;
 }
 
 #kiosk_count{
 position: absolute;
 top: 345px;
-left: 190px;  
+left: 195px;  
 }
 
 .font1{
@@ -1429,7 +1429,7 @@ left: 190px;
 #garage_count{
 position: absolute;
 top: 345px;
-left: 270px;
+left: 280px;
 }
 
 #eta_div{
