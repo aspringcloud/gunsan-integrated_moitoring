@@ -1797,8 +1797,10 @@ function currentVehicleETA(stationData)
     else
     {
         var selectedId = dom.options[dom.selectedIndex].id;
+        console.log("stationData.eta :"+stationData.eta);
         for(var p of stationData.eta)
-        {            
+        {   
+            console.log("p :"+p);         
             var temp = JSON.parse(p);
             var key = Object.keys(temp);
             var value = Object.values(temp);
@@ -1858,14 +1860,15 @@ function getDriveStatusOfVehicle(vehicleId)
 function updateETA(site_id)
 {
     getMethod("stations/", function(data) {
-        var stationData = JSON.parse(data);
+        var stationData =  JSON.parse(data);
         var count = Object.keys(stationData).length;
         var stationETA = [];
         stationData = stationData.sort((a, b) => (a.sta_Order > b.sta_Order) ? 1 : -1)
 
         // station list
-        for (var i = 0; i < count; i++) {
-            if (stationData[i].site == site_id)
+        for (var i = 0; i < count; i++) 
+        {
+            if(stationData[i].site == site_id)
             {  
                 var eta = currentVehicleETA(stationData[i]);
                 stationETA.push(eta);
@@ -1923,7 +1926,7 @@ function updateETA(site_id)
 function createRoute(mapInstance, waypoints, stationTitle) {
     var control = L.Routing.control({
         waypoints: waypoints,
-        serviceUrl:'https://osrm.aspringcloud.com/route/v1',
+        serviceUrl: 'https://osrm.springgo.io:900/route/v1',//'https://osrm.springgo.io:900/route/v1',//'https://osrm.aspringcloud.com/route/v1',
         dragging:false,
         routeWhileDragging:false,
         createMarker: function (i, wp) {
@@ -2360,6 +2363,8 @@ function paginate(array, page_size, page_number) {
   
 function showNotice(noticeArray)
 {
+    if(noticeArray == undefined)
+        return false;
     // show all notices
     for(var j = 0; j < noticeArray.length; j++) {
         var obj = noticeArray[j]; 
@@ -2775,9 +2780,12 @@ function updateCCTV()
             webcam = vehicle.webcam1;    
 
         document.getElementById("hidden_cam1").style.background = 'url('+webcam+')'; 
+
+       // document.getElementById('cctv_webcam').src=  "rtsp://223.171.57.132:8554/dvr" ;
+
         document.getElementById('cctv_webcam').style.background = document.getElementById("hidden_cam1").style.background;
         document.getElementById('cctv_webcam').style.backgroundSize="contain";
-        console.log("webcam :"+ document.getElementById('cctv_webcam').style.background);
+        //console.log("webcam :"+ document.getElementById('cctv_webcam').style.background);
         document.getElementById('pausePlayButton1').src = "images/cctv/play.svg";
         document.getElementById('cameraText').style.display = "none";
         
@@ -2900,10 +2908,13 @@ function scale_image(hidden_cam)
 function siteMsgSend() {
     document.getElementById('messageModal').style.display = "block";
     var e = document.getElementById("manager_selectlist");
-    var selectedUserInfo = {
-        name :e.options[e.selectedIndex].innerHTML,
-        email : e.options[e.selectedIndex].value,
-        option_index : e.selectedIndex
+    if(e.options[e.selectedIndex] != undefined)
+    {
+        var selectedUserInfo = {
+            name :e.options[e.selectedIndex].innerHTML,
+            email : e.options[e.selectedIndex].value,
+            option_index : e.selectedIndex
+        }
     }
     selectSite2(selectedUserInfo);
 }
@@ -2923,6 +2934,7 @@ function selectSite2(selectedUserInfo) {
         getMethod(api_url, function (data) {
             var userData = JSON.parse(data);
             var count = Object.keys(userData).length;
+      
             for (var j=0; j<count; j++)
             {
                 var userData2 = userData[j].user;
