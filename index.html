@@ -4,13 +4,23 @@
         <title>Login</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+       
+        <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> -->
 
-        <!--font awesome icon-->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <!--jquery-->
+        <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>-->
+        <link rel="stylesheet" href="jquery/jquery-ui.css">
+        <script src="jquery/jquery-1.10.2.js"></script>
+        <script src="jquery/jquery-ui.js"></script>
+
+        <!--bootstrap 4.3.1-->
+        <link rel="stylesheet" href="bootstrap-4.3.1/css/bootstrap.min.css">
+        <script src="bootstrap-4.3.1/js/bootstrap.min.js"></script>
+
+        <!--font awesome icon
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
         <link rel="stylesheet" href="css/login_style.css">
         <script src="js/validation.js"></script>
     </head>
@@ -30,10 +40,8 @@
             <form id="login_form" action="" method="post" role="form" onsubmit = "login_validation(); return false;">
                 <p class="name_P">이메일 아이디</p>
                 <input type="text" id="input_id" class="form-control form_input font_roboto placeholder" placeholder="이메일 아이디를 입력해 주세요." autofocus>
-                
                 <p class="name_P">비밀번호</p>
                 <input id="input_pwd" type="password" class="form-control form_input placeholder imeModeDisabled"  placeholder="비밀번호를 입력해 주세요.">
-                          
                 <div style="margin-right: 0px;">
                     <div style="display:inline-block;">
                         <label class="font_thirteen">
@@ -44,15 +52,13 @@
                         <span class="font_thirteen1"><a href="Find_id.html"> 비밀번호 재설정</a> </span>
                     </div>
                 </div>
-    
-            <button type="submit" class="login_button" > 로그인 </button>
-            <p class="error" id="name_error"></p>
-            <p class="error" id="pwd_error"></p> 
-            <p class="error" id="incorrect_credentials"></p> 
-
-            <label class="info">본 서비스 가입을 위해서는 bcchoi@aspringcloud.com 으로 <br/>이메일 주소, 이름, 소속, 전화번호를 보내주시기 바랍니다.</label>
-            <div class="info2">Copyright ⓒ GUNSANCITY. All right reserved </div>
-        </form>   
+                <button type="submit" class="login_button"> 로그인 </button>
+                <p class="error" id="name_error"></p>
+                <p class="error" id="pwd_error"></p> 
+                <p class="error" id="incorrect_credentials"></p> 
+                <label class="info">본 서비스 가입을 위해서는 bcchoi@aspringcloud.com 으로 <br/>이메일 주소, 이름, 소속, 전화번호를 보내주시기 바랍니다.</label>
+                <div class="info2">Copyright ⓒ GUNSANCITY. All right reserved </div>
+            </form>   
             <div id="login_success_div" style="display: none;">
                 <hr>
                 <p class="p_padding" id="username_p"></p>

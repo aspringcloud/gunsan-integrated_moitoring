@@ -477,7 +477,6 @@ input:checked + .slider:before {
   -ms-transform: translateX(15px);
   transform: translateX(15px);
   background-color: rgba(29, 138, 219);
-  
 }
 
 /* Rounded sliders */
@@ -1502,6 +1501,8 @@ overflow-x: hidden;
   width: 150px;
   height: 107px;
   background: #F2F2F2;
+  /* width: 100%;
+  height: 100%;*/
   position: absolute;
   right: 15px;
   border : 1px solid black;
@@ -1517,7 +1518,14 @@ overflow-x: hidden;
 }
 
 #notice-footer{
-  width:750px;height:20px;text-align: center;margin: auto;bottom: 40px;position: relative
+  width: 100%;
+  height: 20px;
+  text-align: center;
+  left: 0px;
+  margin: 0 auto;
+  bottom: 350px;
+  position: absolute;
+  /*width:750px;height:20px;text-align: center;margin: auto;bottom: 40px;position: relative*/
 }
 
 /* Notice pagination */
@@ -1536,7 +1544,7 @@ overflow-x: hidden;
   text-decoration: none;
   transition: background-color .3s;
   font-size: 13px;
-    font-family: Roboto_medium;
+  font-family: Roboto_medium;
 }
 
 .pagination_img{
@@ -1546,7 +1554,11 @@ overflow-x: hidden;
 .pagination a.active {
   background-color: dodgerblue;
   color: white;
+}
 
+.page_active {
+  background-color: dodgerblue;
+  color: white;
 }
 
 .disable_a{

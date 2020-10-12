@@ -2,6 +2,17 @@
 <html lang="ko=KR"></html>
 <head>
     <title>통합관제 </title>
+    <!-- unpkg : use the latest version of Video.js 
+    <link href = "https://unpkg.com/video.js/dist/video-js.min.css" rel="stylesheet"/>
+    <script src = "https://unpkg.com/video.js/dist/video.min.js"></script>-->
+
+    <!-- unpkg : use a specific version of Video.js (change the version numbers as necessary) 
+    <link href="https://unpkg.com/video.js@7.8.2/dist/video-js.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/video.js@7.8.2/dist/video.min.js"></script>-->
+
+    <!--<script type = "module" src="../html5_rtsp_player-master/streamedian.js"></script>-->
+    <!--<script type="module" src="webrtc-streamer-element.js"></script>-->
+
     <meta charset="utf-8">
     <meta name="description" content="Integrated Monitoring System Spring Cloud AUTONOMOUS Shuttle, 통합관제">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -51,9 +62,9 @@
     <link rel="stylesheet" href="Chart.js/Chart.css">
     <link rel="stylesheet" href="Chart.js/Chart.min.css">
   
-    <!--font awesome icon--> <!--currently cpmments but id css is broken : uncomment this-->
+    <!--font awesome icon--> <!--currently comments but id css is broken : uncomment this -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-   
+ 
     <!--javascript function files-->
     <script src="js/map_function.js"></script>
     <script src="js/validation.js"></script>
@@ -87,18 +98,13 @@
                     <span onclick="hide_div('noticeModal');" id="noticeModalClose">&times;</span>
                 </div>
             <div class="notice-body" id="noticeBody"> </div>
-
-       
-           <!-- <div id="notice-footer">
+            <!-- <div id="notice-footer">
                 <div class="pagination" id="paginationDiv"></div>
-            </div>
-
-            -->
+            </div> -->
         </div>
         <div id="notice-footer" >
             <div class="pagination" id="paginationDiv"></div>
         </div>
-          
     </div>
     <!-- Message Modal -->
     <div id="messageModal" class="message_div2" >
@@ -227,8 +233,15 @@
                 <img class="fullscreen" onclick="scale_image('hidden_cam1');" src="images/cctv/fullscreen.svg" />
             </div>
             <p id="cameraText"> 영상이 여기에 표시됩니다. </p>
-             <div id="cctv_webcam"></div>
-            <!--<iframe id="cctv_webcam"></iframe>-->
+            <div id="cctv_webcam"></div>
+           
+            <!--<webrtc-streamer id="cctv_webcam" url=""></webrtc-streamer>-->
+            <!-- <video id="cctv_webcam" autoplay playsinline></video> 
+            <video id="cctv_webcam" controls autoplay></video>-->
+
+            
+            <!--<div id="cctv_webcam"><a href="rtsp://222.114.83.18/proxyStream-7"></a></div>-->
+           <!-- <iframe id="cctv_webcam" allow="camera;microphone"></iframe>-->
             <!--<iframe style="width: 100%; border: 0px; height:100%; background: pink;" id="cctv_webcam"></iframe>onchange="updateCCTV();-->
             <select id="camera_select" onchange="stopVideoStreaming(); /*updateCCTV();  playPause('cctv_webcam','pausePlayButton1');*/">
                 <option id = "1" selected="selected">전방 카메라 1 </option>
@@ -509,6 +522,7 @@
     }
 
     $('.leaflet-top, .leaflet-bottom ').css("left" , "1810px");
+    //webrtc();
     </script>
 </body>
 </html>
