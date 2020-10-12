@@ -67,6 +67,7 @@ function findid_validation(button_id) {
     input_name_error.innerHTML = "";
     input_email_error.innerHTML = "";
     var input_name = $("#input_name").val();
+    
     var input_email = $("#input_email").val();
     if (!inputLengthCheck(input_name, input_name_error, "이름을 입력해 주세요.") && !inputLengthCheck(input_email, input_email_error, "이메일 아이디를 입력해 주세요."))
         return false;
