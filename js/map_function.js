@@ -1423,7 +1423,7 @@ function showChartData(siteId){
 }
 
 function checkWebcam(webcamData, imgID, ifImg, elseImg) {
-    console.log("webcamData :"+JSON.stringify(webcamData));
+    //console.log("webcamData :"+JSON.stringify(webcamData));
     var imgPath = "images/cctv/";
     var imgDom = document.getElementById(imgID);
     if (webcamData == null)
@@ -1686,10 +1686,10 @@ function currentVehicleETA(stationData)
     else
     {
         var selectedId = dom.options[dom.selectedIndex].id;
-        console.log("stationData.eta :"+stationData.eta);
+        //console.log("stationData.eta :"+stationData.eta);
         for(var p of stationData.eta)
         {   
-            console.log("p :"+p);         
+            //console.log("p :"+p);         
             var temp = JSON.parse(p);
             var key = Object.keys(temp);
             var value = Object.values(temp);
