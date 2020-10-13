@@ -1,4 +1,4 @@
-var server_URL =  "https://test.aspringcloud.com/api/";  //"https://gunsanapi.tasio.io:300/api/";//"https://api.aspringcloud.com/api/";
+var server_URL =  "https://gunsanapi.tasio.io:300/api/"; //"https://test.aspringcloud.com/api/";  ////"https://api.aspringcloud.com/api/";
 /* Input validation of login page */
 function login_validation() {
     var email_error = document.getElementById("name_error");
@@ -67,7 +67,7 @@ function findid_validation(button_id) {
     input_name_error.innerHTML = "";
     input_email_error.innerHTML = "";
     var input_name = $("#input_name").val();
-    
+
     var input_email = $("#input_email").val();
     if (!inputLengthCheck(input_name, input_name_error, "이름을 입력해 주세요.") && !inputLengthCheck(input_email, input_email_error, "이메일 아이디를 입력해 주세요."))
         return false;

@@ -25,6 +25,7 @@ function createAlertDiv(eventData)
     var selectList = document.getElementById("vehicleSelect");  // vehicle select list
     var selectedId;// = selectList.options[selectList.selectedIndex].id;  // selected Id 
     var siteId = event_how.site_id;
+    console.log("event_how :"+event_how);
     if(dataAttribute == "message")
     {
         id = event_how.vehicle_id;
@@ -182,7 +183,7 @@ function createAlertDiv(eventData)
             id = event_how.vehicle_id;
             vehicleID = event_how.vehicle_mid;
             var reason = event_how.reason_type;
-        // var koreanReason;
+           // var koreanReason;
             if(reason == "car")
                 eventMessage = "[차]로 인해 정지 발생";
             else if(reason == "people")
@@ -202,7 +203,7 @@ function createAlertDiv(eventData)
             id = event_how.vehicle_id;
             vehicleID = event_how.vehicle_mid;
             var powerStatus;
-            if(event_how.value == "true" || event_how.value == null)
+            if(event_how.value == "true" )
             {
                 eventMessage = "전원이 켜졌습니다."; 
                 powerStatus = true;
@@ -223,7 +224,6 @@ function createAlertDiv(eventData)
         }
     }
    
-
     if(vehicleID == null || siteId != active_site || dataAttribute == "message" ) //|| siteId != active_site
         return false;
     

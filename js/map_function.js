@@ -182,7 +182,6 @@ function switchMap(obj)
                     zoomControl: false,
                 });
             }    
-         
             showElements(["sejongSubmenu", "alertDiv"]);
             hide_div('countInfoDiv');
             showSite(sejong_map2, 18, sejong2ClickCount); 
@@ -234,6 +233,12 @@ function switchMap(obj)
                     zoomControl: false,
                 });
             }
+
+            // zoom button reallocate 
+            $('.leaflet-top, .leaflet-bottom ').css("left" , "1643px");
+
+            // scale button reallocate 
+            $('.leaflet-bottom .leaflet-control-scale ').css("right" , "10px");
 
             hide_div('countInfoDiv');
             show_div("eta_div");

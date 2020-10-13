@@ -11,7 +11,7 @@ function onDisconnectClick() {
 /* Open a new WebSocket connection using the given parameters */
 function openWSConnection() {
     var webSocketURL = null;
-    webSocketURL = "wss://ws.tasio.io:11511";//"ws://222.114.39.8:11411";//"wss://ws.tasio.io:11511"; //"ws://222.114.39.8:11411/ws/vehicle"
+    webSocketURL = "wss://websocket.springgo.io:11511";//"ws://222.114.39.8:11411";//"wss://ws.tasio.io:11511"; //"ws://222.114.39.8:11411/ws/vehicle"
     try {
         webSocket = new WebSocket(webSocketURL,[], {
             rejectUnauthorized: false
