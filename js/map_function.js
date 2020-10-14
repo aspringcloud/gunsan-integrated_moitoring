@@ -90,6 +90,7 @@ function switchMap(obj)
                     center:[35.83731,128.68384],
                     zoom : 16,
                     zoomControl: false,
+                    minZoom : 4,
                 });
             }
             showSite(daegu_map, 2, deguClickCount); 
@@ -114,18 +115,22 @@ function switchMap(obj)
             if(cluster_map == undefined)
             {            
                 cluster_map = L.map('offsiteMap', {
-                    zoomSnap: 0.15,      
+                 /*  zoomSnap: 0.75,  */  
                     dragging: true,
                     draggable:true,
                     scrollWheelZoom: true,
                     color: "rgba(8, 148, 19)",
                     zoomControl: false,
                     zoom:15,
-                    center:leftCenter
-                });
+                    minZoom : 4,
+                    center:leftCenter,
+               });
                 zoomHome_main = L.Control.zoomHome();
                 zoomHome_main.addTo(cluster_map);   
-                L.control.scale().addTo(cluster_map);
+                L.control.scale({
+                    imperial: false,
+                    maxWidth : 200,
+                }).addTo(cluster_map);
             }
             else
             {
@@ -151,6 +156,7 @@ function switchMap(obj)
                     zoom : 17,
                     center:[36.50047,127.27109],
                     zoomControl: false,
+                    minZoom : 4,
                 });
             }
 
@@ -179,6 +185,7 @@ function switchMap(obj)
                 sejong_map2 = L.map('sejongMap2',{
                     zoom : 16,
                     center:[36.4975,127.3274],
+                    minZoom : 4,
                     zoomControl: false,
                 });
             }    
@@ -203,6 +210,7 @@ function switchMap(obj)
                 sangam_map = L.map('sangamMap',{
                     zoom : 15,
                     center:[37.579333, 126.889036],
+                    minZoom : 4,
                     zoomControl: false,
                 });
             }
@@ -227,9 +235,10 @@ function switchMap(obj)
             if(gunsan_map == undefined)
             {
                 gunsan_map = L.map('gunsanMap',{
-                    zoomSnap: 0.15,
+                  /* zoomSnap: 0.15,*/
                     zoom : 16,
                     center:[35.812484, 126.409100],
+                    minZoom : 4,
                     zoomControl: false,
                 });
             }
@@ -264,6 +273,7 @@ function switchMap(obj)
                     color:"rgba(8, 148, 19)",
                     zoomControl: false,
                     zoom:18,
+                    minZoom : 4,
                     center:rightCenter
                 });
             }
@@ -328,7 +338,10 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
         getweather(currentSiteId);
     }, 10 * 60000);
 
-    L.control.scale().addTo(mapInstance);
+    L.control.scale({
+            imperial: false,
+            maxWidth : 200,
+        }).addTo(mapInstance);
     mapInstance.invalidateSize();
      
     // Show All the shuttles on degu route
@@ -1188,7 +1201,7 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                         else
                         {
                             currentMarker._popup.setContent("<div class="+popupColor+" id='vPopup'>"+
-                                "<p class='popupTitle'>" +vehicleObj.name+ "<img class='activeGreenPopup' src="+vehicleOperation+"></p>"+
+                                "<p class='popupTitle'>" +vehicleObj.name+ "<img class='activeGreenPopup' src='images/status/inactive_grey.svg'></p>"+
                                 "<span class='popupVersion'>VER : "+vehicleObj.model.firmware+"</span>"+
                             "</div><br>"+
                             "<div class='popupSpeedDivDisable'></div>"+
@@ -2709,7 +2722,8 @@ function updateCCTV()
         //document.getElementById('cctv_webcam').src = "rtsp://222.114.83.18/proxyStream-7";
         
         document.getElementById('cctv_webcam').style.background = document.getElementById("hidden_cam1").style.background;
-        document.getElementById('cctv_webcam').style.backgroundSize="contain";
+        document.getElementById('cctv_webcam').style.backgroundSize = "contain";
+        
         //console.log("webcam :"+ document.getElementById('cctv_webcam').style.background);
         document.getElementById('pausePlayButton1').src = "images/cctv/play.svg";
         document.getElementById('cameraText').style.display = "none";
@@ -2787,6 +2801,7 @@ function playPause(webcam_div, pausePlayButton)
         document.getElementById(webcam_div).style.backgroundColor = "#F2F2F2";
         document.getElementById(webcam_div).style.backgroundSize="contain";
         document.getElementById('cameraText').style.display = "block";
+        clearHiddenCamera();
     } 
     else 
     {  
@@ -2801,6 +2816,12 @@ function playPause(webcam_div, pausePlayButton)
         document.getElementById('cameraText').style.display = "none";
     }
 }
+
+function clearHiddenCamera()
+{
+    document.getElementById("hidden_cam1").style.background = "";
+    document.getElementById("hidden_cam2").style.background = "";
+} 
 
 function webcam(webcamId, vehicle) {
     show_div('webcam_div');
@@ -2872,6 +2893,8 @@ function scale_image(hidden_cam)
         active_webcam = "webcam_div2";
         activeVideoButton = "pausePlayButton2";
     }
+    var selectEle = document.getElementById("camera_select");
+    document.getElementById("cctvTitle").innerHTML = selectEle.options[selectEle.selectedIndex].text;
 }
 
 function siteMsgSend() {

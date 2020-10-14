@@ -233,7 +233,9 @@
                 <img class="fullscreen" onclick="scale_image('hidden_cam1');" src="images/cctv/fullscreen.svg" />
             </div>
             <p id="cameraText"> 영상이 여기에 표시됩니다. </p>
-            <div id="cctv_webcam"></div>
+            <div id="cctv_webcam">
+               
+            </div>
            
             <!--<webrtc-streamer id="cctv_webcam" url=""></webrtc-streamer>-->
             <!-- <video id="cctv_webcam" autoplay playsinline></video> 
@@ -243,7 +245,7 @@
             <!--<div id="cctv_webcam"><a href="rtsp://222.114.83.18/proxyStream-7"></a></div>-->
            <!-- <iframe id="cctv_webcam" allow="camera;microphone"></iframe>-->
             <!--<iframe style="width: 100%; border: 0px; height:100%; background: pink;" id="cctv_webcam"></iframe>onchange="updateCCTV();-->
-            <select id="camera_select" onchange="stopVideoStreaming(); /*updateCCTV();  playPause('cctv_webcam','pausePlayButton1');*/">
+            <select id="camera_select" onchange="stopVideoStreaming(); clearHiddenCamera(); /*updateCCTV();  playPause('cctv_webcam','pausePlayButton1');*/">
                 <option id = "1" selected="selected">전방 카메라 1 </option>
                 <option id = "2">분할 영상​</option>
             </select>
@@ -428,10 +430,11 @@
     </div>-->
     <!-- The CCTV Modal -->
     <div id="myModal" class="modal">
-        <span class="close2" >&times;</span>
+        <span id="cctvTitle">전방 카메라1</span>
+        <span class="close2" onclick="clearHiddenCamera();">&times;</span>
         <div class="modal-content" id="img01"> 
             <div class="buttonDiv">
-                <img src="images/cctv/fullscreen_exit.svg" onclick="document.getElementById('myModal').style.display = 'none'"/>    
+                <img src="images/cctv/fullscreen_exit.svg" onclick="document.getElementById('myModal').style.display = 'none'; clearHiddenCamera();"/>    
             </div>
         </div>
     </div>
