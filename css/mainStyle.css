@@ -1536,34 +1536,37 @@ overflow-x: hidden;
 
 .pagination a {
   color: black;
-  /*float: left;*/
   padding: 4px 8px;
   text-decoration: none;
   transition: background-color .3s;
   font-size: 13px;
   font-family: Roboto_medium;
-}
+  border-radius: 50%;
+} 
 
 .pagination_img{
   margin-top: 10px;
 }
-
-.pagination a.active {
+/*
+.pagination a:active {
   background-color: dodgerblue;
   color: white;
+  width:15px;
+  height:15px;
+  border-radius: 50%;
 }
-
+*/
 .page_active {
+  border-radius: 50%;
   background-color: dodgerblue;
-  color: white;
+  color: white !important;
+  width:15px;
+  height:15px;
+  
 }
-
-.disable_a{
-  pointer-events: none;
-}
-
+/*
+, .pagination a:focus
 .pagination a:hover:not(.active) {background-color: #ddd;}
-
 #paginationDiv a:focus{
   background-color: dodgerblue;
   color: white;
@@ -1571,6 +1574,9 @@ overflow-x: hidden;
   height:15px;
   border-radius: 50%;
 }
+
+*/
+
 
 #cctvTitle{
   font-size: 28px;

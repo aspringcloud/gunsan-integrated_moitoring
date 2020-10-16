@@ -380,7 +380,7 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
 
         // create select list of vehicle 
         createSelectList(vehicleObj);
-        if(deguShuttleArray.length >0 )
+        if(deguShuttleArray.length > 0 )
         {
             deguShuttleArray = deguShuttleArray.sort((a, b) => (a > b) ? 1 : -1);
             firstId = deguShuttleArray[0];
@@ -1630,39 +1630,36 @@ function showRouteInfo(mapInstance, api_name, icon_path, site_no) {
             else if(site_no == 1)
             {
                 // Gunsan route part 1 
-                stationWp_array = [
-                    L.latLng(35.8137410000000000, 126.4131030000000000),//12
-                    L.latLng(35.810844, 126.416400),//18
-                ];
-                stationTitleArray = ["선착장행 주차장", "유람선 선착장"];
-                stationMidArray = ["STA012", "STA013"];
-                createRoute(mapInstance, stationWp_array, stationTitleArray);
-
-                // Gunsan route part 2 
                 stationWp_array =[   
-                    L.latLng(35.8138710000000000, 126.4130100000000000),//11
-                    L.latLng(35.8142630000000000, 126.4098250000000000),//18
+                    L.latLng(35.813821, 126.412758 ),//3
+                    L.latLng(35.814228, 126.409923),//6
                 ];
-                stationTitleArray = ["테마파크행 주차장", "선유도 해변"];
-                stationMidArray = ["STA011", "STA018", "STA009"];
+                stationTitleArray = ["보건지소 해변로", "선유도 해수욕장"];
                 createRoute(mapInstance, stationWp_array, stationTitleArray);
 
-                //GUNSAN EXTRA PART 
+                //Gunsan route part 2 
                 stationWp_array =[  
-                    L.latLng(35.8142630000000000, 126.4098250000000000),//18
-                    L.latLng(35.8117490000000000, 126.4050750000000000),//9
+                    L.latLng(35.814228, 126.409923),//6
+                    L.latLng( 35.811922, 126.405097 ),//7
                 ];
-                stationTitleArray = ["선유도 해변", "자율주행 테마파크(입)"];
+                stationTitleArray = ["선유도 해수욕장", "테마파크 승차장"];
                 createRoute(mapInstance, stationWp_array, stationTitleArray);
-               
-                // Gunsan route part 3
-                stationWp_array = [
-                    L.latLng(35.8118700000000000, 126.4051900000000000),//19
-                    L.latLng(35.8141840000000000, 126.4098450000000000), //10
+
+                 //Gunsan route part 3 
+                 stationWp_array =[  
+                    L.latLng(35.811922, 126.405097),//7
+                    L.latLng(35.813733, 126.413112),//4
                 ];
-                stationTitleArray = ["자율주행 테마파크(출)", "고군산 탐방센터" ];
-                stationMidArray = ["STA019", "STA010"];
-                //createRoute(mapInstance, stationWp_array, stationTitleArray);
+                stationTitleArray = ["", ""];
+                createRoute(mapInstance, stationWp_array, stationTitleArray);
+
+                //Gunsan route part 4 
+                 stationWp_array =[  
+                    L.latLng(35.813733, 126.413112),//4
+                    L.latLng(35.810838, 126.416394),//5
+                ];
+                stationTitleArray = ["선유도 보건지소", "선유도항 "];
+                createRoute(mapInstance, stationWp_array, stationTitleArray);
             }
             if(site_no != 1)
                 createRoute(mapInstance, stationWp_array, stationTitleArray);
@@ -2230,7 +2227,7 @@ function changeNotice(){
         for(var j=0; j<numberOfPagesNeeded; j++)
         {
             var a_id = "pagination_a"+(j+1);
-            var html2 =  "<a id="+a_id+" href='#' onclick='paginateTest("+(j+1)+")'>"+(j+1)+"</a>";
+            var html2 = "<a id="+a_id+" href='#' onclick='paginateTest("+(j+1)+"); preventFocus(this);'>"+(j+1)+"</a>";
             $('#paginationDiv').append(html2);
         }
         var html3 = "<a href='#' class='pagination_img disable_a'><img src= 'images/arrow/rightArrowDisabled.svg'/></a>";
@@ -2239,30 +2236,45 @@ function changeNotice(){
     });
 }
 
+function preventFocus(obj){
+    var header = document.getElementById("paginationDiv");
+    var btns = header.getElementsByClassName("page_active");
+    if((btns.length) > 1)
+    {
+        for (var i=0; i<btns.length; i++)
+            $(btns[i]).removeClass('page_active');
+    }
+    $(btns).removeClass('page_active');
+    $(obj).addClass('page_active');
+}
+
 function paginateTest(buttonId)
 {      
     // show first button as active (blue)
   //  alert("first buttton :"+document.getElementById(buttonId));
-  //  c
     if(buttonId == 1)
     {
-        document.getElementById("pagination_a1").style.backgroundColor = "dodgerblue";
+        $("#pagination_a1").addClass('page_active');
+        //$(obj).addClass('page_active');
+
+      /*  document.getElementById("pagination_a1").style.backgroundColor = "dodgerblue";
         document.getElementById("pagination_a1").style.color = "white";
         document.getElementById("pagination_a1").style.width = "15px";
         document.getElementById("pagination_a1").style.height = "15px";
         document.getElementById("pagination_a1").style.borderRadius = "50%";
-    
-    }
+    */}
        // $("#pagination_a"+buttonId).className+="page_active";
     else
     {
-        document.getElementById("pagination_a1").style.backgroundColor = "white";
+        $("#pagination_a1").removeClass('page_active');
+
+        // remove css for button 1
+       /* document.getElementById("pagination_a1").style.backgroundColor = "white";
         document.getElementById("pagination_a1").style.color = "black";
         document.getElementById("pagination_a1").style.width = "15px";
         document.getElementById("pagination_a1").style.height = "15px";
         document.getElementById("pagination_a1").style.borderRadius = "100%";
-    
-    }
+    */}
     //$("#pagination_a"+buttonId).removeClass = "page_active";
 
 
@@ -2327,7 +2339,7 @@ function showNotice(noticeArray)
         else
         {
             var html = '<div id="noticeDiv" style="width: 100%; margin-top:15px">'+
-                            '<span id="noticeTitle' +j+ '" class = "noticeSpan2">' +obj.title+'</span>'+
+                            '<span id="noticeTitle' +j+ '"class = "noticeSpan2">' +obj.title+'</span>'+
                             '<button class = "divButton" id="noticeButton' +j+ '" onclick=" toggle_div2(noticeDetails' +j+ ', ' +j+ ')" >'+
                                 '<i id="openAngleIcon" class = "fa fa-angle-down" data-src="images/openArrow.svg" style = "vertical-align: top; margin-left: -1px;"></i>'+ 
                             '</button>' +
@@ -2342,7 +2354,7 @@ function showNotice(noticeArray)
         }
 
         $('#noticeBody').append(html);
-        var html2= '<hr id="hideHr"/>';
+        var html2 = '<hr id="hideHr"/>';
         $('#noticeBody').append(html2);
     }
 }  
@@ -2452,8 +2464,10 @@ function close_div() {
 
 function showMarker(mapInstance, iconUrl, stationTitle, station_mid, lat, long) {
     var markerLabelClass;
-    if(station_mid == "STA019" || station_mid == "STA018" || station_mid == "STA011" )
+    if(stationTitle == "선유도 해수욕장" || stationTitle == "보건지소 해변로" )
         markerLabelClass = "markerLable_top";
+    else if (stationTitle == "테마파크 하차장" )   
+        markerLabelClass = "markerLable_right"; 
     else
         markerLabelClass = "markerLable";
 
@@ -2582,9 +2596,23 @@ function setDateTime() {
     var userName = localStorage.getItem("activeUserID");
     // trim email id to username
     var trimName = userName.substring(0, userName.indexOf('@'));
-    document.getElementById("active_username").innerHTML = "안녕하세요, " +trimName;
+    //document.getElementById("active_username").innerHTML = "안녕하세요, " +trimName;
+    getLoggedInUser();
+
     // update date and time after every 20 seconds
     setTimeout(setDateTime, 20000);  
+}
+
+function getLoggedInUser()
+{
+    var apiUrl = "auth/user/";
+    getMethod(apiUrl, function (data) {
+        var first_name = JSON.parse(data).first_name;
+        var last_name = JSON.parse(data).last_name;
+        var activeUser = last_name+first_name;
+        document.getElementById("active_username").innerHTML = "안녕하세요, "+activeUser;
+    });
+    // $$ overflow should be hidden
 }
 
 function showChart(graph1, title, color, yAxisLable, vehicleList, yAxisList, y_unit, total) {
@@ -2708,7 +2736,7 @@ function updateCCTV()
     getMethod("vehicles/"+selectedId+"/", function (data)
     {
         var vehicle = JSON.parse(data);
-        var webcam ;
+        var webcam;
         var cameraSelectDom = document.getElementById("camera_select");
         var cameraSelectValue = cameraSelectDom.options[cameraSelectDom.selectedIndex].id;
         if(cameraSelectValue == 2)
@@ -2719,6 +2747,7 @@ function updateCCTV()
         //webrtc();
 
         document.getElementById("hidden_cam1").style.background = 'url('+webcam+')'; 
+        //alert("hidden cam :"+document.getElementById("hidden_cam1").style.background);
         //document.getElementById('cctv_webcam').src = "rtsp://222.114.83.18/proxyStream-7";
         
         document.getElementById('cctv_webcam').style.background = document.getElementById("hidden_cam1").style.background;
@@ -2765,29 +2794,6 @@ function webrtc()
     );
 }
 
-async function getMedia(constraints) {
-    let stream = null;
-    try {
-      stream = await navigator.mediaDevices.getUserMedia(constraints);
-      console.log("stream :"+stream);
-      //alert("stream :"+stream);
-      /* use the stream */
-      navigator.mediaDevices.getUserMedia(constraints)
-      .then(function(mediaStream) {
-        var video = document.querySelector('iframe');
-        alert("mediaStream :"+mediaStream);
-        //  video.srcObject = mediaStream;
-      video.src = "rtsp://222.114.83.18/proxyStream-7" ;//mediaStream;
-        video.onloadedmetadata = function(e) {
-            alert("video :"+video);
-            video.play();
-        };
-      })
-    } catch(err) {
-      /* handle the error */
-    }
-  }
-
 function playPause(webcam_div, pausePlayButton)
 {    
     // Event listener for the play/pause button
@@ -2801,7 +2807,7 @@ function playPause(webcam_div, pausePlayButton)
         document.getElementById(webcam_div).style.backgroundColor = "#F2F2F2";
         document.getElementById(webcam_div).style.backgroundSize="contain";
         document.getElementById('cameraText').style.display = "block";
-        clearHiddenCamera();
+        //clearHiddenCamera();
     } 
     else 
     {  
@@ -2879,22 +2885,54 @@ function webcam(webcamId, vehicle) {
 var active_webcam;
 var activeVideoButton;
 function scale_image(hidden_cam) 
-{
-    document.getElementById("myModal").style.display = "block";
-    var div_url = document.getElementById(hidden_cam).style.background;
-    document.getElementById("img01").style.backgroundImage = div_url;
-    if(hidden_cam == "hidden_cam1")
+{    
+    var dom = document.getElementById("vehicleSelect");
+    var selectedId = dom.options[(dom.selectedIndex)].id;
+    getMethod("vehicles/"+selectedId+"/", function (data)
     {
-        active_webcam = "webcam_div1";
-        activeVideoButton = "pausePlayButton1";
-    }
-    else if(hidden_cam == "hidden_cam2")
-    {
-        active_webcam = "webcam_div2";
-        activeVideoButton = "pausePlayButton2";
-    }
-    var selectEle = document.getElementById("camera_select");
-    document.getElementById("cctvTitle").innerHTML = selectEle.options[selectEle.selectedIndex].text;
+        var vehicle = JSON.parse(data);
+        var webcam;
+        var cameraSelectDom = document.getElementById("camera_select");
+        var cameraSelectValue = cameraSelectDom.options[cameraSelectDom.selectedIndex].id;
+            if(cameraSelectValue == 2)
+                webcam = vehicle.webcam2;
+            else
+                webcam = vehicle.webcam1;    
+
+            //webrtc();
+
+            document.getElementById("hidden_cam1").style.background = 'url('+webcam+')'; 
+     
+            //document.getElementById('cctv_webcam').src = "rtsp://222.114.83.18/proxyStream-7";
+            
+            document.getElementById('cctv_webcam').style.background = document.getElementById("hidden_cam1").style.background;
+            document.getElementById('cctv_webcam').style.backgroundSize = "contain";
+            
+            //console.log("webcam :"+ document.getElementById('cctv_webcam').style.background);
+            document.getElementById('pausePlayButton1').src = "images/cctv/play.svg";
+            document.getElementById('cameraText').style.display = "none";
+    
+    
+            document.getElementById("myModal").style.display = "block";
+        var div_url = document.getElementById(hidden_cam).style.background;
+    
+      
+        document.getElementById("img01").style.backgroundImage = div_url;
+        console.log("div_url :"+ document.getElementById("img01").style.backgroundImage);
+        if(hidden_cam == "hidden_cam1")
+        {
+            active_webcam = "webcam_div1";
+            activeVideoButton = "pausePlayButton1";
+        }
+        else if(hidden_cam == "hidden_cam2")
+        {
+            active_webcam = "webcam_div2";
+            activeVideoButton = "pausePlayButton2";
+        }
+        var selectEle = document.getElementById("camera_select");
+        document.getElementById("cctvTitle").innerHTML = selectEle.options[selectEle.selectedIndex].text;
+
+    });
 }
 
 function siteMsgSend() {
@@ -3256,3 +3294,4 @@ function showEmergencyContact()
 {
     document.getElementById('contactDiv').style.display = "block";
 }
+
