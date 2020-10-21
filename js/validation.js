@@ -147,7 +147,7 @@ function sendMail() {
 }
 
 function postMethod(data, api_url, callback) {
-    const requestURL = api_url;
+    var requestURL = api_url;
     var username = localStorage.getItem("userId"); //"admin@aspringcloud.com";
     var password = localStorage.getItem("userPwd"); //"spring#007";
     var base64Credentials = "Basic " + btoa(username + ":" + password);

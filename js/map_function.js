@@ -1631,7 +1631,7 @@ function showRouteInfo(mapInstance, api_name, icon_path, site_no) {
             {
                 // Gunsan route part 1 
                 stationWp_array =[   
-                    L.latLng(35.813821, 126.412758 ),//3
+                    L.latLng(35.813821, 126.412758),//3
                     L.latLng(35.814228, 126.409923),//6
                 ];
                 stationTitleArray = ["보건지소 해변로", "선유도 해수욕장"];
@@ -1640,12 +1640,12 @@ function showRouteInfo(mapInstance, api_name, icon_path, site_no) {
                 //Gunsan route part 2 
                 stationWp_array =[  
                     L.latLng(35.814228, 126.409923),//6
-                    L.latLng( 35.811922, 126.405097 ),//7
+                    L.latLng(35.811922, 126.405097),//7
                 ];
                 stationTitleArray = ["선유도 해수욕장", "테마파크 승차장"];
                 createRoute(mapInstance, stationWp_array, stationTitleArray);
 
-                 //Gunsan route part 3 
+                //Gunsan route part 3 
                  stationWp_array =[  
                     L.latLng(35.811922, 126.405097),//7
                     L.latLng(35.813733, 126.413112),//4
@@ -2251,7 +2251,6 @@ function preventFocus(obj){
 function paginateTest(buttonId)
 {      
     // show first button as active (blue)
-  //  alert("first buttton :"+document.getElementById(buttonId));
     if(buttonId == 1)
     {
         $("#pagination_a1").addClass('page_active');
@@ -2610,7 +2609,7 @@ function getLoggedInUser()
         var first_name = JSON.parse(data).first_name;
         var last_name = JSON.parse(data).last_name;
         var activeUser = last_name+first_name;
-        document.getElementById("active_username").innerHTML = "안녕하세요, "+activeUser;
+        document.getElementById("active_username").innerHTML = "안녕하세요, "+activeUser+"님" ;
     });
     // $$ overflow should be hidden
 }
@@ -2733,9 +2732,11 @@ function updateCCTV()
     // get CCTV URL 
     var dom = document.getElementById("vehicleSelect");
     var selectedId = dom.options[(dom.selectedIndex)].id;
+
     getMethod("vehicles/"+selectedId+"/", function (data)
     {
         var vehicle = JSON.parse(data);
+        console.log("vehicle :"+JSON.stringify(vehicle));
         var webcam;
         var cameraSelectDom = document.getElementById("camera_select");
         var cameraSelectValue = cameraSelectDom.options[cameraSelectDom.selectedIndex].id;
@@ -2745,9 +2746,7 @@ function updateCCTV()
             webcam = vehicle.webcam1;    
 
         //webrtc();
-
         document.getElementById("hidden_cam1").style.background = 'url('+webcam+')'; 
-        //alert("hidden cam :"+document.getElementById("hidden_cam1").style.background);
         //document.getElementById('cctv_webcam').src = "rtsp://222.114.83.18/proxyStream-7";
         
         document.getElementById('cctv_webcam').style.background = document.getElementById("hidden_cam1").style.background;
@@ -2775,8 +2774,6 @@ function updateCCTV()
 function webrtc()
 {
     pc1 = new RTCPeerConnection("rtsp://222.114.83.18/proxyStream-7");
-
-    //alert("pc1 :"+pc1);
     localStream.getTracks().forEach((track) => {
     pc1.addTrack(track, localStream);
     });

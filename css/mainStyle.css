@@ -151,7 +151,6 @@ display:inline-block;
 }
 
 .settingTitle img{
-display:inline-block;
 cursor: pointer;
 float:right;
 position: absolute;
@@ -245,7 +244,6 @@ font-family: Noto_medium;
 }
 */
 .settingDiv2{
-display:inline-block;
 width: 320px;
 position: absolute;
 /*margin: 5%;*/
@@ -557,7 +555,6 @@ line-height: 0.1;
 }
 
 .titleDiv1{
-display:inline-block;
 float:left; 
 margin-left: 2px;
 line-height: 0px;
@@ -571,15 +568,12 @@ height:60px;
 color:white; 
 cursor:pointer; 
 float:right; 
-display: inline-block;
 width:12px;
 margin-right: 10px; 
 margin-top: 10px;
 }
 
-
 .infoDiv1{
-display:inline-block; 
 float:right; 
 margin-top: 8px; 
 }
@@ -756,7 +750,6 @@ display: none;
 float:left;
 height:60px;
 width:10px; 
-display: inline-block; 
 font-size: 9px;
 vertical-align: inherit; 
 margin-left: 10px;
@@ -897,7 +890,6 @@ letter-spacing: -0.02em;
 }
 
 .chartTitle2{
-display: inline-block;
 color: #185786;
 float:right;
 font-size: 24px;
@@ -905,7 +897,6 @@ margin: 0px;
 }
 
 .chartTitle3{
-display: inline-block;
 color: #333333;
 float:right;
 font-size: 14px;
@@ -1526,14 +1517,6 @@ overflow-x: hidden;
 }
 
 /* Notice pagination */
-.pagination
-{
- /* z-index: 1111;
-  position: fixed;
-  top: 790px;
-  left: 800px;*/
-}
-
 .pagination a {
   color: black;
   padding: 4px 8px;
