@@ -9,7 +9,9 @@ function login_validation() {
     email_error.innerHTML = "";
     pwd_error.innerHTML = "";
     credential_error.innerHTML = "";
+    //alert("test 0.1");
     localStorage.setItem('activeUserID', input_email);
+    //alert("test 0.2");
 
     if (!inputLengthCheck(input_email, email_error, "이메일 아이디를 입력해 주세요") && !inputLengthCheck(input_pwd, pwd_error, "비밀번호를 다시 확인 해주세요"))
         return false;
@@ -21,6 +23,8 @@ function login_validation() {
         "email": input_email,
         "password": input_pwd,
     });
+    //alert("test 1");
+
     var api_url = server_URL + "auth/login/";
     postMethod(data, api_url, function (request) {
         if(request.status == 200) 
@@ -67,7 +71,6 @@ function findid_validation(button_id) {
     input_name_error.innerHTML = "";
     input_email_error.innerHTML = "";
     var input_name = $("#input_name").val();
-
     var input_email = $("#input_email").val();
     if (!inputLengthCheck(input_name, input_name_error, "이름을 입력해 주세요.") && !inputLengthCheck(input_email, input_email_error, "이메일 아이디를 입력해 주세요."))
         return false;
@@ -339,12 +342,16 @@ function saveID_localstorage()
 /* Assign the user_id fromm the local storage when login page is loaded */
 window.onload = function () {
     var input_id = document.getElementById("input_id");
-    if (input_id != null) {
+     if (input_id != null) {
         input_id.value = localStorage.getItem("localStorage_inputId");
         checkboxStatus = localStorage.getItem("localStorage_checked");
         if(checkboxStatus == 'true')
-           document.getElementById("saveId_checkbox").checked = true;
+        {
+            document.getElementById("saveId_checkbox").checked = true;
+        }
         else
-           document.getElementById("saveId_checkbox").checked = false;
-     }
+        {
+            document.getElementById("saveId_checkbox").checked = false;
+        }
+    }
 }

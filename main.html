@@ -234,9 +234,12 @@
                 <img class="fullscreen" onclick=" scale_image('hidden_cam1');" src="images/cctv/fullscreen.svg" />
             </div>
             <p id="cameraText"> 영상이 여기에 표시됩니다. </p>
-            <div id="cctv_webcam">
+            <iframe id="cctv_webcam">
                
-            </div>
+            </iframe>
+            <!--<iframe id='fp_embed_player' src='https://104.198.122.72:8888/embed_player?urlServer=wss://104.198.122.72:8443&streamName=rtsp://admin:az2020!!@223.171.45.214:553/Streaming/channels/101&mediaProviders=WebRTC' 
+            marginwidth='0' marginheight='0' frameborder='0' width='100%' height='100%' 
+            scrolling='no' allowfullscreen='allowfullscreen'></iframe>-->
            
             <!--<webrtc-streamer id="cctv_webcam" url=""></webrtc-streamer>-->
             <!-- <video id="cctv_webcam" autoplay playsinline></video> 
@@ -433,11 +436,11 @@
     <div id="myModal" class="modal">
         <span id="cctvTitle">전방 카메라1</span>
         <span class="close2" onclick="/*clearHiddenCamera();*/">&times;</span>
-        <div class="modal-content" id="img01"> 
+        <iframe class="modal-content" id="img01"> 
             <div class="buttonDiv">
                 <img src="images/cctv/fullscreen_exit.svg" onclick="document.getElementById('myModal').style.display = 'none';/* clearHiddenCamera(); */"/>    
             </div>
-        </div>
+        </iframe>
     </div>
 
     <div id="hidden_cam" hidden></div>
