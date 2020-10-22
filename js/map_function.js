@@ -2747,10 +2747,8 @@ function updateCCTV()
 
         //webrtc();
         document.getElementById("hidden_cam1").style.background = 'url('+webcam+')'; 
-        //document.getElementById('cctv_webcam').src = "rtsp://222.114.83.18/proxyStream-7";
-        
-        //document.getElementById('cctv_webcam').style.background = document.getElementById("hidden_cam1").style.background;
-        document.getElementById('cctv_webcam').src = "https://104.198.122.72:8888/embed_player?urlServer=wss://104.198.122.72:8443&streamName=rtsp://admin:az2020!!@223.171.45.214:553/Streaming/channels/101&mediaProviders=WebRTC";  //
+        document.getElementById('cctv_webcam').style.background = document.getElementById("hidden_cam1").style.background;
+       // document.getElementById('cctv_webcam').src = "https://104.198.122.72:8888/embed_player?urlServer=wss://104.198.122.72:8443&streamName=rtsp://admin:az2020!!@223.171.45.214:553/Streaming/channels/101&mediaProviders=WebRTC";  //
         document.getElementById('cctv_webcam').style.backgroundSize = "contain";
         
         //console.log("webcam :"+ document.getElementById('cctv_webcam').style.background);
@@ -2900,8 +2898,8 @@ function scale_image(hidden_cam)
             //webrtc();
 
             document.getElementById("hidden_cam1").style.background = 'url('+webcam+')'; 
-            //document.getElementById('cctv_webcam').src = "https://104.198.122.72:8888/embed_player?urlServer=wss://104.198.122.72:8443&streamName=rtsp://admin:az2020!!@223.171.45.214:553/Streaming/channels/101&mediaProviders=WebRTC%27";
-            document.getElementById('cctv_webcam').style.background = document.getElementById("hidden_cam1").style.background;
+        
+            document.getElementById('cctv_webcam').style.background  = document.getElementById("hidden_cam1").style.background;
             document.getElementById('cctv_webcam').style.backgroundSize = "contain";
             
             //console.log("webcam :"+ document.getElementById('cctv_webcam').style.background);
@@ -2913,7 +2911,7 @@ function scale_image(hidden_cam)
             var div_url = document.getElementById(hidden_cam).style.background;
     
       //.style.backgroundImage
-        document.getElementById("img01").src =  "https://104.198.122.72:8888/embed_player?urlServer=wss://104.198.122.72:8443&streamName=rtsp://admin:az2020!!@223.171.45.214:553/Streaming/channels/101&mediaProviders=WebRTC%27";// div_url;
+        document.getElementById("img01").style.backgroundImage = div_url;// "https://104.198.122.72:8888/embed_player?urlServer=wss://104.198.122.72:8443&streamName=rtsp://admin:az2020!!@223.171.45.214:553/Streaming/channels/101&mediaProviders=WebRTC%27";// div_url;
         console.log("div_url :"+ document.getElementById("img01").style.backgroundImage);
         if(hidden_cam == "hidden_cam1")
         {
