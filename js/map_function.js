@@ -2895,8 +2895,6 @@ function scale_image(hidden_cam)
             else
                 webcam = vehicle.webcam1;    
 
-            //webrtc();
-
             document.getElementById("hidden_cam1").style.background = 'url('+webcam+')'; 
         
             document.getElementById('cctv_webcam').style.background  = document.getElementById("hidden_cam1").style.background;
