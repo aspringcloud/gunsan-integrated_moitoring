@@ -1001,7 +1001,7 @@ function changeVehicleInfo(obj)
     updateETA(active_site);
     eta_interval = setInterval(function() {
         updateETA(active_site);
-    }, 30000);
+    }, 3000);
 }
 
 function createHtmlMarker(vehicleObj, iconHtml)
@@ -1325,7 +1325,7 @@ function setPopupContent(e, mapInstance, site_no)
             updateETA(active_site);
             eta_interval = setInterval(function() {
                 updateETA(active_site);
-            }, 30000);
+            }, 3000);
             break;
         }
     }

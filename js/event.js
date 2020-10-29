@@ -219,9 +219,8 @@ function createAlertDiv(eventData)
             if(eta_interval != null)
                 clearInterval(eta_interval);
             eta_interval = setInterval(function() {
-               
                 updateETA(active_site);
-            }, 30000);
+            }, 3000);
         }
     }
    

@@ -38,21 +38,7 @@ function openWSConnection() {
             {
                 if(wsMsg.indexOf("error") > 0) 
                     console.log("WebSocket Error MESSAGE: " +wsMsg.error);
-                 
-            }
-
-
-
-            //alert("*wsMsg :"+wsMsg);
-          /*  if(wsMsg.indexOf("error") > 0) {
-               // alert("if");
-                console.log("WebSocket Error MESSAGE: " +wsMsg.error);
-            } 
-            else {
-                //alert("else:" +JSON.parse(wsMsg).what );
-                if(JSON.parse(wsMsg).what == "EVENT")
-                    createAlertDiv(wsMsg);
-            }*/
+           }
         };
     } catch (exception) {
         console.error(exception);
