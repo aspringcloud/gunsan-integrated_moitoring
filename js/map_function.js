@@ -114,17 +114,18 @@ function switchMap(obj)
             var leftCenter =[35.8191,126.4332];// [35.8118970000000000,126.4048860000000000];//[35.951,133.066];
             if(cluster_map == undefined)
             {            
-                cluster_map = L.map('offsiteMap', {
+                cluster_map = L.map('offsiteMap',{
                  /*  zoomSnap: 0.75,  */  
                     dragging: true,
                     draggable:true,
                     scrollWheelZoom: true,
+                
                     color: "rgba(8, 148, 19)",
                     zoomControl: false,
                     zoom:15,
                     minZoom : 4,
                     center:leftCenter,
-               });
+                });
                 zoomHome_main = L.Control.zoomHome();
                 zoomHome_main.addTo(cluster_map);   
                 L.control.scale({
@@ -342,6 +343,11 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
             imperial: false,
             maxWidth : 200,
         }).addTo(mapInstance);
+
+    mapInstance.on("touchstart",{passive:true})    
+
+    //document.addEventListener('touchstart', handler, {passive: true});
+
     mapInstance.invalidateSize();
      
     // Show All the shuttles on degu route
@@ -717,13 +723,13 @@ function showContent(tabId) {
 function setWeather(domElement, weatherStatus)
 {
     var weatherIconPath;
-    if(weatherStatus == "rainy") 
+    if(weatherStatus == "Rainy") 
         weatherIconPath = "images/weather/rainy.svg";
-    else if(weatherStatus == "good") 
+    else if(weatherStatus == "Sunny") 
         weatherIconPath = "images/weather/sunny.svg";
-    else if(weatherStatus == "cloudy") 
+    else if(weatherStatus == "Cloudy") 
         weatherIconPath = "images/weather/cloudy.svg";
-    else if(weatherStatus == "snow") 
+    else if(weatherStatus == "Snowy") 
         weatherIconPath = "images/weather/snowy.svg";
 
     document.getElementById(domElement).src = weatherIconPath;
@@ -735,7 +741,8 @@ function getweather(site_id) {
     getMethod(url, function(data) {
         var weatherData =  JSON.parse(data);
         //set current weather 
-        var currentWeather = JSON.parse((weatherData.current_weather)).weather;
+        var currentWeather = JSON.parse(weatherData.current_weather).weather;
+        console.log("weather data "+JSON.stringify(JSON.parse(weatherData.current_weather)));
         document.getElementById('temp_celsicus').innerHTML = Math.round(JSON.parse((weatherData.current_weather)).temp)+ '&deg;C';
         setWeather('weather_icon', currentWeather);
     });
@@ -1094,7 +1101,16 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                     
                 // create html and append to popup div
                 var customPopup = "";
-                var customOptions = {'className': 'custom-popup4'};
+                //var customOptions = {'className': 'custom-popup4'};
+
+                var customOptions;
+                customOptions = {'className': 'custom-popup4'};
+          
+               /* if(vehicleObj.drive == true)
+                    customOptions = {'className': 'custom-popup4'};
+                else
+                    customOptions = {'className': 'customPopup4Disable'};
+                */
                 vehicleMarker.bindPopup(customPopup, customOptions).openPopup();               // bind popup to vehicle marker                   
                 vehicleMarker.on('click', function(e) {           
                     // vehicle marker on click function ---> updates vehicle popup data every second 
@@ -3287,3 +3303,4 @@ function showEmergencyContact()
     document.getElementById('contactDiv').style.display = "block";
 }
 
+//document.addEventListener('touchstart', handler, {passive: true});

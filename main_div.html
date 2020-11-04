@@ -44,27 +44,31 @@
             <button id="setting_button1" onclick="settings();"></button>
             <button onclick="passwordChange2();" id="user_pwd_change"></button>
             <div class="settingDiv2" id="settingDiv2">
-                <label class="settingDiv_label">이메일 ID</label>
-                <span class="settingDiv_span" id="activeEmail"></span>
-                <label class="settingDiv_label">이름</label>
-                <span class="settingDiv_span" id="activeName"></span>
-                <label class="settingDiv_label">팀</label>
-                <span class="settingDiv_span" id="activeTeam"></span>
-                <label class="settingDiv_label">휴대폰</label>
-                <span class="settingDiv_span" id="activePhone"></span>
-                <label class="settingDiv_label">권한</label>
-                <span class="settingDiv_span" id="activeLevel"></span>
+                <form>
+                    <label class="settingDiv_label">이메일 ID</label>
+                    <span class="settingDiv_span" id="activeEmail"></span>
+                    <label class="settingDiv_label">이름</label>
+                    <span class="settingDiv_span" id="activeName"></span>
+                    <label class="settingDiv_label">팀</label>
+                    <span class="settingDiv_span" id="activeTeam"></span>
+                    <label class="settingDiv_label">휴대폰</label>
+                    <span class="settingDiv_span" id="activePhone"></span>
+                    <label class="settingDiv_label">권한</label>
+                    <span class="settingDiv_span" id="activeLevel"></span>
+                </form>
             </div>
         </div>
         <!--Update password window-->
+        <form>
         <div class="settingDiv21" id="settingDiv21">
             <div style="position: absolute; left:20px;top:0px">
-                <label class="settingDiv_label2">현재 비밀번호</label>
-                <input class="settingDiv_span" id="currentPwd" type="password" placeholder="현재 비밀번호를 입력하세요."/>
-                <label class="settingDiv_label2">새 비밀번호</label>
-                <input class="settingDiv_span" id="newPwd"  type="password" placeholder="새로운 비밀번호를 입력하세요." class="imeModeDisabled" /> 
-                <label class="settingDiv_label2">새 비밀번호 확인</label>
-                <input class="settingDiv_span" id="confirmPwd" type="password" placeholder="새로운 비밀번호를 다시 입력하세요."  class="imeModeDisabled" />
+               
+                    <label class="settingDiv_label2">현재 비밀번호</label>
+                    <input class="settingDiv_span" id="currentPwd" type="password" placeholder="현재 비밀번호를 입력하세요." autocomplete="off"/>
+                    <label class="settingDiv_label2">새 비밀번호</label>
+                    <input class="settingDiv_span" id="newPwd" type="password" placeholder="새로운 비밀번호를 입력하세요." class="imeModeDisabled" autocomplete="off"/> 
+                    <label class="settingDiv_label2">새 비밀번호 확인</label>
+                    <input class="settingDiv_span" id="confirmPwd" type="password" placeholder="새로운 비밀번호를 다시 입력하세요." class="imeModeDisabled" autocomplete="off"/>
             </div>
             <span class="error" id="pwdResetError"></span>
             <div>
@@ -76,6 +80,7 @@
         <div class="settingDiv31" id="settingDiv31">
             <button onclick="resetPassword()">변경하기</button>
         </div>
+    </form>
     </div>
 </div>
    

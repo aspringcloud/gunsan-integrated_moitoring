@@ -9,10 +9,8 @@ function login_validation() {
     email_error.innerHTML = "";
     pwd_error.innerHTML = "";
     credential_error.innerHTML = "";
-    //alert("test 0.1");
     localStorage.setItem('activeUserID', input_email);
-    //alert("test 0.2");
-
+   
     if (!inputLengthCheck(input_email, email_error, "이메일 아이디를 입력해 주세요") && !inputLengthCheck(input_pwd, pwd_error, "비밀번호를 다시 확인 해주세요"))
         return false;
     if (!inputLengthCheck(input_pwd, pwd_error, "비밀번호를 입력해 주세요"))
