@@ -11,7 +11,7 @@ function onDisconnectClick() {
 /* Open a new WebSocket connection using the given parameters */
 function openWSConnection() {
     var webSocketURL = null;
-    webSocketURL = "wss://websocket.springgo.io:11511";//"ws://222.114.39.8:11411";//"wss://ws.tasio.io:11511"; //"ws://222.114.39.8:11411/ws/vehicle"
+    webSocketURL = "wss://websocket.springgo.io:11511";//"wss://websocket.springgo.io:11411";
     try {
         webSocket = new WebSocket(webSocketURL,[], {
             rejectUnauthorized: false
@@ -25,11 +25,10 @@ function openWSConnection() {
         };
         webSocket.onerror = function (errorEvent) {
             console.log("WebSocket ERROR: " + JSON.stringify(errorEvent, null, 4));
-           // openWSConnection();
+            // openWSConnection();
         };
         webSocket.onmessage = function (messageEvent) {
             var wsMsg = messageEvent.data;
-            //console.log("wsMsg :"+JSON.stringify(wsMsg));
             if(JSON.parse(wsMsg).what == "EVENT")
             {
                 createAlertDiv(wsMsg);
@@ -38,7 +37,7 @@ function openWSConnection() {
             {
                 if(wsMsg.indexOf("error") > 0) 
                     console.log("WebSocket Error MESSAGE: " +wsMsg.error);
-           }
+            }
         };
     } catch (exception) {
         console.error(exception);

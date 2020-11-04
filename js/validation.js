@@ -21,8 +21,6 @@ function login_validation() {
         "email": input_email,
         "password": input_pwd,
     });
-    //alert("test 1");
-
     var api_url = server_URL + "auth/login/";
     postMethod(data, api_url, function (request) {
         if(request.status == 200) 
@@ -62,7 +60,6 @@ function backArrow(id)
 }
 
 // Validation for Find_id page 
-// For explanation of regex - https://blog.jaeyoon.io/2017/10/js-regex.html 
 function findid_validation(button_id) {
     var input_name_error = document.getElementById('input_name_error');
     var input_email_error = document.getElementById('input_email_error');
@@ -149,8 +146,8 @@ function sendMail() {
 
 function postMethod(data, api_url, callback) {
     var requestURL = api_url;
-    var username = localStorage.getItem("userId"); //"admin@aspringcloud.com";
-    var password = localStorage.getItem("userPwd"); //"spring#007";
+    var username = localStorage.getItem("userId"); 
+    var password = localStorage.getItem("userPwd"); 
     var base64Credentials = "Basic " + btoa(username + ":" + password);
     var request = new XMLHttpRequest();
     request.open('POST', requestURL, true);
@@ -331,7 +328,8 @@ function saveID_localstorage()
         localStorage.setItem('localStorage_checked', 'true');
         return false;
     }
-    else{
+    else
+    {
         localStorage.setItem('localStorage_inputId', '');
         localStorage.setItem('localStorage_checked', 'false');
     }

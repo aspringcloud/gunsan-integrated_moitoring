@@ -1,11 +1,9 @@
-/*Integrated Monitoring system version 0.2
-  Note : Some function from version 0.1 which 
-  are not used in version 0.2  are commented  */
+/*Integrated Monitoring system version 0.3 */
 
 'use strict';
 
 var mapList = [];               // stores the id of open map 
-mapList.push("offsiteMap");          //  push id of offsite map on login  
+mapList.push("offsiteMap");     //  push id of offsite map on login  
 
 // variables to store instances of all maps
 var daegu_map;
@@ -37,7 +35,7 @@ var active_site = 0;
 // Calls the function associated for that route 
 function activeButton(element)
 {   
-    var buttonList = ["main_site_button",  "gunsan_button"]; // "degu_button", "sejong_button", "sangam_button", "sejong_button1", "sejong_button2",, "offsite_button"
+    var buttonList = ["main_site_button",  "gunsan_button"]; // list of buttons
     for(var i = 0; i < buttonList.length; i++)
     {
         if(buttonList[i] == element.id)
@@ -111,15 +109,14 @@ function switchMap(obj)
             showElements(show_elements2);
             
             // create offsite map
-            var leftCenter =[35.8191,126.4332];// [35.8118970000000000,126.4048860000000000];//[35.951,133.066];
+            var leftCenter =[35.8191,126.4332];
             if(cluster_map == undefined)
             {            
                 cluster_map = L.map('offsiteMap',{
-                 /*  zoomSnap: 0.75,  */  
+                    /*zoomSnap: 0.75*/  
                     dragging: true,
                     draggable:true,
                     scrollWheelZoom: true,
-                
                     color: "rgba(8, 148, 19)",
                     zoomControl: false,
                     zoom:15,
@@ -236,7 +233,7 @@ function switchMap(obj)
             if(gunsan_map == undefined)
             {
                 gunsan_map = L.map('gunsanMap',{
-                  /* zoomSnap: 0.15,*/
+                    /* zoomSnap: 0.15,*/
                     zoom : 16,
                     center:[35.812484, 126.409100],
                     minZoom : 4,
@@ -344,10 +341,7 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
             maxWidth : 200,
         }).addTo(mapInstance);
 
-    mapInstance.on("touchstart",{passive:true})    
-
-    //document.addEventListener('touchstart', handler, {passive: true});
-
+    //mapInstance.on("touchstart",{passive:true})    
     mapInstance.invalidateSize();
      
     // Show All the shuttles on degu route
@@ -380,7 +374,7 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
         {
             daegu_interval = setInterval(function() {
                 reqCount++;
-                shuttleOnRoute(mapInstance, reqCount, currentSiteId); //vehicleObj
+                shuttleOnRoute(mapInstance, reqCount, currentSiteId); 
             }, 1000)
         }
 
@@ -401,12 +395,9 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
 
         /*
         // update ETA
-        console.log("Show site()");
         updateETA(currentSiteId);
         eta_interval = setInterval(function() {
-            console.log("Show site interval()");
             updateETA(currentSiteId);
-            console.log("Updating eta after 30 seconds")
         }, 30000);*/
              
         // update status of webcam  
@@ -455,7 +446,7 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
         });
     });
     show_div("alertDiv");
-    // development history data (underdevelopment)
+    // development history data 
     showSummary(currentSiteId);
 }
 
@@ -668,7 +659,6 @@ function showCluster(cluster_map)
 
     // current_mapinstance = cluster_map;
     // array to store lat-lon of cluster 
-    //var addressPoints = []; 
     if(clusterMapCount <= 1)
     {
         // create openstreet tile layer
@@ -898,10 +888,10 @@ function updateShuttleInfo(vehicle, request_count)
         // show battery status
         setBatteryPercent(vehicle.battery);
         // show webcam
-
         checkWebcam(vehicle.webcam1, 'cameraButton1', 'video1', 'video1Active');
         checkWebcam(vehicle.webcam2, 'cameraButton2', 'video2', 'video2Active');
     }    
+    console.log("Shuttle info updated");
 }
 
 function updateFrontStaus(isParked, speed)
@@ -989,8 +979,6 @@ function createSelectList(objArray)
 function changeVehicleInfo(obj)
 {
     // check if which sites map is open 
-    // return the last element of array 
-    //var activeMap =  mapList[mapList.length - 1];
     clearInterval(interval);
     if(typeof(obj) == 'number')
     {  
@@ -1682,17 +1670,7 @@ function showRouteInfo(mapInstance, api_name, icon_path, site_no) {
         }
      });
 }
-/*
-stationWp_array = [
-                    L.latLng(35.8137410000000000, 126.4131030000000000),//12
-                    L.latLng(35.8114720000000000, 126.4164430000000000),//13
-                    L.latLng(35.8138710000000000, 126.4130100000000000),//11
-                    L.latLng(35.8142630000000000, 126.4098250000000000),//18
-                    L.latLng(35.8117490000000000, 126.4050750000000000),//9
-                    L.latLng(35.8118700000000000, 126.4051900000000000),//19
-                    L.latLng(35.8141840000000000, 126.4098450000000000), //10
-                ];
-*/
+
 function currentVehicleETA(stationData)
 {   
     // get current vehicle id from select list 
@@ -1712,10 +1690,8 @@ function currentVehicleETA(stationData)
     else
     {
         var selectedId = dom.options[dom.selectedIndex].id;
-        //console.log("stationData.eta :"+stationData.eta);
         for(var p of stationData.eta)
         {   
-            //console.log("p :"+p);         
             var temp = JSON.parse(p);
             var key = Object.keys(temp);
             var value = Object.values(temp);
@@ -1834,6 +1810,7 @@ function updateETA(site_id)
             divElement.insertAdjacentHTML('beforeend', stationHtml);
         }
     });
+    console.log("ETA updated");
 }
 
 // create route using control routing plugin leaflet 
@@ -2268,41 +2245,10 @@ function paginateTest(buttonId)
 {      
     // show first button as active (blue)
     if(buttonId == 1)
-    {
         $("#pagination_a1").addClass('page_active');
-        //$(obj).addClass('page_active');
-
-      /*  document.getElementById("pagination_a1").style.backgroundColor = "dodgerblue";
-        document.getElementById("pagination_a1").style.color = "white";
-        document.getElementById("pagination_a1").style.width = "15px";
-        document.getElementById("pagination_a1").style.height = "15px";
-        document.getElementById("pagination_a1").style.borderRadius = "50%";
-    */}
-       // $("#pagination_a"+buttonId).className+="page_active";
     else
-    {
         $("#pagination_a1").removeClass('page_active');
-
-        // remove css for button 1
-       /* document.getElementById("pagination_a1").style.backgroundColor = "white";
-        document.getElementById("pagination_a1").style.color = "black";
-        document.getElementById("pagination_a1").style.width = "15px";
-        document.getElementById("pagination_a1").style.height = "15px";
-        document.getElementById("pagination_a1").style.borderRadius = "100%";
-    */}
-    //$("#pagination_a"+buttonId).removeClass = "page_active";
-
-
-    /*background-color: dodgerblue;
-    color: white;
-    width:15px;
-    height:15px;
-    border-radius: 50%;
-*/
-    //document.getElementById(buttonId).className += "page_active";
-    //console.log("before color :"+ document.getElementById("pagination_a"+buttonId).style.backgroundColor);
-    //document.getElementById("pagination_a"+buttonId).style.backgroundColor = "dodgerblue";
-   // console.log("after color :"+ document.getElementById("pagination_a"+buttonId).style.backgroundColor);
+      
     // clear previous notices
     document.getElementById('noticeBody').innerHTML = "";
     var i = (buttonId - 1 ) * 8;
@@ -2760,50 +2706,12 @@ function updateCCTV()
             webcam = vehicle.webcam2;
         else
             webcam = vehicle.webcam1;    
-
-        //webrtc();
         document.getElementById("hidden_cam1").style.background = 'url('+webcam+')'; 
         document.getElementById('cctv_webcam').style.background = document.getElementById("hidden_cam1").style.background;
-       // document.getElementById('cctv_webcam').src = "https://104.198.122.72:8888/embed_player?urlServer=wss://104.198.122.72:8443&streamName=rtsp://admin:az2020!!@223.171.45.214:553/Streaming/channels/101&mediaProviders=WebRTC";  //
         document.getElementById('cctv_webcam').style.backgroundSize = "contain";
-        
-        //console.log("webcam :"+ document.getElementById('cctv_webcam').style.background);
         document.getElementById('pausePlayButton1').src = "images/cctv/play.svg";
         document.getElementById('cameraText').style.display = "none";
-        
-        /*if(filePath == null)
-        {           
-            var oddDom = document.getElementById("oddFile");
-            oddDom.href = "";
-            return false;
-        }
-        else
-        {
-            document.getElementById('oddFileSpan').className = "oddButton"; 
-            var oddDom = document.getElementById("oddFile");
-            oddDom.href = filePath;
-        }*/
     });
-}
-
-function webrtc()
-{
-    pc1 = new RTCPeerConnection("rtsp://222.114.83.18/proxyStream-7");
-    localStream.getTracks().forEach((track) => {
-    pc1.addTrack(track, localStream);
-    });
-
-    pc1.setLocalDescription(desc).then(() => {
-        onSetLocalSuccess(pc1);
-      },
-      onSetSessionDescriptionError
-    );
-    trace('pc2 setRemoteDescription start');
-    pc2.setRemoteDescription(desc).then(() => {
-        onSetRemoteSuccess(pc2);
-      },
-      onSetSessionDescriptionError
-    );
 }
 
 function playPause(webcam_div, pausePlayButton)
@@ -2906,27 +2814,19 @@ function scale_image(hidden_cam)
         var webcam;
         var cameraSelectDom = document.getElementById("camera_select");
         var cameraSelectValue = cameraSelectDom.options[cameraSelectDom.selectedIndex].id;
-            if(cameraSelectValue == 2)
-                webcam = vehicle.webcam2;
-            else
-                webcam = vehicle.webcam1;    
+        if(cameraSelectValue == 2)
+            webcam = vehicle.webcam2;
+        else
+            webcam = vehicle.webcam1;    
 
-            document.getElementById("hidden_cam1").style.background = 'url('+webcam+')'; 
-        
-            document.getElementById('cctv_webcam').style.background  = document.getElementById("hidden_cam1").style.background;
-            document.getElementById('cctv_webcam').style.backgroundSize = "contain";
-            
-            //console.log("webcam :"+ document.getElementById('cctv_webcam').style.background);
-            document.getElementById('pausePlayButton1').src = "images/cctv/play.svg";
-            document.getElementById('cameraText').style.display = "none";
-    
-    
-            document.getElementById("myModal").style.display = "block";
-            var div_url = document.getElementById(hidden_cam).style.background;
-    
-      //.style.backgroundImage
-        document.getElementById("img01").style.backgroundImage = div_url;// "https://104.198.122.72:8888/embed_player?urlServer=wss://104.198.122.72:8443&streamName=rtsp://admin:az2020!!@223.171.45.214:553/Streaming/channels/101&mediaProviders=WebRTC%27";// div_url;
-        console.log("div_url :"+ document.getElementById("img01").style.backgroundImage);
+        document.getElementById("hidden_cam1").style.background = 'url('+webcam+')'; 
+        document.getElementById('cctv_webcam').style.background  = document.getElementById("hidden_cam1").style.background;
+        document.getElementById('cctv_webcam').style.backgroundSize = "contain";
+        document.getElementById('pausePlayButton1').src = "images/cctv/play.svg";
+        document.getElementById('cameraText').style.display = "none";
+        document.getElementById("myModal").style.display = "block";
+        var div_url = document.getElementById(hidden_cam).style.background;
+        document.getElementById("img01").style.backgroundImage = div_url;
         if(hidden_cam == "hidden_cam1")
         {
             active_webcam = "webcam_div1";
@@ -2939,7 +2839,6 @@ function scale_image(hidden_cam)
         }
         var selectEle = document.getElementById("camera_select");
         document.getElementById("cctvTitle").innerHTML = selectEle.options[selectEle.selectedIndex].text;
-
     });
 }
 
@@ -3302,5 +3201,3 @@ function showEmergencyContact()
 {
     document.getElementById('contactDiv').style.display = "block";
 }
-
-//document.addEventListener('touchstart', handler, {passive: true});

@@ -15,6 +15,31 @@ left: 94px;
 cursor: pointer;
 }
 
+.body_bg{
+background-color: #83c3e0;
+}
+
+.margin1{
+    margin-bottom: 30px;
+}
+
+.margin2{
+    margin-right: 0px;
+}
+
+.display1{
+    display:inline-block;
+}
+
+.divstyle6{
+    float:right; 
+    height: 18px;
+}
+
+#login_success_div{
+    display: none;  
+}
+
 .logo {
 position: absolute;
 background-size: contain;

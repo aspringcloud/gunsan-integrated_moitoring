@@ -4,13 +4,6 @@
         <title>Login</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-       
-        <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> -->
-
-        <!--jquery-->
-        <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>-->
         <link rel="stylesheet" href="jquery/jquery-ui.css">
         <script src="jquery/jquery-1.10.2.js"></script>
         <script src="jquery/jquery-ui.js"></script>
@@ -24,13 +17,13 @@
         <link rel="stylesheet" href="css/login_style.css">
         <script src="js/validation.js"></script>
     </head>
-    <body style="background-color: #83c3e0;">
+    <body class="body_bg">
         <div>
             <img class="gifStyle" src="images\gif\background.gif" > 
             <span class="mainTitle">새로운 미래, 여기로부터.</span>
         </div>
         <div class="container_box">
-            <div style="margin-bottom: 30px;">
+            <div class="margin1">
                 <img class="logo_size1" style="left:150px;" src="images\login\gunsan_logo.svg" alt="gunsan logo" />
                 <img style="left:208px;" class="logo_size" src="images\login\sc_logo.svg" alt="spring cloud logo" />
             </div>
@@ -41,14 +34,14 @@
                 <p class="name_P">이메일 아이디</p>
                 <input type="text" id="input_id" class="form-control form_input font_roboto placeholder" placeholder="이메일 아이디를 입력해 주세요." autofocus>
                 <p class="name_P">비밀번호</p>
-                <input id="input_pwd" type="password" class="form-control form_input placeholder imeModeDisabled"  placeholder="비밀번호를 입력해 주세요.">
-                <div style="margin-right: 0px;">
-                    <div style="display:inline-block;">
+                <input id="input_pwd" type="password" class="form-control form_input placeholder imeModeDisabled" autocomplete="off" placeholder="비밀번호를 입력해 주세요.">
+                <div class="margin2">
+                    <div class="display1">
                         <label class="font_thirteen">
-                            <input id="saveId_checkbox" type="checkbox"  class="checkboxStyle" onclick="saveID_localstorage();">이메일 아이디 기억하기
+                            <input id="saveId_checkbox" type="checkbox" class="checkboxStyle" onclick="saveID_localstorage();">이메일 아이디 기억하기
                         </label>
                     </div>
-                    <div style="float:right; height: 18px;">
+                    <div class="divstyle6">
                         <span class="font_thirteen1"><a href="Find_id.html"> 비밀번호 재설정</a> </span>
                     </div>
                 </div>
@@ -59,7 +52,7 @@
                 <label class="info">본 서비스 가입을 위해서는 bcchoi@aspringcloud.com 으로 <br/>이메일 주소, 이름, 소속, 전화번호를 보내주시기 바랍니다.</label>
                 <div class="info2">Copyright ⓒ GUNSANCITY. All right reserved </div>
             </form>   
-            <div id="login_success_div" style="display: none;">
+            <div id="login_success_div">
                 <hr>
                 <p class="p_padding" id="username_p"></p>
             </div>
