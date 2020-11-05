@@ -113,7 +113,6 @@ function switchMap(obj)
             if(cluster_map == undefined)
             {            
                 cluster_map = L.map('offsiteMap',{
-                    /*zoomSnap: 0.75*/  
                     dragging: true,
                     draggable:true,
                     scrollWheelZoom: true,
@@ -233,7 +232,6 @@ function switchMap(obj)
             if(gunsan_map == undefined)
             {
                 gunsan_map = L.map('gunsanMap',{
-                    /* zoomSnap: 0.15,*/
                     zoom : 16,
                     center:[35.812484, 126.409100],
                     minZoom : 4,
@@ -265,9 +263,9 @@ function switchMap(obj)
             {
                 cluster_map = L.map('offsiteMap', {
                     zoomSnap: 0.15,      
-                    dragging: true, //false
+                    dragging: true,
                     draggable:true,
-                    scrollWheelZoom: true, //false
+                    scrollWheelZoom: true, 
                     color:"rgba(8, 148, 19)",
                     zoomControl: false,
                     zoom:18,
@@ -341,7 +339,6 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
             maxWidth : 200,
         }).addTo(mapInstance);
 
-    //mapInstance.on("touchstart",{passive:true})    
     mapInstance.invalidateSize();
      
     // Show All the shuttles on degu route
@@ -392,14 +389,7 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
         {
             noVehicleInfo();
         }
-
-        /*
-        // update ETA
-        updateETA(currentSiteId);
-        eta_interval = setInterval(function() {
-            updateETA(currentSiteId);
-        }, 30000);*/
-             
+     
         // update status of webcam  
         document.getElementById("hidden_cam1").style.background= "";
         document.getElementById("hidden_cam2").style.background= "";
@@ -418,11 +408,6 @@ function showSite(mapInstance, currentSiteId, clickCount, mapToShow)
         getMethod("sites/"+currentSiteId+"/", function (data) {
             if(JSON.parse(data).image == null)
             {
-                /*document.getElementById('emergency_contactImg').src = '';
-                document.getElementById('contact_button').style.backgroundColor = "#BDBDBD"; 
-                document.getElementById('contact_button').style.border  = "0.5px solid #BDBDBD";
-                document.getElementById('contact_button').style.pointerEvents ="none";
-                document.getElementById('contact_button').style.color = "#FFFFFF";*/
                 document.getElementById('contact_button').style.display= "none";
             }
             else
@@ -516,24 +501,6 @@ function toggledSwitch()
     } 
 }
 
-/* toggled switch disabled
-window.onresize = function (event) {
-    const windowWidth = window.innerWidth * window.devicePixelRatio;
-    const windowHeight = window.innerHeight * window.devicePixelRatio;
-    const screenWidth = window.screen.width;
-    const screenHeight = window.screen.height;
-    
-    if (((windowWidth/screenWidth)>=0.95) && ((windowHeight/screenHeight)>=0.95)) {
-        switchStatus = true;
-        $("#switchButton").prop('checked', switchStatus);
-    }
-    else {
-        switchStatus = false;
-        $("#switchButton").prop('checked', switchStatus);
-    }
-}
-*/
-
 function offsite() {
     // hide all div's from site route
     for(var i = 0; i < mapList.length; i++)
@@ -543,7 +510,7 @@ function offsite() {
     var offsite_list = document.getElementById("offsite_list");
     offsite_list.innerHTML = '';
     getMethod("sites/", function (sites_data) {
-        var site_data = JSON.parse(sites_data);//.results;
+        var site_data = JSON.parse(sites_data);
         var count = Object.keys(site_data).length;
         for (i = 0; i < count; i++) {
             var siteId = site_data[i].mid;
@@ -606,19 +573,6 @@ function showGraphs() {
               } 
         }
         vehicleData = vehicleData.sort((a, b) => (a.vehicleList > b.vehicleList) ? 1 : -1)
-       
-        // vehicleList = vehicleList.sort();
-        //var total_data = distanceList.reduce(function(pv, cv) { return pv + cv; }, 0);
-        // byte conversion 
-        /* 1 B = 1 byte;
-            1 kB = 1000 bytes;
-            1 MB = 1000 kB;
-            1 GB = 1000 MB or 1 000 000 000 bytes.*/
-        // if(dataList)
-        //total_data = 
-        // else
-        // total_data = 0+ ' MB';
-
         /* Temporary vehicle data is hardcoded because database has no data */
         // dataList
         document.getElementById('totalData').innerHTML = 0;
@@ -657,7 +611,6 @@ function showCluster(cluster_map)
     if(clusterMapCount == 1)
         showGraphs();
 
-    // current_mapinstance = cluster_map;
     // array to store lat-lon of cluster 
     if(clusterMapCount <= 1)
     {
@@ -668,31 +621,6 @@ function showCluster(cluster_map)
 
         // add layer to map with zoom level
         clusterLayer.addTo(cluster_map);
-        // get location of clusters using REST api
-        /* getMethod("routes/", function (routes_data) {
-            var cluster_data = JSON.parse(routes_data).results;
-            var count = Object.keys(cluster_data).length;
-            for (var i = 0; i < count; i++) {
-                if(cluster_data[i].start != '' && cluster_data[i].operation == true && cluster_data[i].site == 1)
-                {
-                    addressPoints.push(cluster_data[i].start);
-                }
-            }
-            // create markers and add it to layer
-            var markers = L.markerClusterGroup();
-            for (var i = 0; i < addressPoints.length; i++) {
-                var location = addressPoints[i];
-                var clusterIcon = L.icon({
-                    iconUrl: "images/singleCluster.svg",
-                }); 
-                var marker = L.marker(new L.LatLng(location[0], location[1]),{
-                    icon : clusterIcon
-                })
-                markers.addLayer(marker);
-            }
-            // add layer to the map instance.
-            cluster_map.addLayer(markers);  
-        });*/
     }
     // refresh map 
     cluster_map.invalidateSize();
@@ -849,20 +777,6 @@ function updateShuttleInfo(vehicle, request_count)
         else
             vehicleStatus( "STOPPED", "#CA4040");
 
-        /*
-        // Vehicle name and version     
-        var nameColor = vehicleMakeColor(vehicle.name);
-        // changes bgcolor of popup background
-        var color; 
-        if(nameColor == "greenPopup")
-            color= "#67BBB1";
-        else if(nameColor == "bluePopup")
-            color= "#0082C8";
-        else if(nameColor == "blackPopup")
-            color = "#333333";
-        else
-            color ="#666666"; 
-        */
         if((vehicle.model) != null)
             document.getElementById("vehicleVersion").innerHTML = "SW 버전: "+vehicle.model.firmware;
                        
@@ -920,7 +834,7 @@ function updateGnssBgcolor(gnss_status)
     if (gnss_status == true)
         document.getElementById("gnss_v1").style.backgroundColor = "#57AE66";
     else
-        document.getElementById("gnss_v1").style.backgroundColor = "#BDBDBD";//"#CA4040";
+        document.getElementById("gnss_v1").style.backgroundColor = "#BDBDBD";
 }
 
 function updateDrive(drive_mode)
@@ -1047,11 +961,11 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
             if(request_count == 1) 
             {
                 // create Icon for ripple marker as per the speed value
-                if(vehicleObj.isparked == true || vehicleObj.isparked == null) //vehicleObj.isparked == true |
+                if(vehicleObj.isparked == true || vehicleObj.isparked == null)
                 {
                     var marker = createHtmlMarker(vehicleObj, greyRippleIcon);
                 }
-                else if (vehicleObj.speed > 0) // || vehicleObj.drive == true // && vehicleObj.isparked == false
+                else if (vehicleObj.speed > 0)
                 {
                     var marker = createHtmlMarker(vehicleObj, greenRippleIcon);
                     marker.options.rotationAngle = vehicleObj.heading;                // rotate marker of speed is greater then 0 to avoid abnormal data
@@ -1082,23 +996,13 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                 vehicleMarker = createHtmlMarker(vehicleObj, vehicleIcon);            
                 vehicleMarker._leaflet_id = vehicleObj.name;
                 if(vehicleObj.isparked == false) 
-                {
-                    //if(vehicleObj.speed > 0) 
-                        vehicleMarker.options.rotationAngle = vehicleObj.heading;               // rotate marker of speed is greater then 0 to avoid abnormal data
-                }
-                    
+                    vehicleMarker.options.rotationAngle = vehicleObj.heading;               // rotate marker of speed is greater then 0 to avoid abnormal data
+                                
                 // create html and append to popup div
                 var customPopup = "";
-                //var customOptions = {'className': 'custom-popup4'};
-
                 var customOptions;
                 customOptions = {'className': 'custom-popup4'};
           
-               /* if(vehicleObj.drive == true)
-                    customOptions = {'className': 'custom-popup4'};
-                else
-                    customOptions = {'className': 'customPopup4Disable'};
-                */
                 vehicleMarker.bindPopup(customPopup, customOptions).openPopup();               // bind popup to vehicle marker                   
                 vehicleMarker.on('click', function(e) {           
                     // vehicle marker on click function ---> updates vehicle popup data every second 
@@ -1126,18 +1030,18 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                     var currentRipple = rippleMarkerArray[i].marker;
                     currentRipple.setLatLng(newLatLng);                                         // update the location of ripple marker
                     // change speed status in left side window
-                    if(vehicleObj.isparked == true || vehicleObj.isparked == null) //vehicleObj.isparked == true ||
+                    if(vehicleObj.isparked == true || vehicleObj.isparked == null) 
                     {
                         currentRipple.setIcon(greyRippleIcon);
                     }
-                    else if(vehicleObj.speed > 0) //|| vehicleObj.drive == true //&& vehicleObj.isparked == false 
+                    else if(vehicleObj.speed > 0) 
                     {                  
                         currentRipple.setIcon(greenRippleIcon);
                         currentRipple.options.rotationAngle = vehicleObj.heading;
                     }
                     else
                     {
-                        currentRipple.setIcon(redRippleIcon); //L.divIcon({html: icon_html2})
+                        currentRipple.setIcon(redRippleIcon); 
                     }
                     currentRipple.addTo(mapInstance);
                 }
@@ -1151,15 +1055,13 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                     var currentVehicle = shuttleMarkerArray[k].marker;
                     currentVehicle.setLatLng(newLatLng);                                       // update the location of vehicle marker
                     currentVehicle._leaflet_id = vehicleObj.name;
-
-                    if(vehicleObj.isparked == false || vehicleObj.isparked == null) //vehicleObj.isparked == true ||
+                    if(vehicleObj.isparked == false || vehicleObj.isparked == null) 
                     {
                         if(vehicleObj.speed > 0 )
                             currentVehicle.options.rotationAngle = vehicleObj.heading;
                     }
-
                     currentVehicle.addTo(mapInstance);
-                                      
+                                     
                     // If current markers popup is open then set the content of popup
                     var currentMarker = shuttleMarkerArray[k].marker;
                     if(currentMarker.getPopup().isOpen() == true)
@@ -1242,7 +1144,7 @@ function vehicleMakeColor(vehicleName){
         popupColor ="greenPopup";
     else if(thirdCharacter == "K")   
         popupColor ="blackPopup";
-    else //if(thirdCharacter == "N") 
+    else 
         popupColor ="bluePopup";
     return popupColor;     
 }
@@ -1423,7 +1325,6 @@ function showChartData(siteId){
                         colorList.push('#67BBB1');
                 }    
             }
-            //  todayChart('todayDistance', '총 운행거리', colorList, 'Distance(km)', nameList, nameList);
             var total_distance = distanceList.reduce((a, b) => a + b, 0);
             var total_passengers = passengerList.reduce((a, b) => a + b, 0);
 
@@ -1440,7 +1341,6 @@ function showChartData(siteId){
 }
 
 function checkWebcam(webcamData, imgID, ifImg, elseImg) {
-    //console.log("webcamData :"+JSON.stringify(webcamData));
     var imgPath = "images/cctv/";
     var imgDom = document.getElementById(imgID);
     if (webcamData == null)
@@ -1582,7 +1482,7 @@ function showRouteInfo(mapInstance, api_name, icon_path, site_no) {
         var stationTitleArray=[];
         for (var i = 0; i < count; i++) {
             if (iconData[i].site == site_no) {
-                if (api_name == "stations/" ) //&& site_no != 18
+                if (api_name == "stations/" ) 
                 {
                     stationWp_array.push(L.latLng(iconData[i].lat, iconData[i].lon)); // array for station location on route
                     var stationTitle = iconData[i].name;
@@ -1592,7 +1492,6 @@ function showRouteInfo(mapInstance, api_name, icon_path, site_no) {
                     stationTitleArray.push(stationTitle); // array for station title
                                      
                     // check if kiosk for the station is available in kiosk api
-                    // var kioskTitle = "KIS" +kiosk_title.substring(3);
                     stationMidArray.push(station_mid);
                     showMarker(mapInstance, "images/" + icon_path, stationTitle, station_mid, stationLat, stationLon);
                 }
@@ -1722,7 +1621,7 @@ function currentVehicleETA(stationData)
                     {
                         stationDetails = {
                             vehicle_id : null,
-                            time : "운행 준비중",//"운행 준비중", //"N분 후 도착",
+                            time : "운행 준비중",
                             id : stationData.id,
                             mid : stationData.mid,
                             name : stationData.name  
@@ -1817,7 +1716,7 @@ function updateETA(site_id)
 function createRoute(mapInstance, waypoints, stationTitle) {
     var control = L.Routing.control({
         waypoints: waypoints,
-        serviceUrl: 'https://osrm.springgo.io:900/route/v1',//'https://osrm.aspringcloud.com/route/v1',
+        serviceUrl: 'https://osrm.springgo.io:900/route/v1',
         dragging:false,
         routeWhileDragging:false,
         createMarker: function (i, wp) {
@@ -1976,8 +1875,7 @@ function vehicle_info(vehicle_id) {
 
                 var battery_percent = vehicle_data[i].battery;
                 document.getElementById("v_battery").innerHTML = battery_percent + " %";
-                // setBatteryPercent(battery_percent);
-            }
+           }
         }
     });
 }
@@ -2124,7 +2022,6 @@ function manager_list(site_manager_array)
     if( select.disabled == true)
         select.disabled = false;    
     
-    //var site_manager_data = JSON.parse(site_manager_data);
     var sortedManagers = (site_manager_array.sort (ascending));
     for(var i = 0; i < sortedManagers.length; i++)
     {        
@@ -2143,7 +2040,6 @@ function ascending ( a , b ) {
 
 function msg_modal() {
     show_div('messageModal');
-    //selectSite('all', null,null);
 }
 
 // updates notice
@@ -2172,8 +2068,6 @@ function updateSettingIcon()
 
 var globalNoticeArray;
 function changeNotice(){
-    //var noticeSelect = document.getElementById('select_notice');
-    //var category = noticeSelect.options[noticeSelect.selectedIndex].value;
     var category = "2";
     getMethod("notice/", function (site_data) {
         var noticeData = JSON.parse(site_data).results;
@@ -2554,10 +2448,6 @@ function setDateTime() {
     document.getElementById("currentTime").innerHTML = strTime;
 
     // store the logged in user name in local storage
-    var userName = localStorage.getItem("activeUserID");
-    // trim email id to username
-    var trimName = userName.substring(0, userName.indexOf('@'));
-    //document.getElementById("active_username").innerHTML = "안녕하세요, " +trimName;
     getLoggedInUser();
 
     // update date and time after every 20 seconds
@@ -2647,9 +2537,6 @@ function showChart(graph1, title, color, yAxisLable, vehicleList, yAxisList, y_u
             maintainAspectRatio: false,
             scales: {
                 xAxes: [{
-                    //barThickness: 15,
-                    //categoryPercentage: 0,
-                    //barPercentage: 0,
                     offsetGridLines : false,
                     gridLines: {
                         display: false,
@@ -2681,7 +2568,6 @@ function showChart(graph1, title, color, yAxisLable, vehicleList, yAxisList, y_u
                         fontFamily: "Roboto",
                         fontStyle: "bold",
                         beginAtZero: true,
-                        // stepSize: 300,
                     }
                 }]
             }
@@ -2698,7 +2584,6 @@ function updateCCTV()
     getMethod("vehicles/"+selectedId+"/", function (data)
     {
         var vehicle = JSON.parse(data);
-        console.log("vehicle :"+JSON.stringify(vehicle));
         var webcam;
         var cameraSelectDom = document.getElementById("camera_select");
         var cameraSelectValue = cameraSelectDom.options[cameraSelectDom.selectedIndex].id;
@@ -2801,7 +2686,7 @@ function webcam(webcamId, vehicle) {
     }           
 }
 
-// under- development
+// scale cctv image video
 var active_webcam;
 var activeVideoButton;
 function scale_image(hidden_cam) 
@@ -3086,7 +2971,6 @@ function passwordChange2()
     hide_div('settingDiv3');
     document.getElementById("settingDiv21").style.display = "inline-block";
     document.getElementById("settingDiv31").style.display = "inline-block";
-
     // change button text color blue to show button is active
     document.getElementById("user_pwd_change").style.color = "#2E92B0";
 }
@@ -3127,7 +3011,7 @@ function resetPassword()
             "confirm_new_password": input_repeat_pwd
         });
 
-        var api_url = server_URL+"users/change_password/";//"auth/password/change/";
+        var api_url = server_URL+"users/change_password/";
         postMethod(data, api_url, function (req) 
         {
             if(req.status == 200)
@@ -3154,7 +3038,7 @@ $(document).on("click", function(){
     $('.contactDiv').hide();
 });
   
-function stopVideoStreaming() //webcam_div, playPauseButton
+function stopVideoStreaming()
 {
     // close full screen 
     // stop video - make screen grey and show pause button

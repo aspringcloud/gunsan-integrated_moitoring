@@ -1,4 +1,4 @@
-var server_URL =  "https://gunsanapi.tasio.io:300/api/"; //"https://test.aspringcloud.com/api/";  ////"https://api.aspringcloud.com/api/";
+var server_URL =  "https://gunsanapi.tasio.io:300/api/";
 /* Input validation of login page */
 function login_validation() {
     var email_error = document.getElementById("name_error");

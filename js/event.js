@@ -9,23 +9,17 @@ function checkTime(i) {
     return i;
 }
 
-function getPosition( element ) {
-    var rect = element.getBoundingClientRect();
-    return {x:rect.left,y:rect.top};
-}
-
 function createAlertDiv(eventData)
 {
     console.log("eventDiv :"+eventData);
     var event_how = (JSON.parse(eventData).how);
-    var dataAttribute = event_how.type;//Object.keys(JSON.parse(eventData))
+    var dataAttribute = event_how.type;
     var id;
     var vehicleID; 
     var eventMessage;
     var selectList = document.getElementById("vehicleSelect");  // vehicle select list
-    var selectedId;// = selectList.options[selectList.selectedIndex].id;  // selected Id 
+    var selectedId;
     var siteId = event_how.site_id;
-    console.log("event_how :"+event_how);
     if(dataAttribute == "message")
     {
         id = event_how.vehicle_id;
@@ -62,7 +56,7 @@ function createAlertDiv(eventData)
             if(top == undefined )
                 top = 100;
         }
-        else //if(document.getElementById("eventContent"+left))
+        else 
         {
             $('div','#eventMsgModalDiv').each(function(){
                 divArray.push($(this).attr('id')); 
@@ -81,15 +75,12 @@ function createAlertDiv(eventData)
                     }
                 }
             }
-
-            //console.log("topValueArray :"+leftValueArray);
             left = leftValueArray [leftValueArray.length -1];
             top = (leftValueArray [leftValueArray.length -1])-100;
             top = parseInt(top) + 60;
             left = parseInt(left) + 60;
         }
 
-        var divId = "eventContent"+left;
         var style = 'left:'+left+'px; top:'+top+'px; display:block;';
         var eventHtml = '<div id="eventContent'+left+'" class="message-content3" style="'+style+'" onclick="showDivOnTop(this);">'+ 
                          '<div id="eventHeader" class="message-header2">'+
@@ -108,17 +99,14 @@ function createAlertDiv(eventData)
                             '<button class="event_send_button" id="testEvent" >확인</button>'+
                         ' </div>'+
                     '</div>';
-        $('#eventMsgModalDiv').append(eventHtml);//html(eventHtml);//append(eventHtml);
+        $('#eventMsgModalDiv').append(eventHtml);
         document.getElementById("eventMsgModalDiv").style.display = "block";
-        // document.getElementById("eventContent"+left).onclick = "showDivOnTop()";
-        //document.getElementById("eventContent").style.left = left+'px';
     }
     else if(selectList != undefined)
     {
         if(selectList.options[selectList.selectedIndex] != undefined)
             selectedId = selectList.options[selectList.selectedIndex].id; 
 
-        console.log("#dataAttribute :"+dataAttribute);
         if(dataAttribute == "door")
         {            
             // selected Id 
@@ -156,7 +144,7 @@ function createAlertDiv(eventData)
         }
         else if(dataAttribute == "parking")
         {
-            id =event_how.vehicle_id;
+            id = event_how.vehicle_id;
             vehicleID = event_how.vehicle_mid;
             if(event_how.value == "true")
             {
@@ -183,7 +171,6 @@ function createAlertDiv(eventData)
             id = event_how.vehicle_id;
             vehicleID = event_how.vehicle_mid;
             var reason = event_how.reason_type;
-           // var koreanReason;
             if(reason == "car")
                 eventMessage = "[차]로 인해 정지 발생";
             else if(reason == "people")
@@ -203,7 +190,6 @@ function createAlertDiv(eventData)
             id = event_how.vehicle_id;
             vehicleID = event_how.vehicle_mid;
             var powerStatus;
-            console.log("power:"+JSON.stringify(event_how));
             if(event_how.value == "on" )
             {
                 eventMessage = "전원이 켜졌습니다."; 
@@ -224,7 +210,7 @@ function createAlertDiv(eventData)
         }
     }
    
-    if(vehicleID == null || siteId != active_site || dataAttribute == "message" ) //|| siteId != active_site
+    if(vehicleID == null || siteId != active_site || dataAttribute == "message" ) 
         return false;
     
     // Create div to show event information
@@ -237,13 +223,8 @@ function createAlertDiv(eventData)
     if(todayDay < 10)
         todayDay = "0"+todayDay;
 
-    //var eventMessage = today.getFullYear()+'/'+(todayMonth)+'/'+ todayDay;
-    console.log("eventMessage :"+eventMessage);
     // calculate hours 
     var currentHour = today.getHours();
-    //if(currentHour > 12)
-   //     currentHour = currentHour - 12;
-      
     if (currentHour < 10)
         currentHour = "0"+currentHour;
 
@@ -262,15 +243,12 @@ function createAlertDiv(eventData)
         currentSeconds = today.getSeconds();
 
     var currentTime = currentHour+':'+currentMinutes+':'+currentSeconds;
-    //console.log("currentTime :"+currentTime);
     var currentDate2= today.getFullYear()+'/'+(todayMonth)+'/'+ todayDay;
-    var todayDate = currentDate2+ '   ';//+currentTime;
-    console.log("todayDate :"+todayDate);
+    var todayDate = currentDate2+ '   ';
     var dom = document.getElementById('eventsDiv');
     var newAlert = "<span style='display:inline-block'>"+vehicleID+"</span> <img style='display:inline-block; position:relative; z-index : 1010; right:0; cursor:pointer; top: 2%;' src = 'images/events/event_close_button.svg'/>"+
                    "<label style='margin-top:20%; color:#929292;padding-left: 5%;display:inline-block; position:absolute'>"+todayDate+"</label><label style=';margin-top:20%; margin-left :55%;  position:absolute; display:inline-block; '>"+currentTime+"</label>"+
-                   "<p style='width: 160px; word-wrap: break-word'>"+eventMessage+"</p>";//+
-                   //"<button>확인</button>";
+                   "<p style='width: 160px; word-wrap: break-word'>"+eventMessage+"</p>";     
     var divs = document.createElement("div");
     divs.className = 'batteryAlert';
     divs.innerHTML = newAlert;
@@ -292,7 +270,6 @@ function showDivOnTop(obj)
     $('div','#eventMsgModalDiv').each(function(){
         childDivarray.push($(this).attr('id')); 
     });
-    console.log("# childDivarray :"+childDivarray);
     for(var j = 0; j < childDivarray.length; j++)
     {
         if(childDivarray[j] != undefined)
@@ -301,9 +278,7 @@ function showDivOnTop(obj)
             if(subStr == "eventContent")
             {
                 if(childDivarray[j] != obj.id)
-                {
                     document.getElementById(childDivarray[j]).style.zIndex = "1010";
-                } 
             }
         }
     }
@@ -313,7 +288,6 @@ function showDivOnTop(obj)
 function confirmEventMsg()
 {
     document.getElementById('eventContent').style.display = "none";
-   //$(obj).parent('div').fadeOut();
 }
 
 function addition(left)

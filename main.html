@@ -334,7 +334,6 @@
                     <!-- site operation information-->
                     <div id="operationInfo">
                         <p id="operationInfoTitle" class="operationInfo_p">운영 정보 </p>
-                        <!--<p id="line_count" class="operationInfo_p">NA</p>-->
                         <p id="vehicle_count" class=" font1">2</p>
                         <p id="station_count" class=" font1">7</p>
                         <p id="kiosk_count" class=" font1">2</p>
@@ -390,7 +389,7 @@
         <span class="close2">&times;</span>
         <div class="modal-content" id="img01"></div>
         <div class="buttonDiv">
-            <img src="images/cctv/fullscreen_exit.svg" onclick="document.getElementById('myModal').style.display = 'none';/* clearHiddenCamera(); */"/>    
+            <img src="images/cctv/fullscreen_exit.svg" onclick="document.getElementById('myModal').style.display = 'none';"/>    
         </div>
     </div>
 
@@ -477,6 +476,7 @@
     }
 
     $('.leaflet-top, .leaflet-bottom ').css("left" , "1810px");
+    console.log("main page loaded");
     </script>
 </body>
 </html>

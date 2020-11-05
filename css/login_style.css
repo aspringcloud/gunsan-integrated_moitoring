@@ -20,24 +20,24 @@ background-color: #83c3e0;
 }
 
 .margin1{
-    margin-bottom: 30px;
+margin-bottom: 30px;
 }
 
 .margin2{
-    margin-right: 0px;
+margin-right: 0px;
 }
 
 .display1{
-    display:inline-block;
+display:inline-block;
 }
 
 .divstyle6{
-    float:right; 
-    height: 18px;
+float:right; 
+height: 18px;
 }
 
 #login_success_div{
-    display: none;  
+display: none;  
 }
 
 .logo {
@@ -82,14 +82,12 @@ line-height: normal;
 letter-spacing: normal;
 color: #ffffff;
 border: 0px;
-/*
-box-shadow: inset 2px 4px 4px rgba(0, 0, 0, 0.25);*/
 border-radius: 25px;
 margin-top: 10px;
 }
 
 .login_button:hover {
-    box-shadow: inset 2px 4px 4px rgba(0, 0, 0, 0.25);
+box-shadow: inset 2px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 .main_button {
@@ -167,8 +165,7 @@ font-style: normal;
 line-height: normal;
 color: #828282;
 position: absolute;
-top:520px;/*
-text-align: center;*/
+top:520px;
 width: 357px;
 }
 
@@ -181,7 +178,6 @@ border-radius: 2px;
 padding: 14px 8px;
 background: #FAFAFA;
 margin-top: 60px;
-
 width: 326px;
 }
 
@@ -1071,32 +1067,32 @@ outline: 0;
 }
 */
 .round_button button:hover {
-  background: #93C3D1 !important;
-  color: #333333 !important ;
-  cursor: pointer !important;
+background: #93C3D1 !important;
+color: #333333 !important ;
+cursor: pointer !important;
 }
 
 input[id="saveId_checkbox"]  {
-    -webkit-appearance: none;
-    content: " ";
-    display: inline-block;
-    width: 17px;
-    height: 17px;
-    line-height: 17px;
-    margin: -2px 3px 0px 0px;
-    text-align: middle;
-    vertical-align: middle;
-    background-color: #ffffff;
-    border-radius: 50%;
-    border: 1px solid #79B4D2;
+-webkit-appearance: none;
+content: " ";
+display: inline-block;
+width: 17px;
+height: 17px;
+line-height: 17px;
+margin: -2px 3px 0px 0px;
+text-align: middle;
+vertical-align: middle;
+background-color: #ffffff;
+border-radius: 50%;
+border: 1px solid #79B4D2;
 }
 
 input[id="saveId_checkbox"]{
-    outline: none;
+outline: none;
 }
 input[id="saveId_checkbox"]:checked:before{
-    outline: none;
-    border: 0px;
+outline: none;
+border: 0px;
 }
 
 input[id="saveId_checkbox"]:checked:after {
@@ -1176,13 +1172,13 @@ display: inline;
 }
 
 .tab_elements>p {
-    color:#555;
-    font-family: noto_regular;
-    font-size: 16px;
-    line-height: 16px;
-    margin-right: 47px;
-    letter-spacing: -0.016em;
-    cursor: pointer;
+color:#555;
+font-family: noto_regular;
+font-size: 16px;
+line-height: 16px;
+margin-right: 47px;
+letter-spacing: -0.016em;
+cursor: pointer;
 }
 
 .date_time_div {
@@ -1525,7 +1521,7 @@ overflow: hidden;
 margin: 0 8px;
 list-style: none; padding: 0; width: 10px; 
 height: 0px;/*155.7px;*/
- margin: 5px;
+margin: 5px;
 }
 
 /*ul.bar::after {
@@ -2038,14 +2034,14 @@ box-shadow: none;
 }
 
 .customPopup4Disable.leaflet-popup-content-wrapper{
-    background-color: gray;
-    opacity: 0.9;
+background-color: gray;
+opacity: 0.9;
 }
 .customPopup4Disable.leaflet-popup-tip {
-    background: red;
+background: red;
 }
 */
-    
+
 .popup{
 text-align:'center'; 
 height: 40px; 
@@ -2766,12 +2762,12 @@ border-radius: 2px;
 }
 
 .noticeSelect option{
-    background-color: #ffffff;
+background-color: #ffffff;
 }
 
 .noticeSelect:focus
 {
-    background-color: #E6E6E6;
+background-color: #E6E6E6;
 }
 
 .siteManager{
@@ -2888,17 +2884,17 @@ animation: ring-1 1s 0s ease-out infinite;
 }
 
 @keyframes ring-1 {
-    0% {
-    transform: scale(0.1, 0.1);
-    opacity: 0, 
-    }
-    50% {
-    opacity: 1
-    }
-    100% {
-    transform: scale(1.2, 1.2);
-    opacity: 0
-    }
+0% {
+transform: scale(0.1, 0.1);
+opacity: 0, 
+}
+50% {
+opacity: 1
+}
+100% {
+transform: scale(1.2, 1.2);
+opacity: 0
+}
 }
 
 .v2x_ripple .v2x_inner {
@@ -3006,11 +3002,11 @@ animation: ring-1 0.8s 0.3s ease-out infinite;
 }
 
 .shuttle_ring2 {
-    animation: ring-1 2s 1.3s ease-out infinite;
+animation: ring-1 2s 1.3s ease-out infinite;
 }
 
 .shuttle_ring3 {
-    animation: ring-1 1s 1s ease-out infinite;
+animation: ring-1 1s 1s ease-out infinite;
 }
 
 /* green color */
@@ -3063,7 +3059,7 @@ animation: ring-1 0.8s 0.3s ease-out infinite;
 .shuttle_ring3_grey {
 animation: ring-1 1s 1s ease-out infinite;
 }
-    
+
 .leaflet-marker-icon {
 background-color: transparent;
 border: none;
@@ -3138,7 +3134,7 @@ background-color: rgba(0, 0, 0, 0.9);
 }
 
 @keyframes listAnimation {
-    50%  {top:200px;}
+50%  {top:200px;}
 }
 
 .listModal {
@@ -3192,21 +3188,21 @@ animation-duration: 0.6s;
 }
 
 @-webkit-keyframes zoom {
-    from {
-    -webkit-transform: scale(0)
-    }
-    to {
-    -webkit-transform: scale(1)
-    }
+from {
+-webkit-transform: scale(0)
+}
+to {
+-webkit-transform: scale(1)
+}
 }
 
 @keyframes zoom {
 from {
-    transform: scale(0)
-    }
-    to {
-    transform: scale(1)
-    }
+transform: scale(0)
+}
+to {
+transform: scale(1)
+}
 }
 
 /* The Close Button */
@@ -3449,16 +3445,16 @@ border-radius: 3px;
 }
 
 .offsiteList1{
-    padding-top: 5px;
-    padding-bottom: 5px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    font-size: 16px;
+padding-top: 5px;
+padding-bottom: 5px;
+margin-top: 10px;
+margin-bottom: 10px;
+font-size: 16px;
 }
 
 .offsiteList2{
-    font-family: Noto_bold; 
-    background: rgba(24, 87, 134, 0.1);
+font-family: Noto_bold; 
+background: rgba(24, 87, 134, 0.1);
 }
 
 /* Common class*/
@@ -3699,49 +3695,49 @@ line-height: 14px;
 }
 
 #hideTempPassword{
-    color: #4F4F4F;
-    text-align: center;
-    font-family: Noto_regular;
-    font-size: 14px;
-    vertical-align: middle;
-    position: absolute;
-    top:285px;
-    left:85px;
+color: #4F4F4F;
+text-align: center;
+font-family: Noto_regular;
+font-size: 14px;
+vertical-align: middle;
+position: absolute;
+top:285px;
+left:85px;
 }
 
 .greetSpan{
-    display: inline-block;
-    width:145px;
-    text-overflow: ellipsis;
-    white-space: nowrap; 
-    font-family: Noto_regular;
-    font-size: 14px; 
-    font-style: normal !important; 
-    color: #555555;
-    overflow: hidden;
-    /*
-    margin-right:15px;
-   
-    top: 14px;
-    margin-bottom: -5px;*/ 
+display: inline-block;
+width:145px;
+text-overflow: ellipsis;
+white-space: nowrap; 
+font-family: Noto_regular;
+font-size: 14px; 
+font-style: normal !important; 
+color: #555555;
+overflow: hidden;
+/*
+margin-right:15px;
+
+top: 14px;
+margin-bottom: -5px;*/ 
 }
 
 .divStyle3{
-    position: absolute;
-    right: 0px;
-    top:3px;
-    width: 168px;
-    height: 43px;
-    letter-spacing: -0.02em;
-   /* margin-left:8px;*/
+position: absolute;
+right: 0px;
+top:3px;
+width: 168px;
+height: 43px;
+letter-spacing: -0.02em;
+/* margin-left:8px;*/
 }
 
 .dropDownStyle{
-    position: absolute;
-    top: 20px;
-    right: 0px;
-    margin-left:15px;
-    padding-bottom: 25px; cursor: pointer;
+position: absolute;
+top: 20px;
+right: 0px;
+margin-left:15px;
+padding-bottom: 25px; cursor: pointer;
 }
 
 .setting_P button{
@@ -3902,25 +3898,25 @@ margin-left:25px
 }
 
 .p6{
-    color: #2E92B0;font-size: 20px;font-family: Roboto_regular;line-height: 0;
+color: #2E92B0;font-size: 20px;font-family: Roboto_regular;line-height: 0;
 }
 .p7{
-    font-size: 36px;font-family: Roboto_regular;color: #185786;text-align: right;padding:0px; margin:3px;
+font-size: 36px;font-family: Roboto_regular;color: #185786;text-align: right;padding:0px; margin:3px;
 }
 
 .p8{
-    font-size: 18px;font-family: Roboto_regular;color: #185786;text-align: right;padding:0px;margin:0px;
+font-size: 18px;font-family: Roboto_regular;color: #185786;text-align: right;padding:0px;margin:0px;
 }
 
 .hr3{
-    width:340px; align-self: center;
+width:340px; align-self: center;
 }
 .graphDivLeft{
-    display: inline-block;margin-left: 15px;
+display: inline-block;margin-left: 15px;
 }
 
 .graphDivRight{
- margin-right: 15px; float: right;
+margin-right: 15px; float: right;
 }
 
 .graph1{
@@ -4042,17 +4038,17 @@ width:/*130px;*/ 170px;
 }
 
 .markerLable_right{
-    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15);
-    font-weight: bold;
-    font-size: 15px;
-    color: #DB5499;
-    font-family: Noto_regular;
-    display: block;
-    margin-top: -25px;
-    margin-left: 17px;
-    line-height: 2;
-    width:/*130px;*/ 170px;
-    }
+text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15);
+font-weight: bold;
+font-size: 15px;
+color: #DB5499;
+font-family: Noto_regular;
+display: block;
+margin-top: -25px;
+margin-left: 17px;
+line-height: 2;
+width:/*130px;*/ 170px;
+}
 
 #settingDialog{
 position: fixed;
@@ -4090,23 +4086,23 @@ display : inline-block;
 }
 
 #inputValue input{
-    display : inline-block;
+display : inline-block;
 }
 
 #settingOptions{
-    cursor: pointer;
+cursor: pointer;
 }
 
 #settingOptions:hover {
-    src : "../images/password_reset/login_mouseover.svg"
+src : "../images/password_reset/login_mouseover.svg"
 }
 
 #settingOptions:active {
-    src : "../images/password_reset/login_unselected.svg"
+src : "../images/password_reset/login_unselected.svg"
 }
 
 #settingDiv21 input:focus{
-    background-color: #E0E0E0;
+background-color: #E0E0E0;
 }
 
 .settingDiv_label2{
