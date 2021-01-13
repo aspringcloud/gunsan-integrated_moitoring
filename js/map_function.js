@@ -700,7 +700,7 @@ function setVehicleSpeed(speed)
 {
     var speedDom = document.getElementById("speed_v1");
     speedDom.innerHTML = speed;
-    if(speed < 18)
+    if(speed <= 18)
     {
         // speed is less then 18 text color is black
         speedDom.style.color="#4F4F4F";
@@ -1072,7 +1072,7 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                         var speedColor;
                         var speedWeight;
                         var currentSpeed = shuttleMarkerArray[k].speed;
-                        if(currentSpeed < 18)                                              // if speed is less then 18, text should be black color with normal font weight
+                        if(currentSpeed <= 18)                                              // if speed is less then 18, text should be black color with normal font weight
                         {
                             speedColor = '#4F4F4F';
                             speedWeight = "normal";
@@ -1184,7 +1184,7 @@ function setPopupContent(e, mapInstance, site_no)
                     var speedColor;
                     var speedWeight;
                     var currentSpeed = shuttleMarkerArray[k].speed;
-                    if(currentSpeed < 18)                                              // if speed is less then 18, text should be black color with normal font weight
+                    if(currentSpeed <= 18)                                              // if speed is less then 18, text should be black color with normal font weight
                     {
                         speedColor = '#4F4F4F';
                         speedWeight = "normal";
@@ -1407,7 +1407,7 @@ function setPopupSpeed(speed)
         return false;
 
     // change css to show changes in speed.
-    if(speed < 18)
+    if(speed <= 18)
     {
         popup_speed.style.color="#4F4F4F";
         popup_speed.style.fontWeight ="normal";
