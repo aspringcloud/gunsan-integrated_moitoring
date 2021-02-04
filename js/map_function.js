@@ -135,6 +135,22 @@ function switchMap(obj)
                 cluster_map.setView(leftCenter);
                 zoomHome_main.setHomeCoordinates([35.8191,126.4332], 15);
             }
+            cluster_map.on('zoomend', function () {
+               // console.log("Current zoom level :"+cluster_map.current.leafletElement.getZoom());
+                if(cluster_map.getZoom() >= 9){
+                    var clusterLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+                        attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+                    });
+                    clusterLayer.addTo(cluster_map);
+                }
+                else
+                {                   
+                    var clusterLayer = L.tileLayer('https://a.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}@2x.png', {
+                        attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'                 
+                    });
+                    clusterLayer.addTo(cluster_map);
+                }
+             });
             showCluster(cluster_map);
             cluster_map.invalidateSize();
             cluster_map.resize;
@@ -559,9 +575,8 @@ function showGraphs() {
         var passengerList = [];
         var distanceList = [];
         var dataList = [];
-
         var vehicleData = [];
-        for (var i = 0; i < count; i++) {
+        for (var i=0; i<count; i++) {
             if(graph_data[i].vehicle == "1146" || graph_data[i].vehicle == "1147" || graph_data[i].vehicle == "6894" || graph_data[i].vehicle == "6895" )
             {
                 var vehicleObj = {
@@ -570,7 +585,7 @@ function showGraphs() {
                     distanceList : graph_data[i].accum_distance
                 }
                 vehicleData.push(vehicleObj);
-              } 
+            } 
         }
         vehicleData = vehicleData.sort((a, b) => (a.vehicleList > b.vehicleList) ? 1 : -1)
         /* Temporary vehicle data is hardcoded because database has no data */
