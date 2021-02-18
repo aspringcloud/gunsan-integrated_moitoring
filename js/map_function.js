@@ -998,11 +998,22 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                 rippleMarkerArray.push(rippleMarkerObj);                              // maintain array of ripple marker objects
 
                 // show vehicle markers on route
-                var iconUrl = "images/route/shuttleIcon_" + vehicleObj.id + "ho.svg";  
+                var iconUrl = "images/route/shuttleIcon_" + vehicleObj.id + "ho.svg"; 
+                var iconSize = []
+                var iconAnchor = []
+                if(vehicleObj.drive == true) {
+                    iconUrl = "images/route/shuttleIcon_" + vehicleObj.id + "ho.svg";
+                    iconSize = [60,70]
+                    iconAnchor = [15,30]
+                } else {
+                    iconUrl = "images/route/shuttleIcon.svg";
+                    iconSize = [26,30]
+                    iconAnchor = [13,15]
+                }
                 var vehicleIcon = L.icon({                                            // Create icon for marker.               
-                    iconSize: [60, 70],
+                    iconSize: iconSize,
                     popupAnchor: [5, -45],
-                    iconAnchor:[15,30], //[25, 45],
+                    iconAnchor:iconAnchor, //[25, 45],
                     iconUrl: iconUrl,
                 });
 
