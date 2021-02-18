@@ -1996,7 +1996,7 @@ border-radius: 2px;
 }
 
 .custom-popup4 .leaflet-popup-close-button, .customPopup4Disable .leaflet-popup-close-button{
-display: none
+/* display: none */
 }
 
 .custom-popup4 .leaflet-popup-content-wrapper p, .customPopup4Disable .leaflet-popup-content-wrapper p{

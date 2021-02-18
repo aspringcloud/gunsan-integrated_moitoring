@@ -576,25 +576,23 @@ function showGraphs() {
         var distanceList = [];
         var dataList = [];
         var vehicleData = [];
+        var dataSizeList = [];
         for (var i=0; i<count; i++) {
             if(graph_data[i].vehicle == "1146" || graph_data[i].vehicle == "1147" || graph_data[i].vehicle == "6894" || graph_data[i].vehicle == "6895" )
             {
                 var vehicleObj = {
                     vehicleList: graph_data[i].vehicle,
                     passengerList : graph_data[i].accum_passenger,
-                    distanceList : graph_data[i].accum_distance
+                    distanceList : graph_data[i].accum_distance,
+                    dataSizeList : graph_data[i].accum_dvr_volume
                 }
                 vehicleData.push(vehicleObj);
             } 
         }
         vehicleData = vehicleData.sort((a, b) => (a.vehicleList > b.vehicleList) ? 1 : -1)
-        /* Temporary vehicle data is hardcoded because database has no data */
-        // dataList
         document.getElementById('totalData').innerHTML = 0;
-        document.getElementById('dataSize').innerHTML = 'MB';
+        document.getElementById('dataSize').innerHTML = 'GB';
         document.getElementById('dataUnit').innerHTML = 'MB';
-        dataList.push(12.54);
-        dataList.push(9.14);
         
         // show charts on main site(cluster map)
         for(var k=0; k<vehicleData.length; k++)
@@ -602,15 +600,16 @@ function showGraphs() {
             vehicleList.push(vehicleData[k].vehicleList);
             passengerList.push(vehicleData[k].passengerList);
             distanceList.push(vehicleData[k].distanceList);
+            dataSizeList.push(vehicleData[k].dataSizeList);
         }
              
         //distanceList
-        document.getElementById('totalDistance').innerHTML =(Number(distanceList.reduce(function(pv, cv) { return pv + cv; }, 0)).toFixed(2)).toLocaleString('en');
+        document.getElementById('totalDistance').innerHTML =(Number(distanceList.reduce(function(pv, cv) { return pv + cv; }, 0))).toLocaleString('en');
         //passengerList
         document.getElementById('totalPassenger').innerHTML = Number(passengerList.reduce(function(pv, cv) { return pv + cv; }, 0)).toLocaleString('en');
-        // add datalist
-        document.getElementById('totalData').innerHTML = (Number(dataList.reduce(function(pv, cv) { return pv + cv; }, 0)).toFixed(2)).toLocaleString('en');
-        showChart('graph3', '총 데이터 용량', '#3bc7d1', 'Data', vehicleList , dataList, 'GB');
+        // add dataSizeList
+        document.getElementById('totalData').innerHTML = (Number(dataSizeList.reduce(function(pv, cv) { return pv + cv; }, 0))).toLocaleString('en');
+        showChart('graph3', '총 데이터 용량', '#3bc7d1', 'Data', vehicleList , dataSizeList, 'GB');
         showChart('graph2', '총 운행거리', '#f1ca3f', 'Distance(km)', vehicleList, distanceList  , 'km');
         showChart('graph1', '총 탑승자 수', '#3bc7d1', 'Passenger', vehicleList, passengerList , '명');
     });
@@ -999,11 +998,11 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                 rippleMarkerArray.push(rippleMarkerObj);                              // maintain array of ripple marker objects
 
                 // show vehicle markers on route
-                var iconUrl = "images/route/shuttleIcon.svg";  
+                var iconUrl = "images/route/shuttleIcon_" + vehicleObj.id + "ho.svg";  
                 var vehicleIcon = L.icon({                                            // Create icon for marker.               
-                    iconSize: [26, 30],
+                    iconSize: [60, 70],
                     popupAnchor: [5, -45],
-                    iconAnchor:[13,15], //[25, 45],
+                    iconAnchor:[15,30], //[25, 45],
                     iconUrl: iconUrl,
                 });
 
