@@ -1053,6 +1053,7 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                 {
                     var newLatLng = new L.LatLng(vehicleObj.lat, vehicleObj.lon);
                     var currentRipple = rippleMarkerArray[i].marker;
+                    var currentVehicle = shuttleMarkerArray[i].marker;
                     currentRipple.setLatLng(newLatLng);                                         // update the location of ripple marker
                     // change speed status in left side window
                     if(vehicleObj.isparked == true || vehicleObj.isparked == null) 
@@ -1062,11 +1063,13 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                     else if(vehicleObj.speed > 0) 
                     {                  
                         currentRipple.setIcon(greenRippleIcon);
+                        currentVehicle.setIcon(L.icon({iconSize: [60,70],popupAnchor: [5, -45],iconAnchor:[15,30],iconUrl: "images/route/shuttleIcon_" + vehicleObj.id + "ho.svg",}))
                         currentRipple.options.rotationAngle = vehicleObj.heading;
                     }
                     else
                     {
                         currentRipple.setIcon(redRippleIcon); 
+                        currentVehicle.setIcon(L.icon({iconSize: [26,30],popupAnchor: [5, -45],iconAnchor:[13,15],iconUrl: "images/route/shuttleIcon.svg"}))
                     }
                     currentRipple.addTo(mapInstance);
                 }
@@ -1084,6 +1087,10 @@ function showVehicleRipple(request_count, mapInstance, vehicleInfo, currentSiteI
                     {
                         if(vehicleObj.speed > 0 )
                             currentVehicle.options.rotationAngle = vehicleObj.heading;
+                            currentVehicle.setIcon(L.icon({iconSize: [60,70],popupAnchor: [5, -45],iconAnchor:[15,30],iconUrl: "images/route/shuttleIcon_" + vehicleObj.id + "ho.svg",}))
+
+                    } else {
+                        currentVehicle.setIcon(L.icon({iconSize: [26,30],popupAnchor: [5, -45],iconAnchor:[13,15],iconUrl: "images/route/shuttleIcon.svg"}))
                     }
                     currentVehicle.addTo(mapInstance);
                                      
